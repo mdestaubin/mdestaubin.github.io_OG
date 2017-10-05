@@ -57,6 +57,21 @@ function gotData(data)
   var d = day();
   var y = year();
 
+   var c = color(150, 150, 150);
+
+  var temp1 = Math.floor(hourlyWeather.data[1].temperature);
+  var temp2 = Math.floor(hourlyWeather.data[2].temperature);
+  var temp3 = Math.floor(hourlyWeather.data[3].temperature);
+  var temp4 = Math.floor(hourlyWeather.data[4].temperature);
+  var temp5 = Math.floor(hourlyWeather.data[5].temperature);
+  var temp6 = Math.floor(hourlyWeather.data[6].temperature);
+  var temp7 = Math.floor(hourlyWeather.data[7].temperature);
+  var temp8 = Math.floor(hourlyWeather.data[8].temperature);
+  var temp9 = Math.floor(hourlyWeather.data[9].temperature);
+  var temp10 = Math.floor(hourlyWeather.data[10].temperature);
+  var temp11 = Math.floor(hourlyWeather.data[11].temperature);
+  var temp12 = Math.floor(hourlyWeather.data[12].temperature);
+
   // List relevant items of information
   fill(50);
   textAlign(CENTER);
@@ -70,9 +85,28 @@ function gotData(data)
 
  
   // Current Weather
-   noStroke();
-   fill(50,50,200,50);
-   ellipse(xPos2,140,iconRadiusBig,iconRadiusBig);
+
+      if(currentWeather.summary == "Clear")
+    {
+         var c = color(255,204,0);
+         noStroke();
+         fill(c);
+
+         ellipse(xPos2,140,iconRadiusBig,iconRadiusBig);
+    }  
+
+      if(currentWeather.summary == "Partly Cloudy")
+    {
+         var c = color(255,204,0);
+         noStroke();
+         fill(c);
+
+         ellipse(xPos2,140,iconRadiusBig,iconRadiusBig);
+      
+         fill(200);
+         arc(xPos2, 140, iconRadiusBig, iconRadiusBig, 0-QUARTER_PI, PI-QUARTER_PI, CHORD);
+    }
+
 
    fill(0);
    textSize(textSizeDegrees);
@@ -97,15 +131,33 @@ function gotData(data)
   ellipse(xPos1,yPos4,iconRadiusSmall,iconRadiusSmall);
   ellipse(xPos2,yPos4,iconRadiusSmall,iconRadiusSmall);
   ellipse(xPos3,yPos4,iconRadiusSmall,iconRadiusSmall);
-  
 
+  // Future Temps
+
+
+
+  fill(255);
+  textSize(textSizeSmall);
+  text(temp1,xPos1,yPos1+6);
+  text(temp2,xPos2,yPos1+6);
+  text(temp3,xPos3,yPos1+6);
+  text(temp4,xPos1,yPos2+6);
+  text(temp5,xPos2,yPos2+6);
+  text(temp6,xPos3,yPos2+6);
+  text(temp7,xPos1,yPos3+6);
+  text(temp8,xPos2,yPos3+6);
+  text(temp9,xPos3,yPos3+6);
+  text(temp10,xPos1,yPos4+6);
+  text(temp11,xPos2,yPos4+6);
+  text(temp12,xPos3,yPos4+6);
   // settings and arrow
 
+/*
   strokeWeight(3);
   stroke(0);
   line(width-25,(height-20)+5,width-15,(height-20));
   line(width-25,(height-20)-5,width-15,(height-20));
-
+*/
 
   // border outline
   noFill();
@@ -113,10 +165,6 @@ function gotData(data)
   strokeWeight(2);
   rect(0,0,width,height);
 
-    // image load
-
-  //image(img, 0, 0);
-  //img.resize(0, 20);
 
   // Rain Summary
   
