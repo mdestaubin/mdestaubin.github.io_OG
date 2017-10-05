@@ -48,7 +48,7 @@ function gotData(data)
   var yGap = 60; 
   var textSizeLarge = 20;
   var textSizeSmall = 16;
-  var textSizeDegrees = 30;
+  var textSizeDegrees = 32;
 
   var iconRadiusBig = 120;
   var iconRadiusSmall = 50;
@@ -56,8 +56,11 @@ function gotData(data)
   var m = month();
   var d = day();
   var y = year();
+  var h = hour();
 
-   var c = color(150, 150, 150);
+   var sun = color(255,204,0);
+   var night = 80;
+   var cloud = 200;
 
   var temp1 = Math.floor(hourlyWeather.data[1].temperature);
   var temp2 = Math.floor(hourlyWeather.data[2].temperature);
@@ -80,57 +83,394 @@ function gotData(data)
   textSize(textSizeSmall);
   text(m + "/" + d + "/" + y, xPos2, yPos);
   yPos+=textSizeSmall;
-  text("Cambridge, MA", xPos2, yPos);
+  text("Cambridge, MA  "+currentWeather.icon + "  " + hourlyWeather.data[12].icon, xPos2, yPos);
   //yPos+=yGap; 
 
  
   // Current Weather
 
-      if(currentWeather.summary == "Clear")
-    {
-         var c = color(255,204,0);
-         noStroke();
-         fill(c);
+  //clear-day
+  //partly-cloudy-day
+  //rain
+  //
 
+/////////////////////////////////////////////////////////////////////////////// Current time
+
+      if(currentWeather.icon == "clear-day")
+    {
+         noStroke();
+         fill(sun);
          ellipse(xPos2,140,iconRadiusBig,iconRadiusBig);
     }  
 
-      if(currentWeather.summary == "Partly Cloudy")
+      else if(currentWeather.icon == "partly-cloudy-day")
     {
-         var c = color(255,204,0);
          noStroke();
-         fill(c);
-
+         fill(sun);
          ellipse(xPos2,140,iconRadiusBig,iconRadiusBig);
       
-         fill(200);
+         fill(cloud);
          arc(xPos2, 140, iconRadiusBig, iconRadiusBig, 0-QUARTER_PI, PI-QUARTER_PI, CHORD);
     }
 
 
-   fill(0);
+   fill(255);
    textSize(textSizeDegrees);
    textAlign(CENTER);
-   text(Math.round(hourlyWeather.data[0].temperature), xPos2,150);
+   text(Math.round(hourlyWeather.data[0].temperature), xPos2,149);
 
  
   // future weather ellipses
   fill(50);
+
+///////////////////////////////////////////////////////////////////////////////////// hour 1
+   if(hourlyWeather.data[1].icon == "clear-day")
+{
+ // var c = color(255,204,0);
+  noStroke();
+  fill(sun);
   ellipse(xPos1,yPos1,iconRadiusSmall,iconRadiusSmall);
+}
+
+   else if(hourlyWeather.data[1].icon == "partly-cloudy-day")
+{
+ // var c = color(255,204,0);
+  noStroke();
+  fill(sun);
+  ellipse(xPos1,yPos1,iconRadiusSmall,iconRadiusSmall);
+  fill(cloud);
+  arc(xPos1, yPos1, iconRadiusSmall, iconRadiusSmall, 0-QUARTER_PI, PI-QUARTER_PI, CHORD);
+}
+
+   else if(hourlyWeather.data[1].icon == "partly-cloudy-night")
+{
+ // var c = color(255,204,0);
+  noStroke();
+  fill(night);
+  ellipse(xPos1,yPos1,iconRadiusSmall,iconRadiusSmall);
+  fill(cloud);
+  arc(xPos1, yPos1, iconRadiusSmall, iconRadiusSmall, 0-QUARTER_PI, PI-QUARTER_PI, CHORD);
+}
+
+///////////////////////////////////////////////////////////////////////////////////// hour 2
+
+   if(hourlyWeather.data[2].icon == "clear-day")
+{
+ // var c = color(255,204,0);
+  noStroke();
+  fill(sun);
   ellipse(xPos2,yPos1,iconRadiusSmall,iconRadiusSmall);
+}
+
+   else if(hourlyWeather.data[2].icon == "partly-cloudy-day")
+{
+ // var c = color(255,204,0);
+  noStroke();
+  fill(sun);
+  ellipse(xPos2,yPos1,iconRadiusSmall,iconRadiusSmall);
+  fill(cloud);
+  arc(xPos1, yPos1, iconRadiusSmall, iconRadiusSmall, 0-QUARTER_PI, PI-QUARTER_PI, CHORD);
+}
+
+   else if(hourlyWeather.data[2].icon == "partly-cloudy-night")
+{
+  noStroke();
+  fill(night);
+  ellipse(xPos2,yPos1,iconRadiusSmall,iconRadiusSmall);
+  fill(cloud);
+  arc(xPos1, yPos1, iconRadiusSmall, iconRadiusSmall, 0-QUARTER_PI, PI-QUARTER_PI, CHORD);
+}
+
+///////////////////////////////////////////////////////////////////////////////////// hour 3
+
+   if(hourlyWeather.data[3].icon == "clear-day")
+{
+  noStroke();
+  fill(sun);
   ellipse(xPos3,yPos1,iconRadiusSmall,iconRadiusSmall);
+}
 
+   else if(hourlyWeather.data[3].icon == "partly-cloudy-day")
+{
+  noStroke();
+  fill(sun);
+  ellipse(xPos3,yPos1,iconRadiusSmall,iconRadiusSmall);
+  fill(cloud);
+  arc(xPos1, yPos1, iconRadiusSmall, iconRadiusSmall, 0-QUARTER_PI, PI-QUARTER_PI, CHORD);
+}
+
+   else if(hourlyWeather.data[3].icon == "partly-cloudy-night")
+{
+  noStroke();
+  fill(night);
+  ellipse(xPos3,yPos1,iconRadiusSmall,iconRadiusSmall);
+  fill(cloud);
+  arc(xPos1, yPos1, iconRadiusSmall, iconRadiusSmall, 0-QUARTER_PI, PI-QUARTER_PI, CHORD);
+}
+ 
+///////////////////////////////////////////////////////////////////////////////////// hour 4
+
+   if(hourlyWeather.data[4].icon == "clear-day")
+{
+  noStroke();
+  fill(sun);
   ellipse(xPos1,yPos2,iconRadiusSmall,iconRadiusSmall);
+}
+
+   else if(hourlyWeather.data[4].icon == "partly-cloudy-day")
+{
+  noStroke();
+  fill(sun);
+  ellipse(xPos1,yPos2,iconRadiusSmall,iconRadiusSmall);
+  fill(cloud);
+  arc(xPos1, yPos2, iconRadiusSmall, iconRadiusSmall, 0-QUARTER_PI, PI-QUARTER_PI, CHORD);
+}
+
+   else if(hourlyWeather.data[4].icon == "partly-cloudy-night")
+{
+  noStroke();
+  fill(night);
+  ellipse(xPos1,yPos2,iconRadiusSmall,iconRadiusSmall);
+  fill(cloud);
+  arc(xPos1, yPos2, iconRadiusSmall, iconRadiusSmall, 0-QUARTER_PI, PI-QUARTER_PI, CHORD);
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////// hour 5
+
+
+   if(hourlyWeather.data[5].icon == "clear-day")
+{
+  noStroke();
+  fill(sun);
   ellipse(xPos2,yPos2,iconRadiusSmall,iconRadiusSmall);
+}
+
+   else if(hourlyWeather.data[5].icon == "partly-cloudy-day")
+{
+  noStroke();
+  fill(sun);
+  ellipse(xPos2,yPos2,iconRadiusSmall,iconRadiusSmall);
+  fill(cloud);
+  arc(xPos2, yPos2, iconRadiusSmall, iconRadiusSmall, 0-QUARTER_PI, PI-QUARTER_PI, CHORD);
+}
+
+   else if(hourlyWeather.data[5].icon == "partly-cloudy-night")
+{
+  noStroke();
+  fill(night);
+  ellipse(xPos2,yPos2,iconRadiusSmall,iconRadiusSmall);
+  fill(cloud);
+  arc(xPos2, yPos2, iconRadiusSmall, iconRadiusSmall, 0-QUARTER_PI, PI-QUARTER_PI, CHORD);
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////////// hour 6
+
+   if(hourlyWeather.data[6].icon == "clear-day")
+{
+  noStroke();
+  fill(sun);
   ellipse(xPos3,yPos2,iconRadiusSmall,iconRadiusSmall);
+}
 
+   else if(hourlyWeather.data[6].icon == "partly-cloudy-day")
+{
+  noStroke();
+  fill(sun);
+  ellipse(xPos3,yPos2,iconRadiusSmall,iconRadiusSmall);
+  fill(cloud);
+  arc(xPos3, yPos2, iconRadiusSmall, iconRadiusSmall, 0-QUARTER_PI, PI-QUARTER_PI, CHORD);
+}
+
+   else if(hourlyWeather.data[6].icon == "partly-cloudy-night")
+{
+  noStroke();
+  fill(night);
+  ellipse(xPos3,yPos2,iconRadiusSmall,iconRadiusSmall);
+  fill(cloud);
+  arc(xPos3, yPos2, iconRadiusSmall, iconRadiusSmall, 0-QUARTER_PI, PI-QUARTER_PI, CHORD);
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////// hour 7
+
+   if(hourlyWeather.data[7].icon == "clear-day")
+{
+  noStroke();
+  fill(sun);
   ellipse(xPos1,yPos3,iconRadiusSmall,iconRadiusSmall);
-  ellipse(xPos2,yPos3,iconRadiusSmall,iconRadiusSmall);
-  ellipse(xPos3,yPos3,iconRadiusSmall,iconRadiusSmall);
+}
 
+   else if(hourlyWeather.data[7].icon == "partly-cloudy-day")
+{
+  noStroke();
+  fill(sun);
+  ellipse(xPos1,yPos3,iconRadiusSmall,iconRadiusSmall);
+  fill(cloud);
+  arc(xPos1, yPos3, iconRadiusSmall, iconRadiusSmall, 0-QUARTER_PI, PI-QUARTER_PI, CHORD);
+}
+
+   else if(hourlyWeather.data[7].icon == "partly-cloudy-night")
+{
+  noStroke();
+  fill(night);
+  ellipse(xPos1,yPos3,iconRadiusSmall,iconRadiusSmall);
+  fill(cloud);
+  arc(xPos1, yPos3, iconRadiusSmall, iconRadiusSmall, 0-QUARTER_PI, PI-QUARTER_PI, CHORD);
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////////// hour 8
+
+   if(hourlyWeather.data[8].icon == "clear-day")
+{
+  noStroke();
+  fill(sun);
+  ellipse(xPos2,yPos3,iconRadiusSmall,iconRadiusSmall);
+}
+
+   else if(hourlyWeather.data[8].icon == "partly-cloudy-day")
+{
+  noStroke();
+  fill(sun);
+  ellipse(xPos2,yPos3,iconRadiusSmall,iconRadiusSmall);
+  fill(cloud);
+  arc(xPos2, yPos3, iconRadiusSmall, iconRadiusSmall, 0-QUARTER_PI, PI-QUARTER_PI, CHORD);
+}
+
+   else if(hourlyWeather.data[8].icon == "partly-cloudy-night")
+{
+  noStroke();
+  fill(night);
+  ellipse(xPos2,yPos3,iconRadiusSmall,iconRadiusSmall);
+  fill(cloud);
+  arc(xPos2, yPos3, iconRadiusSmall, iconRadiusSmall, 0-QUARTER_PI, PI-QUARTER_PI, CHORD);
+}
+
+///////////////////////////////////////////////////////////////////////////////////// hour 9
+
+   if(hourlyWeather.data[9].icon == "clear-day")
+{
+  noStroke();
+  fill(sun);
+  ellipse(xPos3,yPos3,iconRadiusSmall,iconRadiusSmall);
+}
+
+   else if(hourlyWeather.data[9].icon == "partly-cloudy-day")
+{
+  noStroke();
+  fill(sun);
+  ellipse(xPos3,yPos3,iconRadiusSmall,iconRadiusSmall);
+  fill(cloud);
+  arc(xPos3, yPos3, iconRadiusSmall, iconRadiusSmall, 0-QUARTER_PI, PI-QUARTER_PI, CHORD);
+}
+
+   else if(hourlyWeather.data[9].icon == "partly-cloudy-night")
+{
+  noStroke();
+  fill(night);
+  ellipse(xPos3,yPos3,iconRadiusSmall,iconRadiusSmall);
+  fill(cloud);
+  arc(xPos3, yPos3, iconRadiusSmall, iconRadiusSmall, 0-QUARTER_PI, PI-QUARTER_PI, CHORD);
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////// hour 10
+
+   if(hourlyWeather.data[10].icon == "clear-day")
+{
+  noStroke();
+  fill(sun);
   ellipse(xPos1,yPos4,iconRadiusSmall,iconRadiusSmall);
+}
+
+   else if(hourlyWeather.data[10].icon == "partly-cloudy-day")
+{
+  noStroke();
+  fill(sun);
+  ellipse(xPos1,yPos4,iconRadiusSmall,iconRadiusSmall);
+  fill(cloud);
+  arc(xPos1, yPos4, iconRadiusSmall, iconRadiusSmall, 0-QUARTER_PI, PI-QUARTER_PI, CHORD);
+}
+
+   else if(hourlyWeather.data[10].icon == "partly-cloudy-night")
+{
+  noStroke();
+  fill(night);
+  ellipse(xPos1,yPos4,iconRadiusSmall,iconRadiusSmall);
+  fill(cloud);
+  arc(xPos1, yPos4, iconRadiusSmall, iconRadiusSmall, 0-QUARTER_PI, PI-QUARTER_PI, CHORD);
+}
+
+///////////////////////////////////////////////////////////////////////////////////// hour 11
+
+   if(hourlyWeather.data[11].icon == "clear-day")
+{
+  noStroke();
+  fill(sun);
   ellipse(xPos2,yPos4,iconRadiusSmall,iconRadiusSmall);
+}
+
+   else if(hourlyWeather.data[11].icon == "partly-cloudy-day")
+{
+  noStroke();
+  fill(sun);
+  ellipse(xPos2,yPos4,iconRadiusSmall,iconRadiusSmall);
+  fill(cloud);
+  arc(xPos2, yPos4, iconRadiusSmall, iconRadiusSmall, 0-QUARTER_PI, PI-QUARTER_PI, CHORD);
+}
+
+   else if(hourlyWeather.data[11].icon == "partly-cloudy-night")
+{
+  noStroke();
+  fill(night);
+  ellipse(xPos2,yPos4,iconRadiusSmall,iconRadiusSmall);
+  fill(cloud);
+  arc(xPos2, yPos4, iconRadiusSmall, iconRadiusSmall, 0-QUARTER_PI, PI-QUARTER_PI, CHORD);
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////// hour 12
+
+    if(hourlyWeather.data[12].icon == "clear-day")
+{
+  noStroke();
+  fill(sun);
   ellipse(xPos3,yPos4,iconRadiusSmall,iconRadiusSmall);
+}
+
+   else if(hourlyWeather.data[12].icon == "partly-cloudy-day")
+{
+  noStroke();
+  fill(sun);
+  ellipse(xPos3,yPos4,iconRadiusSmall,iconRadiusSmall);
+  fill(cloud);
+  arc(xPos3, yPos4, iconRadiusSmall, iconRadiusSmall, 0-QUARTER_PI, PI-QUARTER_PI, CHORD);
+}
+
+   else if(hourlyWeather.data[12].icon == "partly-cloudy-night")
+{
+  noStroke();
+  fill(night);
+  ellipse(xPos3,yPos4,iconRadiusSmall,iconRadiusSmall);
+  fill(cloud);
+  arc(xPos3, yPos4, iconRadiusSmall, iconRadiusSmall, 0-QUARTER_PI, PI-QUARTER_PI, CHORD);
+}
+
+   else if(hourlyWeather.data[12].icon == "rain")
+{
+  noStroke();
+  fill(cloud);
+  ellipse(xPos3,yPos4,iconRadiusSmall,iconRadiusSmall);
+}
+
+ 
+  
+
+
 
   // Future Temps
 
@@ -150,50 +490,29 @@ function gotData(data)
   text(temp10,xPos1,yPos4+6);
   text(temp11,xPos2,yPos4+6);
   text(temp12,xPos3,yPos4+6);
+
+  fill(150);
+  textSize(13);
+  text((h+1),xPos1,yPos1+45);
+  text((h+2),xPos2,yPos1+45);
+  text((h+3),xPos3,yPos1+45);
+  text((h+4),xPos1,yPos2+45);
+  text((h+5),xPos2,yPos2+45);
+  text((h+6),xPos3,yPos2+45);
+  text((h+7),xPos1,yPos3+45);
+  text((h+8),xPos2,yPos3+45);
+  text((h+9),xPos3,yPos3+45);
+  text((h+10),xPos1,yPos4+45);
+  text((h+11),xPos2,yPos4+45);
+  text((h+12),xPos3,yPos4+45);
   // settings and arrow
 
-/*
-  strokeWeight(3);
-  stroke(0);
-  line(width-25,(height-20)+5,width-15,(height-20));
-  line(width-25,(height-20)-5,width-15,(height-20));
-*/
 
   // border outline
   noFill();
-  stroke(0);
+  stroke(100);
   strokeWeight(2);
   rect(0,0,width,height);
-
-
-  // Rain Summary
-  
-  /*
-  textSize(textSizeSmall);
-  text("Temperature",20, yPos);
-  yPos+=textSizeLarge;
-  textSize(textSizeLarge);
-  text(currentWeather.temperature + "º",20, yPos);
-  yPos+=yGap;
-  
-  textSize(textSizeSmall);
-  text("Precipitation",20, yPos);
-  yPos+=textSizeLarge;
-  textSize(textSizeLarge);
-  text(currentWeather.precipIntensity + "%",20, yPos);
-  yPos+=yGap;
-  
-  textSize(textSizeSmall);
-  text("Humidity",20, yPos);
-  yPos+=textSizeLarge;
-  textSize(textSizeLarge);
-  text(currentWeather.humidity + "%",20, yPos);
-  yPos+=yGap;
-
-  */
-
- 
-
 
 
 }
