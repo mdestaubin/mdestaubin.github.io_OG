@@ -72,20 +72,33 @@ function gotData(data) {
   var tempDescription = ""
   var temp = hourlyWeather.data[0].apparentTemperature
 
-  if(temp < 70 || temp > 60){
-  tempDescription = "fairly chilly."
-  }
+  if(temp < 0){tempDescription = "it is way too fucking cold"}
 
-  else if(temp < 60 || temp > 50){
+  else if(temp < 10 && temp > 0){tempDescription = "insanely cold"}
+  
+  else if(temp < 20 && temp > 10){tempDescription = "very cold"}
 
-    tempDescription = "chilly."
-  }
+  else if(temp < 30 && temp > 20){tempDescription = "cold"}
 
-  else{
-    tempDescription = "I dont know what the hell the temperature is"
-  }
+  else if(temp < 40 && temp > 30){tempDescription = "pretty cold"} 
 
-  text(hourlySummary + tempDescription, 20, (yPos+60), (width-40),100);
+  else if(temp < 50 && temp > 40){tempDescription = "pretty chilly"} 
+
+  else if(temp < 60 && temp > 50){tempDescription = "kind of chilly"}
+
+  else if(temp < 70 && temp > 60){tempDescription = "basically like the perfect temperature"}
+
+  else if(temp < 80 && temp > 70){tempDescription = "warm"}
+
+  else if(temp < 90 && temp > 80){tempDescription = "pretty hot"}
+
+  else if(temp < 100 && temp > 90){tempDescription = "insanely hot"}
+
+  else if(temp > 100){tempDescription = "it is way too fucking hot"}
+
+  else{tempDescription = "I dont know what the hell the temperature is, sorry bro"}
+
+  text(hourlySummary + tempDescription + " outside.", 20, (yPos+60), (width-40),100);
 
   //text(hourlyWeather.data[0].time);
 
