@@ -86,7 +86,7 @@ function gotData(data)
   textSize(textSizeSmall);
   text(m + "/" + d + "/" + y, xPos2, yPos);
   yPos+=textSizeSmall;
-  text("Cambridge, MA  "+ hourlyWeather.data[11].precipProbability, xPos2, yPos);
+  text("Cambridge, MA  ", xPos2, yPos);
   //yPos+=yGap; 
 
  
@@ -124,7 +124,7 @@ function gotData(data)
 
  
   // future weather ellipses
-  fill(50);
+  fill(night);
 
 ///////////////////////////////////////////////////////////////////////////////////// hour 1
    if(hourlyWeather.data[1].icon == "clear-day")
