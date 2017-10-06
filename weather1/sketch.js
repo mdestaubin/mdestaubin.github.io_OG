@@ -76,9 +76,9 @@ function gotData(data) {
   
   else if(h > 12 && h <= 18 ){intro = "This Evening "}
 
-  else if(h > 18 && h <= 22 ){intro = "Tonight "}
+  else if(h > 18 && h < 22 ){intro = "Tonight "}
 
-  else if(h > 22 && h <= 24 ){intro = "In the Wee Hours "}
+  else if(h >= 22 && h <= 24 ){intro = "Late tonight "}
 
 
  // Date and Location
@@ -200,9 +200,9 @@ if(futureRain >= 0 && futureRain <= .2){fRainDescription = "There's no chance of
 //////////////////////////////////////////////////////////////////////////////////////////////////////// Text
 
 
-  text("Currently, it's " + tempDescription + " outside with " + skyDescription + rainDescription, 15, yPos2, (width-15),boxLength);
+  text("Currently, it's " + tempDescription + " outside with " + skyDescription + rainDescription, 15, yPos2+5, (width-15),boxLength);
 
-  text(intro +"is expected to be " + futureTempDescription + " with " + fSkyDescription + fRainDescription, 15, (yPos2 + 5 + boxLength), (width-15),boxLength);
+  text(intro +"is expected to be " + futureTempDescription + " with " + fSkyDescription + fRainDescription, 15, (yPos2 + 20 + boxLength), (width-15),boxLength);
 
 
 } 

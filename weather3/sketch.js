@@ -1,7 +1,5 @@
 var queryResult;
 
-
-
 function setup() 
 {
   //pixelDensity(3.0);
@@ -63,8 +61,6 @@ function gotData(data)
    var cloud = 200;
    var rain = color(36,91,142);
 
-
-
   var temp1 = Math.floor(hourlyWeather.data[1].temperature);
   var temp2 = Math.floor(hourlyWeather.data[2].temperature);
   var temp3 = Math.floor(hourlyWeather.data[3].temperature);
@@ -87,17 +83,9 @@ function gotData(data)
   text(m + "/" + d + "/" + y, xPos2, yPos);
   yPos+=textSizeSmall;
   text("Cambridge, MA  ", xPos2, yPos);
-  //yPos+=yGap; 
-
- 
-  // Current Weather
-
-  //clear-day
-  //partly-cloudy-day
-  //rain
-  //
 
 /////////////////////////////////////////////////////////////////////////////// Current time
+  fill(night);
 
       if(currentWeather.icon == "clear-day")
     {
@@ -116,8 +104,43 @@ function gotData(data)
          arc(xPos2, 140, iconRadiusBig, iconRadiusBig, 0-QUARTER_PI, PI-QUARTER_PI, CHORD);
     }
 
+     else if(currentWeather.icon == "partly-cloudy-night")
+    {
+ 
+  noStroke();
+  fill(night);
+  ellipse(xPos2,140,iconRadiusBig,iconRadiusBig);
+  fill(cloud);
+  arc(xPos2, 140, iconRadiusBig, iconRadiusBig, 0-QUARTER_PI, PI-QUARTER_PI, CHORD);
+}
 
-   fill(50);
+   else if(currentWeather.icon == "rain")
+{
+  noStroke();
+  fill(cloud);
+  ellipse(xPos2,140,iconRadiusBig,iconRadiusBig);
+
+if(currentWeather.precipProbability < .25){
+  fill(rain);
+  arc(xPos2, 140, iconRadiusBig, iconRadiusBig, 0+QUARTER_PI, PI-QUARTER_PI, CHORD);
+}
+
+if(currentWeather.precipProbability > .25 && currentWeather.precipProbability < .75)
+{
+  fill(rain);
+  arc(xPos2, 140, iconRadiusBig, iconRadiusBig, 0, PI, CHORD);
+}
+
+if(currentWeather.precipProbability > .75){
+ fill(rain);
+ ellipse(xPos2,140,iconRadiusBig,iconRadiusBig);
+}
+}
+
+
+
+   fill(25);
+   textStyle(BOLD);
    textSize(textSizeDegrees);
    textAlign(CENTER);
    text(Math.round(hourlyWeather.data[0].temperature), xPos2,149);
@@ -129,7 +152,6 @@ function gotData(data)
 ///////////////////////////////////////////////////////////////////////////////////// hour 1
    if(hourlyWeather.data[1].icon == "clear-day")
 {
- // var c = color(255,204,0);
   noStroke();
   fill(sun);
   ellipse(xPos1,yPos1,iconRadiusSmall,iconRadiusSmall);
@@ -137,7 +159,6 @@ function gotData(data)
 
    else if(hourlyWeather.data[1].icon == "partly-cloudy-day")
 {
- // var c = color(255,204,0);
   noStroke();
   fill(sun);
   ellipse(xPos1,yPos1,iconRadiusSmall,iconRadiusSmall);
@@ -147,7 +168,6 @@ function gotData(data)
 
    else if(hourlyWeather.data[1].icon == "partly-cloudy-night")
 {
- // var c = color(255,204,0);
   noStroke();
   fill(night);
   ellipse(xPos1,yPos1,iconRadiusSmall,iconRadiusSmall);
@@ -166,7 +186,7 @@ function gotData(data)
   arc(xPos1, yPos1, iconRadiusSmall, iconRadiusSmall, 0+QUARTER_PI, PI-QUARTER_PI, CHORD);
 }
 
-if(hourlyWeather.data[1].precipProbability > .25 && hourlyWeather.data[11].precipProbability < .75){
+if(hourlyWeather.data[1].precipProbability > .25 && hourlyWeather.data[1].precipProbability < .75){
   fill(rain);
   arc(xPos1, yPos1, iconRadiusSmall, iconRadiusSmall, 0, PI, CHORD);
 }
@@ -182,7 +202,6 @@ ellipse(xPos1,yPos1,iconRadiusSmall,iconRadiusSmall);
 
    if(hourlyWeather.data[2].icon == "clear-day")
 {
- // var c = color(255,204,0);
   noStroke();
   fill(sun);
   ellipse(xPos2,yPos1,iconRadiusSmall,iconRadiusSmall);
@@ -190,7 +209,6 @@ ellipse(xPos1,yPos1,iconRadiusSmall,iconRadiusSmall);
 
    else if(hourlyWeather.data[2].icon == "partly-cloudy-day")
 {
- // var c = color(255,204,0);
   noStroke();
   fill(sun);
   ellipse(xPos2,yPos1,iconRadiusSmall,iconRadiusSmall);
@@ -218,7 +236,7 @@ ellipse(xPos1,yPos1,iconRadiusSmall,iconRadiusSmall);
   arc(xPos2, yPos1, iconRadiusSmall, iconRadiusSmall, 0+QUARTER_PI, PI-QUARTER_PI, CHORD);
 }
 
-if(hourlyWeather.data[2].precipProbability > .25 && hourlyWeather.data[11].precipProbability < .75){
+if(hourlyWeather.data[2].precipProbability > .25 && hourlyWeather.data[2].precipProbability < .75){
   fill(rain);
   arc(xPos2, yPos1, iconRadiusSmall, iconRadiusSmall, 0, PI, CHORD);
 }
@@ -268,7 +286,7 @@ ellipse(xPos2,yPos1,iconRadiusSmall,iconRadiusSmall);
   arc(xPos3, yPos1, iconRadiusSmall, iconRadiusSmall, 0+QUARTER_PI, PI-QUARTER_PI, CHORD);
 }
 
-if(hourlyWeather.data[3].precipProbability > .25 && hourlyWeather.data[11].precipProbability < .75){
+if(hourlyWeather.data[3].precipProbability > .25 && hourlyWeather.data[3].precipProbability < .75){
   fill(rain);
   arc(xPos3, yPos1, iconRadiusSmall, iconRadiusSmall, 0, PI, CHORD);
 }
@@ -318,7 +336,7 @@ ellipse(xPos3,yPos1,iconRadiusSmall,iconRadiusSmall);
   arc(xPos1, yPos2, iconRadiusSmall, iconRadiusSmall, 0+QUARTER_PI, PI-QUARTER_PI, CHORD);
 }
 
-if(hourlyWeather.data[4].precipProbability > .25 && hourlyWeather.data[11].precipProbability < .75){
+if(hourlyWeather.data[4].precipProbability > .25 && hourlyWeather.data[4].precipProbability < .75){
   fill(rain);
   arc(xPos1, yPos2, iconRadiusSmall, iconRadiusSmall, 0, PI, CHORD);
 }
@@ -369,7 +387,7 @@ ellipse(xPos1,yPos2,iconRadiusSmall,iconRadiusSmall);
   arc(xPos2, yPos2, iconRadiusSmall, iconRadiusSmall, 0+QUARTER_PI, PI-QUARTER_PI, CHORD);
 }
 
-if(hourlyWeather.data[5].precipProbability > .25 && hourlyWeather.data[11].precipProbability < .75){
+if(hourlyWeather.data[5].precipProbability > .25 && hourlyWeather.data[5].precipProbability < .75){
   fill(rain);
   arc(xPos2, yPos2, iconRadiusSmall, iconRadiusSmall, 0, PI, CHORD);
 }
@@ -420,7 +438,7 @@ ellipse(xPos2,yPos2,iconRadiusSmall,iconRadiusSmall);
   arc(xPos3, yPos2, iconRadiusSmall, iconRadiusSmall, 0+QUARTER_PI, PI-QUARTER_PI, CHORD);
 }
 
-if(hourlyWeather.data[6].precipProbability > .25 && hourlyWeather.data[11].precipProbability < .75){
+if(hourlyWeather.data[6].precipProbability > .25 && hourlyWeather.data[6].precipProbability < .75){
   fill(rain);
   arc(xPos3, yPos2, iconRadiusSmall, iconRadiusSmall, 0, PI, CHORD);
 }
@@ -471,7 +489,7 @@ ellipse(xPos3,yPos2,iconRadiusSmall,iconRadiusSmall);
   arc(xPos1, yPos3, iconRadiusSmall, iconRadiusSmall, 0+QUARTER_PI, PI-QUARTER_PI, CHORD);
 }
 
-if(hourlyWeather.data[7].precipProbability > .25 && hourlyWeather.data[11].precipProbability < .75){
+if(hourlyWeather.data[7].precipProbability > .25 && hourlyWeather.data[7].precipProbability < .75){
   fill(rain);
   arc(xPos1, yPos3, iconRadiusSmall, iconRadiusSmall, 0, PI, CHORD);
 }
@@ -482,8 +500,6 @@ ellipse(xPos1,yPos3,iconRadiusSmall,iconRadiusSmall);
 }
 
 }
-
-
 
 ///////////////////////////////////////////////////////////////////////////////////// hour 8
 
@@ -523,7 +539,7 @@ ellipse(xPos1,yPos3,iconRadiusSmall,iconRadiusSmall);
   arc(xPos2, yPos3, iconRadiusSmall, iconRadiusSmall, 0+QUARTER_PI, PI-QUARTER_PI, CHORD);
 }
 
-if(hourlyWeather.data[8].precipProbability > .25 && hourlyWeather.data[11].precipProbability < .75){
+if(hourlyWeather.data[8].precipProbability > .25 && hourlyWeather.data[8].precipProbability < .75){
   fill(rain);
   arc(xPos2, yPos3, iconRadiusSmall, iconRadiusSmall, 0, PI, CHORD);
 }
@@ -572,7 +588,7 @@ ellipse(xPos2,yPos3,iconRadiusSmall,iconRadiusSmall);
   arc(xPos3, yPos3, iconRadiusSmall, iconRadiusSmall, 0+QUARTER_PI, PI-QUARTER_PI, CHORD);
 }
 
-if(hourlyWeather.data[9].precipProbability > .25 && hourlyWeather.data[11].precipProbability < .75){
+if(hourlyWeather.data[9].precipProbability > .25 && hourlyWeather.data[9].precipProbability < .75){
   fill(rain);
   arc(xPos3, yPos3, iconRadiusSmall, iconRadiusSmall, 0, PI, CHORD);
 }
@@ -621,7 +637,7 @@ ellipse(xPos3,yPos3,iconRadiusSmall,iconRadiusSmall);
   arc(xPos1, yPos4, iconRadiusSmall, iconRadiusSmall, 0+QUARTER_PI, PI-QUARTER_PI, CHORD);
 }
 
-if(hourlyWeather.data[10].precipProbability > .25 && hourlyWeather.data[11].precipProbability < .75){
+if(hourlyWeather.data[10].precipProbability > .25 && hourlyWeather.data[10].precipProbability < .75){
   fill(rain);
   arc(xPos1, yPos4, iconRadiusSmall, iconRadiusSmall, 0, PI, CHORD);
 }
@@ -721,7 +737,7 @@ ellipse(xPos2,yPos4,iconRadiusSmall,iconRadiusSmall);
   arc(xPos3, yPos4, iconRadiusSmall, iconRadiusSmall, 0+QUARTER_PI, PI-QUARTER_PI, CHORD);
 }
 
-if(hourlyWeather.data[12].precipProbability > .25 && hourlyWeather.data[11].precipProbability < .75){
+if(hourlyWeather.data[12].precipProbability > .25 && hourlyWeather.data[12].precipProbability < .75){
   fill(rain);
   arc(xPos3, yPos4, iconRadiusSmall, iconRadiusSmall, 0, PI, CHORD);
 }
@@ -733,15 +749,10 @@ ellipse(xPos3,yPos4,iconRadiusSmall,iconRadiusSmall);
   
 }
 
-
- 
-  
-
-
-
   // Future Temps
   fill(0);
   textSize(textSizeSmall);
+  textStyle(BOLD);
   text(temp1,xPos1,yPos1+6);
   text(temp2,xPos2,yPos1+6);
   text(temp3,xPos3,yPos1+6);
@@ -755,18 +766,13 @@ ellipse(xPos3,yPos4,iconRadiusSmall,iconRadiusSmall);
   text(temp11,xPos2,yPos4+6);
   text(temp12,xPos3,yPos4+6);
 
-  fill(150);
-  textSize(13);
+  // time
+  fill(200);
+  textSize(12);
+  textStyle(NORMAL);
 
-//    if(h > 12) {
-//    h = hour()-12;
-// }
-
-// for(i = h; i < 24; i++) {
-
-
-var now = new Date();
-var hours = now.getHours() % 12 || 12
+  var now = new Date();
+  var hours = now.getHours() % 12 || 12
 
   var i = h
   if( i > 12){ 
@@ -785,29 +791,6 @@ var hours = now.getHours() % 12 || 12
   text((i+11),xPos2,yPos4+45);
   text((i+12),xPos3,yPos4+45);
   }
-
-  // fill(rain);
-  // arc(xPos1, yPos4, iconRadiusSmall, iconRadiusSmall, 0+QUARTER_PI, PI-QUARTER_PI, CHORD);
-  // arc(xPos2, yPos4, iconRadiusSmall, iconRadiusSmall, 0, PI, CHORD);
-  // arc(xPos3, yPos4, iconRadiusSmall, iconRadiusSmall, 0-QUARTER_PI, PI+QUARTER_PI, CHORD);
-
-// }
-  // text((i+1),xPos1,yPos1+45);
-  // text((i+2),xPos2,yPos1+45);
-  // text((i+3),xPos3,yPos1+45);
-  // text((i+4),xPos1,yPos2+45);
-  // text((i+5),xPos2,yPos2+45);
-  // text((i+6),xPos3,yPos2+45);
-  // text((i+7),xPos1,yPos3+45);
-  // text((i+8),xPos2,yPos3+45);
-  // text((i+9),xPos3,yPos3+45);
-  // text((i+10),xPos1,yPos4+45);
-  // text((i+11),xPos2,yPos4+45);
-  // text((i+12),xPos3,yPos4+45);
-
-
-
-  // settings and arrow
 
 
   // border outline
