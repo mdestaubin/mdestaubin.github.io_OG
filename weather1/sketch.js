@@ -34,13 +34,17 @@ function gotData(data) {
   // a few variables for text formatting
   var xPos = 20;  
   var yPos = 40;
+  var yPos2 = 75;
+  var boxLength = 230;
   var yGap = 60; 
   var textSizeLarge = 30;
-  var textSizeSmall = 16;
+  var textSizeSmall = 12;
 
   var m = month();
   var d = day();
   var y = year();
+  var h = hour();
+
 
   // Audio Play Button
    // noFill();
@@ -53,21 +57,37 @@ function gotData(data) {
   var hourlySummary = "It's " + hourlyWeather.data[0].summary.toLowerCase() + " at the moment and "
   var tempDescription = ""
   var temp = hourlyWeather.data[0].apparentTemperature
-  var futureTemp = hourlyWeather.data[6].apparentTemperature
+  var futureTemp = hourlyWeather.data[5].apparentTemperature
   var futureTempDescription = ""
   var sky = hourlyWeather.data[0].cloudCover
   var skyDescription = ""
+  var futureSky = hourlyWeather.data[5].cloudCover
+  var fSkyDescription = ""
   var rain = hourlyWeather.data[0].precipProbability
   var rainDescription = ""
+  var futureRain = hourlyWeather.data[5].precipProbability
+  var fRainDescription = ""
+
+  var intro = ""
+
+  if(h >= 0 && h <= 6 ){intro = "This Morning "}
+
+  else if(h > 6 && h <= 12 ){intro = "This Afternoon "}
+  
+  else if(h > 12 && h <= 18 ){intro = "This Evening "}
+
+  else if(h > 18 && h <= 22 ){intro = "Tonight "}
+
+  else if(h > 22 && h <= 24 ){intro = "In the Wee Hours "}
 
 
  // Date and Location
-  fill(255);
+  fill(150);
   textSize(textSizeSmall);
-  text(m + "/" + d + "/" + y,20, yGap);
+  text(m + "/" + d + "/" + y + "  |  Cambridge, MA ",20, yGap);
   yGap+=textSizeSmall;
-  text("Cambridge, MA  " + sky,20, yGap);
-  yPos+=yGap;
+  //text("Cambridge, MA  " + rain,20, yGap);
+  //yPos+=yGap;
 
 
   // Temperature Summary
@@ -91,7 +111,7 @@ if(futureTemp < 0){tempDescription = "it is way too fucking cold"}
 
   else if(temp < 60 && temp > 50){tempDescription = "kind of chilly"}
 
-  else if(temp < 70 && temp > 60){tempDescription = "basically the perfect temperature"}
+  else if(temp < 70 && temp > 60){tempDescription = "the perfect temperature"}
 
   else if(temp < 80 && temp > 70){tempDescription = "warm"}
 
@@ -119,7 +139,7 @@ if(futureTemp < 0){tempDescription = "it is way too fucking cold"}
 
   else if(futureTemp < 60 && futureTemp > 50){futureTempDescription = "kind of chilly"}
 
-  else if(futureTemp < 70 && futureTemp > 60){futureTempDescription = "basically the perfect temperature"}
+  else if(futureTemp < 70 && futureTemp > 60){futureTempDescription = "the perfect temperature"}
 
   else if(futureTemp < 80 && futureTemp > 70){futureTempDescription = "warm"}
 
@@ -131,16 +151,58 @@ if(futureTemp < 0){tempDescription = "it is way too fucking cold"}
 
   else{futureTempDescription = "I dont know what the hell the temperature is, sorry bro"}
 
+///////////////////////////////////////////////////////////////////////////////////////////////////// current sky
 
-if(sky > 0 && sky < .3){skyDescription = "little to no cloud cover. "}
+if(sky > 0 && sky <= .3){skyDescription = "little to no cloud cover. "}
+
+  else if(sky > .3 && sky <= .6){skyDescription = "partly cloudy skies. "}
+
+  else if(sky > .6 && sky <= .8){skyDescription = "mostly cloudy skies. "}
+
+  else if(sky > .8 && sky <= 1){skyDescription = "overcast skies. "}
+
+  else if(sky == 0){skyDescription = "clear skies. "}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////// future sky
+
+if(futureSky > 0 && futureSky <= .3){fSkyDescription = "little to no cloud cover. "}
+
+  else if(futureSky > .3 && futureSky <= .6){fSkyDescription = "partly cloudy skies. "}
+
+  else if(futureSky > .6 && futureSky <= .8){fSkyDescription = "mostly cloudy skies. "}
+
+  else if(futureSky > .8 && futureSky <= 1){fSkyDescription = "overcast skies. "}
+
+  else if(futureSky == 0){fSkyDescription = "clear skies. "}
 
 
-if(rain > 0 && rain < .2){rainDescription = "There is no chance of rain."}
+///////////////////////////////////////////////////////////////////////////////////////////////////// current rain
 
 
-  text("Currently, it's " + tempDescription + " outside with " + skyDescription + rainDescription, 20, yPos, (width-30),300);
+if(rain >= 0 && rain <= .2){rainDescription = "There's no chance of rain."}
 
-  text("Later, it's going to be " + futureTempDescription + " with " , 20, (height/2)+40, (width-30),200);
+  else if(rain > .2 && rain <= .5){rainDescription = "There's little chance of rain."}
+
+  else if(rain > .5 && rain <= .75){rainDescription = "There's a chance of rain."}
+
+  else if(rain > .75 && rain <= 1){rainDescription = "It'll for sure rain."}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////// future rain
+
+if(futureRain >= 0 && futureRain <= .2){fRainDescription = "There's no chance of rain."}
+
+  else if(futureRain > .2 && futureRain <= .5){fRainDescription = "There's little chance of rain."}
+
+  else if(futureRain > .5 && futureRain <= .75){fRainDescription = "There's a chance of rain."}
+
+  else if(futureRain > .75 && futureRain <= 1){fRainDescription = "It'll for sure rain."}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////// Text
 
 
-}
+  text("Currently, it's " + tempDescription + " outside with " + skyDescription + rainDescription, 15, yPos2, (width-15),boxLength);
+
+  text(intro +"is expected to be " + futureTempDescription + " with " + fSkyDescription + fRainDescription, 15, (yPos2 + 5 + boxLength), (width-15),boxLength);
+
+
+} 
