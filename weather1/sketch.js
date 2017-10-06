@@ -70,11 +70,11 @@ function gotData(data) {
 
   var intro = ""
 
-  if(h >= 0 && h <= 6 ){intro = "This Morning "}
+  if(h >= 0 && h <= 6 ){intro = "This morning "}
 
-  else if(h > 6 && h <= 12 ){intro = "This Afternoon "}
+  else if(h > 6 && h <= 12 ){intro = "This afternoon "}
   
-  else if(h > 12 && h <= 18 ){intro = "This Evening "}
+  else if(h > 12 && h <= 18 ){intro = "This evening "}
 
   else if(h > 18 && h < 22 ){intro = "Tonight "}
 
