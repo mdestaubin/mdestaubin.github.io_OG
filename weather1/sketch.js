@@ -37,7 +37,7 @@ function gotData(data) {
   var yPos2 = 75;
   var boxLength = 230;
   var yGap = 60; 
-  var textSizeLarge = 30;
+  var textSizeLarge = 32;
   var textSizeSmall = 12;
 
   var m = month();
@@ -153,49 +153,49 @@ if(futureTemp < 0){tempDescription = "it is way too fucking cold"}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////// current sky
 
-if(sky > 0 && sky <= .3){skyDescription = "little to no cloud cover. "}
+if(sky > 0 && sky <= .3){skyDescription = "little to no cloud cover "}
 
-  else if(sky > .3 && sky <= .6){skyDescription = "partly cloudy skies. "}
+  else if(sky > .3 && sky <= .6){skyDescription = "partly cloudy skies "}
 
-  else if(sky > .6 && sky <= .8){skyDescription = "mostly cloudy skies. "}
+  else if(sky > .6 && sky <= .8){skyDescription = "mostly cloudy skies "}
 
-  else if(sky > .8 && sky <= 1){skyDescription = "overcast skies. "}
+  else if(sky > .8 && sky <= 1){skyDescription = "overcast skies "}
 
-  else if(sky == 0){skyDescription = "clear skies. "}
+  else if(sky == 0){skyDescription = "clear skies "}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////// future sky
 
-if(futureSky > 0 && futureSky <= .3){fSkyDescription = "little to no cloud cover. "}
+if(futureSky > 0 && futureSky <= .3){fSkyDescription = "little to no cloud cover "}
 
-  else if(futureSky > .3 && futureSky <= .6){fSkyDescription = "partly cloudy skies. "}
+  else if(futureSky > .3 && futureSky <= .6){fSkyDescription = "partly cloudy skies "}
 
-  else if(futureSky > .6 && futureSky <= .8){fSkyDescription = "mostly cloudy skies. "}
+  else if(futureSky > .6 && futureSky <= .8){fSkyDescription = "mostly cloudy skies "}
 
-  else if(futureSky > .8 && futureSky <= 1){fSkyDescription = "overcast skies. "}
+  else if(futureSky > .8 && futureSky <= 1){fSkyDescription = "overcast skies "}
 
-  else if(futureSky == 0){fSkyDescription = "clear skies. "}
+  else if(futureSky == 0){fSkyDescription = "clear skies "}
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////// current rain
 
 
-if(rain >= 0 && rain <= .2){rainDescription = "There's no chance of rain."}
+if(rain >= 0 && rain <= .2){rainDescription = "and no chance of rain."}
 
-  else if(rain > .2 && rain <= .5){rainDescription = "There's little chance of rain."}
+  else if(rain > .2 && rain <= .5){rainDescription = "and little chance of rain."}
 
-  else if(rain > .5 && rain <= .75){rainDescription = "There's a chance of rain."}
+  else if(rain > .5 && rain <= .75){rainDescription = "and a chance of rain."}
 
-  else if(rain > .75 && rain <= 1){rainDescription = "It'll for sure rain."}
+  else if(rain > .75 && rain <= 1){rainDescription = "and it will for sure rain."}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////// future rain
 
-if(futureRain >= 0 && futureRain <= .2){fRainDescription = "There's no chance of rain."}
+if(futureRain >= 0 && futureRain <= .2){fRainDescription = "and no chance of rain."}
 
-  else if(futureRain > .2 && futureRain <= .5){fRainDescription = "There's little chance of rain."}
+  else if(futureRain > .2 && futureRain <= .5){fRainDescription = "and little chance of rain."}
 
-  else if(futureRain > .5 && futureRain <= .75){fRainDescription = "There's a chance of rain."}
+  else if(futureRain > .5 && futureRain <= .75){fRainDescription = "and a chance of rain."}
 
-  else if(futureRain > .75 && futureRain <= 1){fRainDescription = "It'll for sure rain."}
+  else if(futureRain > .75 && futureRain <= 1){fRainDescription = "and it will for sure rain."}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////// Text
 
