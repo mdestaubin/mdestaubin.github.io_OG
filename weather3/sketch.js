@@ -752,8 +752,7 @@ ellipse(xPos3,yPos4,iconRadiusSmall,iconRadiusSmall);
   // Future Temps
   fill(0);
   textSize(textSizeSmall);
-  //textStyle(BOLD);
-  textStyle(ITALIC);
+  textStyle(BOLD);
   text(temp1,xPos1,yPos1+8);
   text(temp2,xPos2,yPos1+8);
   text(temp3,xPos3,yPos1+8);
