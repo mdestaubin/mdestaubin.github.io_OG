@@ -78,13 +78,13 @@ function gotData(data) {
 
   else if(h > 18 && h < 22 ){intro = "Tonight "}
 
-  else if(h >= 22 && h <= 24 ){intro = "Late tonight "}
+  else if(h >= 22 && h <= 24 ){intro = "In the wee hours it "}
 
 
  // Date and Location
   fill(150);
   textSize(textSizeSmall);
-  text(m + "/" + d + "/" + y + "  |  Cambridge, MA ",20, yGap);
+  text(m + "/" + d + "/" + y + "  |  Cambridge, MA  ",20, yGap);
   yGap+=textSizeSmall;
   //text("Cambridge, MA  " + rain,20, yGap);
   //yPos+=yGap;
@@ -107,11 +107,11 @@ if(futureTemp < 0){tempDescription = "it is way too fucking cold"}
 
   else if(temp < 40 && temp > 30){tempDescription = "pretty cold"} 
 
-  else if(temp < 50 && temp > 40){tempDescription = "pretty chilly"} 
+  else if(temp < 50 && temp > 40){tempDescription = "very chilly"} 
 
   else if(temp < 60 && temp > 50){tempDescription = "kind of chilly"}
 
-  else if(temp < 70 && temp > 60){tempDescription = "the perfect temperature"}
+  else if(temp < 70 && temp > 60){tempDescription = "pleasant"}
 
   else if(temp < 80 && temp > 70){tempDescription = "warm"}
 
@@ -135,11 +135,11 @@ if(futureTemp < 0){tempDescription = "it is way too fucking cold"}
 
   else if(futureTemp < 40 && futureTemp > 30){futureTempDescription = "pretty cold"} 
 
-  else if(futureTemp < 50 && futureTemp > 40){futureTempDescription = "pretty chilly"} 
+  else if(futureTemp < 50 && futureTemp > 40){futureTempDescription = "very chilly"} 
 
   else if(futureTemp < 60 && futureTemp > 50){futureTempDescription = "kind of chilly"}
 
-  else if(futureTemp < 70 && futureTemp > 60){futureTempDescription = "the perfect temperature"}
+  else if(futureTemp < 70 && futureTemp > 60){futureTempDescription = "pleasant"}
 
   else if(futureTemp < 80 && futureTemp > 70){futureTempDescription = "warm"}
 
@@ -200,9 +200,9 @@ if(futureRain >= 0 && futureRain <= .2){fRainDescription = "There's no chance of
 //////////////////////////////////////////////////////////////////////////////////////////////////////// Text
 
 
-  text("Currently, it's " + tempDescription + " outside with " + skyDescription + rainDescription, 15, yPos2+5, (width-15),boxLength);
+  text("Currently, it's " + tempDescription + " outside with " + skyDescription + rainDescription, 15, yPos2+10, (width-15),boxLength);
 
-  text(intro +"is expected to be " + futureTempDescription + " with " + fSkyDescription + fRainDescription, 15, (yPos2 + 20 + boxLength), (width-15),boxLength);
+  text(intro +"is expected to be " + futureTempDescription + " with " + fSkyDescription + fRainDescription, 15, (yPos2 + 2 + boxLength), (width-15),boxLength);
 
 
 } 

@@ -44,9 +44,9 @@ function gotData(data)
 
   var yPos = 40;
   var yGap = 60; 
-  var textSizeLarge = 20;
-  var textSizeSmall = 16;
-  var textSizeDegrees = 32;
+  var textSizeLarge = 16;
+  var textSizeSmall = 20;
+  var textSizeDegrees = 38;
 
   var iconRadiusBig = 120;
   var iconRadiusSmall = 50;
@@ -79,10 +79,10 @@ function gotData(data)
   textAlign(CENTER);
 
   // Date and Location
-  textSize(textSizeSmall);
+  textSize(textSizeLarge);
   text(m + "/" + d + "/" + y, xPos2, yPos);
   yPos+=textSizeSmall;
-  text("Cambridge, MA  ", xPos2, yPos);
+  text("Cambridge, MA", xPos2, yPos);
 
 /////////////////////////////////////////////////////////////////////////////// Current time
   fill(night);
@@ -143,7 +143,7 @@ if(currentWeather.precipProbability > .75){
    textStyle(BOLD);
    textSize(textSizeDegrees);
    textAlign(CENTER);
-   text(Math.round(hourlyWeather.data[0].temperature), xPos2,149);
+   text(Math.round(hourlyWeather.data[0].temperature), xPos2,154);
 
  
   // future weather ellipses
@@ -752,19 +752,20 @@ ellipse(xPos3,yPos4,iconRadiusSmall,iconRadiusSmall);
   // Future Temps
   fill(0);
   textSize(textSizeSmall);
-  textStyle(BOLD);
-  text(temp1,xPos1,yPos1+6);
-  text(temp2,xPos2,yPos1+6);
-  text(temp3,xPos3,yPos1+6);
-  text(temp4,xPos1,yPos2+6);
-  text(temp5,xPos2,yPos2+6);
-  text(temp6,xPos3,yPos2+6);
-  text(temp7,xPos1,yPos3+6);
-  text(temp8,xPos2,yPos3+6);
-  text(temp9,xPos3,yPos3+6);
-  text(temp10,xPos1,yPos4+6);
-  text(temp11,xPos2,yPos4+6);
-  text(temp12,xPos3,yPos4+6);
+  //textStyle(BOLD);
+  textStyle(ITALIC);
+  text(temp1,xPos1,yPos1+8);
+  text(temp2,xPos2,yPos1+8);
+  text(temp3,xPos3,yPos1+8);
+  text(temp4,xPos1,yPos2+8);
+  text(temp5,xPos2,yPos2+8);
+  text(temp6,xPos3,yPos2+8);
+  text(temp7,xPos1,yPos3+8);
+  text(temp8,xPos2,yPos3+8);
+  text(temp9,xPos3,yPos3+8);
+  text(temp10,xPos1,yPos4+8);
+  text(temp11,xPos2,yPos4+8);
+  text(temp12,xPos3,yPos4+8);
 
   // time
   fill(200);
@@ -778,7 +779,7 @@ ellipse(xPos3,yPos4,iconRadiusSmall,iconRadiusSmall);
   if( i > 12){ 
     i=i - 12;
 
-  text((hours+1),xPos1,yPos1+45);
+  text((i+1),xPos1,yPos1+45);
   text((i+2),xPos2,yPos1+45);
   text((i+3),xPos3,yPos1+45);
   text((i+4),xPos1,yPos2+45);
