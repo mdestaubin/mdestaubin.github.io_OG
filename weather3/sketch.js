@@ -771,12 +771,8 @@ ellipse(xPos3,yPos4,iconRadiusSmall,iconRadiusSmall);
   textSize(12);
   textStyle(NORMAL);
 
-  var now = new Date();
-  var hours = now.getHours() % 12 || 12
 
   var i = h
-  if( i > 12){ 
-    i=i - 12;
 
   text((i+1),xPos1,yPos1+45);
   text((i+2),xPos2,yPos1+45);
@@ -790,7 +786,7 @@ ellipse(xPos3,yPos4,iconRadiusSmall,iconRadiusSmall);
   text((i+10),xPos1,yPos4+45);
   text((i+11),xPos2,yPos4+45);
   text((i+12),xPos3,yPos4+45);
-  }
+  
 
 
   // border outline

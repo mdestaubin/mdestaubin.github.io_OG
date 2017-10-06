@@ -200,9 +200,9 @@ if(futureRain >= 0 && futureRain <= .2){fRainDescription = "There's no chance of
 //////////////////////////////////////////////////////////////////////////////////////////////////////// Text
 
 
-  text("Currently, it's " + tempDescription + " outside with " + skyDescription + rainDescription, 15, yPos2+10, (width-15),boxLength);
+  text("Currently, it's " + tempDescription + " outside with " + skyDescription + rainDescription, 15, yPos2+10, (width-20),boxLength);
 
-  text(intro +"is expected to be " + futureTempDescription + " with " + fSkyDescription + fRainDescription, 15, (yPos2 + 2 + boxLength), (width-15),boxLength);
+  text(intro +"is expected to be " + futureTempDescription + " with " + fSkyDescription + fRainDescription, 15, (yPos2 + 2 + boxLength), (width-20),boxLength);
 
 
 } 
