@@ -771,7 +771,6 @@ ellipse(xPos3,yPos4,iconRadiusSmall,iconRadiusSmall);
   textSize(12);
   textStyle(NORMAL);
 
-
   var i = h
 
   text((i+1),xPos1,yPos1+45);
@@ -787,8 +786,6 @@ ellipse(xPos3,yPos4,iconRadiusSmall,iconRadiusSmall);
   text((i+11),xPos2,yPos4+45);
   text((i+12),xPos3,yPos4+45);
   
-
-
   // border outline
   noFill();
   stroke(100);
