@@ -1,10 +1,10 @@
 // this table will contain the numbers and actual data
 var table;
 
-var margin = 150;
+var margin = 855;
 
 // this is an array that will contain all the data in form of javascript objects
-var states = [];
+var admins = [];
 
 var leafletMap;
 
@@ -39,7 +39,7 @@ var slHealthJSON;
 function preload() {
   //my table is comma separated value "csv"
   //I'm ignoring the header 
-  //table       = loadTable("data/ACS_15_5YR_S2401_with_ann_Clean.csv", "csv");
+  table = loadTable("data/ebola_case_data.csv", "csv", "header");
   myFontThin  = loadFont('Text/frutiger-thin.otf');
   myFontBlack = loadFont('Text/frutiger-black.otf');
 }
@@ -50,21 +50,21 @@ function setup() {
    canvas.parent("container");
    createMap();
    textFont(myFontBlack);
-   //parseData();
+   parseData();
 
-   textSize(70);
+   textSize(35);
    fill(255);
-   text("EBOLA RESPONSE MAP", 855, 80);
+   text("EBOLA RESPONSE MAP", 855, 55);
 
-  textSize(30);
-  text("ABOUT", 855, 140);
+  textSize(25);
+  text("ABOUT", 855, 160);
   textFont(myFontThin);
-  text("This interactive map was created with the intention of acting as a tool of research to visualize and understand the West Africa Ebola Outbreak Response. ", 855,170,630,400);
-  text("Click on the counties to reveal statistical information related to the outbreak.", 855,310,630,400);
-  text("Click on the icons to learn about existing and temporary health facilities.", 855,410,630,400);
+  text("This interactive map was created with the intention of acting as a tool of research to visualize and understand the West Africa Ebola Outbreak Response. ", 855,170,375,400);
+  text("+ Click on the counties to reveal statistical     information related to the outbreak.", 855,320,375,400);
+  text("+ Click on the icons to learn about                  existing and temporary health facilities.", 855,410,375,400);
 
    stroke(255);
-   strokeWeight(3);
+   strokeWeight(2);
    noFill();
    rect(22,27,805,725);
   
@@ -141,24 +141,24 @@ function createMap(){
 
 //////////////////////////////////////////////////////////// health centers    
 
-    ginHealthJSON = L.geoJson(ginHealth, {
-      style: ETUstyle,
-      pointToLayer : HpointToLayer,
-      onEachFeature: onEachETU
-}).addTo(leafletMap);     
+//     ginHealthJSON = L.geoJson(ginHealth, {
+//       style: ETUstyle,
+//       pointToLayer : HpointToLayer,
+//       onEachFeature: onEachETU
+// }).addTo(leafletMap);     
 
-    libHealthJSON = L.geoJson(libHealth, {
-      style: ETUstyle,
-      pointToLayer : HpointToLayer,
-      onEachFeature: onEachETU
-}).addTo(leafletMap);      
+//     libHealthJSON = L.geoJson(libHealth, {
+//       style: ETUstyle,
+//       pointToLayer : HpointToLayer,
+//       onEachFeature: onEachETU
+// }).addTo(leafletMap);      
 
-    slHealthJSON = L.geoJson(slHealth, {
-      style: ETUstyle,
-      pointToLayer : HpointToLayer,
-      onEachFeature: onEachETU 
-}).addTo(leafletMap);      
-}
+//     slHealthJSON = L.geoJson(slHealth, {
+//       style: ETUstyle,
+//       pointToLayer : HpointToLayer,
+//       onEachFeature: onEachETU 
+// }).addTo(leafletMap);      
+// }
 
 // function onEachHealth(feature, layer) {
 //      layer.bindPopup(
@@ -166,13 +166,13 @@ function createMap(){
 //           );
 //     }
 
-    function HpointToLayer(feature, latlng) {
-  return new L.CircleMarker(latlng,{
-      radius: .5, 
-      weight: .5, 
-      color: 'white', 
-      fillOpacity: .7
-    });
+  //   function HpointToLayer(feature, latlng) {
+  // return new L.CircleMarker(latlng,{
+  //     radius: .5, 
+  //     weight: .5, 
+  //     color: 'white', 
+  //     fillOpacity: .7
+  //   });
     }
 
 //     function heatlhStyle(feature) {
@@ -307,7 +307,7 @@ layer.setStyle({
     color: 'white',
     dashArray: '',
     fillColor:'black',
-    fillOpacity: 0.7
+    fillOpacity: 0
   });
 
   if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
@@ -347,105 +347,105 @@ function activateGraph(e) {
   fill(255); 
   noStroke();
   textFont(myFontBlack);
-  textSize(70);
-  text("EBOLA RESPONSE MAP", 855, 80);
+  textSize(35);
+  text("EBOLA RESPONSE MAP", 855, 55)
 
-  textSize(30);
-  text(countryName, 855, 140);
+
+  textSize(25);
+  text(countryName, 855, 135);
   textFont(myFontThin);
-  text("Admin Level 1: " + admin1Name, 855, 170);
-  text("Admin Level 2: " + admin2Name, 855, 200);
+  text("Admin Level 1: " + admin1Name, 855, 165);
+  text("Admin Level 2: " + admin2Name, 855, 195);
   //text("Admin Level 3: " +admin3Name, 35, 240);
   console.log(admin1Name);
-  createGraph(layer.feature.properties.name);
+  createGraph(layer.feature.properties.ADM1_NAME);
 
 
 }
 
 /////////////////////////////////////////////////// PARSE DATA
 
-// function parseData(){
-//    //this is the key at the top, we will need it later
-//    var keyRow = table.getRow(0);
-//    var metaRow = table.getRow(1);
+function parseData(){
+   //this is the key at the top, we will need it later
+   var keyRow = table.getRow(0);
+   //var metaRow = table.getRow(1);
 
-//     // cycle through each item in that column, ignoring the first two items which are the headers
-//     for(var i=2;i<table.getRowCount(); i++){    
+    // cycle through each item in that column, ignoring the first two items which are the headers
+    for(var i=1;i<table.getRowCount(); i++){    
 
-//       //get each row for each id, hence the data for one state at a time
-//       var stateRow = table.getRow(i);
+      //get each row for each id, hence the data for one state at a time
+      var adminRow = table.getRow(i);
 
-//       // create an empty object for each state
-//       // we will attach all the information to this object
-//       var state = {};
-//       state.id = stateRow.getString(0);
-//       state.id2 = stateRow.getString(1);
-//       state.name = stateRow.getString(2);
+      // create an empty object for each state
+      // we will attach all the information to this object
+      var admin = {};
+      //state.id = stateRow.getString(0);
+      //state.id2 = stateRow.getString(1);
+      admin.ADM1_NAME = adminRow.getString(0);
 
-//       // this array will hold all occupation data
-//       state.occupations = [];
+      // this array will hold all occupation data
+      admin.values = [];
       
-//       for(var j=3; j<table.getColumnCount(); j++){
-//         // create an empty object that holds the occupation data for one category
-//         var item = {};
-//         item.label = metaRow.getString(j);
-//         item.key = keyRow.getString(j);
-//         item.value = stateRow.getNum(j);
+      for(var j=1; j<table.getColumnCount(); j++){
+        // create an empty object that holds the occupation data for one category
+        var item = {};
+        //item.label = metaRow.getString(j);
+        item.label = keyRow.getString(j);
+        item.value = adminRow.getNum(j);
         
-//         // attach the item object to the "occupation" array
-//         append(state.occupations, item);
-//       }
-//       // attach the state object to the "states" array
-//       append(states, state);
-//    }
-// }
+        // attach the item object to the "occupation" array
+        append(admin.values, item);
+      }
+      // attach the state object to the "states" array
+      append(admins, admin);
+   }
+}
 
 
-
-// function createGraph(name){
+function createGraph(ADM1_NAME){
   
-//   //var county = findStateByName(name);
-//   //console.log(state);
+  var admin = findStateByName(ADM1_NAME);
+  console.log(admin);
   
-//   // first let's find the highest value for this state
-//   var maxValue =0;
+  // // first let's find the highest value for this state
+  // var maxValue =0;
 
-//   for(var i=1; i<county.values.length; i++){
-//     if(county.values[i].value>maxValue)
-//       maxValue = county.values[i].value;
-//   }
+  // for(var i=1; i<admin.values.length; i++){
+  //   if(admin.values[i].value>maxValue)
+  //     maxValue = admin.values[i].value;
+  // }
 
-//   console.log("maxValue: " + maxValue);
+  // console.log("maxValue: " + maxValue);
 
-//   // now draw the bars and the labels
-//   background(245);
-//   noStroke();
-//   textAlign(LEFT);
-//   textSize(16);
+  // // now draw the bars and the labels
+  // background(245);
+  // noStroke();
+  // textAlign(LEFT);
+  // textSize(16);
 
-//   text(state.occupations[3].label,200,200 );
+  text("Admins" + admin.ADM1_NAME, 855,300);  
 
   // textSize(8);
 
-  // for(var i=1; i<state.occupations.length; i++){
+  // for(var i=1; i<admin.values.length; i++){
   //   // draw the bars
-  //   fill(120);
-  //   var x = map(i,1, state.occupations.length-1, margin+10, width-margin);
-  //   var y = map(state.occupations[i].value,0, maxValue, height-margin, margin);
-  //   var h = map(state.occupations[i].value,0, maxValue, 0, height-(margin*2));
+  //   fill(255);
+  //   var x = map(i,1, admin.values.length-1, margin+10, width-margin);
+  //   var y = map(admin.values[i].value,0, maxValue, height-margin, margin);
+  //   var h = map(admin.values[i].value,0, maxValue, 0, height-(margin*2));
   //   rect(x,y,10, h);
 
   //    // add the labels
-  //   fill(0);
+  //   fill(255);
   //   push();
   //   translate(x+5,height-margin+10);
   //   rotate(PI/5.0);
-  //   text(state.occupations[i].label,0,0 );
+  //   text(admin.values[i].label,0,0 );
   //   pop();
 
   // }
   // // add labels to the y axis
-  // stroke(0);
+  // stroke(255);
   // line(margin, margin, margin, height-margin);
   // noStroke();
   // textAlign(RIGHT);
@@ -461,18 +461,18 @@ function activateGraph(e) {
   //   stroke(0);
   //   line(xLabel+5,yLabel,xLabel+10,yLabel);
   // }
-// }
+}
 
-// // helper function to find a state by name
-// function findStateByName(name){
-//   var county;
-//   for(var i=0; i<counties.length; i++){
-//     if(counties[i].name == name){
-//       county = counties[i];
-//       return county;
-//     }
-//   }
-// }
+// helper function to find a state by name
+function findStateByName(ADM1_NAME){
+  var admin;
+  for(var i=0; i<admins.length; i++){
+    if(admins[i].ADM1_NAME == ADM1_NAME){
+      admin = admins[i];
+      return admin;
+    }
+  }
+}
 
 
 
