@@ -1,7 +1,18 @@
 // this table will contain the numbers and actual data
 var table;
 
-var margin = 855;
+var margin = 1150;
+var title  = 42;
+
+var yTitle = 45;
+var yTitle2 = 130;
+var yLocation = 155;
+var ypop = 220;
+var yCases = 270;
+var yDeaths = 330;
+var yETU = 390;
+var yCCC = 450;
+var yHealth = 510;
 
 // this is an array that will contain all the data in form of javascript objects
 var admins = [];
@@ -30,6 +41,8 @@ var myFontBlack;
 
 var slOutline;
 
+var libOutline;
+
 var CCCJSON;
 
 var libHealthJSON;
@@ -54,27 +67,30 @@ function setup() {
    textFont(myFontBlack);
    parseData();
 
-   textSize(35);
+   textSize(title);
    fill(255);
-   text("EBOLA RESPONSE MAP", 855, 55);
+   text("EBOLA RESPONSE MAP", margin, yTitle);
 
   textSize(25);
-  text("ABOUT", 855, 160);
+  text("ABOUT", margin, yLocation);
   textFont(myFontThin);
-  text("This interactive map was created with the intention of acting as a tool of research to visualize and understand the West Africa Ebola Outbreak Response. ", 855,170,375,400);
-  text("+ Click on the counties to reveal statistical     information related to the outbreak.", 855,320,375,400);
-  text("+ Click on the icons to learn about                  existing and temporary health facilities.", 855,410,375,400);
+  text("This interactive map was created with the intention of acting as a tool of research to visualize and understand the West Africa Ebola Outbreak Response. ", margin,170,375,400);
+  text("+ Click on the counties to reveal statistical     information related to the outbreak.", margin,320,375,400);
+  text("+ Click on the icons to learn about                  existing and temporary health facilities.", margin,410,375,400);
 
+ // Border  
    stroke(255);
-   strokeWeight(2);
-   noFill();
-   rect(22,27,805,725);
+   strokeWeight(3);
+   //noFill();
+   //fill(255);
+   //rect(10,15,margin-29,756);
+   line(margin-29,0,margin-29,800);
   
  }
 
 // create the map using leaflet
 function createMap(){
-  leafletMap = L.map('map').setView([8.6, -11.5], 7);
+  leafletMap = L.map('map').setView([6.45, -9.5], 8);
 
   L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png', {
   //attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
@@ -85,7 +101,7 @@ function createMap(){
 
 ////////////////////////////////////////////////////////// Country JSON
 
-    slOutline = L.geoJson(slCountry, {
+    libOutline = L.geoJson(libCountry, {
     style: countryStyle,
   }).addTo(leafletMap);  
 
@@ -268,8 +284,8 @@ function resetETU(e) {
 
 function countryStyle(feature) {
   return {
-    weight: 1.5,
-    opacity: .7,
+    weight: 3,
+    opacity: .8,
     color: 'white',
     //dashArray: '4',
     fillOpacity: 0
@@ -289,16 +305,16 @@ function style(feature) {
   };
 }
 
-function lowStyle(feature) {
-  return {
-    weight: .5,
-    opacity: .2,
-    color: 'white',
-    dashArray: '2',
-    fillOpacity: 0,
-    //fillColor: '##ffffff'
-  };
-}
+// function lowStyle(feature) {
+//   return {
+//     weight: .5,
+//     opacity: .2,
+//     color: 'white',
+//     dashArray: '2',
+//     fillOpacity: 0,
+//     //fillColor: '##ffffff'
+//   };
+// }
 
 
 function roadStyle(feature) {
@@ -320,12 +336,12 @@ function onEachFeature(feature, layer) {
   });
 }
 
-function onEachLowFeature(feature, layer) {
-  layer.on({
+// function onEachLowFeature(feature, layer) {
+//   layer.on({
 
-    click: activateGraph
-  });
-}
+//     click: activateGraph
+//   });
+// }
 
 
 
@@ -336,9 +352,9 @@ layer.setStyle({
     weight: 5,
     color: 'white',
     dashArray: '',
-    fill: false,
-    //fillColor: 'black',
-    //fillOpacity: 0.2
+    // fill: false,
+    fillColor: 'black',
+    fillOpacity: 0.2
   });
 
   if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
@@ -365,33 +381,50 @@ function activateGraph(e) {
   var countryName = layer.feature.properties.CNTRY_NAME;
   var admin1Name = layer.feature.properties.ADM1_NAME;
   var admin2Name = layer.feature.properties.ADM2_NAME;
-  var admin3Name = layer.feature.properties.ADM3_NAME;
+  //var admin3Name = layer.feature.properties.ADM3_NAME;
 
   var yGap = 15;
 
   background(0);
 
+//border
   stroke(255);
   strokeWeight(3);
-  noFill();
-  rect(22,27,805,725);
+  // noFill();
+  //  //fill(255);
+  // rect(10,15,margin-29,760);
+
+  line(margin-29,0,margin-29,800);
 
   fill(255); 
   noStroke();
   textFont(myFontBlack);
-  textSize(35);
-  text("EBOLA RESPONSE MAP", 855, 55)
+  textSize(title);
+  text("EBOLA RESPONSE MAP", margin, yTitle)
 
 
   textSize(25);
-  text(countryName, 855, 135);
+  text(countryName, margin, yTitle2);
+  
   textFont(myFontThin);
-  text("Admin Level 1: " + admin1Name, 855, 165);
-  text("Admin Level 2: " + admin2Name, 855, 195);
+  textSize(22);
+  if(countryName == "Liberia"){
+  text(admin1Name + " County", margin, yLocation);
+}
+
+  if (countryName == "Sierra Leone"){
+  text(admin1Name + " District", margin, yLocation);
+  } 
+
+  else if(countryName == "Guinea"){
+  text(admin1Name + " District", margin, yLocation);
+  } 
+
+   
   //text("Admin Level 3: " +admin3Name, 35, 240);
   console.log(admin1Name);
   createGraph(layer.feature.properties.ADM1_NAME);
-  
+ 
 
 }
 
@@ -440,34 +473,44 @@ function createGraph(ADM1_NAME){
   console.log(admin);
   
   // // first let's find the highest value for this state
-  // var maxValue =0;
+ var maxValue =0;
 
-  // for(var i=1; i<admin.values.length; i++){
-  //   if(admin.values[i].value>maxValue)
-  //     maxValue = admin.values[i].value;
-  // }
+  for(var i=1; i<admin.values.length; i++){
+    if(admin.values[i].value>maxValue)
+      maxValue = admin.values[i].value;
+  }
 
-  // console.log("maxValue: " + maxValue);
+   console.log("maxValue: " + maxValue);
 
   // // now draw the bars and the labels
   // background(245);
   // noStroke();
   // textAlign(LEFT);
   // textSize(16);
+  
+  textSize(20);
+  text("Population: " + maxValue,margin,ypop);
 
-  text("Admin " + admin.ADM1_NAME, 855,300);  
-  text("Cases " + admin.values[0].value,900,400);
-  text("Deaths " + admin.values[1].value,900,430);
+  text("Cases: " + admin.values[0].value,margin,yCases);
+  text("Deaths: " + admin.values[1].value,margin,yDeaths);
 
+  text("Ebola Treatment Units: ",margin,yETU);
+  text("Community Care Centers: ",margin,yCCC);
+  
+  text("Exisiting Health Facilities: ",margin,yHealth);
+
+ 
   // textSize(8);
 
   // for(var i=1; i<admin.values.length; i++){
-  //   // draw the bars
-  //   fill(255);
-  //   var x = map(i,1, admin.values.length-1, margin+10, width-margin);
-  //   var y = map(admin.values[i].value,0, maxValue, height-margin, margin);
-  //   var h = map(admin.values[i].value,0, maxValue, 0, height-(margin*2));
-  //   rect(x,y,10, h);
+    // draw the bars
+    fill(255,100);
+    var x = map(admin.values[0].value,0,4866,0,410);
+    //var y = map(admin.values[i].value,0, maxValue, height-margin, margin);
+    //var h = map(admin.values[i].value,0, maxValue, 0, height-(margin*2));
+    rect(margin,yCases+9,410, 25);
+    fill(255);
+    rect(margin,yCases+9,x, 25);
 
   //    // add the labels
   //   fill(255);
