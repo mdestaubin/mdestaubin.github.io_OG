@@ -250,9 +250,9 @@ layer.setStyle({
     fillOpacity: .5,
   });
 
-  // if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-  //   layer.bringToFront();
-  // }
+  if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+    layer.bringToFront();
+  }
 
 }
 
