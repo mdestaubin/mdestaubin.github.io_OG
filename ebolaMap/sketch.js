@@ -14,6 +14,8 @@ var ginCountiesJSON;
 
 var libCountiesJSON;
 
+var waCountiesJSON;
+
 var libJSON;
 
 var slJSON;
@@ -89,20 +91,27 @@ function createMap(){
 
   ////////////////////////////////////////////////////// Counties JSON
 
+  //   waCountiesJSON = L.geoJson(waCounties, {
+  //   style: lowStyle,
+  //   onEachFeature: onEachLowFeature
+  // }).addTo(leafletMap); 
+
   slCountiesJSON = L.geoJson(slCounties, {
     style: style,
-    onEachFeature: onEachFeature
+   onEachFeature: onEachFeature
   }).addTo(leafletMap);  
 
   ginCountiesJSON = L.geoJson(ginCounties, {
     style: style,
-    onEachFeature: onEachFeature
+   onEachFeature: onEachFeature
   }).addTo(leafletMap);  
 
   libCountiesJSON = L.geoJson(libCounties, {
     style: style,
     onEachFeature: onEachFeature
   }).addTo(leafletMap);  
+
+
 
 
 //////////////////////////////////////////////////////////// Roads
@@ -113,7 +122,7 @@ function createMap(){
   }).addTo(leafletMap);  
 
 //////////////////////////////////////////////////// ETU JSON Files
-  //libJSON = L.geoJson(libETUData, {
+  
   libJSON = L.geoJson(libETUData, {
       style: ETUstyle,
       pointToLayer : pointToLayer,
@@ -241,9 +250,9 @@ layer.setStyle({
     fillOpacity: .5,
   });
 
-  if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-    layer.bringToFront();
-  }
+  // if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+  //   layer.bringToFront();
+  // }
 
 }
 
@@ -280,6 +289,18 @@ function style(feature) {
   };
 }
 
+function lowStyle(feature) {
+  return {
+    weight: .5,
+    opacity: .2,
+    color: 'white',
+    dashArray: '2',
+    fillOpacity: 0,
+    //fillColor: '##ffffff'
+  };
+}
+
+
 function roadStyle(feature) {
   return {
     weight: .75,
@@ -299,6 +320,15 @@ function onEachFeature(feature, layer) {
   });
 }
 
+function onEachLowFeature(feature, layer) {
+  layer.on({
+
+    click: activateGraph
+  });
+}
+
+
+
 function highlightFeature(e) {
   var layer = e.target;
 
@@ -306,8 +336,9 @@ layer.setStyle({
     weight: 5,
     color: 'white',
     dashArray: '',
-    fillColor:'black',
-    fillOpacity: 0
+    fill: false,
+    //fillColor: 'black',
+    //fillOpacity: 0.2
   });
 
   if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
@@ -317,6 +348,7 @@ layer.setStyle({
 }
 
 function resetHighlight(e) {
+  //waCountiesJSON.resetStyle(e.target);
   slCountiesJSON.resetStyle(e.target);
   ginCountiesJSON.resetStyle(e.target);
   libCountiesJSON.resetStyle(e.target);
@@ -359,7 +391,7 @@ function activateGraph(e) {
   //text("Admin Level 3: " +admin3Name, 35, 240);
   console.log(admin1Name);
   createGraph(layer.feature.properties.ADM1_NAME);
-
+  
 
 }
 
@@ -423,7 +455,9 @@ function createGraph(ADM1_NAME){
   // textAlign(LEFT);
   // textSize(16);
 
-  text("Admins" + admin.ADM1_NAME, 855,300);  
+  text("Admin " + admin.ADM1_NAME, 855,300);  
+  text("Cases " + admin.values[0].value,900,400);
+  text("Deaths " + admin.values[1].value,900,430);
 
   // textSize(8);
 
