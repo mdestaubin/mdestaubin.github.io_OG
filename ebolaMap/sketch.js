@@ -493,7 +493,7 @@ function createGraph(ADM1_NAME){
   text("Population: " + admin.values[4].value,margin,ypop);
 
   text("Confirmed Cases: " + admin.values[0].value,margin,yCases);
-  text("Deaths: " + admin.values[1].value,margin,yDeaths);
+  text("Confirmed Deaths: " + admin.values[1].value,margin,yDeaths);
 
   text("Ebola Treatment Units: " + admin.values[2].value,margin,yETU);
   text("Community Care Centers: " + admin.values[3].value,margin,yCCC);
