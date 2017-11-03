@@ -264,7 +264,7 @@ function onEachETU(feature, layer) {
 function pointToLayer(feature, latlng) {
   return new L.CircleMarker(latlng,{
       radius: 6, 
-      weight: 2, 
+      weight: 3, 
       color: '#a52222', 
       fillOpacity: 0
     });
@@ -273,7 +273,7 @@ function pointToLayer(feature, latlng) {
 function ETUstyle(feature) {
   return {      
       radius: 6, 
-      weight: 2, 
+      weight: 3, 
       color: '#a52222', 
       fillOpacity: 0};
       }
@@ -283,7 +283,7 @@ function highlightETU(e) {
 
 layer.setStyle({
     radius: 6,
-    weight: 2,
+    weight: 3,
     color: '#a52222',
     fillOpacity: 0,
   });
@@ -305,7 +305,7 @@ function resetETU(e) {
 
 function countryStyle(feature) {
   return {
-    weight: 5,
+    weight: 6,
     opacity: 1,
     color: '#d4d6d8',
     //dashArray: '4',
@@ -492,7 +492,7 @@ function createGraph(ADM1_NAME){
   textSize(20);
   text("Population: " + admin.values[4].value,margin,ypop);
 
-  text("Cases: " + admin.values[0].value,margin,yCases);
+  text("Confirmed Cases: " + admin.values[0].value,margin,yCases);
   text("Deaths: " + admin.values[1].value,margin,yDeaths);
 
   text("Ebola Treatment Units: " + admin.values[2].value,margin,yETU);
