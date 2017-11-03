@@ -7,12 +7,12 @@ var title  = 42;
 var yTitle = 45;
 var yTitle2 = 130;
 var yLocation = 160;
-var ypop = 220;
+var ypop = 190;
 var yCases = 270;
 var yDeaths = 330;
-var yETU = 390;
-var yCCC = 450;
-var yHealth = 510;
+var yETU = 420;
+var yCCC = 480;
+var yHealth = 570;
 
 // this is an array that will contain all the data in form of javascript objects
 var admins = [];
@@ -475,7 +475,7 @@ function createGraph(ADM1_NAME){
   // textSize(16);
   
   textSize(20);
-  text("Population: " + maxValue,margin,ypop);
+  text("Population: " + admin.values[4].value,margin,ypop);
 
   text("Cases: " + admin.values[0].value,margin,yCases);
   text("Deaths: " + admin.values[1].value,margin,yDeaths);
@@ -494,9 +494,11 @@ function createGraph(ADM1_NAME){
     var x4 = map(admin.values[3].value,0,10,0,400);
 
 
-    fill(255,100);
+    fill(255,50);
     rect(margin,yCases+9,400, 25);
     rect(margin,yDeaths+9,170, 25);
+    rect(margin,yETU+9,400, 25);
+    rect(margin,yCCC+9,400, 25);
 
     fill(255);
     rect(margin,yCases+9,x, 25);

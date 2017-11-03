@@ -1,60 +1,60 @@
-ADM1_NAME,Cases,Deaths,Etu,Ccc
-Beyla,46,27,0,0
-Boffa,46,36,0,0
-Boke,1,0,0,0
-Conakry,498,265,0,0
-Coyah,201,104,0,0
-Dabola,13,13,0,0
-Dalaba,9,2,0,0
-Dinguiraye,1,1,0,0
-Dubreka,116,70,0,0
-Faranah,70,55,0,0
-Forecariah,247,159,0,0
-Fria,2,2,0,0
-Gaoual,0,0,0,0
-Gueckedou,381,315,0,0
-Kankan,32,21,0,0
-Kerouane,161,98,0,0
-Kindia,101,77,0,0
-Kissidougou,105,76,0,0
-Kouroussa,20,13,0,0
-Labe,0,0,0,0
-Lola,111,84,0,0
-Macenta,745,502,0,0
-Mali,5,3,0,0
-Mamou,0,0,0,0
-Nzerekore,256,181,0,0
-Pita,8,4,0,0
-Siguiri,32,23,0,0
-Telimele,43,20,0,0
-Tougue,2,1,0,0
-Yomou,11,5,0,0
-Bomi,318,174,1,1
-Bong,596,154,1,1
-Gbarpolu,35,13,1,4
-Grand Bassa,181,79,1,2
-Grand Cape Mount,313,28,1,2
-Grand Gedeh,11,6,1,1
-Grand Kru,36,27,1,0
-Lofa,674,401,3,1
-Margibi,1291,582,3,2
-Maryland,26,21,1,1
-Montserrado,4866,2026,10,6
-Nimba,337,60,3,2
-River Gee,25,13,1,2
-Rivercess,44,27,1,1
-Sinoe,59,24,1,2
-Bo,561,165,0,0
-Bombali,1216,428,0,0
-Bonthe,23,7,0,0
-Kailahun,656,267,0,0
-Kambia,364,134,0,0
-Kenema,758,270,0,0
-Koinadugu,221,88,0,0
-Kono,612,207,0,0
-Moyamba,343,107,0,0
-Port,1923,624,0,0
-Pujehun,63,21,0,0
-Tonkolili,571,185,0,0
-Western area rural,1545,520,0,0
-Western area urban,3034,763,0,0
+ADM1_NAME,Cases,Deaths,Etu,Ccc,pop
+Beyla,46,27,0,0,0
+Boffa,46,36,0,0,0
+Boke,1,0,0,0,0
+Conakry,498,265,0,0,0
+Coyah,201,104,0,0,0
+Dabola,13,13,0,0,0
+Dalaba,9,2,0,0,0
+Dinguiraye,1,1,0,0,0
+Dubreka,116,70,0,0,0
+Faranah,70,55,0,0,0
+Forecariah,247,159,0,0,0
+Fria,2,2,0,0,0
+Gaoual,0,0,0,0,0
+Gueckedou,381,315,0,0,0
+Kankan,32,21,0,0,0
+Kerouane,161,98,0,0,0
+Kindia,101,77,0,0,0
+Kissidougou,105,76,0,0,0
+Kouroussa,20,13,0,0,0
+Labe,0,0,0,0,0
+Lola,111,84,0,0,0
+Macenta,745,502,0,0,0
+Mali,5,3,0,0,0
+Mamou,0,0,0,0,0
+Nzerekore,256,181,0,0,0
+Pita,8,4,0,0,0
+Siguiri,32,23,0,0,0
+Telimele,43,20,0,0,0
+Tougue,2,1,0,0,0
+Yomou,11,5,0,0,0
+Bomi,318,174,1,1,82036
+Bong,596,154,1,1,328919
+Gbarpolu,35,13,1,4,83758
+Grand Bassa,181,79,1,2,224839
+Grand Cape Mount,313,28,1,2,129055
+Grand Gedeh,11,6,1,1,126146
+Grand Kru,36,27,1,0,57106
+Lofa,674,401,3,1,270114
+Margibi,1291,582,3,2,199689
+Maryland,26,21,1,1,136404
+Montserrado,4866,2026,10,6,1144806
+Nimba,337,60,3,2,468088
+River Gee,25,13,1,2,67318
+Rivercess,44,27,1,1,65862
+Sinoe,59,24,1,2,104932
+Bo,561,165,0,0,0
+Bombali,1216,428,0,0,0
+Bonthe,23,7,0,0,0
+Kailahun,656,267,0,0,0
+Kambia,364,134,0,0,0
+Kenema,758,270,0,0,0
+Koinadugu,221,88,0,0,0
+Kono,612,207,0,0,0
+Moyamba,343,107,0,0,0
+Port,1923,624,0,0,0
+Pujehun,63,21,0,0,0
+Tonkolili,571,185,0,0,0
+Western area rural,1545,520,0,0,0
+Western area urban,3034,763,0,0,0
