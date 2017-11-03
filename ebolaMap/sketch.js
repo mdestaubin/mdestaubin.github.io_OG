@@ -4,53 +4,35 @@ var table;
 var margin = 1150;
 var title  = 42;
 
-var yTitle = 45;
-var yTitle2 = 130;
-var yLocation = 160;
-var ypop = 190;
-var yCases = 270;
-var yDeaths = 330;
-var yETU = 420;
-var yCCC = 480;
-var yHealth = 570;
+var yTitle = 55;
+var yTitle2 = 160;
+var yLocation = 205;
+var ypop = 235;
+var yCases = 315;
+var yDeaths = 375;
+var yETU = 465;
+var yCCC = 525;
+var yHealth = 615;
 
 // this is an array that will contain all the data in form of javascript objects
 var admins = [];
-
 var leafletMap;
-
 var slCountiesJSON;
-
 var ginCountiesJSON;
-
 var libCountiesJSON;
-
 var waCountiesJSON;
-
 var libJSON;
-
 var slJSON;
-
 var ginJSON;
-
 var libRoadJSON;
-
 var myFontThin;
-
 var myFontBlack;
-
 var slOutline;
-
 var libOutline;
-
 var CCCJSON;
-
 var libHealthJSON;
-
 var ginHealthJSON;
-
 var slHealthJSON;
-
 var img;
 
 function preload() {
@@ -72,18 +54,42 @@ function setup() {
    img = loadImage("data/ebola_treatment.png"); 
 
    textSize(title);
-   fill('#5a90e8');
+   fill('#a52222');
    text("EBOLA RESPONSE MAP", margin, yTitle);
   
   fill(255);
   textSize(25);
-  text("ABOUT", margin, yLocation);
+  text("ABOUT", margin, yTitle2);
   textFont(myFontThin);
-  text("This interactive map was created with the intention of acting as a tool of research to visualize and understand the West Africa Ebola Outbreak Response. ", margin,170,375,400);
-  text("+ Click on the counties to reveal statistical     information related to the outbreak.", margin,320,375,400);
-  text("+ Click on the icons to learn about                  existing and temporary health facilities.", margin,410,375,400);
+  text("This interactive map was created with the intention of acting as a tool of research to visualize and understand the West Africa Ebola Outbreak Response. ", margin,185,375,400);
+  text("It is an ongoing project and currently only focusing on the data available for the country of Liberia.", margin,325,375,400);
+  text("+ Click on the counties to reveal statistical     information related to the outbreak.", margin,460,375,400);
+  text("+ Click on the icons to learn about                  existing and temporary health facilities.", margin,550,375,400);
+  textSize(18);
+  text("For any questions or suggestions, please email mdestaubin@gsd.harvard.edu", margin+20,670,375,400);
   
  }
+
+
+// var blackMap = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png', 
+// {maxZoom: 19}),
+
+// satMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+//   attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'}).addTo(leafletMap);
+
+// var leafletMap = L.map('map', {
+//     center: [6.45, -9.5],
+//     zoom: 8,
+//     layers: [blackMap, satMap]
+// });
+
+// var baseMaps = {
+//     "Black Map": grayscale,
+//     "Satelite Map": streets
+// };
+
+// L.control.layers(baseMaps).addTo(leafletMap);
+
 
 // create the map using leaflet
 function createMap(){
@@ -142,21 +148,21 @@ function createMap(){
       onEachFeature: onEachETU
 }).addTo(leafletMap); 
 
-    slJSON = L.geoJson(slETUData, {
-      style: ETUstyle,
-      pointToLayer : pointToLayer,
-      onEachFeature: onEachETU
-}).addTo(leafletMap); 
+//     slJSON = L.geoJson(slETUData, {
+//       style: ETUstyle,
+//       pointToLayer : pointToLayer,
+//       onEachFeature: onEachETU
+// }).addTo(leafletMap); 
 
-    ginJSON = L.geoJson(ginETUData, {
-      style: ETUstyle,
-      pointToLayer : pointToLayer,
-      onEachFeature: onEachETU 
-}).addTo(leafletMap);  
+//     ginJSON = L.geoJson(ginETUData, {
+//       style: ETUstyle,
+//       pointToLayer : pointToLayer,
+//       onEachFeature: onEachETU 
+// }).addTo(leafletMap);  
 
     CCCJSON = L.geoJson(CCCData, {
-      style: CCCstyle,
-      pointToLayer : CCCpointToLayer,
+      style: ETUstyle,
+      pointToLayer : pointToLayer,
       onEachFeature: onEachETU 
 }).addTo(leafletMap);  
 
@@ -169,38 +175,71 @@ function createMap(){
 //       onEachFeature: onEachETU
 // }).addTo(leafletMap);     
 
-//     libHealthJSON = L.geoJson(libHealth, {
-//       style: ETUstyle,
-//       pointToLayer : HpointToLayer,
-//       onEachFeature: onEachETU
-// }).addTo(leafletMap);      
+    libHealthJSON = L.geoJson(libHealth, {
+      style: healthStyle,
+      pointToLayer : HpointToLayer,
+      onEachFeature: onEachHealth
+}).addTo(leafletMap);      
 
 //     slHealthJSON = L.geoJson(slHealth, {
 //       style: ETUstyle,
 //       pointToLayer : HpointToLayer,
 //       onEachFeature: onEachETU 
 // }).addTo(leafletMap);      
-// }
+}
 
-// function onEachHealth(feature, layer) {
-//      layer.bindPopup(
-//            feature.properties.Type 
-//           );
-//     }
 
-  //   function HpointToLayer(feature, latlng) {
-  // return new L.CircleMarker(latlng,{
-  //     radius: .5, 
-  //     weight: .5, 
-  //     color: 'white', 
-  //     fillOpacity: .7
-  //   });
+//////////////////////////////////////////////////////////////////// health facilities
+
+function HpointToLayer(feature, latlng) {
+  return new L.CircleMarker(latlng,{
+      radius: 1, 
+      weight: 1, 
+      color: 'white', 
+      fillOpacity: .7
+    });
     }
 
-//     function heatlhStyle(feature) {
-//   return {fillColor: 'white'};
-//       }
+function onEachHealth(feature, layer) {
+     layer.bindPopup(
+           feature.properties.name + "<b></b><br>" + 
+           "type of facility: " + feature.properties.natureoffacility + "<b></b><br>" + 
+           "description: " + feature.properties.what3words
+          );
+    layer.on({
+    mouseover: highlightHealth,
+    mouseout: resetHealth,
+    //click: activateGraph
+  });
+    }
 
+    function highlightHealth(e) {
+  var layer = e.target;
+
+layer.setStyle({
+    radius: 2,
+    weight: 2,
+    color: 'white',
+    fillColor: 'white',
+    fillOpacity: 1,
+  });
+
+  if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+    layer.bringToFront();
+  }
+}
+
+function resetHealth(e) {
+  libHealthJSON.resetStyle(e.target);
+}
+
+function healthStyle(feature) {
+  return {
+      radius: 1, 
+      weight: 1, 
+      color: 'white', 
+      fillOpacity: .7};
+      }
 
 ///////////////////////////////////////////////////// ETU SETTINGS
 
@@ -210,7 +249,6 @@ function onEachETU(feature, layer) {
            feature.properties.ECF_Name + "<b></b><br>" + 
           "Status: " + feature.properties.Status + "<b></b><br>" + "<b></b><br>" +
           "Partner: " + feature.properties.Partner + "<b></b><br>" + 
-          "Lead Donor: " + feature.properties.Lead_Donor + "<b></b><br>" + 
           "Bed Capacity: " +  feature.properties.Beds_Plan  + "<b></b><br>" +
           "Lab Present: " + feature.properties.LabPresent
           + "<b></b><br>" + "<b></b><br>" +
@@ -225,32 +263,20 @@ function onEachETU(feature, layer) {
 
 function pointToLayer(feature, latlng) {
   return new L.CircleMarker(latlng,{
-      radius: 4, 
+      radius: 6, 
       weight: 2, 
-      color: 'white', 
-      fillOpacity: .7
+      color: '#a52222', 
+      fillOpacity: 0
     });
     }
 
 function ETUstyle(feature) {
-  return {fillColor: '##ffffff'};
-      }
-
-///////////////////////////////////////////////////////// CCC Specific
-function CCCpointToLayer(feature, latlng) {
-  return new L.CircleMarker(latlng,{
-      radius: 4, 
+  return {      
+      radius: 6, 
       weight: 2, 
-      color: 'white', 
-      fillOpacity: .7
-    });
-    }
-
-function CCCstyle(feature) {
-  return {fillColor: '##ffffff'};
+      color: '#a52222', 
+      fillOpacity: 0};
       }
-
-/////////////////////////////////////////////////////////////////////
 
 function highlightETU(e) {
   var layer = e.target;
@@ -258,23 +284,21 @@ function highlightETU(e) {
 layer.setStyle({
     radius: 6,
     weight: 2,
-    color: 'white',
-    fillColor: '##ffffff',
-    fillOpacity: .5,
+    color: '#a52222',
+    fillOpacity: 0,
   });
 
   if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
     layer.bringToFront();
   }
-
 }
+
 
 function resetETU(e) {
   ginJSON.resetStyle(e.target);
   slJSON.resetStyle(e.target);
   libJSON.resetStyle(e.target);
   CCCJSON.resetStyle(e.target);
-  
 }
 
 ////////////////////////////////////////////////// Country Settings
@@ -321,15 +345,6 @@ function onEachFeature(feature, layer) {
     click: activateGraph
   });
 }
-
-// function onEachLowFeature(feature, layer) {
-//   layer.on({
-
-//     click: activateGraph
-//   });
-// }
-
-
 
 function highlightFeature(e) {
   var layer = e.target;
@@ -382,7 +397,7 @@ function activateGraph(e) {
 
   //line(margin-29,0,margin-29,800);
 
-  fill('#5a90e8'); 
+  fill('#a52222'); 
   noStroke();
   textFont(myFontBlack);
   textSize(title);
