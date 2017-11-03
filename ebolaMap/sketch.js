@@ -6,7 +6,7 @@ var title  = 42;
 
 var yTitle = 45;
 var yTitle2 = 130;
-var yLocation = 155;
+var yLocation = 160;
 var ypop = 220;
 var yCases = 270;
 var yDeaths = 330;
@@ -51,6 +51,8 @@ var ginHealthJSON;
 
 var slHealthJSON;
 
+var img;
+
 function preload() {
   //my table is comma separated value "csv"
   //I'm ignoring the header 
@@ -67,24 +69,19 @@ function setup() {
    textFont(myFontBlack);
    parseData();
 
-   textSize(title);
-   fill(255);
-   text("EBOLA RESPONSE MAP", margin, yTitle);
+   img = loadImage("data/ebola_treatment.png"); 
 
+   textSize(title);
+   fill('#5a90e8');
+   text("EBOLA RESPONSE MAP", margin, yTitle);
+  
+  fill(255);
   textSize(25);
   text("ABOUT", margin, yLocation);
   textFont(myFontThin);
   text("This interactive map was created with the intention of acting as a tool of research to visualize and understand the West Africa Ebola Outbreak Response. ", margin,170,375,400);
   text("+ Click on the counties to reveal statistical     information related to the outbreak.", margin,320,375,400);
   text("+ Click on the icons to learn about                  existing and temporary health facilities.", margin,410,375,400);
-
- // Border  
-   stroke(255);
-   strokeWeight(3);
-   //noFill();
-   //fill(255);
-   //rect(10,15,margin-29,756);
-   line(margin-29,0,margin-29,800);
   
  }
 
@@ -284,9 +281,9 @@ function resetETU(e) {
 
 function countryStyle(feature) {
   return {
-    weight: 3,
-    opacity: .8,
-    color: 'white',
+    weight: 5,
+    opacity: 1,
+    color: '#d4d6d8',
     //dashArray: '4',
     fillOpacity: 0
   };
@@ -305,21 +302,10 @@ function style(feature) {
   };
 }
 
-// function lowStyle(feature) {
-//   return {
-//     weight: .5,
-//     opacity: .2,
-//     color: 'white',
-//     dashArray: '2',
-//     fillOpacity: 0,
-//     //fillColor: '##ffffff'
-//   };
-// }
-
 
 function roadStyle(feature) {
   return {
-    weight: .75,
+    weight: .25,
     opacity: .5,
     color: 'yellow',
     dashArray: '0',
@@ -388,21 +374,21 @@ function activateGraph(e) {
   background(0);
 
 //border
-  stroke(255);
-  strokeWeight(3);
+  //stroke(255);
+  //strokeWeight(3);
   // noFill();
   //  //fill(255);
   // rect(10,15,margin-29,760);
 
-  line(margin-29,0,margin-29,800);
+  //line(margin-29,0,margin-29,800);
 
-  fill(255); 
+  fill('#5a90e8'); 
   noStroke();
   textFont(myFontBlack);
   textSize(title);
   text("EBOLA RESPONSE MAP", margin, yTitle)
 
-
+  fill(255);
   textSize(25);
   text(countryName, margin, yTitle2);
   
@@ -494,50 +480,32 @@ function createGraph(ADM1_NAME){
   text("Cases: " + admin.values[0].value,margin,yCases);
   text("Deaths: " + admin.values[1].value,margin,yDeaths);
 
-  text("Ebola Treatment Units: ",margin,yETU);
-  text("Community Care Centers: ",margin,yCCC);
+  text("Ebola Treatment Units: " + admin.values[2].value,margin,yETU);
+  text("Community Care Centers: " + admin.values[3].value,margin,yCCC);
   
   text("Exisiting Health Facilities: ",margin,yHealth);
 
  
-  // textSize(8);
-
-  // for(var i=1; i<admin.values.length; i++){
     // draw the bars
+    
+    var x = map(admin.values[0].value,0,4866,0,400);
+    var x2 = map(admin.values[1].value,0,2026,0,170);
+    var x3 = map(admin.values[2].value,0,10,0,400);
+    var x4 = map(admin.values[3].value,0,10,0,400);
+
+
     fill(255,100);
-    var x = map(admin.values[0].value,0,4866,0,410);
-    //var y = map(admin.values[i].value,0, maxValue, height-margin, margin);
-    //var h = map(admin.values[i].value,0, maxValue, 0, height-(margin*2));
-    rect(margin,yCases+9,410, 25);
+    rect(margin,yCases+9,400, 25);
+    rect(margin,yDeaths+9,170, 25);
+
     fill(255);
     rect(margin,yCases+9,x, 25);
+    rect(margin,yDeaths+9,x2, 25);
+    rect(margin,yETU+9,x3, 25);
+    rect(margin,yCCC+9,x4, 25);
 
-  //    // add the labels
-  //   fill(255);
-  //   push();
-  //   translate(x+5,height-margin+10);
-  //   rotate(PI/5.0);
-  //   text(admin.values[i].label,0,0 );
-  //   pop();
-
-  // }
-  // // add labels to the y axis
-  // stroke(255);
-  // line(margin, margin, margin, height-margin);
-  // noStroke();
-  // textAlign(RIGHT);
-  // textStyle(NORMAL);
-  // var increment = maxValue/5;
-  // increment = Math.round(increment/500)*500;
-  // for(var i=0; i<maxValue; i+=increment){
-  //   var xLabel = margin-10;
-  //   var yLabel = map(i,0, maxValue,height-margin, margin);
-  //   noStroke();
-  //   fill(0);
-  //   text(i, xLabel, yLabel+5);
-  //   stroke(0);
-  //   line(xLabel+5,yLabel,xLabel+10,yLabel);
-  // }
+    image(img, margin, yETU+9);
+    image(img, margin, yCCC+9);
 }
 
 // helper function to find a state by name
@@ -551,6 +519,11 @@ function findStateByName(ADM1_NAME){
   }
 }
 
+function drawETU(){
+
+
+
+}
 
 
 
