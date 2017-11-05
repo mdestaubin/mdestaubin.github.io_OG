@@ -281,7 +281,7 @@ function highlightETU(e) {
   var layer = e.target;
 
 layer.setStyle({
-    radius: 6,
+    radius: 8,
     weight: 3,
     color: '#a52222',
     fillOpacity: 0,
