@@ -102,12 +102,6 @@ function createMap(){
   }).addTo(leafletMap);
 
 
-////////////////////////////////////////////////////////// Country JSON
-
-    libOutline = L.geoJson(libCountry, {
-    style: countryStyle,
-  }).addTo(leafletMap);  
-
   ////////////////////////////////////////////////////// Counties JSON
 
   //   waCountiesJSON = L.geoJson(waCounties, {
@@ -130,6 +124,11 @@ function createMap(){
     onEachFeature: onEachFeature
   }).addTo(leafletMap);  
 
+  ////////////////////////////////////////////////////////// Country JSON
+
+    libOutline = L.geoJson(libCountry, {
+    style: countryStyle,
+  }).addTo(leafletMap);  
 
 
 
@@ -295,8 +294,8 @@ layer.setStyle({
 
 
 function resetETU(e) {
-  ginJSON.resetStyle(e.target);
-  slJSON.resetStyle(e.target);
+  //ginJSON.resetStyle(e.target);
+  //slJSON.resetStyle(e.target);
   libJSON.resetStyle(e.target);
   CCCJSON.resetStyle(e.target);
 }
@@ -305,11 +304,11 @@ function resetETU(e) {
 
 function countryStyle(feature) {
   return {
-    weight: 6,
+    weight: 7,
     opacity: 1,
-    color: '#d4d6d8',
+    color: '#adadad',
     //dashArray: '4',
-    fillOpacity: 0
+    fill: false,
   };
 }
 
@@ -358,16 +357,16 @@ layer.setStyle({
     fillOpacity: 0.2
   });
 
-  if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-    layer.bringToFront();
-  }
+  // if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+  //   layer.bringToFront();
+  // }
   
 }
 
 function resetHighlight(e) {
   //waCountiesJSON.resetStyle(e.target);
-  slCountiesJSON.resetStyle(e.target);
-  ginCountiesJSON.resetStyle(e.target);
+  //slCountiesJSON.resetStyle(e.target);
+  //ginCountiesJSON.resetStyle(e.target);
   libCountiesJSON.resetStyle(e.target);
 }
 
