@@ -518,10 +518,10 @@ class Agent {
   void bounce()
   {
     //bounce checks
-    if (loc.x < 0 || loc.x >= width) {
+    if (loc.x < 0 || loc.x >= width-400) {
       vel.x *= -1;
     }
-    if (loc.y < 0 || loc.y >= height-35) {
+    if (loc.y < 0 || loc.y >= height) {
       vel.y *= -1;
     }
   }
