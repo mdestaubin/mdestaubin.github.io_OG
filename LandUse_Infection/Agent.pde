@@ -6,7 +6,7 @@ class Agent{
       PVector target;
       int     LUhome;
       float   mag;
-      int     kernelSize = 700; 
+      int     kernelSize = 25; 
       boolean foundTarget = false;
   
       Agent()
@@ -36,27 +36,27 @@ class Agent{
           LUhome = LUclass;
       }
       
-      void findTarget( Lattice l, int targetLU, ArrayList<PVector> healthZones )
+      void findTarget( Lattice l, int targetLU )
       {
-         //k.setNeighborhoodDistance( kernelSize );
-          //target = k.getNearest( l, loc, targetLU );
-          //if( target != null ) foundTarget = true; 
+          k.setNeighborhoodDistance( kernelSize );
+          target = k.getNearest( l, loc, targetLU );
+          if( target != null ) foundTarget = true; 
+         //////////////////////////////////////////////////////////////////
+          //float minDistance = MAX_FLOAT;
          
-          float minDistance = MAX_FLOAT;
-         
-          for (PVector z : healthZones) {
-              float distance = loc.dist(z);
-              if (distance < minDistance) {
-                minDistance = distance;
-                target = z;
-            }
-          }
+          //for (PVector z : healthZones) {
+          //    float distance = loc.dist(z);
+          //    if (distance < minDistance) {
+          //      minDistance = distance;
+          //      target = z;
+          //  }
+          //}
     }
 
-      void update(Lattice l, int targetLU, ArrayList<PVector> healthZones )
+      void update(Lattice l, int targetLU )
       {
           if( foundTarget == false ){
-            findTarget(l,targetLU, healthZones );
+            findTarget(l,targetLU);
           }
           if( foundTarget == true ) 
           {

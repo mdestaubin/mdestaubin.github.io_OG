@@ -1,3 +1,6 @@
+// Michael de St. Aubin
+// Mengze Xu
+
 //  GSD 6349 Mapping II : Geosimulation
 //  Havard University Graduate School of Design
 //  Professor Robert Gerard Pietrusko
@@ -29,10 +32,22 @@ int   maxDays              = 21;
 int   spreadDistance       = 6;
 float infectionProbability = 0.5;
 
+int xStat      = 1220;
+
+int yTitle     = 40;
+int yDay       = 140;
+int yPop       = 170;
+int yHealthy   = 230;
+int ySick      = 290;
+int yInfected  = 350;
+int ySurvivors = 410;
+int yDead      = 470;
+int yHealth    = 600;
+int yStaff     = 630;
 
 void setup()
 {
-  size(1200, 800);
+  size(1600, 800);
   frameRate( 24 );
   population = new ArrayList<Agent>();
   healthZone  = loadImage( "DATA/zones4.png" ); 
@@ -96,6 +111,7 @@ void statsBar() {
   float numInfected = 0;
   float numHealed = 0;
   float numDead = 0;
+  float numHealthy = 0;
   
   for (Agent person : population) {
     if ( person.sick == true) { 
@@ -114,28 +130,92 @@ void statsBar() {
   }
   for (Agent person : population) {
     if ( person.dead == true) { 
-      numDead += 1;
+      int x = 1;
+      numDead = x++;
     }
   }
+  
+    for (Agent person : population) {
+    if ( person.dead == false && person.healed == false && person.infected == false && person.sick == false) { 
+      numHealthy += 1;
+    }
+  }
+  
   float percentSick = numSick / popSize * 100;
   float percentInfected = numInfected / popSize * 100;
   float percentHealed = numHealed / popSize * 100;
   float percentDead = numDead / popSize * 100;
+  float percentHealthy = numHealthy / popSize * 100;
 
 
   fill(255);  
   textAlign(LEFT);
-  text( "DAY: " + dayCounter +"  |  POPULATION: " + currentPopulationSize + " / " + initialPopulationSize + "  |  NUMBER SICK: " + numSick + " (" + nf(percentSick, 0, 2)+"%)"+  "  |  NUMBER INFECTED: " + numInfected+ " (" + nf(percentInfected, 0, 2)+"%)" +  "  |  SURVIVORS: " + numHealed + " (" + nf(percentHealed, 0, 2)+"%)" +  "  |  NON SURVIVORS: " + numDead + " (" + nf(percentDead, 0, 2)+"%)", 12, height - 12);
-  textAlign(RIGHT);
-  text("HEALTH ZONES: 5       HEALTH STAFF: 20", width-23, height -12);
+  textSize(36);
+  text( "MODEL",xStat, yTitle,360,100);
+  textSize(12);
+  text( "DAY: " + dayCounter,xStat, yDay);
+  text( "POPULATION: " + popSize + " / " + initialPopulationSize, xStat, yPop);
+  text( "NUMBER HEALTHY: " + numHealthy + " | " + nf(percentHealthy, 0, 2)+"%", xStat, yHealthy);
+  text( "NUMBER SICK: " + numSick + " | " + nf(percentSick, 0, 2)+"%", xStat, ySick);
+  text( "NUMBER INFECTED: " + numInfected+ " (" + nf(percentInfected, 0, 2)+"%)", xStat, yInfected);
+  text( "SURVIVORS: " + numHealed + " | " + nf(percentHealed, 0, 2)+"%", xStat, ySurvivors);
+  text( "DEATHS: " + numDead + " | " + nf(percentDead, 0, 2)+"%", xStat, yDead);
+  text( "HEALTH ZONES: 5", xStat, yHealth);
+  text( "HEALTH STAFF: 20",xStat, yStaff);
+  
   textAlign(CENTER);
+  text( " CLICK TO ADD SICK AGENT  | |  SPACE BAR TO RESET", width/2-200, height -25);
+    
+    float xScale = 100;
+    
+    float xHealthy = map(percentHealthy,0,xScale,0,360);
+    float xSick = map(percentSick,0,xScale,0,360);
+    float xInfected = map(percentInfected,0,xScale,0,360);
+    float xSurvivors = map(percentHealed,0,xScale,0,360);
+    float xDead = map(percentDead,0,xScale,0,360);
+    
+    //float xxHealthy = map(percentHealthy,0,xScale,0,1200);
+    //float xxSick = map(percentSick,0,xScale,0,1200);
+    //float xxInfected = map(percentInfected,0,xScale,0,1200);
+    //float xxSurvivors = map(percentHealed,0,xScale,0,1200);
+    //float xxDead = map(percentDead,0,xScale,0,1200);
+    
+    noStroke();
+    fill(255,50);
+    rect(xStat,yHealthy+10,360, 25);
+    rect(xStat,ySick+10,360, 25);
+    rect(xStat,yInfected+10,360, 25);
+    rect(xStat,ySurvivors+10,360, 25);
+    rect(xStat,yDead+10,360, 25);
+    
+    fill(255);
+    rect(xStat,yHealthy+10,xHealthy, 25);
+    fill(255,0,0,150);
+    rect(xStat,ySick+10,xSick, 25);
+    fill(255,255,0,150);
+    rect(xStat,yInfected+10, xInfected, 25);
+    fill(0,255,0,150);
+    rect(xStat,ySurvivors+10,xSurvivors, 25);
+    fill(255);
+    rect(xStat,yDead+10,xDead, 25);
+    
+    //fill(255);
+    //rect(0,height-30,xxHealthy, 30);
+    //fill(255,0,0,150);
+    //rect(xxHealthy,height-30,xxSick, 30);
+    //fill(255,255,0,150);
+    //rect(xxSick+ xxHealthy,height-30, xxInfected, 30);
+    //fill(0,255,0,150);
+    //rect(xxInfected + xxSick + xxHealthy,height-30,xxSurvivors, 30);
+    //fill(255);
+    //rect(xxSurvivors + xxInfected + xxSick + xxHealthy,height-30,xxDead, 30);
 
-  text( " CLICK TO ADD SICK AGENT  | |  SPACE BAR TO RESET", width/2, height -55);
+
 
   stroke(255);
   strokeWeight(1);
-  line(0, height-35, width, height-35);
-  line(1200, 0, 1200, height-35);
+  //line(0, height-35, width, height-35);
+  line(1200, 0, 1200, height);
 }
 /////////////////////////////////////////////////////////////////////////// Infect
 void infect()
@@ -185,7 +265,7 @@ boolean prob( float probRate )
 void initailizePop() {
   for ( int i = 0; i < initialPopulationSize; i += 1 )
   {
-    PVector L = new PVector(random(0, width), random(0, height-35));    
+    PVector L = new PVector(random(0, width-400), random(0, height));    
     population.add(  new Agent(L)  );
   }
 }
@@ -222,7 +302,7 @@ void popFlux()
 //============================================================//
 void mousePressed()
 {
-  PVector L = new PVector(random(0, width), random(0, height-35));
+  PVector L = new PVector(random(0, width-400), random(0, height));
 
   Agent infectedPerson = new Agent(L);
   infectedPerson.getInfected();
@@ -240,7 +320,7 @@ void keyPressed()
     population.clear();
     for ( int i = 0; i < initialPopulationSize; i += 1 )
     {
-      PVector L = new PVector(random(0, width), random(0, height-35));    
+      PVector L = new PVector(random(0, width-400), random(0, height));    
       population.add(  new Agent(L)  ); 
       dayCounter = 0;
     }

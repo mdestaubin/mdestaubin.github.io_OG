@@ -15,12 +15,12 @@ Lattice LUlat;
 PFont txt;
 boolean mouseOverText = false;
 
-int populationHomeNLCD = 22; // evergreen forest
-int targetAdjacency = 11; // emergent herbaceous wetlands
-float birthProb     = 0.005;
+int populationHomeNLCD = 23; // evergreen forest
+int targetAdjacency = 24; // emergent herbaceous wetlands
+float birthProb     = 0.15;
 
 ArrayList<Agent> population;
-ArrayList<PVector> healthZones;
+//ArrayList<PVector> healthZones;
 
 /////////////////////////////////////////////// Code Merge Variables
 int initialPopulationSize = 1000;
@@ -53,7 +53,7 @@ void setup()
  // this is used to color the land cover ascii grid      
      nlcdColors = new NLCDswatch();  
      
-     //createPopulation();
+     createPopulation();
   
     // fill the healthzones array
 }
@@ -63,14 +63,16 @@ void setup()
 void draw()
 {
     background(0);
-    image( LU.getImage(),-200,0 );
-    LU.getImage().resize(0,800);
+    image( LU.getImage(),0,0 );
+
+    //image( LU.getImage(),-200,0 );
+    //LU.getImage().resize(0,800);
     
-    //for( Agent a : population )
-    //{
-    //    a.update(LUlat, targetAdjacency, healthZones);
-    //    a.drawAgent();
-    //}
+    for( Agent a : population )
+    {
+        a.update(LUlat, targetAdjacency);
+        a.drawAgent();
+    }
     
     texter();
 
@@ -97,16 +99,16 @@ void keyPressed()
 }
 
 
-//void mousePressed()
-//{
-//    targetAdjacency = (int)LUlat.get(mouseX,mouseY);
-//    for( Agent a : population )
-//    {
-//          a.foundTarget = false;
-//          a.vel = new PVector( random(-2,2), random( -2, 2 ) );
-//    }
+void mousePressed()
+{
+    targetAdjacency = (int)LUlat.get(mouseX,mouseY);
+    for( Agent a : population )
+    {
+          a.foundTarget = false;
+          a.vel = new PVector( random(-2,2), random( -2, 2 ) );
+    }
 
-//}
+}
 
 
 ///////////////////////////////////////////////////////////////////////
@@ -132,7 +134,7 @@ void createPopulation()
              {
                  Agent temp = new Agent(x,y);
                  temp.setHomeClass( populationHomeNLCD );
-                 temp.findTarget( LUlat, targetAdjacency, healthZones );
+                 temp.findTarget( LUlat, targetAdjacency);
                  population.add( temp );            
              }
         
