@@ -142,6 +142,10 @@ function resetHighlight(e) {
 ////////////////////////////////////////////////// ACTIVATE GRAPH
 
  function activateGraph(e) {
+
+   fill('#3a913b');
+   textSize(28);
+   text("COUNTRY DATA",122, 1100);
 //   // leafletMap.fitBounds(e.target.getBounds());
   
 //   var layer = e.target;
