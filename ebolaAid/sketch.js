@@ -34,7 +34,6 @@ function preload() {
 function setup() {  
 
    var canvas = createCanvas(1600,1500);  
-   background(255);
    canvas.parent("container");
    createMap();
    textFont(myFontThin);
@@ -53,8 +52,6 @@ function draw(){
    textSize(title);
    fill('#3a913b');
    text("EBOLA  AID  FLOW.",122, 40);
-   textSize(28);
-   text("COUNTRY DATA",122, 1100);
 
    strokeWeight(1.25);
    stroke(58, 145, 59,180);
@@ -62,14 +59,19 @@ function draw(){
    
    fill('white');  
    strokeWeight(1.5);
+  
 
-   if( mouseY > 590 && mouseY < 610)
-   {
+   if(mouseY > 580 && mouseY < 620){
+   if (mouseIsPressed) 
    ellipse(mouseX,610,10,10);
- }
-   else { 
+   else  
    ellipse(125,610,10,10);
-   }
+}
+   else  
+   ellipse(125,610,10,10);
+
+ activateGraph();
+
 }
 
 // create the map using leaflet
@@ -139,46 +141,10 @@ function resetHighlight(e) {
 }
 
 
+
 ////////////////////////////////////////////////// ACTIVATE GRAPH
 
- function activateGraph(e) {
 
-   fill('#3a913b');
-   textSize(28);
-   text("COUNTRY DATA",122, 1100);
-//   // leafletMap.fitBounds(e.target.getBounds());
-  
-//   var layer = e.target;
-
-//   var countryName = layer.feature.properties.CNTRY_NAME;
-
-//   var yGap = 15;
-
-//   background(0);
-
-
-//   fill('#a52222'); 
-   // background(255);
-   // noStroke();
-   // textFont(myFontThin);
-   // fill(58, 145, 59);
-   // textSize(title);
-   // text("EBOLA  AID  FLOW",122, 40);
-
-//   fill(255);
-//   textSize(25);
-//   text(countryName, margin, yTitle2);
-   
-//   //text("Admin Level 3: " +admin3Name, 35, 240);
-//   console.log(admin1Name);
-//   createGraph(layer.feature.properties.ADM1_NAME);
-    
-   // stroke(58, 145, 59);
-   // line(125,600,1155,600);
-   // fill('white');  
-   // ellipse(mouseX,600,10,10);
-
- }
 
 // /////////////////////////////////////////////////// PARSE DATA
 
@@ -289,7 +255,48 @@ function resetHighlight(e) {
 
  }
 
+ function activateGraph(e) {
 
+  //leafletMap.fitBounds(e.target.getBounds());
+  var layer = e.target;
+
+  var countryName = layer.feature.properties.admin;
+   
+   fill(255);
+   noStroke(0);
+   rect(118,900,310,100);
+   noStroke();
+   textFont(myFontBlack);
+   textSize(22);
+   fill('#3a913b');
+   text(countryName,120, 410);
+  
+//   var yGap = 15;
+
+
+
+//   fill('#a52222'); 
+   // background(255);
+   // noStroke();
+   // textFont(myFontThin);
+   // fill(58, 145, 59);
+   // textSize(title);
+   // text("EBOLA  AID  FLOW",122, 40);
+
+//   fill(255);
+//   textSize(25);
+//   text(countryName, margin, yTitle2);
+   
+//   //text("Admin Level 3: " +admin3Name, 35, 240);
+//   console.log(admin1Name);
+//   createGraph(layer.feature.properties.ADM1_NAME);
+    
+   // stroke(58, 145, 59);
+   // line(125,600,1155,600);
+   // fill('white');  
+   // ellipse(mouseX,600,10,10);
+
+ }
 
 
 
