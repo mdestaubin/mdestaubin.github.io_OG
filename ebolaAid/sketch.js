@@ -25,7 +25,7 @@ function preload() {
   //my table is comma separated value "csv"
   //I'm ignoring the header 
 
-  //table = loadTable("data/ebola_case_data.csv", "csv", "header");
+  table = loadTable("data/finData.csv", "csv", "header");
   myFontThin  = loadFont('Text/frutiger-thin.otf');
   myFontBlack = loadFont('Text/frutiger-black.otf');
 }
@@ -37,7 +37,7 @@ function setup() {
    canvas.parent("container");
    createMap();
    textFont(myFontThin);
-   //parseData();
+   parseData();
 
    var m = map(0,0,0,0,0);
    var moneyScale = m/100;
@@ -138,7 +138,56 @@ layer.setStyle({
 
 function resetHighlight(e) {
   worldJSON.resetStyle(e.target);
+
 }
+
+function activateGraph(e) {
+
+  //leafletMap.fitBounds(e.target.getBounds());
+  var layer = e.target;
+
+  var countryName = layer.feature.properties.admin;
+  var region = layer.feature.properties.region_wb;
+   
+   fill(255);
+   noStroke(0);
+   rect(118,388,500,200);
+   noStroke();
+   textFont(myFontBlack);
+   textSize(22);
+   fill('#3a913b');
+   text(countryName,120, 410);
+   textFont(myFontThin);
+   textSize(16);
+   text(region,120, 430);
+  
+//   var yGap = 15;
+
+
+
+//   fill('#a52222'); 
+   // background(255);
+   // noStroke();
+   // textFont(myFontThin);
+   // fill(58, 145, 59);
+   // textSize(title);
+   // text("EBOLA  AID  FLOW",122, 40);
+
+//   fill(255);
+//   textSize(25);
+//   text(countryName, margin, yTitle2);
+   
+//   //text("Admin Level 3: " +admin3Name, 35, 240);
+//   console.log(admin1Name);
+//   createGraph(layer.feature.properties.ADM1_NAME);
+    
+   // stroke(58, 145, 59);
+   // line(125,600,1155,600);
+   // fill('white');  
+   // ellipse(mouseX,600,10,10);
+
+ }
+ 
 
 
 
@@ -148,10 +197,12 @@ function resetHighlight(e) {
 
 // /////////////////////////////////////////////////// PARSE DATA
 
-// function parseData(){
+}
+
+function parseData(){
 //    //this is the key at the top, we will need it later
-//    var keyRow = table.getRow(0);
-//    //var metaRow = table.getRow(1);
+     var keyRow = table.getRow(0);
+     var metaRow = table.getRow(1);
 
 //     // cycle through each item in that column, ignoring the first two items which are the headers
 //     for(var i=1;i<table.getRowCount(); i++){    
@@ -182,13 +233,13 @@ function resetHighlight(e) {
 //       // attach the state object to the "states" array
 //       append(admins, admin);
 //    }
-// }
+ }
 
 
-// function createGraph(ADM1_NAME){
+ // function createGraph(admn){
   
-//   var admin = findStateByName(ADM1_NAME);
-//   console.log(admin);
+ //  var admin = findStateByName(admn);
+ //  console.log(admin);
   
 //   // // first let's find the highest value for this state
 //  var maxValue =0;
@@ -242,8 +293,8 @@ function resetHighlight(e) {
 //     image(img, margin, yCCC+9);
 // }
 
-// // helper function to find a state by name
-// function findStateByName(ADM1_NAME){
+// helper function to find a state by name
+//  function findStateByName(admn){
 //   var admin;
 //   for(var i=0; i<admins.length; i++){
 //     if(admins[i].ADM1_NAME == ADM1_NAME){
@@ -253,50 +304,7 @@ function resetHighlight(e) {
 //   }
 // }
 
- }
-
- function activateGraph(e) {
-
-  //leafletMap.fitBounds(e.target.getBounds());
-  var layer = e.target;
-
-  var countryName = layer.feature.properties.admin;
-   
-   fill(255);
-   noStroke(0);
-   rect(118,900,310,100);
-   noStroke();
-   textFont(myFontBlack);
-   textSize(22);
-   fill('#3a913b');
-   text(countryName,120, 410);
-  
-//   var yGap = 15;
-
-
-
-//   fill('#a52222'); 
-   // background(255);
-   // noStroke();
-   // textFont(myFontThin);
-   // fill(58, 145, 59);
-   // textSize(title);
-   // text("EBOLA  AID  FLOW",122, 40);
-
-//   fill(255);
-//   textSize(25);
-//   text(countryName, margin, yTitle2);
-   
-//   //text("Admin Level 3: " +admin3Name, 35, 240);
-//   console.log(admin1Name);
-//   createGraph(layer.feature.properties.ADM1_NAME);
-    
-   // stroke(58, 145, 59);
-   // line(125,600,1155,600);
-   // fill('white');  
-   // ellipse(mouseX,600,10,10);
-
- }
+ 
 
 
 
