@@ -42,7 +42,7 @@ function setup() {
 
    var m = map(0,0,0,0,0);
    var moneyScale = m/100;
-
+   
   // parseData();
  }
 
@@ -52,16 +52,19 @@ function draw(){
    background(255);
    textFont(myFontThin);
    
-
+  
 
    noStroke();
    textSize(title);
    fill('#3a913b');
    text("EBOLA  AID  FLOW",122, 40);
-
-   strokeWeight(1.25);
+   
+   textSize(26);
+   text("Click on a Country",122, 410);
+  
+   strokeWeight(1);
    stroke(58, 145, 59,180);
-   line(125,610,1155,610);
+   line(125,370,625,370);
    
    fill('white');  
    strokeWeight(1.5);
@@ -70,15 +73,17 @@ function draw(){
    if(mouseY > 580 && mouseY < 620){
    if (mouseIsPressed) 
    ellipse(mouseX,610,10,10);
+ }
    else  
-   ellipse(125,610,10,10);
-}
-   else  
-   ellipse(125,610,10,10);
+   ellipse(125,370,10,10);
+ 
 
    line(200,1500,400,1500);
 
    activateGraph();
+
+   //ellipse
+  
 
 }
 
@@ -86,7 +91,7 @@ function draw(){
 
 function createMap(){
 
-  leafletMap = L.map('map').setView([22, 0], 2);
+  leafletMap = L.map('map').setView([22, 0], 1);
 
   L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.{ext}', {
   //attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',

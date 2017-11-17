@@ -482,11 +482,6 @@ function createGraph(ADM1_NAME){
 
    console.log("maxValue: " + maxValue);
 
-  // // now draw the bars and the labels
-  // background(245);
-  // noStroke();
-  // textAlign(LEFT);
-  // textSize(16);
   
   textSize(20);
   text("Population: " + admin.values[4].value,margin,ypop);
