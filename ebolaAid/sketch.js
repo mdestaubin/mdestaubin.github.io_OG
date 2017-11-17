@@ -26,7 +26,7 @@ function preload() {
   //my table is comma separated value "csv"
   //I'm ignoring the header 
 
-  table = loadTable("data/FinData.csv", "csv", "header");
+  //table = loadTable("data/FinData.csv", "csv", "header");
   myFontThin  = loadFont('Text/frutiger-thin.otf');
   myFontBlack = loadFont('Text/frutiger-black.otf');
 }
@@ -75,6 +75,8 @@ function draw(){
 }
    else  
    ellipse(125,610,10,10);
+
+   line(200,1500,400,1500);
 
    activateGraph();
 
@@ -164,8 +166,8 @@ function activateGraph(e) {
    noStroke(0);
    rect(118,388,500,200);
    noStroke();
-   textFont(myFontBlack);
-   textSize(22);
+   textFont(myFontThin);
+   textSize(26);
    fill('#3a913b');
    text(countryName,122, 410);
    textFont(myFontThin);
@@ -204,103 +206,103 @@ function activateGraph(e) {
  
 }
 
-function parseData(){
-    //this is the key at the top, we will need it later
-     var keyRow = table.getRow(0);
-     //var metaRow = table.getRow(1);
+// function parseData(){
+//     //this is the key at the top, we will need it later
+//      var keyRow = table.getRow(0);
+//      //var metaRow = table.getRow(1);
    
-    // cycle through each item in that column, ignoring the first two items which are the headers
-    for(var i=1;i<table.getRowCount(); i++){    
+//     // cycle through each item in that column, ignoring the first two items which are the headers
+//     for(var i=1;i<table.getRowCount(); i++){    
 
-      //get each row for each id, hence the data for one state at a time
-      var adminRow = table.getRow(i);
+//       //get each row for each id, hence the data for one state at a time
+//       var adminRow = table.getRow(i);
 
-      // create an empty object for each state
-      // we will attach all the information to this object
-      var country = {};
-      //state.id = stateRow.getString(0);
-      //state.id2 = stateRow.getString(1);
-      country.admin = adminRow.getString(0);
+//       // create an empty object for each state
+//       // we will attach all the information to this object
+//       var country = {};
+//       //state.id = stateRow.getString(0);
+//       //state.id2 = stateRow.getString(1);
+//       country.admin = adminRow.getString(0);
 
-      // this array will hold all occupation data
-      country.values = [];
+//       // this array will hold all occupation data
+//       country.values = [];
       
-      for(var j=1; j<table.getColumnCount(); j++){
-        // create an empty object that holds the occupation data for one category
-        var item = {};
-        //item.label = metaRow.getString(j);
-        item.label = keyRow.getString(j);
-        item.value = adminRow.getNum(j);
+//       for(var j=1; j<table.getColumnCount(); j++){
+//         // create an empty object that holds the occupation data for one category
+//         var item = {};
+//         //item.label = metaRow.getString(j);
+//         item.label = keyRow.getString(j);
+//         item.value = adminRow.getNum(j);
         
-        // attach the item object to the "occupation" array
-        append(country.values, item);
-      }
-        // attach the state object to the "states" array
-      append(admins, admin);
-    }
- }
+//         // attach the item object to the "occupation" array
+//         append(country.values, item);
+//       }
+//         // attach the state object to the "states" array
+//       append(admins, admin);
+//     }
+//  }
 
 
- function createGraph(admn){
+//  function createGraph(admn){
   
-  var country = findStateByName(admn);
-  console.log(admin);
+//   var country = findStateByName(admn);
+//   console.log(admin);
   
-//   // // first let's find the highest value for this state
-  var maxValue =0;
+// //   // // first let's find the highest value for this state
+//   var maxValue =0;
 
-  for(var i=1; i<country.values.length; i++){
-    if(country.values[i].value>maxValue)
-      maxValue = country.values[i].value;
-  }
+//   for(var i=1; i<country.values.length; i++){
+//     if(country.values[i].value>maxValue)
+//       maxValue = country.values[i].value;
+//   }
 
-    console.log("maxValue: " + maxValue);
+//     console.log("maxValue: " + maxValue);
   
-  textSize(20);
-  text("Amount: " + country.values[0].value,122,500);
+//   textSize(20);
+//   text("Amount: " + country.values[0].value,122,500);
 
-//   text("Confirmed Cases: " + admin.values[0].value,margin,yCases);
-//   text("Confirmed Deaths: " + admin.values[1].value,margin,yDeaths);
+// //   text("Confirmed Cases: " + admin.values[0].value,margin,yCases);
+// //   text("Confirmed Deaths: " + admin.values[1].value,margin,yDeaths);
 
-//   text("Ebola Treatment Units: " + admin.values[2].value,margin,yETU);
-//   text("Community Care Centers: " + admin.values[3].value,margin,yCCC);
+// //   text("Ebola Treatment Units: " + admin.values[2].value,margin,yETU);
+// //   text("Community Care Centers: " + admin.values[3].value,margin,yCCC);
   
-//   text("Exisiting Health Facilities: ",margin,yHealth);
+// //   text("Exisiting Health Facilities: ",margin,yHealth);
 
  
-//     // draw the bars
+// //     // draw the bars
     
-//     var x = map(admin.values[0].value,0,4866,0,400);
-//     var x2 = map(admin.values[1].value,0,2026,0,170);
-//     var x3 = map(admin.values[2].value,0,10,0,400);
-//     var x4 = map(admin.values[3].value,0,10,0,400);
+// //     var x = map(admin.values[0].value,0,4866,0,400);
+// //     var x2 = map(admin.values[1].value,0,2026,0,170);
+// //     var x3 = map(admin.values[2].value,0,10,0,400);
+// //     var x4 = map(admin.values[3].value,0,10,0,400);
 
 
-//     fill(255,50);
-//     rect(margin,yCases+9,400, 25);
-//     rect(margin,yDeaths+9,170, 25);
-//     rect(margin,yETU+9,400, 25);
-//     rect(margin,yCCC+9,400, 25);
+// //     fill(255,50);
+// //     rect(margin,yCases+9,400, 25);
+// //     rect(margin,yDeaths+9,170, 25);
+// //     rect(margin,yETU+9,400, 25);
+// //     rect(margin,yCCC+9,400, 25);
 
-//     fill(255);
-//     rect(margin,yCases+9,x, 25);
-//     rect(margin,yDeaths+9,x2, 25);
-//     rect(margin,yETU+9,x3, 25);
-//     rect(margin,yCCC+9,x4, 25);
+// //     fill(255);
+// //     rect(margin,yCases+9,x, 25);
+// //     rect(margin,yDeaths+9,x2, 25);
+// //     rect(margin,yETU+9,x3, 25);
+// //     rect(margin,yCCC+9,x4, 25);
 
-//     image(img, margin, yETU+9);
-//     image(img, margin, yCCC+9);
- }
-// helper function to find a state by name
- function findStateByName(admn){
-  var country;
-  for(var i=0; i<admins.length; i++){
-    if(admins[i].admin == admn){
-      country = admins[i];
-      return country;
-    }
-  }
-}
+// //     image(img, margin, yETU+9);
+// //     image(img, margin, yCCC+9);
+//  }
+// // helper function to find a state by name
+//  function findStateByName(admn){
+//   var country;
+//   for(var i=0; i<admins.length; i++){
+//     if(admins[i].admin == admn){
+//       country = admins[i];
+//       return country;
+//     }
+//   }
+// }
 
  
 
