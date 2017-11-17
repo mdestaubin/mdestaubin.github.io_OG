@@ -60,14 +60,30 @@ function draw(){
    text("EBOLA  AID  FLOW",122, 40);
    
    textSize(26);
-   text("Click on a Country",122, 410);
+   text("Click on a Country",122, 450);
   
+   strokeWeight(2);
+   stroke(58, 145, 59,180);
+   noFill();
+   bezier(1000,370, 1080, 100, 920, 25, 840,100);
+   bezier(1000,370, 1100, 100, 1160, 475, 1110,500);
+   bezier(1000,370, 800, 150, 800, 475, 840,550);
+
    strokeWeight(1);
    stroke(58, 145, 59,180);
    line(125,370,625,370);
    
+
    fill('white');  
    strokeWeight(1.5);
+
+   ellipse(1000,370,90,90); 
+   ellipse(800,300,50,50); 
+   ellipse(1110,110,50,50); 
+   ellipse(1100,200,20,20); 
+   ellipse(840,100,100,100); 
+   ellipse(840,550,30,30); 
+   ellipse(1110,500,50,50);
   
 
    if(mouseY > 580 && mouseY < 620){
@@ -174,13 +190,13 @@ function activateGraph(e) {
    textFont(myFontThin);
    textSize(26);
    fill('#3a913b');
-   text(countryName,122, 410);
+   text(countryName,122, 450);
    textFont(myFontThin);
    textSize(16);
-   text(region, 122, 430);
-   text("Pledged: XXX", 122, 475);
-   text("Paid Contribution: XXX", 122, 500);
-   text("Total Aid: XXX", 122, 525);
+   text(region, 122, 470);
+   text("Pledged: XXX", 122, 500);
+   text("Paid Contribution: XXX", 122, 525);
+   text("Total Aid: XXX", 122, 550);
   
 //   var yGap = 15;
 
