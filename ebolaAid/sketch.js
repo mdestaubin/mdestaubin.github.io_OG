@@ -20,12 +20,13 @@ var leafletMap;
 var worldJSON;
 
 var m; 
+var r;
 
 function preload() {
   //my table is comma separated value "csv"
   //I'm ignoring the header 
 
-  table = loadTable("data/finData.csv", "csv", "header");
+  table = loadTable("data/FinData.csv", "csv", "header");
   myFontThin  = loadFont('Text/frutiger-thin.otf');
   myFontBlack = loadFont('Text/frutiger-black.otf');
 }
@@ -37,21 +38,26 @@ function setup() {
    canvas.parent("container");
    createMap();
    textFont(myFontThin);
-   parseData();
+   
 
    var m = map(0,0,0,0,0);
    var moneyScale = m/100;
+
+  // parseData();
  }
 
 
 function draw(){
+
    background(255);
    textFont(myFontThin);
    
+
+
    noStroke();
    textSize(title);
    fill('#3a913b');
-   text("EBOLA  AID  FLOW.",122, 40);
+   text("EBOLA  AID  FLOW",122, 40);
 
    strokeWeight(1.25);
    stroke(58, 145, 59,180);
@@ -70,7 +76,7 @@ function draw(){
    else  
    ellipse(125,610,10,10);
 
- activateGraph();
+   activateGraph();
 
 }
 
@@ -78,11 +84,11 @@ function draw(){
 
 function createMap(){
 
-  leafletMap = L.map('map').setView([20, 0], 2);
+  leafletMap = L.map('map').setView([22, 0], 2);
 
   L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.{ext}', {
-  attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  subdomains: 'abcd',
+  //attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  //subdomains: 'abcd',
   minZoom: 0,
   maxZoom: 20,
   ext: 'png',
@@ -100,12 +106,15 @@ function createMap(){
 /////////////////////////////////////////////////// Country Settings
 
 function style(feature) {
+  
+  var r = random(0,1);
+
   return {
-    weight: 2,
+    weight: 1,
     opacity: .5,
     color: '#58a52e',
     dashArray: '1',
-    fillOpacity: 0,
+    fillOpacity: r,
     fillColor: '#58a52e'
   };
 }
@@ -148,7 +157,9 @@ function activateGraph(e) {
 
   var countryName = layer.feature.properties.admin;
   var region = layer.feature.properties.region_wb;
-   
+  
+  //var center = layer.feature.geometry.coordinates.getCenter();
+
    fill(255);
    noStroke(0);
    rect(118,388,500,200);
@@ -156,10 +167,13 @@ function activateGraph(e) {
    textFont(myFontBlack);
    textSize(22);
    fill('#3a913b');
-   text(countryName,120, 410);
+   text(countryName,122, 410);
    textFont(myFontThin);
    textSize(16);
-   text(region,120, 430);
+   text(region, 122, 430);
+   text("Pledged: XXX", 122, 475);
+   text("Paid Contribution: XXX", 122, 500);
+   text("Total Aid: XXX", 122, 525);
   
 //   var yGap = 15;
 
@@ -178,8 +192,8 @@ function activateGraph(e) {
 //   text(countryName, margin, yTitle2);
    
 //   //text("Admin Level 3: " +admin3Name, 35, 240);
-//   console.log(admin1Name);
-//   createGraph(layer.feature.properties.ADM1_NAME);
+     console.log(admin1Name);
+     createGraph(layer.feature.properties.admn);
     
    // stroke(58, 145, 59);
    // line(125,600,1155,600);
@@ -188,77 +202,62 @@ function activateGraph(e) {
 
  }
  
-
-
-
-////////////////////////////////////////////////// ACTIVATE GRAPH
-
-
-
-// /////////////////////////////////////////////////// PARSE DATA
-
 }
 
 function parseData(){
-//    //this is the key at the top, we will need it later
+    //this is the key at the top, we will need it later
      var keyRow = table.getRow(0);
-     var metaRow = table.getRow(1);
+     //var metaRow = table.getRow(1);
+   
+    // cycle through each item in that column, ignoring the first two items which are the headers
+    for(var i=1;i<table.getRowCount(); i++){    
 
-//     // cycle through each item in that column, ignoring the first two items which are the headers
-//     for(var i=1;i<table.getRowCount(); i++){    
+      //get each row for each id, hence the data for one state at a time
+      var adminRow = table.getRow(i);
 
-//       //get each row for each id, hence the data for one state at a time
-//       var adminRow = table.getRow(i);
+      // create an empty object for each state
+      // we will attach all the information to this object
+      var country = {};
+      //state.id = stateRow.getString(0);
+      //state.id2 = stateRow.getString(1);
+      country.admin = adminRow.getString(0);
 
-//       // create an empty object for each state
-//       // we will attach all the information to this object
-//       var admin = {};
-//       //state.id = stateRow.getString(0);
-//       //state.id2 = stateRow.getString(1);
-//       admin.ADM1_NAME = adminRow.getString(0);
-
-//       // this array will hold all occupation data
-//       admin.values = [];
+      // this array will hold all occupation data
+      country.values = [];
       
-//       for(var j=1; j<table.getColumnCount(); j++){
-//         // create an empty object that holds the occupation data for one category
-//         var item = {};
-//         //item.label = metaRow.getString(j);
-//         item.label = keyRow.getString(j);
-//         item.value = adminRow.getNum(j);
+      for(var j=1; j<table.getColumnCount(); j++){
+        // create an empty object that holds the occupation data for one category
+        var item = {};
+        //item.label = metaRow.getString(j);
+        item.label = keyRow.getString(j);
+        item.value = adminRow.getNum(j);
         
-//         // attach the item object to the "occupation" array
-//         append(admin.values, item);
-//       }
-//       // attach the state object to the "states" array
-//       append(admins, admin);
-//    }
+        // attach the item object to the "occupation" array
+        append(country.values, item);
+      }
+        // attach the state object to the "states" array
+      append(admins, admin);
+    }
  }
 
 
- // function createGraph(admn){
+ function createGraph(admn){
   
- //  var admin = findStateByName(admn);
- //  console.log(admin);
+  var country = findStateByName(admn);
+  console.log(admin);
   
 //   // // first let's find the highest value for this state
-//  var maxValue =0;
+  var maxValue =0;
 
-//   for(var i=1; i<admin.values.length; i++){
-//     if(admin.values[i].value>maxValue)
-//       maxValue = admin.values[i].value;
-//   }
+  for(var i=1; i<country.values.length; i++){
+    if(country.values[i].value>maxValue)
+      maxValue = country.values[i].value;
+  }
 
-//    console.log("maxValue: " + maxValue);
-
-//   // // now draw the bars and the labels
-//   // background(245);
-//   // noStroke();
-//   // textAlign(LEFT);
-//   // textSize(16);
+    console.log("maxValue: " + maxValue);
   
-//   textSize(20);
-//   text("Population: " + admin.values[4].value,margin,ypop);
+  textSize(20);
+  text("Amount: " + country.values[0].value,122,500);
 
 //   text("Confirmed Cases: " + admin.values[0].value,margin,yCases);
 //   text("Confirmed Deaths: " + admin.values[1].value,margin,yDeaths);
@@ -291,18 +290,17 @@ function parseData(){
 
 //     image(img, margin, yETU+9);
 //     image(img, margin, yCCC+9);
-// }
-
+ }
 // helper function to find a state by name
-//  function findStateByName(admn){
-//   var admin;
-//   for(var i=0; i<admins.length; i++){
-//     if(admins[i].ADM1_NAME == ADM1_NAME){
-//       admin = admins[i];
-//       return admin;
-//     }
-//   }
-// }
+ function findStateByName(admn){
+  var country;
+  for(var i=0; i<admins.length; i++){
+    if(admins[i].admin == admn){
+      country = admins[i];
+      return country;
+    }
+  }
+}
 
  
 
