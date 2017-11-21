@@ -130,14 +130,14 @@ function createMap(){
 
 function style(feature) {
   
-  var r = random(0,1);
+  var x = map(admin.values[0].value,0,4866,0,1);
 
   return {
     weight: 1,
     opacity: .5,
     color: '#58a52e',
     dashArray: '1',
-    fillOpacity: r,
+    fillOpacity: x,
     fillColor: '#58a52e'
   };
 }

@@ -50,7 +50,9 @@ function setup() {
    createMap();
    textFont(myFontBlack);
    parseData();
-
+   
+   //var countyFill = map(admin.values[0].value,0,4866,0,1);
+   
    img = loadImage("data/ebola_treatment.png"); 
 
    textSize(title);
@@ -71,35 +73,27 @@ function setup() {
  }
 
 
-// var blackMap = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png', 
-// {maxZoom: 19}),
-
-// satMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-//   attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'}).addTo(leafletMap);
-
-// var leafletMap = L.map('map', {
-//     center: [6.45, -9.5],
-//     zoom: 8,
-//     layers: [blackMap, satMap]
-// });
-
-// var baseMaps = {
-//     "Black Map": grayscale,
-//     "Satelite Map": streets
-// };
-
-// L.control.layers(baseMaps).addTo(leafletMap);
-
-
 // create the map using leaflet
 function createMap(){
-  leafletMap = L.map('map').setView([6.45, -9.5], 8);
 
-  L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png', {
-  //attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
-  //subdomains: 'abcd',
-  maxZoom: 19
-  }).addTo(leafletMap);
+ var black      = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png', {maxZoom: 19}),
+     satelite   = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+                });
+
+ var leafletMap = L.map('map',{
+       center: [6.45, -9.5],
+       zoom: 8,
+       layers: [black,satelite]
+});
+
+ var baseMaps = {
+    "Satelite": satelite,
+    "Black": black
+};
+  
+
+ L.control.layers(baseMaps).addTo(leafletMap);
 
 
   ////////////////////////////////////////////////////// Counties JSON
@@ -109,15 +103,15 @@ function createMap(){
   //   onEachFeature: onEachLowFeature
   // }).addTo(leafletMap); 
 
-  slCountiesJSON = L.geoJson(slCounties, {
-    style: style,
-   onEachFeature: onEachFeature
-  }).addTo(leafletMap);  
+  // slCountiesJSON = L.geoJson(slCounties, {
+  //   style: style,
+  //  onEachFeature: onEachFeature
+  // }).addTo(leafletMap);  
 
-  ginCountiesJSON = L.geoJson(ginCounties, {
-    style: style,
-   onEachFeature: onEachFeature
-  }).addTo(leafletMap);  
+  // ginCountiesJSON = L.geoJson(ginCounties, {
+  //   style: style,
+  //  onEachFeature: onEachFeature
+  // }).addTo(leafletMap);  
 
   libCountiesJSON = L.geoJson(libCounties, {
     style: style,
@@ -304,9 +298,9 @@ function resetETU(e) {
 
 function countryStyle(feature) {
   return {
-    weight: 7,
+    weight: 4,
     opacity: 1,
-    color: '#adadad',
+    color: 'white',
     //dashArray: '4',
     fill: false,
   };
@@ -315,12 +309,16 @@ function countryStyle(feature) {
 /////////////////////////////////////////////////// County Settings
 
 function style(feature) {
+ 
+  var r = random(0,.3);
+  //var countyFill = map(admin.values[0].value,0,4866,0,1);
+ 
   return {
     weight: 2,
     opacity: .5,
     color: 'white',
     dashArray: '4',
-    fillOpacity: 0,
+    fillOpacity: r,
     //fillColor: '##ffffff'
   };
 }
@@ -349,12 +347,12 @@ function highlightFeature(e) {
   var layer = e.target;
 
 layer.setStyle({
-    weight: 5,
+    weight: 6,
     color: 'white',
     dashArray: '',
     // fill: false,
     fillColor: 'black',
-    fillOpacity: 0.2
+    fillOpacity: 0.1
   });
 
   // if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
@@ -517,6 +515,8 @@ function createGraph(ADM1_NAME){
 
     image(img, margin, yETU+9);
     image(img, margin, yCCC+9);
+
+    return map(admin.values[0].value,0,4866,0,1);
 }
 
 // helper function to find a state by name
@@ -530,8 +530,13 @@ function findStateByName(ADM1_NAME){
   }
 }
 
-function drawETU(){
+// function getFill(x){
 
+// return var x = map(admin.values[0].value,0,4866,0,1);
+
+// }
+
+function drawETU(){
 
 
 }
