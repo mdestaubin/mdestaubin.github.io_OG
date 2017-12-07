@@ -15,18 +15,22 @@ var yCCC = 525;
 var yHealth = 615;
 
 // this is an array that will contain all the data in form of javascript objects
-var admins = [];
+var states = [];
 var leafletMap;
 var worldJSON;
 
 var m; 
 var r;
 
+
+var slider;
+
+
 function preload() {
   //my table is comma separated value "csv"
   //I'm ignoring the header 
 
-  //table = loadTable("data/FinData.csv", "csv", "header");
+  table       = loadTable("data/newData.csv", "csv");
   myFontThin  = loadFont('Text/frutiger-thin.otf');
   myFontBlack = loadFont('Text/frutiger-black.otf');
 }
@@ -34,16 +38,21 @@ function preload() {
 
 function setup() {  
 
-   var canvas = createCanvas(1600,1500);  
+   var canvas = createCanvas(1600,1475);  
    canvas.parent("container");
+   parseData();  
    createMap();
    textFont(myFontThin);
-   
 
-   var m = map(0,0,0,0,0);
-   var moneyScale = m/100;
-   
-  // parseData();
+
+
+  slider = createSlider(0, 144, 72);
+  slider.position(57, 1450);
+  slider.style('width', '1525px');
+
+ // slider.style('color', 'white');
+
+
  }
 
 
@@ -51,63 +60,54 @@ function draw(){
 
    background(255);
    textFont(myFontThin);
-   
-  
 
    noStroke();
-   textSize(title);
+   textSize(40);
    fill('#3a913b');
-   text("EBOLA  AID  FLOW",122, 40);
+   text("EBOLA  AID  FLOW  MAP",57, 55);
+   text("AID DESTINATIONS",57, 790);
+   
+   
+   // textFont(myFontBlack);
+   // textSize(40);
+   // fill('#3a913b');
+   // text("2014 WEST AFRICA EBOLA OUTBREAK",900, 60);
    
    textSize(26);
-   text("Click on a Country",122, 450);
-  
-   strokeWeight(2);
-   stroke(58, 145, 59,180);
-   noFill();
-   bezier(1000,370, 1080, 100, 920, 25, 840,100);
-   bezier(1000,370, 1100, 100, 1160, 475, 1110,500);
-   bezier(1000,370, 800, 150, 800, 475, 840,550);
+   text("Click a Country",122, 635);
 
-   strokeWeight(1);
-   stroke(58, 145, 59,180);
-   line(125,370,625,370);
-   
 
-   fill('white');  
-   strokeWeight(1.5);
+   fill(255,0,0);
+     // var val = float(slider.value());
+   text("slider value = " + slider.value(),80, 505);
 
-   ellipse(1000,370,90,90); 
-   ellipse(800,300,50,50); 
-   ellipse(1110,110,50,50); 
-   ellipse(1100,200,20,20); 
-   ellipse(840,100,100,100); 
-   ellipse(840,550,30,30); 
-   ellipse(1110,500,50,50);
-  
 
-   if(mouseY > 580 && mouseY < 620){
-   if (mouseIsPressed) 
-   ellipse(mouseX,610,10,10);
- }
-   else  
-   ellipse(125,370,10,10);
- 
+   //rect(40,40,100,100);
 
-   line(200,1500,400,1500);
 
-   activateGraph();
+ //   strokeWeight(51);
+ //   line(112,610,800,610);
 
-   //ellipse
-  
+ //   if(mouseY > 580 && mouseY < 620){
+ //   if (mouseIsPressed) 
+ //   ellipse(mouseX,610,10,10);
+ // }
+ //   else  {
+ //   ellipse(125,370,10,10);
+ // }
+
+   activeGraph();
+   //scrollBar();
 
 }
+
 
 // create the map using leaflet
 
 function createMap(){
+  //var state = findStateByName(admin);
 
-  leafletMap = L.map('map').setView([22, 0], 1);
+  leafletMap = L.map('map').setView([22, 0], 2);
 
   L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.{ext}', {
   //attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
@@ -118,6 +118,10 @@ function createMap(){
   opacity: 0.0,
   }).addTo(leafletMap);
 
+  leafletMap._handlers.forEach(function(handler) {
+    handler.disable();
+
+});
 
   ////////////////////////////////////////////////////// World Map JSON
 
@@ -125,19 +129,33 @@ function createMap(){
     style: style,
    onEachFeature: onEachFeature
   }).addTo(leafletMap);  
+}
 
 /////////////////////////////////////////////////// Country Settings
 
 function style(feature) {
   
-  var x = map(admin.values[0].value,0,4866,0,1);
+    
+    stateNow = findStateByName(feature.properties.admin);
+      //  console.log(stateNow);
+      var m = 0;
+     if(stateNow!=undefined){ 
+       var paid = float(stateNow.occupations[0].value);
+       m = map(paid, 0, 150000000,.1,.6);
+
+     }
+//     console.log(m);
+
+ // var m = map(state.occupations[1].value,0,359540696,0,1);
+
+ // var m = map(state.occupations[1].value,0,359540696,0,1);
 
   return {
     weight: 1,
     opacity: .5,
     color: '#58a52e',
     dashArray: '1',
-    fillOpacity: x,
+    fillOpacity: m,
     fillColor: '#58a52e'
   };
 }
@@ -162,9 +180,9 @@ layer.setStyle({
     fillOpacity: 0.6
   });
 
-  // if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-  //   layer.bringToFront();
-  // }
+  if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+    layer.bringToFront();
+  }
   
 }
 
@@ -185,149 +203,292 @@ function activateGraph(e) {
 
    fill(255);
    noStroke(0);
-   rect(118,388,500,200);
+   rect(118,488,500,160);
    noStroke();
    textFont(myFontThin);
    textSize(26);
    fill('#3a913b');
-   text(countryName,122, 450);
-   textFont(myFontThin);
-   textSize(16);
-   text(region, 122, 470);
-   text("Pledged: XXX", 122, 500);
-   text("Paid Contribution: XXX", 122, 525);
-   text("Total Aid: XXX", 122, 550);
-  
-//   var yGap = 15;
-
-
-
-//   fill('#a52222'); 
-   // background(255);
-   // noStroke();
+   textAlign(LEFT);
+   // text(countryName,122, 635);
    // textFont(myFontThin);
-   // fill(58, 145, 59);
-   // textSize(title);
-   // text("EBOLA  AID  FLOW",122, 40);
+   // textSize(16);
+   // text(region, 122, 470);
+   // text("Pledged: XXX", 122, 500);
+   // text("Paid Contribution: XXX", 122, 525);
+   // text("Total Aid: XXX", 122, 550);
+  
 
-//   fill(255);
-//   textSize(25);
-//   text(countryName, margin, yTitle2);
-   
-//   //text("Admin Level 3: " +admin3Name, 35, 240);
-     console.log(admin1Name);
-     createGraph(layer.feature.properties.admn);
-    
-   // stroke(58, 145, 59);
-   // line(125,600,1155,600);
-   // fill('white');  
-   // ellipse(mouseX,600,10,10);
+     console.log(countryName);
+     //createGraph(layer.feature.properties.admin);
+     playTimeline(layer.feature.properties.admin);
 
  }
- 
+
+
+function parseData(){
+   //this is the key at the top, we will need it later
+   var keyRow = table.getRow(0);
+   var metaRow = table.getRow(1);
+
+    // cycle through each item in that column, ignoring the first two items which are the headers
+    for(var i=2;i<table.getRowCount(); i++){    
+
+      //get each row for each id, hence the data for one state at a time
+      var stateRow = table.getRow(i);
+
+      // create an empty object for each state
+      // we will attach all the information to this object
+      var state = {};
+      state.id = stateRow.getString(0);
+      state.id2 = stateRow.getString(1);
+      state.name = stateRow.getString(2);
+
+      // this array will hold all occupation data
+      state.occupations = [];
+      
+      for(var j=3; j<table.getColumnCount(); j++){
+        // create an empty object that holds the occupation data for one category
+        var item = {};
+        item.label = metaRow.getString(j);
+        item.key = keyRow.getString(j);
+        item.value = stateRow.getString(j);
+        
+        // attach the item object to the "occupation" array
+        append(state.occupations, item);
+      }
+      // attach the state object to the "states" array
+      append(states, state);
+   }
+
 }
 
-// function parseData(){
-//     //this is the key at the top, we will need it later
-//      var keyRow = table.getRow(0);
-//      //var metaRow = table.getRow(1);
-   
-//     // cycle through each item in that column, ignoring the first two items which are the headers
-//     for(var i=1;i<table.getRowCount(); i++){    
-
-//       //get each row for each id, hence the data for one state at a time
-//       var adminRow = table.getRow(i);
-
-//       // create an empty object for each state
-//       // we will attach all the information to this object
-//       var country = {};
-//       //state.id = stateRow.getString(0);
-//       //state.id2 = stateRow.getString(1);
-//       country.admin = adminRow.getString(0);
-
-//       // this array will hold all occupation data
-//       country.values = [];
-      
-//       for(var j=1; j<table.getColumnCount(); j++){
-//         // create an empty object that holds the occupation data for one category
-//         var item = {};
-//         //item.label = metaRow.getString(j);
-//         item.label = keyRow.getString(j);
-//         item.value = adminRow.getNum(j);
-        
-//         // attach the item object to the "occupation" array
-//         append(country.values, item);
-//       }
-//         // attach the state object to the "states" array
-//       append(admins, admin);
-//     }
-//  }
 
 
-//  function createGraph(admn){
+//  function createGraph(admin){
   
-//   var country = findStateByName(admn);
+//   //var state = findStateByName(admin);
 //   console.log(admin);
+
+//   var runningTotal;
+//   var state;
+//   for(var i=0; i<states.length; i++){
+//     if(states[i].name == admin){
+//       state = states[i];
+//     }
+//   }
   
 // //   // // first let's find the highest value for this state
-//   var maxValue =0;
+//   var maxValue =200000000;
 
-//   for(var i=1; i<country.values.length; i++){
-//     if(country.values[i].value>maxValue)
-//       maxValue = country.values[i].value;
-//   }
+//   // for(var i=1; i<country.values.length; i++){
+//   //   if(country.values[i].value>maxValue)
+//   //     maxValue = country.values[i].value;
+//   // }
 
-//     console.log("maxValue: " + maxValue);
-  
-//   textSize(20);
-//   text("Amount: " + country.values[0].value,122,500);
+//   console.log("maxValue: " + maxValue);
 
-// //   text("Confirmed Cases: " + admin.values[0].value,margin,yCases);
-// //   text("Confirmed Deaths: " + admin.values[1].value,margin,yDeaths);
+//   fill(255);
+//   rect(width-550,0,width/2,height);
+//   fill('#3a913b');
 
-// //   text("Ebola Treatment Units: " + admin.values[2].value,margin,yETU);
-// //   text("Community Care Centers: " + admin.values[3].value,margin,yCCC);
-  
-// //   text("Exisiting Health Facilities: ",margin,yHealth);
+//   var xPos = 100;
+//   var yPos = 1600;
 
- 
-// //     // draw the bars
+//   //go through all states
+//   // for(var i =0; i<70; i++){
+//   //   // Display the state name
+//   //   var stateDiv = createDiv(states[i].name);
+//   //   stateDiv.position(xPos, yPos);
+//   //   stateDiv.style("font-size", "50%");
+//   //   stateDiv.style("color", "#c6c6c6");
+
+//   //   // Display the population count (the first name in the array)
+//   //   // var popDiv = createDiv(states[i].occupations[0].value);
+//   //   // popDiv.position(xPos + 200, yPos);
+//   //   // popDiv.style("width", "100px");
+//   //   // popDiv.style("text-align", "right")
+//   //   yPos +=8;
+
+//   //   var rectX = map(states[i].occupations[0].value,0, 300000000, 1, 400);
+//   //   rect(100,yPos,rectX,5);
+
     
-// //     var x = map(admin.values[0].value,0,4866,0,400);
-// //     var x2 = map(admin.values[1].value,0,2026,0,170);
-// //     var x3 = map(admin.values[2].value,0,10,0,400);
-// //     var x4 = map(admin.values[3].value,0,10,0,400);
+//   // }
 
 
-// //     fill(255,50);
-// //     rect(margin,yCases+9,400, 25);
-// //     rect(margin,yDeaths+9,170, 25);
-// //     rect(margin,yETU+9,400, 25);
-// //     rect(margin,yCCC+9,400, 25);
-
-// //     fill(255);
-// //     rect(margin,yCases+9,x, 25);
-// //     rect(margin,yDeaths+9,x2, 25);
-// //     rect(margin,yETU+9,x3, 25);
-// //     rect(margin,yCCC+9,x4, 25);
-
-// //     image(img, margin, yETU+9);
-// //     image(img, margin, yCCC+9);
-//  }
-// // helper function to find a state by name
-//  function findStateByName(admn){
-//   var country;
-//   for(var i=0; i<admins.length; i++){
-//     if(admins[i].admin == admn){
-//       country = admins[i];
-//       return country;
+//     if(float(state.occupations[1].value) >= 200000000){
+//        var h = 500;
 //     }
-//   }
-// }
+//     else {
+//       var h = map(float(state.occupations[1].value),0, maxValue, 3, 1000);
+//     }
+
+//     var rX = width-235;
+//     var rY = 325;
+    
+//     // fill(0,255,0,100);
+//     // triangle(mouseX,mouseY,rX,rY+h/2,rX,rY-h/2);
+//     fill('#3a913b');
+//     ellipse(rX,rY,h, h);
+//    //  //stroke('#3a913b');
+//    //  //line(mouseX,mouseY,rX,rY);
+//    // // noStroke();
+   
+//    var str = map(float(state.occupations[1].value),0, 100000000, 1, 8);
+//    strokeWeight(str);
+//    stroke(58, 145, 59,180);
+//    noFill();
+//    bezier(mouseX,mouseY, 500, -200, 550, 525, 547,417);
+//    noStroke();
+   
+//     fill('#3a913b');
+//     textSize(26);
+//     textAlign(CENTER);
+//     var paid = nfc(float(state.occupations[1].value));
+//     text("Paid Contribution: $" + paid,rX,rY + h/2 + 30);
+
+
+
+//  }
+
+  function playTimeline(admin){
+  
+  //var state = findStateByName(admin);
+  console.log(admin);
+
+  var runningTotal = 0.0;
+  var state;
+  var tempX = mouseX;
+  var tempY = mouseY;
+  var paidList = [];
+  var count = 0;
+
+
+  for(var i=0; i<states.length; i++){
+    if(states[i].name == admin){
+      state = states[i];
+      paidList[count] = float(state.occupations[1].value);
+
+      count++;
+
+    }
+  }
+
+  for(var i=0; i<states.length; i++){
+    if(states[i].name == admin){
+      state = states[i];
+      var paidDollars = float(state.occupations[1].value);
+      runningTotal += paidDollars;
+      console.log(runningTotal);
+  
+//   // // first let's find the highest value for this state
+  var maxValue =200000000;
+
+  fill(255);
+  rect(width-550,50,width/2,height);
+  fill('#3a913b');
+
+  textSize(26);
+  text("Click a Country",122, 635);
+
+  var xPos = 100;
+  var yPos = 1000;
+
+  // //go through all states
+  // for(var i=0; i<states.length; i++){
+  //   // Display the state name
+  //   var stateDiv = createDiv(states[i].name);
+  //   stateDiv.position(xPos, yPos);
+  //   stateDiv.style("font-size", "50%");
+  //   stateDiv.style("color", "#c6c6c6");
+
+  //   // Display the population count (the first name in the array)
+  //   // var popDiv = createDiv(states[i].occupations[0].value);
+  //   // popDiv.position(xPos + 200, yPos);
+  //   // popDiv.style("width", "100px");
+  //   // popDiv.style("text-align", "right")
+  //   yPos +=8;
+    
+   
+  // //  var rectX = map(runningTotal,0, maxValue, 1, 400);
+  // //  rect(100,yPos,rectX,5);
+  //    }
+    
+
+    if(runningTotal >= 200000000){
+       var h = 300;
+    }
+    else {
+      var h = map(runningTotal,0, 200000000, 3, 600);
+    }
+
+    var rX = width-225;
+    var rY = 325;
+    
+    // fill(0,255,0,100);
+    // triangle(mouseX,mouseY,rX,rY+h/2,rX,rY-h/2);
+    fill('#3a913b');
+    ellipse(rX,rY,h, h);
+   //  //stroke('#3a913b');
+   //  //line(mouseX,mouseY,rX,rY);
+   // // noStroke();
+   
+   var str = map(runningTotal,0, 100000000, 1, 7);
+   strokeWeight(str);
+   stroke(58, 145, 59,40);
+   noFill();
+   bezier(tempX,tempY, 500, -200, 550, 525, 547,417);
+   noStroke();
+   
+    fill('#3a913b');
+    textSize(26);
+    textAlign(CENTER);
+    var paid = nfc(runningTotal);
+    text("Paid Contribution: $" + paid,rX,rY + h/2 + 90);
+    text(states[i].name,rX,rY + h/2 + 60);
+    textAlign(LEFT);
+
+    fill(255,0,0);
+     // var val = float(slider.value());
+    text("slider value = " + slider.value(),80, 505);
+
+    var countValue = count;
+    text("total payment counts = " + countValue, 80, 535);
+    
+    fill('#3a913b');
+    var xPos2 = 80;
+    var yPos2 = 830;
+    rect(xPos2,yPos2,100,map(238168759, 0, 1262994929, 0, 600));
+    xPos2 += 200;
+    rect(xPos2,yPos2,100,map(19415212, 0, 1262994929, 0, 600));
+    xPos2 += 200;
+    rect(xPos2,yPos2,100,map(1028025604, 0, 1262994929, 0, 600));
+    xPos2 += 200;
+    rect(xPos2,yPos2,100,map(753460487, 0, 1262994929, 0, 600));
+    xPos2 += 200;
+    rect(xPos2,yPos2,100,map(103121737, 0, 1262994929, 0, 600));
+    xPos2 += 200;
+    rect(xPos2,yPos2,100,map(153964272, 0, 1262994929, 0, 600));
+    xPos2 += 200;
+    rect(xPos2,yPos2,100,map(1262994929, 0, 1262994929, 0, 600));
+    xPos2 += 200;
+    rect(xPos2,yPos2,100,map(58802154, 0, 1262994929, 0, 600));
+  }
+ }
+
+
+
+ }
+
+// helper function to find a state by name
+function findStateByName(admin){
+  var state;
+  for(var i=0; i<states.length; i++){
+    if(states[i].name == admin){
+      state = states[i];
+      return state;
+    }
+  }
+}
 
  
-
-
-
-
-

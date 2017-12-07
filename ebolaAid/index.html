@@ -18,27 +18,37 @@
 
 <style>
 	html, body {
-		height: 1500;
+		height: 2000;
 		margin: 0;
 
 	}
 	/*styling for the div which will contain the map*/
+
+     	#title img{
+     	top: 0px;
+     	left:50px;
+        position:relative;
+
+     }
+
 	    #map { 
-		width: 500px; 
-		height: 300px;
-		left: 125px; 
-		top: 55px;
+		width: 1050px; 
+		height: 600px;
+		left: 50px; 
+		top: 230px;
+		/*position: static;*/
 		
 	}
 
 		#container{
 		width:1600px;
-		height: 1500px;
+		height:1475px;
 		left:0px;
-		top:0px;
+		top:750px;
 		bottom: -800px;
 		background-color: 'white';
-		position:fixed;
+		position:absolute;
+		
 	}
 
 
@@ -47,11 +57,15 @@
 </style>
 </head>
 <body>
+<div id='title'>	
+<img src="data/title.jpg">
+</div>
 <!-- container for map -->
 <div id='map'></div>
 <!-- container for p5 canvas -->
 <div id='container'></div>
 <script type="text/javascript" src="sketch.js"></script>
+
 
 
 </body>
