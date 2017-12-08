@@ -63,9 +63,9 @@ function gotData(data) {
   var skyDescription = ""
   var futureSky = hourlyWeather.data[5].cloudCover
   var fSkyDescription = ""
-  var rain = hourlyWeather.data[0].precipProbability
+  var rain = float(hourlyWeather.data[0].precipProbability)
   var rainDescription = ""
-  var futureRain = hourlyWeather.data[5].precipProbability
+  var futureRain = float(hourlyWeather.data[5].precipProbability)
   var fRainDescription = ""
 
   var intro = ""
@@ -187,6 +187,8 @@ if(rain >= 0 && rain <= .2){rainDescription = "and no chance of rain."}
 
   else if(rain > .75 && rain <= 1){rainDescription = "and it will for sure rain."}
 
+// else{rainDescription = "gon rain fool"}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////// future rain
 
 if(futureRain >= 0 && futureRain <= .2){fRainDescription = "and no chance of rain."}
@@ -196,6 +198,8 @@ if(futureRain >= 0 && futureRain <= .2){fRainDescription = "and no chance of rai
   else if(futureRain > .5 && futureRain <= .75){fRainDescription = "and a chance of rain."}
 
   else if(futureRain > .75 && futureRain <= 1){fRainDescription = "and it will for sure rain."}
+
+ // else{fRainDescription = "gon rain fool"}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////// Text
 
