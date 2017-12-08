@@ -28,6 +28,8 @@ var r;
 var slider;
 var sliderValue;
 
+var button;
+
 
 function preload() {
   //my table is comma separated value "csv"
@@ -48,6 +50,7 @@ function setup() {
    parseData2();  
    createMap();
    textFont(myFontThin);
+   aidDestination();
 
 
    var numRows = table.getRowCount(); 
@@ -58,61 +61,21 @@ function setup() {
   slider.position(57, 1450);
   slider.style('width', '1525px');
   slider.style('height', '2px');
-  //slider.style('background', 'transparent');
-  //slider.style('border', 'white');
-     textFont(myFontThin);
 
+   textFont(myFontThin);
    noStroke();
    textSize(40);
    fill('#3a913b');
    text("EBOLA  AID  FLOW  MAP",57, 55);
    text("AID DESTINATIONS",57, 790);
-   
-    textSize(16);
-    textAlign(CENTER);
-    fill(58, 145, 59,200);
-    var xPos2 = 100;
-    var yPos2 = 900;
-    var yPos3 = 1200;
-    ellipse(xPos2,yPos2,map(238168759, 0, 1262994929, 0, 400),map(238168759, 0, 1262994929, 0, 400));
-    text("National Government",xPos2,yPos2+map(238168759, 0, 1262994929, 0, 400)/2 +20);
-    xPos2 += 200;
-    ellipse(xPos2,yPos3,map(1028025604, 0, 1262994929, 0, 400),map(1028025604, 0, 1262994929, 0, 400));
-    text("NGO",xPos2,yPos3+map(1028025604, 0, 1262994929, 0, 400)/2 +20);
-    xPos2 += 200;
-    ellipse(xPos2,yPos2,map(19415212, 0, 1262994929, 0, 400),map(19415212, 0, 1262994929, 0, 400));
-    text("Inter-Governmental",xPos2,yPos2+map(19415212, 0, 1262994929, 0, 400)/2 +20);
-    xPos2 += 200;
-    ellipse(xPos2 + 60,yPos3,map(753460487, 0, 1262994929, 0, 400),map(753460487, 0, 1262994929, 0, 400));
-    text("Not Specified",xPos2+ 60,yPos3+map(753460487, 0, 1262994929, 0, 400)/2 +20);
-    xPos2 += 200;
-    ellipse(xPos2,yPos2,map(103121737, 0, 1262994929, 0, 400),map(103121737, 0, 1262994929, 0, 400));
-    text("Private Organization",xPos2,yPos2+map(103121737, 0, 1262994929, 0, 400)/2 +20);
-    xPos2 += 200;
-    ellipse(xPos2,yPos2,map(153964272, 0, 1262994929, 0, 400),map(153964272, 0, 1262994929, 0, 400));
-    text("Red Cross/Red Crescent",xPos2,yPos2+map(153964272, 0, 1262994929, 0, 400)/2 +20);
-    xPos2 += 200;
-    ellipse(xPos2,yPos3,map(1262994929, 0, 1262994929, 0, 400),map(1262994929, 0, 1262994929, 0, 400));
-    text("UN Agency",xPos2,yPos3+map(1262994929, 0, 1262994929, 0, 400)/2 +20);
-    xPos2 += 200;
-    ellipse(xPos2,yPos2,map(58802154, 0, 1262994929, 0, 400),map(58802154, 0, 1262994929, 0,400));
-    text("Multiple Organization Types",xPos2,yPos2+map(58802154, 0, 1262994929, 0, 400)/2 +20);
-     
-
-   noFill();
-   var rX = width-225;
-   var rY = 325;
-   var h = 400;
-   stroke('#3a913b');
-   strokeWeight(.5);
-   ellipse(rX,rY,h,h);
-   noStroke();
-   fill('#3a913b');
-   text("COUNTRY DATA", rX, rY);
-   textAlign(LEFT);
-
+    
  }
 
+ function draw(){
+
+  dateUpdate();
+ 
+}
 // create the map using leaflet
 
 function createMap(){
@@ -186,6 +149,7 @@ function style(feature) {
        var paid = float(stateNow.occupations[1].value);
        m = map(paid, 0, 50000000,.2,.8);
      }
+
 //     console.log(m);
 
   return {
@@ -351,22 +315,12 @@ function parseData2(){
 
       console.log(runningTotal);
 
-//}
-      // if (sliderValue > date) {
-      //       break;
-      //    }
-
-  
-//   // // first let's find the highest value for this state
-  var maxValue =200000000;
-
   fill(255);
   rect(width-550,50,width/2,height/2);
   fill('#3a913b');
 
   var xPos = 100;
   var yPos = 1000;
-
     
     if(runningTotal >= 200000000){
        var h = 400;
@@ -413,6 +367,228 @@ function findStateByName(admin){
       return state2;
     }
   }
+}
+
+function aidDestination(){
+    
+    noStroke();
+    textSize(16);
+    textAlign(CENTER);
+    fill(58, 145, 59,200);
+    var xPos2 = 100;
+    var yPos2 = 900;
+    var yPos3 = 1200;
+    ellipse(xPos2,yPos2,map(238168759, 0, 1262994929, 0, 400),map(238168759, 0, 1262994929, 0, 400));
+    text("National Government",xPos2,yPos2+map(238168759, 0, 1262994929, 0, 400)/2 +20);
+    xPos2 += 200;
+    ellipse(xPos2,yPos3,map(1028025604, 0, 1262994929, 0, 400),map(1028025604, 0, 1262994929, 0, 400));
+    text("NGO",xPos2,yPos3+map(1028025604, 0, 1262994929, 0, 400)/2 +20);
+    xPos2 += 200;
+    ellipse(xPos2,yPos2,map(19415212, 0, 1262994929, 0, 400),map(19415212, 0, 1262994929, 0, 400));
+    text("Inter-Governmental",xPos2,yPos2+map(19415212, 0, 1262994929, 0, 400)/2 +20);
+    xPos2 += 200;
+    ellipse(xPos2 + 60,yPos3,map(753460487, 0, 1262994929, 0, 400),map(753460487, 0, 1262994929, 0, 400));
+    text("Not Specified",xPos2+ 60,yPos3+map(753460487, 0, 1262994929, 0, 400)/2 +20);
+    xPos2 += 200;
+    ellipse(xPos2,yPos2,map(103121737, 0, 1262994929, 0, 400),map(103121737, 0, 1262994929, 0, 400));
+    text("Private Organization",xPos2,yPos2+map(103121737, 0, 1262994929, 0, 400)/2 +20);
+    xPos2 += 200;
+    ellipse(xPos2,yPos2,map(153964272, 0, 1262994929, 0, 400),map(153964272, 0, 1262994929, 0, 400));
+    text("Red Cross/Red Crescent",xPos2,yPos2+map(153964272, 0, 1262994929, 0, 400)/2 +20);
+    xPos2 += 200;
+    ellipse(xPos2,yPos3,map(1262994929, 0, 1262994929, 0, 400),map(1262994929, 0, 1262994929, 0, 400));
+    text("UN Agency",xPos2,yPos3+map(1262994929, 0, 1262994929, 0, 400)/2 +20);
+    xPos2 += 200;
+    ellipse(xPos2,yPos2,map(58802154, 0, 1262994929, 0, 400),map(58802154, 0, 1262994929, 0,400));
+    text("Multiple Organization Types",xPos2,yPos2+map(58802154, 0, 1262994929, 0, 400)/2 +20);
+
+   noFill();
+   var rX = width-225;
+   var rY = 325;
+   var h = 400;
+   stroke('#3a913b');
+   strokeWeight(.5);
+   ellipse(rX,rY,h,h);
+   noStroke();
+   fill('#3a913b');
+   text("COUNTRY DATA", rX, rY);
+   textAlign(LEFT);
+}
+
+function dateUpdate(){
+
+   textSize(22);
+   var val = slider.value();
+
+   if(val > 0 && val <= 35){
+   fill(255);
+   rect(55,650,200,30);
+   fill(50);
+   text("January 2014", 57, 670);
+ }
+  else if(val > 35 && val <= 37){
+   fill(255);
+   rect(55,650,200,30); 
+   fill(50);
+   text("February 2014", 57, 670);
+ }
+
+  else if(val > 37 && val <= 59){
+   fill(255);
+   rect(55,650,200,30); 
+   fill(50);
+   text("March 2014", 57, 670);
+ }
+
+  else if(val > 59 && val <= 70){
+   fill(255);
+   rect(55,650,200,30); 
+   fill(50);
+   text("April 2014", 57, 670);
+ }
+
+  else if(val > 70 && val <= 77){
+   fill(255);
+   rect(55,650,200,30); 
+   fill(50);
+   text("May 2014", 57, 670);
+ }
+
+  else if(val > 77 && val <= 92){
+   fill(255);
+   rect(55,650,200,30); 
+   fill(50);
+   text("June 2014", 57, 670);
+ }
+
+  else if(val > 92 && val <= 105){
+   fill(255);
+   rect(55,650,200,30); 
+   fill(50);
+   text("July 2014", 57, 670);
+ }
+
+ else if(val > 105 && val <= 113){
+   fill(255);
+   rect(55,650,200,30); 
+   fill(50);
+   text("August 2014", 57, 670);
+ }
+
+ else if(val > 113 && val <= 120){
+   fill(255);
+   rect(55,650,200,30); 
+   fill(50);
+   text("September 2014", 57, 670);
+ }
+
+  else if(val > 120 && val <= 132){
+   fill(255);
+   rect(55,650,200,30); 
+   fill(50);
+   text("October 2014", 57, 670);
+ }
+
+  else if(val > 132 && val <= 152){
+   fill(255);
+   rect(55,650,200,30); 
+   fill(50);
+   text("November 2014", 57, 670);
+ }
+
+  else if(val > 132 && val <= 163){
+   fill(255);
+   rect(55,650,200,30); 
+   fill(50);
+   text("December 2014", 57, 670);
+ }
+
+  else if(val > 163 && val <= 165){
+   fill(255);
+   rect(55,650,200,30); 
+   fill(50);
+   text("January 2015", 57, 670);
+ }
+
+  else if(val > 165 && val <= 165){
+   fill(255);
+   rect(55,650,200,30); 
+   fill(50);
+   text("February 2015", 57, 670);
+ }
+
+ else if(val > 165 && val <= 170){
+   fill(255);
+   rect(55,650,200,30); 
+   fill(50);
+   text("March 2015", 57, 670);
+ }
+
+  else if(val > 170 && val <= 200){
+   fill(255);
+   rect(55,650,200,30); 
+   fill(50);
+   text("April 2015", 57, 670);
+ }
+
+  else if(val > 200 && val <= 230){
+   fill(255);
+   rect(55,650,200,30); 
+   fill(50);
+   text("May 2015", 57, 670);
+ }
+
+  else if(val > 230 && val <= 260){
+   fill(255);
+   rect(55,650,200,30); 
+   fill(50);
+   text("June 2015", 57, 670);
+ }
+
+  else if(val > 260 && val <= 300){
+   fill(255);
+   rect(55,650,200,30); 
+   fill(50);
+   text("July 2015", 57, 670);
+ }
+
+ else if(val > 300 && val <= 330){
+   fill(255);
+   rect(55,650,200,30); 
+   fill(50);
+   text("August 2015", 57, 670);
+ }
+
+ else if(val > 330 && val <= 360){
+   fill(255);
+   rect(55,650,200,30); 
+   fill(50);
+   text("September 2015", 57, 670);
+ }
+
+  else if(val > 360 && val <= 390){
+   fill(255);
+   rect(55,650,200,30); 
+   fill(50);
+   text("October 2015", 57, 670);
+ }
+
+  else if(val > 390 && val <= 420){
+   fill(255);
+   rect(55,650,200,30); 
+   fill(50);
+   text("November 2015", 57, 670);
+ }
+
+  else if(val > 420 && val <= 439){
+   fill(255);
+   rect(55,650,200,30); 
+   fill(50);
+   text("December 2015", 57, 670);
+ }
+
+
+
 }
 
  
