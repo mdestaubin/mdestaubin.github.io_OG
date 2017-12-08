@@ -57,7 +57,7 @@ function setup() {
   slider = createSlider(0, numRows, 1);
   slider.position(57, 1450);
   slider.style('width', '1525px');
-  slider.style('height', '3px');
+  slider.style('height', '2px');
   //slider.style('background', 'transparent');
   //slider.style('border', 'white');
      textFont(myFontThin);
