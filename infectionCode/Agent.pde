@@ -2,7 +2,6 @@ import java.util.Iterator;
 
 class Agent {
 
-  Kernel  k;
   PVector loc;
   PVector vel;
   PVector target;
@@ -10,7 +9,9 @@ class Agent {
   float   mag;
   int     kernelSize = 700; 
   boolean foundTarget = false;
-
+  float   slope;
+  float   slopeVel = constrain(map(slope,0,25,5,0.1), 0.1, 1.5);
+  
   /////////////////////////////////////////// merge variables
   boolean dead = false;
   boolean sick = false;
@@ -22,28 +23,30 @@ class Agent {
   //int perHealthy = 100;
   int days = 0;
   float t = frameCount;
+  
   ////////////////////////////////////////////////////////////
 
   Agent()
   {
+    
     loc = new PVector( random(width), random(height) );
-    vel = new PVector( random(-1, 1), random(-1, 1)   );
+    vel = new PVector( slopeVel*random(-1, 1), slopeVel*random(-1, 1) );
     mag = 1;
 
-    k = new Kernel();
-    k.isNotTorus();
-    k.setNeighborhoodDistance(kernelSize);
+    //k = new Kernel();
+    //k.isNotTorus();
+    //k.setNeighborhoodDistance(kernelSize);
   }
 
   Agent( int x, int y)
   {
     loc = new PVector( x, y );
-    vel = new PVector( random(-1, 1), random(-1, 1)   );
+    vel = new PVector( slopeVel*random(-1, 1), slopeVel*random(-1, 1)   );
     mag = 1;
 
-    k = new Kernel();
-    k.isNotTorus();
-    k.setNeighborhoodDistance(kernelSize);
+    //k = new Kernel();
+    //k.isNotTorus();
+    //k.setNeighborhoodDistance(kernelSize);
   }
 
   void setHomeClass( int LUclass )
@@ -51,24 +54,24 @@ class Agent {
     LUhome = LUclass;
   }
 
-  void findTarget( ArrayList<PVector> healthZones )
+  void findTarget( ArrayList<HealthZone> healthZones )
   {         
     float minDistance = MAX_FLOAT;
 
-    for (PVector z : healthZones) 
+    for (HealthZone z : healthZones) 
     {
-      float distance = loc.dist(z);
+      float distance = loc.dist(z.loc);
       if (distance < minDistance) 
       {
         minDistance = distance;
-        target = z;
+        target = z.loc;
       }
     }
   }
 
-  void update( ArrayList<PVector> healthZones )
+  void update( ArrayList<HealthZone> healthZones, float slope )
   {   
-
+    println(slope); 
     if ( sick )
     {
       findTarget(healthZones);
@@ -76,7 +79,7 @@ class Agent {
 
     if ( target != null)
     {
-      updateVelocity();
+      updateVelocity(slope);
     }
 
     if (infected)
@@ -86,6 +89,14 @@ class Agent {
         getSick(minDays, maxDays);
       }
     }
+    
+    //if (infected)
+    //{ 
+    //  t += 1;
+    //  if (t == (int) random(72, 144) ) {    
+    //    getSick(minDays, maxDays);
+    //  }
+    //}
 
     if ( frameCount%framesPerDay == 0 && sick == true)
     {
@@ -99,15 +110,15 @@ class Agent {
     bounce();
   }
 
-  void updateVelocity()
+  void updateVelocity(float slope)
   {
-    float    angle = calcRadians( target );
-    float      mag = 1;
+    float   angle = calcRadians( target );
+    float   mag = 1;
 
     // use trig to convert from polar (mag, angle) to cartesian (x,y) coordinates      
     // or decompose an angle into x,y velocity components
-    float xVel =  mag*cos( angle );
-    float yVel = -mag*sin( angle );
+    float xVel =  slopeVel*cos( angle );
+    float yVel = -slopeVel*sin( angle );
 
     vel = new PVector(xVel, yVel);
   }
@@ -136,7 +147,7 @@ class Agent {
       healed = true;
       target = null;
       dead = false;
-      vel = new PVector( random(-1, 1), random(-1, 1)   );
+      vel = new PVector( slopeVel*random(-1, 1), slopeVel*random(-1, 1)   );
     }
   }
   
@@ -162,13 +173,13 @@ class Agent {
     } 
 
     if (healed) {
-      fill(0,255,0); 
+      fill(255); 
       rad = 3;
     }
 
     if (healthy) {
-      fill(255); 
-      rad = 2;
+      fill(255,180); 
+      rad = 3;
     }
 
     noStroke();
@@ -177,18 +188,19 @@ class Agent {
     strokeWeight(5);
     if ( sick ) {
       noFill();
-      stroke(255, 0, 0, 150);
-      ellipse(loc.x, loc.y, 6, 6);
+      stroke(255, 48, 36, 150);
+      ellipse(loc.x, loc.y, 4, 4);
     }
     if ( healed ) {
+      strokeWeight(3);
       noFill();
-      stroke(0, 255, 0, 150);
-      ellipse(loc.x, loc.y, 3, 3);
+      stroke(3,191,103,150);
+      ellipse(loc.x, loc.y, 4, 4);
     }
     if ( infected ) {
       noFill();
-      stroke(255, 255, 0, 150);
-      ellipse(loc.x, loc.y, 6, 6);
+      stroke(254, 184, 1, 150);
+      ellipse(loc.x, loc.y, 4, 4);
     }
   }
 
@@ -212,7 +224,7 @@ class Agent {
     if (loc.x < 0 || loc.x >= width) {
       vel.x *= -1;
     }
-    if (loc.y < 0 || loc.y >= height-238) {
+    if (loc.y < 0 || loc.y >= 567) {
       vel.y *= -1;
     }
   }
