@@ -1,87 +1,158 @@
-<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-	<link href="https://fonts.googleapis.com/css?family=Rubik:400,500,700" rel="stylesheet">
-	<link rel="stylesheet" href="css/style.css"> 
-  <title>Michaels Work</title>
-</head>
-
+<!DOCTYPE html>
+<html>
+<title>Simulator</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
-body {
-    background: white;
+body {font-family: "Courier New", Courier, monospace}
+h1,h2,h3,h4,h5,h6 {
+    font-family: "Courier New", Courier, monospace;
+    letter-spacing: 5px;
 }
-
-.section {
-    max-width: 810px;
-    margin: auto;
-    background: white;
-    padding: 5px;
+ #vid {
+    margin: 0 auto;
+    display: block;
 }
 </style>
 
-<body>
-	<div class="section">
-		<h1>Michael de St. Aubin</h1> 
-		<!-- <h2>Information and Visulaization</h2>  -->
-		<p>
-			MIT - 4.033</br>
-			Lecturer: Richard The</br>
-			Fall 2017</br>
-		</p>
-	</div>
-	<div class="section">
-		<h2>Clock Faces</h2> 
+<body class="w3-black">
 
-		    <a href="clocks/Clock1.html">
-		    <img src="clocks/data/thumb1.jpg">
-		    <a href="clocks/Clock2.html">
-		    <img src="clocks/data/thumb2.jpg">
-		    <a href="clocks/Clock3.html">
-		    <img src="clocks/data/thumb3.jpg">
-        </a>
-        <a href="clocks/Clock4.html">
-		    <img src="clocks/data/thumb4.jpg">
-		    <a href="clocks/Clock6.html">
-		    <img src="clocks/data/thumb6.jpg">
-		    <a href="clocks/Clock8.html">
-		    <img src="clocks/data/thumb8.jpg">
-        </a>
-        </br></br>
-	</div>
-	<div class="section">
-	
-		<h2>Weather Apps</h2> 
-		
-		    <a href="weather1/index.html">
-		    <img src="weather1/data/thumb.jpg">
-		    <a href="weather3/index.html">
-		    <img src="weather3/data/thumb.jpg">
-        </a>
-        </br></br>
-	
-		<h2>Census Data</h2> 
-		<p>
-			<a href="ebolaMap/index.html">
-	        <img src="ebolaMap/data/thumb.jpg">
-        </a>
-        </br></br>
+<div class="w3-top">
+<div class="w3-bar w3-black w3-padding-small">
+  <!-- <div class="w3-bar-item w3-xxlarge">Outbreak Response Simulator</div> -->
+  <a href="#contact" class="w3-bar-item w3-button w3-hover-white w3-right" style="width:16.66%">Contact</a>
+  <a href="#contact" class="w3-bar-item w3-button w3-disabled w3-hover-white w3-right w3-hover-white" style="width:16.66%">Simulation Demo</a>
+  <a href="#video" class="w3-bar-item w3-button w3-right w3-hover-white" style="width:16.66%">Example Video</a>
+  <div class="w3-dropdown-hover w3-right w3-center w3-hover-white" style="width:16.66%">
+      <button class="w3-button w3-hover-white">Diagrams</button>
+      <div class="w3-dropdown-content w3-bar-block w3-card-4 w3-black">
+        <a href="#photo1" class="w3-bar-item w3-button w3-hover-white" >Data Layers</a>
+        <a href="#photo2" class="w3-bar-item w3-button w3-hover-white" >Interface</a>
+        <a href="#photo3" class="w3-bar-item w3-button w3-hover-white" >Causal Loop</a>
+      </div>
+    </div>
+  <a href="#about" class="w3-bar-item w3-button w3-right w3-hover-white" style="width:16.66%">Description</a>
+  <a href="#" class="w3-bar-item w3-button w3-right w3-hover-white" style="width:16.66%">Home</a>
+  </div>
+</div>
 
-		<h2>Final Project</h2> 
-		
-			<a href="ebolaAid/index.html">
-		    <img src="ebolaAid/data/thumb.jpg">
-        </a>
-        </br></br>
-        
-		<h2>~ Bonus ~</h2> 
+<!-- Navbar on small screens (Hidden on medium and large screens) -->
+<div class="w3-top w3-hide-large w3-hide-medium" id="myNavbar">
+  <div class="w3-bar w3-black w3-opacity w3-hover-opacity-off w3-center w3-small">
+    <a href="#" class="w3-bar-item w3-button" style="width:25% !important">HOME</a>
+    <a href="#about" class="w3-bar-item w3-button" style="width:25% !important">ABOUT</a>
+    <a href="#photos" class="w3-bar-item w3-button" style="width:25% !important">PHOTOS</a>
+    <a href="#contact" class="w3-bar-item w3-button" style="width:25% !important">CONTACT</a>
+  </div>
+</div>
 
-            <a href="HZinfection/index.html">
-            <img src="HZinfection/DATA/thumb.jpg">
-        </a>
-	</div>
-
+  <!-- Header/Home -->
+  <header class="w3-padding-32 w3-content"" id="home">
+  <!-- <img class="w3-image" src="images/cover.png" alt="cover Image" width="1000"> -->
+  <h3 class="w3-padding-16 w3-text-light-grey w3-wide">Outbreak Response Simulator</h3>
+  <img src="images/gifcover.gif" alt="Computer man" style="width:1000px;">
+  </header>
+<!--   <header class="w3-display-container w3-content w3-wide" style="max-width:1800px;min-width:500px" id="home">
+  <img class="w3-image" src="cover.PNG" alt="cover Image" width="1800">
+  </header> -->
+  
+  <!-- Page Content -->
+  <div class="w3-padding" id="main">
+  <!-- About Section -->
+  <div class="w3-content w3-justify w3-text-grey w3-padding-64" id="about">
+    <h3 class="w3-padding-16 w3-text-light-grey w3-wide">Project Description</h3>
+    <p>
+      The Outbreak Response Simulator is an agent-based infectious disease 
+      simulation model that gives the user the ability to test a range of scenarios
+      and planning policies when responding to an infectious disease outbreak.
+      </br></br>
+        The project has spun largely out of GSD 6349 Mapping II : Geosimulation
+        at Havard University Graduate School of Design, taught by
+        Professor Robert Gerard Pietrusko. [rpietrusko@gsd.harvard.edu]</br></br>
+        The project development is being continued as a thesis project in theMasters in Design Studes Risk and Resilience concentration.The Outbreak Response Simulator is an agent-based infectious disease 
+      simulation model that gives the user the ability to test a range of scenarios
+      and planning policies when responding to an infectious disease outbreak.
+      </br></br>
+        The project has spun largely out of GSD 6349 Mapping II : Geosimulation
+        at Havard University Graduate School of Design, taught by
+        Professor Robert Gerard Pietrusko. [rpietrusko@gsd.harvard.edu]</br></br>
+        The project development is being continued as a thesis project in theMasters in Design Studes Risk and Resilience concentration.Havard University Graduate School of Design, taught by
+        Professor Robert Gerard Pietrusko. [rpietrusko@gsd.harvard.edu]</br></br>
+        The project development is being continued as a thesis project in theMasters in Design Studes Risk and Resilience concentration. The project development is being continued as a thesis project in theMasters in Design Studes Risk and Resilience concentration.Havard University Graduate School of Design, taught by
+        Professor Robert Gerard Pietrusko. [rpietrusko@gsd.harvard.edu]</br></br>
+        The project development is being continued as a thesis project in theMasters in Design Studes Risk and Resilience concentration.
+    </p>
+   
+  
+  <!-- Portfolio Section -->
+  <div class="w3-padding-64 w3-content" id="photo1">
+    <!-- Grid for photos -->
+      <img class="mySlides" id="photo1" src="images/layers.png" style="width:1000px">
+      <img class="mySlides" id="photo2" src="images/interface.png" style="width:1000px">
+      <img class="mySlides" id="photo3" src="images/Loop.png" style="width:1400px%">
+    <!-- End photo grid -->
+    </div>
+  <!-- End Portfolio Section -->
+  </div>
+ 
+  <!-- Video Section -->
+  <div class ="w3-padding-48" id="video">
+ <!--  <video id="vid" x-webkit-airplay="allow" controls width="1000" height="750">
+    <source src="03_Animation.mp4" type="video/mp4">
+    </video> -->
+  
+<iframe id= "vid" width="1120" height="630"
+src="https://www.youtube.com/embed/tLIbR0EFk7g" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</div>
+  <!-- Contact Section -->
+  <div class="w3-padding-64 w3-content w3-text-grey" id="contact">
+    <!-- <h3 class="w3-text-light-grey">Contact Me</h3> -->
+    <div class="w3-row">
+    <div class="w3-col s6 w3-black w3-center w3-padding-64">
+       <img class="w3-half" src="images/profile.png" style="width:400px">
+    </div>
+      
+    <div class="w3-col s6 w3-black w3-left w3-section w3-padding-32" style="shape-margin: 15px">
+      <h3>    
+      Michael de St. Aubin</br>
+      </h3>
+      <p> 
+      Born and raised in the southeast United States. Recieved Bachelors of Architecture degree from Auburn University in 2012. Worked professionally at an architeture firm for four years in Boston. Has always had a focus and passion for design and humanitarianism. Now at Harvard University's design school, developing a greater interest in technology and coding's intersection with design and public health. </br></br>     
+      Resume</br>
+      Portfolio</br></br>
+      Harvard University</br>
+      Graduate School of Design</br>
+      Masers in Design Studies </br>
+      Risk + Resilience</br>
+      Fall 2016 - Spring 2018</br></br>
+      Email : mdestaubin@gsd.harvard.edu</br>
+      Cell : 404.933.3271</br></br>
+      </p>
+    </div>
+    <!-- </div>
+    <div class="w3-section">
+      <p>
+      Michael de St. Aubin</br></br>
+      Harvard University</br>
+      Graduate School of Design</br>
+      Masers in Design Studies </br>
+      Risk + Resilience</br>
+      Fall 2016 - Spring 2018</br></br>
+      Email : mdestaubin@gsd.harvard.edu</br>
+      Cell : 404.933.3271
+    </p> -->
+  <!-- End Contact Section -->
+  </div>
+  
+    <!-- Footer -->
+<!--   <footer class="w3-content w3-padding-64 w3-text-grey w3-xlarge">
+    <p class="w3-medium">Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank" class="w3-hover-text-green">w3.css</a></p> -->
+  <!-- End footer -->
+<!--   </footer> -->
+<!-- END PAGE CONTENT -->
+</div>
 </body>
 </html>
