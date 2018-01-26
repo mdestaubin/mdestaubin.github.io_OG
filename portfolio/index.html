@@ -12,6 +12,76 @@
 
 <style>
 body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #f1f1f1;
+    padding: 20px;
+}
+
+/* Center website */
+.main {
+    max-width: 1000px;
+    margin: auto;
+}
+
+.row {
+    margin: 10px -16px;
+}
+
+/* Add padding BETWEEN each column */
+.row,
+.row > .column {
+    padding: 8px;
+}
+
+/* Create three equal columns that floats next to each other */
+.column {
+    float: left;
+    width: 33.33%;
+    display: none; /* Hide all elements by default */
+}
+
+/* Clear floats after rows */ 
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Content */
+.content {
+    background-color: white;
+    /*padding: 10px;*/
+}
+
+/* The "show" class is added to the filtered elements */
+.show {
+  display: block;
+}
+
+/* Style the buttons */
+.btn {
+  border: none;
+  outline: none;
+  padding: 12px 16px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #ddd;
+}
+
+.btn.active {
+  background-color: black;
+  color: white;
+}
+
+
 </style>
 
 
@@ -19,21 +89,16 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 
 <!-- Sidebar/menu -->
 <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="width:50px;" id="mySidebar"><br>
-
   <div class="w3-container">
-    <a href="#" onclick="w3_close()" class="w3-hide-large w3-right w3-jumbo w3-padding w3-hover-grey" title="close menu">
+    <a href="#" onclick="w3_close()" class="w3-hide-large w3-right w3-jumbo w3-hover-grey" title="close menu">
       <i class="fa fa-remove"></i>
     </a>
-    <!-- <img src="/w3images/avatar_g2.jpg" style="width:45%;" class="w3-round"><br><br> -->
   </div>
   <div class="w3-bar-block">
     <a href="#portfolio" onclick="w3_close()" class="w3-bar-item w3-button"><i class="fa fa-th-large fa-fw w3-margin-right"></i></a> 
     <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-user fa-fw w3-margin-right"></i></a> 
-    <a href="#contact" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-envelope fa-fw w3-margin-right"></i></a>
+    <a href="#contact" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class=" fa fa-map-pin fa-fw w3-margin-right"></i></a>
   </div>
-<!--   <div class="w3-panel w3-large">
-    <i class="fa fa-facebook-official w3-hover-opacity"></i>
-  </div> -->
 </nav>
 
 <!-- Overlay effect when opening sidebar on small screens -->
@@ -48,31 +113,45 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
     <div class="w3-container">
     <h1><b>Michael de St. Aubin</b></h1>
     <div class="w3-section w3-bottombar">
+      <div id="myBtnContainer">
       <span class="w3-margin-right">Work :</span> 
-      <button class="w3-button w3-black">ALL</button>
-      <button class="w3-button w3-white"><i></i>Master Thesis</button>
+      <!-- <button class="w3-button w3-black">ALL</button>
+      <button class="w3-button w3-white" onclick="filterSelection('thesis')"><i></i>Master Thesis</button>
       <button class="w3-button w3-white w3-hide-small"><i></i>Architecture</button>
       <button class="w3-button w3-white w3-hide-small"><i></i>Technology</button>
       <button class="w3-button w3-white w3-hide-small"><i"></i>Research</button>
-      <button class="w3-button w3-white w3-hide-small"><i></i>Teaching</button>
+      <button class="w3-button w3-white w3-hide-small"><i></i>Teaching</button> -->
+     
+     <button class="btn active" onclick="filterSelection('all')">All</button>
+     <button class="btn" onclick="filterSelection('thesis')">Thesis</button>
+     <button class="btn" onclick="filterSelection('architecture')">Architecture</button>
+     <button class="btn" onclick="filterSelection('technology')">Technology</button>
+     <button class="btn" onclick="filterSelection('research')">Research</button>
+     <button class="btn" onclick="filterSelection('teaching')">Teaching</button>
+
     </div>
     </div>
+
   </header>
   
   <!-- First Photo Grid-->
   <div class="w3-row-padding">
-    <div class="w3-third w3-container w3-margin-bottom">
+    
+    <div class="column thesis w3-third">
+    <!-- <div class="w3-third w3-margin-bottom"> -->
       <a href="https://mdestaubin.github.io/simulation">
       <img src="images/thesis.png" style="width:100%" class="w3-hover-opacity">
   </a>
-
-      <div class="w3-container w3-white" id="Master Thesis">
+      <div class="w3-container w3-white">
         <p><b>Outbreak Response Simulator</b></p>
 
         <p>Master of Design Studies in Risk & Resilience Thesis Project. An agent-based simulation model to test infectious disease outbreak response capacitiies and strategies.</p>
       </div>
     </div>
-    <div class="w3-third w3-container w3-margin-bottom">
+    
+
+    <div class="column thesis w3-third">
+    <!-- <div class="w3-third w3-container w3-margin-bottom"> -->
         <a href="https://mdestaubin.github.io/ebolaMap">
       <img src="images/ebolaMap.jpg" alt="Norway" style="width:100%" class="w3-hover-opacity">
       </a>
@@ -81,7 +160,40 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
         <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
       </div>
     </div>
-    <div class="w3-third w3-container">
+
+        <div class="column thesis w3-third">
+        <!-- <div class="w3-third w3-container"> -->
+      <img src="images/triage.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      <div class="w3-container w3-white">
+        <p><b>Ebola Triage Unit Prototype</b></p>
+        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
+      </div>
+    </div>
+    
+  
+  <!-- Second Photo Grid-->
+  <div class="w3-row-padding">
+
+    <div class="column thesis w3-third">
+    <!-- <div class="w3-third w3-container w3-margin-bottom"> -->
+      <img src="images/UGHE.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      <div class="w3-container w3-white">
+        <p><b>University of Global Health Equity</b></p>
+        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
+      </div>
+    </div>
+
+    <div class="column architecture w3-third">
+    <!-- <div class="w3-third w3-container w3-margin-bottom"> -->
+      <img src="images/ebola.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      <div class="w3-container w3-white">
+        <p><b>West Africa Ebola Crisis Healthcare Facilitiy Assessment</b></p>
+        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
+      </div>
+    </div>
+
+    <div class="column architecture w3-third">
+    <!-- <div class="w3-third w3-container"> -->
         <a href="https://mdestaubin.github.io/ebolaAid">
       <img src="images/ebolaAid.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       </a>
@@ -91,43 +203,30 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
       </div>
     </div>
   </div>
-  
-  <!-- Second Photo Grid-->
-  <div class="w3-row-padding">
-    <div class="w3-third w3-container w3-margin-bottom">
-      <img src="/w3images/p1.jpg" alt="Norway" style="width:100%" class="w3-hover-opacity">
+
+
+<!--     <div class="w3-third w3-container w3-margin-bottom" id="2">
+      <img src="images/ebola.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       <div class="w3-container w3-white">
-        <p><b>Lorem Ipsum</b></p>
+        <p><b>West Africa Ebola Crisis Healthcare Facilitiy Assessment</b></p>
         <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
       </div>
     </div>
-    <div class="w3-third w3-container w3-margin-bottom">
-      <img src="/w3images/p2.jpg" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      <div class="w3-container w3-white">
-        <p><b>Lorem Ipsum</b></p>
-        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
-      </div>
-    </div>
-    <div class="w3-third w3-container">
-      <img src="/w3images/p3.jpg" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      <div class="w3-container w3-white">
-        <p><b>Lorem Ipsum</b></p>
-        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
-      </div>
-    </div>
+ 
+ -->
   </div>
 
   <!-- Pagination -->
-  <div class="w3-center w3-padding-32">
+ <!--  <div class="w3-center w3-padding-32">
     <div class="w3-bar">
       <a href="#" class="w3-bar-item w3-button w3-hover-black">«</a>
       <a href="#" class="w3-bar-item w3-black w3-button">1</a>
-      <a href="#" class="w3-bar-item w3-button w3-hover-black">2</a>
+      <a href="#" class="w3-bar-item w3-button w3-hover-black">2</a>   
       <a href="#" class="w3-bar-item w3-button w3-hover-black">3</a>
       <a href="#" class="w3-bar-item w3-button w3-hover-black">4</a>
       <a href="#" class="w3-bar-item w3-button w3-hover-black">»</a>
     </div>
-  </div>
+  </div> -->
 
   <!-- Images of Me -->
   <div class="w3-padding-32 w3-content w3-text-grey" id="about">
@@ -146,7 +245,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
        <img class="w3-half" src="images/profile.png" style="width:420px">
     </div>
       
-    <div class="w3-col s6 w3-left w3-text-grey w3-section w3-padding-32" >
+    <div class="w3-col s6 w3-left w3-text-red w3-section w3-padding-32" >
       <h3 class = "w3-text-black">    
       Michael</br>
       </h3>
@@ -197,14 +296,14 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
     </div>
   
   <!-- Contact Section -->
-  <div class="w3-container w3-padding-large w3-grey">
-    <h4 id="contact"><b>Contact</b></h4>
-    <div class="w3-row-padding">
+  <div class="w3-container w3-padding-48">
+    <h4 id="contact"><b>Locate</b></h4>
+   <!--  <div class="w3-row-padding"> -->
         <p>
                 Cell: <span class="tel">404.933.3271</span><br />
                 Email: <a class="email" href="mailto:mdestaubin@gsd.harvard.edu">mdestaubin@gsd.harvard.edu</a><br />
-               
             </p>
+             <img src="images/map.png" alt="Norway" style="width:100%">
       <!-- <div class="w3-third w3-dark-grey">
         <p><i class="fa fa-envelope w3-xxlarge w3-text-light-grey"></i></p>
         <p>email@email.com</p>
@@ -278,16 +377,51 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 <!-- End page content -->
 </div>
 
+
+<!-- // Script to open and close sidebar -->
 <script>
-// Script to open and close sidebar
-function w3_open() {
-    document.getElementById("mySidebar").style.display = "block";
-    document.getElementById("myOverlay").style.display = "block";
+filterSelection("all")
+function filterSelection(c) {
+  var x, i;
+  x = document.getElementsByClassName("column");
+  if (c == "all") c = "";
+  for (i = 0; i < x.length; i++) {
+    w3RemoveClass(x[i], "show");
+    if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "show");
+  }
 }
- 
-function w3_close() {
-    document.getElementById("mySidebar").style.display = "none";
-    document.getElementById("myOverlay").style.display = "none";
+
+function w3AddClass(element, name) {
+  var i, arr1, arr2;
+  arr1 = element.className.split(" ");
+  arr2 = name.split(" ");
+  for (i = 0; i < arr2.length; i++) {
+    if (arr1.indexOf(arr2[i]) == -1) {element.className += " " + arr2[i];}
+  }
+}
+
+function w3RemoveClass(element, name) {
+  var i, arr1, arr2;
+  arr1 = element.className.split(" ");
+  arr2 = name.split(" ");
+  for (i = 0; i < arr2.length; i++) {
+    while (arr1.indexOf(arr2[i]) > -1) {
+      arr1.splice(arr1.indexOf(arr2[i]), 1);     
+    }
+  }
+  element.className = arr1.join(" ");
+}
+
+
+// Add active class to the current button (highlight it)
+var btnContainer = document.getElementById("myBtnContainer");
+var btns = btnContainer.getElementsByClassName("btn");
+for (var i = 0; i < btns.length; i++) {
+  btns[i].addEventListener("click", function(){
+    var current = document.getElementsByClassName("active");
+    current[0].className = current[0].className.replace(" active", "");
+    this.className += " active";
+  });
 }
 </script>
 
