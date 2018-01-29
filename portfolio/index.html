@@ -19,7 +19,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 
 body {
     background-color: #f1f1f1;
-    padding: 5px;
+    padding: 0px;
 }
 
 /*header {
@@ -46,7 +46,7 @@ position: fixed;
 /* Create three equal columns that floats next to each other */
 .column {
     float: left;
-    width: 33.33%;
+    /*width: 33.33%;*/
     display: none; /* Hide all elements by default */
 }
 
@@ -92,25 +92,11 @@ position: fixed;
 
 <body class="w3-white w3-content" style="max-width:1600px">
 
-<!-- Sidebar/menu -->
-<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="width:50px;" id="mySidebar"><br>
-  <div class="w3-container">
-    <a href="#" onclick="w3_close()" class="w3-hide-large w3-right w3-jumbo w3-hover-grey" title="close menu">
-      <i class="fa fa-remove"></i>
-    </a>
-  </div>
-  <div class="w3-bar-block">
-    <a href="#portfolio" onclick="w3_close()" class="w3-bar-item w3-button"><i class="fa fa-th-large fa-fw w3-margin-right"></i></a> 
-    <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-user fa-fw w3-margin-right"></i></a> 
-    <a href="#contact" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class=" fa fa-map-pin fa-fw w3-margin-right"></i></a>
-  </div>
-</nav>
-
 <!-- Overlay effect when opening sidebar on small screens -->
 <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
 
 <!-- !PAGE CONTENT! -->
-<div class="w3-main" style="margin-left:50px">
+<div class="w3-main">
 
   <!-- Header -->
   <header id="portfolio">
@@ -122,30 +108,36 @@ position: fixed;
     </header>
 
     <div class="w3-bar w3-top">
-      <div class="w3-right" id="myBtnContainer" style="margin-right: 140px">
-      <span class="w3-margin-left w3-bar-item">Work :</span> 
-    <a href="#portfolio"> 
-    <button class="btn active w3-bar-item" onclick="filterSelection('all')">All</button>
-     <button class="btn w3-bar-item" onclick="filterSelection('thesis')">Thesis</button>
-     <button class="btn w3-bar-item" onclick="filterSelection('architecture')">Architecture</button>
-     <button class="btn w3-bar-item" onclick="filterSelection('technology')">Technology</button>
-     <button class="btn w3-bar-item" onclick="filterSelection('research')">Research</button>
-     <button class="btn w3-bar-item" onclick="filterSelection('teaching')">Teaching</button></a>
+      <div class="w3-right" id="myBtnContainer" style="margin-right: 16px">
 
+        <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button w3-white"><i class="fa fa-user fa-fw w3-center"></i></a> 
+
+        <a href="#contact" onclick="w3_close()" class="w3-bar-item w3-button w3-padding w3-white"><i class=" fa fa-map-pin fa-fw w3-center"></i></a>
+    
+      <span class="w3-margin-left w3-bar-item w3-white">Work :</span> 
+      <a href="#portfolio"> 
+      <button class="btn active w3-bar-item" onclick="filterSelection('all')">All</button>
+      <button class="btn w3-bar-item" onclick="filterSelection('thesis')">Thesis</button>
+      <button class="btn w3-bar-item" onclick="filterSelection('architecture')">Architecture</button>
+      <button class="btn w3-bar-item" onclick="filterSelection('technology')">Technology</button>
+      <button class="btn w3-bar-item" onclick="filterSelection('research')">Research</button>
+      <button class="btn w3-bar-item" onclick="filterSelection('teaching')">Teaching</button>
+     </a>
     </div>
     </div>
 
   
-  <!-- First Photo Grid-->
-  <div class="w3-row-padding w3-padding-16">
+  <!-- Photo Grid-->
+  <div class="w3-row-padding" style= "margin-bottom: 100px">
 
-    
-    <div class="column thesis w3-third">
+    <div class="column thesis w3-twothird">
     <!-- <div class="w3-third w3-margin-bottom"> -->
       <a href="https://mdestaubin.github.io/simulation">
-      <img src="images/thesis.png" style="width:100%" class="w3-hover-opacity">
+      <img src="images/thesisthree.png" style="width:100%" class="w3-hover-opacity">
   </a>
       <div class="w3-container w3-white">
+
+
         <p><b>Outbreak Response Simulator</b></p>
 
         <p>Master of Design Studies in Risk & Resilience Thesis Project. An agent-based simulation model to test infectious disease outbreak response capacitiies and strategies.</p>
@@ -153,7 +145,7 @@ position: fixed;
     </div>
     
 
-    <div class="column thesis w3-third">
+    <div class="column technology w3-third">
     <!-- <div class="w3-third w3-container w3-margin-bottom"> -->
         <a href="https://mdestaubin.github.io/ebolaMap">
       <img src="images/ebolaMap.jpg" alt="Norway" style="width:100%" class="w3-hover-opacity">
@@ -166,21 +158,21 @@ position: fixed;
 
         <div class="column architecture w3-third">
         <!-- <div class="w3-third w3-container"> -->
+        <a href="https://www.healthcaredesignmagazine.com/trends/architecture/design-meets-ebola-door/#slide-5">
       <img src="images/triage.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      </a>
       <div class="w3-container w3-white">
         <p><b>Ebola Triage Unit Prototype</b></p>
         <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
       </div>
     </div>
-    
-  
-  <!-- Second Photo Grid-->
-<!--   <div class="w3-row-padding"> -->
 
     <div class="column architecture w3-third">
     <!-- <div class="w3-third w3-container w3-margin-bottom"> -->
+      <a href="http://www.shepleybulfinch.com/project/partners-in-health/A74/">
       <img src="images/UGHE.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       <div class="w3-container w3-white">
+        </a>
         <p><b>University of Global Health Equity</b></p>
         <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
       </div>
@@ -208,11 +200,11 @@ position: fixed;
 
   <div class="column technology w3-third">
     <!-- <div class="w3-third w3-container"> -->
-        <a href="https://www.youtube.com/watch?v=l8OZsr7gcGY">
+        <a href="https://www.youtube.com/watch?v=dpGyz4hHQyM">
       <img src="images/portal.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       </a>
       <div class="w3-container w3-white">
-        <p><b>Kinection Portal</b></p>
+        <p><b>Portal Kinection</b></p>
         <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
       </div>
     </div>
@@ -228,20 +220,35 @@ position: fixed;
       </div>
     </div>
 
- <div class="column research w3-third">
+    <div class="column architecture w3-third">
     <!-- <div class="w3-third w3-container"> -->
-      <img src="images/plot.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      <a href="http://www.shepleybulfinch.com/project/davidson-college/S16/">
+      <img src="images/davidson.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      </a>
       <div class="w3-container w3-white">
-        <p><b>Australia vs. Canada</b></p>
+        <p><b>Davidson College Science Academic Center</b></p>
+        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
+      </div>
+    </div>
+
+    <div class="column architecture w3-third">
+    <!-- <div class="w3-third w3-container"> -->
+       <a href="https://www.archdaily.com/400589/rose-lee-house-auburn-university-rural-studio">
+      <img src="images/rural.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      </a>
+      <div class="w3-container w3-white">
+        <p><b>Rural Studio: Rose Lee's House</b></p>
         <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
       </div>
     </div>
 
      <div class="column teaching w3-third">
     <!-- <div class="w3-third w3-container"> -->
+      <a href="http://communityservicefellowships.gsd.harvard.edu/youthbuild-bostons-designery-program-post-3/">
       <img src="images/youthbuild.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      </a>
       <div class="w3-container w3-white">
-        <p><b>YouthBuild Boston : Lead Designer</b></p>
+        <p><b>Harvard CSFP Fellow: YouthBuild Boston</b></p>
         <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
       </div>
     </div>
@@ -279,35 +286,65 @@ position: fixed;
       </div>
     </div>
 
+    <div class="column technology w3-third">
+    <!-- <div class="w3-third w3-container"> -->
+       <a href="https://vimeo.com/114768789">
+      <img src="images/sparkle.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      </a>
+      <div class="w3-container w3-white">
+        <p><b>Sparkle and Chime</b></p>
+        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
+      </div>
+    </div>
+
+    <div class="column research w3-third">
+    <!-- <div class="w3-third w3-container"> -->
+      <img src="images/plot.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      <div class="w3-container w3-white">
+        <p><b>Australia vs. Canada</b></p>
+        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
+      </div>
+    </div>
+
+    <div class="column teaching w3-third">
+    <!-- <div class="w3-third w3-container"> -->
+       <a href="https://www.archdaily.com/400589/rose-lee-house-auburn-university-rural-studio">
+      <img src="images/bac.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      </a>
+      <div class="w3-container w3-white">
+        <p><b>Boston Architectural College: City Lab</b></p>
+        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
+      </div>
+    </div>
+    
+    </br></br></br>
 
    </div>
   </div>
 
 
   <!-- About Me -->
-  <div class="w3-padding-32 w3-content w3-text-grey" id="about">
-<!--     <div class="w3-col m6">
-      <img src="/w3images/avatar_g.jpg" alt="Me" style="width:100%">
-    </div>
-    <div class="w3-col m6">
-      <img src="/w3images/me2.jpg" alt="Me" style="width:100%">
-    </div>
-  </div> -->
-
-<!--   <div class="w3-row-padding w3-padding-large" style="margin-bottom:32px"> -->
+  <div class="w3-padding-48 w3-content w3-text-grey" id="about">
 
     <div class="w3-row">
     <div class="w3-col s6 w3-padding-64">
        <img class="w3-half" src="images/profile.png" style="width:420px">
     </div>
       
-    <div class="w3-col s6 w3-left w3-text-red w3-section w3-padding-32" >
+    <div class="w3-col s6 w3-left w3-text-grey w3-section w3-padding-32" >
       <h3 class = "w3-text-black">    
-      Bio</br>
+      Michael</br>
       </h3>
       <hr>
       <p> 
-      Born and raised in the southeast United States, I received a Bachelor of Architecture degree from Auburn University in 2012. I then worked professionally at an architecture firm for four years in Boston where I had the opportunity to work on multiple humanitarian and public health projects in developing countries. In 2016, I returned to school to pursue a masters degree at Harvard University Graduate School of Design. Throughout my education and career, I have always held a strong passion in designing for the well-being of others. At graduate school, I've focused on developing my interests in the emerging relationships between design, technology, public health, and humanitarian crisis response.</br></br></br></p>
+      Born and raised in the southeast United States, I received a Bachelor of Architecture degree from Auburn University in 2012. I then worked professionally at an architecture firm for four years in Boston where I had the opportunity to work on multiple humanitarian and public health projects in developing countries. In 2016, I returned to school to pursue a masters degree at Harvard University Graduate School of Design. Throughout my education and career, I have always held a strong passion in designing for the well-being of others. At graduate school, I've focused on developing my interests in the emerging relationships between design, technology, public health, and humanitarian crisis response.</br></br></p>
+      
+      <p>
+      <button class="w3-button w3-black w3-margin-top w3-margin-bottom">
+
+        <a href="https://mdestaubin.github.io/resume/" <i></i>Resume</a>
+      </button>
+     </p>
 
       <p class= "w3-text-black"> 
      
@@ -339,12 +376,7 @@ position: fixed;
  -->   
 
 
-     <p>
-      <button class="w3-button w3-black w3-margin-top w3-margin-bottom">
-
-        <a href="https://mdestaubin.github.io/resume/" <i></i>Download Resume</a>
-      </button>
-     </p>
+     
      </br></br></br>
      <hr>
      </br></br></br>
