@@ -46,8 +46,10 @@ position: fixed;
 /* Create three equal columns that floats next to each other */
 .column {
     float: left;
-    /*width: 33.33%;*/
+    width: 33.33%;
     display: none; /* Hide all elements by default */
+    margin-bottom: 5px;
+    margin-top: 10px;
 }
 
 /* Clear floats after rows */ 
@@ -86,6 +88,42 @@ position: fixed;
   color: white;
 }
 
+/* over lay description */
+.img__wrap {
+  position: relative;
+}
+
+.img__description_layer {
+  position: absolute;
+  top: 0;
+  bottom: 0px;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.4);
+  color: white;
+  visibility: hidden;
+  opacity: 0;
+  display: flex;
+  /*align-items: center;*/
+  justify-content: left;
+
+  /* transition effect. not necessary */
+  transition: opacity .2s, visibility .2s;
+}
+
+.img__wrap:hover .img__description_layer {
+  visibility: visible;
+  opacity: 1;
+}
+
+.img__description {
+  transition: .3s;
+  transform: translateY(1em);
+}
+
+.img__wrap:hover .img__description {
+  transform: translateY(0);
+}
 
 </style>
 
@@ -130,59 +168,91 @@ position: fixed;
   <!-- Photo Grid-->
   <div class="w3-row-padding" style= "margin-bottom: 100px">
 
-    <div class="column thesis w3-third">
-    <!-- <div class="w3-third w3-margin-bottom"> -->
-      <a href="https://mdestaubin.github.io/simulation">
-      <img src="images/thesis.png" style="width:100%" class="w3-hover-opacity">
-  </a>
-      <div class="w3-container w3-white">
 
-        <p><b>Outbreak Response Simulator</b></p>
-
-        <p>Master of Design Studies in Risk & Resilience Thesis Project. An agent-based simulation model to test infectious disease outbreak response capacitiies and strategies.</p>
+    <div class="column thesis w3-third ">
+      <div class="w3-container w3-white w3-border">
+        <p><b>Infectious Disease Outbreak Response Simulator</b></p>
       </div>
-    </div>
-    
+       <div class="img__wrap">
+      <a href="https://mdestaubin.github.io/simulation">
+      <img class="img__img" src="images/thesis.png" style="width:100%" class="w3-hover-opacity">
+       <div class="img__description_layer">
+       <p class="img__description w3-padding-16 w3-margin-left w3-margin-right"><b>Master of Design Studies in Risk & Resilience Thesis Project. An agent-based simulation model to test infectious disease outbreak response capacities and strategies.</b></p>
+       </div>
+       </a>
+  </div>
+   </div>
 
-    <div class="column technology w3-third">
-    <!-- <div class="w3-third w3-container w3-margin-bottom"> -->
-        <a href="https://mdestaubin.github.io/ebolaMap">
+   <div class="column technology w3-third ">
+      <div class="w3-container w3-white w3-border">
+        <p><b>Ebola Response Map</b></p>
+      </div>
+       <div class="img__wrap">
+      <a href="https://mdestaubin.github.io/ebolaMap">
+      <img class="img__img" src="images/ebolaMap.jpg" style="width:100%" class="w3-hover-opacity">
+       <div class="img__description_layer">
+       <p class="img__description w3-padding-16 w3-margin-left w3-margin-right"><b>Interactive map that contains layers of data related to the 2014 West Africa Ebola Outbreak and the international response. Completed as an assignment for a MIT data visualization course.</b></p>
+       </div>
+       </a>
+  </div>
+   </div>
+  
+    
+    <!-- <div class="column technology w3-third"> -->
+<!--         
+      <div class="w3-container w3-white w3-border">
+
+        <p><b>Ebola Response Map</b></p> -->
+        <!-- <p>Interactive map that contains layers of data related to the 2014 West Africa Ebola Outbreak and the international response. Completed as an assignment for a MIT data visualization course.</p> -->
+      <!-- </div>
+      <a href="https://mdestaubin.github.io/ebolaMap">
       <img src="images/ebolaMap.jpg" alt="Norway" style="width:100%" class="w3-hover-opacity">
       </a>
-      <div class="w3-container w3-white">
-        <p><b>Ebola Response Map</b></p>
-        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
-      </div>
-    </div>
+    </div> -->
 
-        <div class="column architecture w3-third">
-        <!-- <div class="w3-third w3-container"> -->
-        <a href="https://www.healthcaredesignmagazine.com/trends/architecture/design-meets-ebola-door/#slide-5">
+    <div class="column architecture w3-third ">
+      <div class="w3-container w3-white w3-border">
+        <p><b>Ebola Triage Unit Prototype</b></p>
+      </div>
+       <div class="img__wrap">
+      <a href="https://www.healthcaredesignmagazine.com/trends/architecture/design-meets-ebola-door/#slide-5">
+      <img class="img__img" src="images/triage.png" style="width:100%" class="w3-hover-opacity">
+       <div class="img__description_layer">
+       <p class="img__description w3-padding-16 w3-margin-left w3-margin-right"><b>Design of a long term Ebola triage and isolation unit. Developed as a prototype to be used as a screening gateway into hospital campus's across West Africa and in replace of the UN temporary structures.</b></p>
+       </div>
+       </a>
+  </div>
+   </div>
+
+        <!-- <div class="column architecture w3-third"> 
+      <div class="w3-container w3-white w3-border">
+
+        <p><b>Ebola Triage Unit Prototype</b></p>
+        <p>Design of a longterm Ebola triage and isolation unit. Developed as a prototype to be used as a screening gateway into hospital campus's across West Africa and in replace of the UN temporary structures.</p>
+      </div>
+      <a href="https://www.healthcaredesignmagazine.com/trends/architecture/design-meets-ebola-door/#slide-5">
       <img src="images/triage.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       </a>
-      <div class="w3-container w3-white">
-        <p><b>Ebola Triage Unit Prototype</b></p>
-        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
-      </div>
-    </div>
+    </div> -->
 
     <div class="column architecture w3-third">
     <!-- <div class="w3-third w3-container w3-margin-bottom"> -->
       <a href="http://www.shepleybulfinch.com/project/partners-in-health/A74/">
       <img src="images/UGHE.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      <div class="w3-container w3-white">
+      <div class="w3-container w3-white w3-border">
         </a>
+
         <p><b>University of Global Health Equity</b></p>
-        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
+        <p>Acadmic campus design for Partners in Health new global health university. The project is located in Butaro, Rwanda and will act as a regional model for future global health education hubs in Africa.</p>
       </div>
     </div>
 
     <div class="column architecture w3-third">
     <!-- <div class="w3-third w3-container w3-margin-bottom"> -->
       <img src="images/ebola.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      <div class="w3-container w3-white">
+      <div class="w3-container w3-white w3-border">
         <p><b>West Africa Healthcare Facilitiy Assessment</b></p>
-        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
+        <p>Hospital facility assessment conducted during the West Africa Ebola Outbreak. The report was prepared and given to PIH, so they understood the conditions of the facilities they were working at.</p>
       </div>
     </div>
 
@@ -191,9 +261,9 @@ position: fixed;
         <a href="https://www.youtube.com/watch?v=ZqaOAgRbHeI&t=88s">
       <img src="images/haitiVideo.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       </a>
-      <div class="w3-container w3-white">
+      <div class="w3-container w3-white w3-border">
         <p><b>The Role of the Designer in the Context of Social Agency</b></p>
-        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
+        <p>A short video of interviews with foreign and haitian architects working in Haiti. It was completed as an assignment for a course at the GSD on examining social agency within architecture.</p>
       </div>
     </div>
 
@@ -202,9 +272,9 @@ position: fixed;
         <a href="https://mdestaubin.github.io/ebolaAid">
       <img src="images/ebolaAid.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       </a>
-      <div class="w3-container w3-white">
+      <div class="w3-container w3-white w3-border">
         <p><b>Ebola International Aid Flow</b></p>
-        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
+        <p>Data visualization of the flow of international humanitarian aid money to West Africa during the Ebola crisis. The dataset comes from the financial tracking service of the UN.</p>
       </div>
     </div>
 
@@ -213,7 +283,7 @@ position: fixed;
         <a href="https://www.youtube.com/watch?v=dpGyz4hHQyM">
       <img src="images/portal.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       </a>
-      <div class="w3-container w3-white">
+      <div class="w3-container w3-white w3-border">
         <p><b>Portal Kinection</b></p>
         <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
       </div>
@@ -224,7 +294,7 @@ position: fixed;
       <a href="http://www.shepleybulfinch.com/project/davidson-college/S16/">
       <img src="images/davidson.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       </a>
-      <div class="w3-container w3-white">
+      <div class="w3-container w3-white w3-border">
         <p><b>Davidson College Science Academic Center</b></p>
         <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
       </div>
@@ -235,7 +305,7 @@ position: fixed;
        <a href="https://www.archdaily.com/400589/rose-lee-house-auburn-university-rural-studio">
       <img src="images/rural.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       </a>
-      <div class="w3-container w3-white">
+      <div class="w3-container w3-white w3-border">
         <p><b>Rural Studio: Rose Lee's House</b></p>
         <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
       </div>
@@ -246,7 +316,7 @@ position: fixed;
       <a href="http://communityservicefellowships.gsd.harvard.edu/youthbuild-bostons-designery-program-post-3/">
       <img src="images/youthbuild.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       </a>
-      <div class="w3-container w3-white">
+      <div class="w3-container w3-white w3-border">
         <p><b>Harvard CSFP Fellow: YouthBuild Boston</b></p>
         <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
       </div>
@@ -257,7 +327,7 @@ position: fixed;
        <a href="https://mdestaubin.github.io/weather1/index.html">
       <img src="images/weather.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       </a>
-      <div class="w3-container w3-white">
+      <div class="w3-container w3-white w3-border">
         <p><b>Weather App</b></p>
         <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
       </div>
@@ -268,7 +338,7 @@ position: fixed;
        <a href="http://www.summits.org/academy-1">
       <img src="images/haitiSchool.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       </a>
-      <div class="w3-container w3-white">
+      <div class="w3-container w3-white w3-border">
         <p><b>Summits Academy</b></p>
         <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
       </div>
@@ -279,7 +349,7 @@ position: fixed;
        <!-- <a href="https://mdestaubin.github.io/weather1/index.html"> -->
       <img src="images/haitiRehab.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       <!-- </a> -->
-      <div class="w3-container w3-white">
+      <div class="w3-container w3-white w3-border">
         <p><b>Haitian Rehabilitation Center</b></p>
         <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
       </div>
@@ -312,7 +382,7 @@ position: fixed;
        <a href="https://vimeo.com/114768789">
       <img src="images/sparkle.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       </a>
-      <div class="w3-container w3-white">
+      <div class="w3-container w3-white w3-border">
         <p><b>Sparkle and Chime</b></p>
         <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
       </div>
@@ -321,7 +391,7 @@ position: fixed;
     <div class="column research w3-third">
     <!-- <div class="w3-third w3-container"> -->
       <img src="images/plot.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      <div class="w3-container w3-white">
+      <div class="w3-container w3-white w3-border">
         <p><b>Australia vs. Canada</b></p>
         <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
       </div>
@@ -333,7 +403,7 @@ position: fixed;
        <a href="https://the-bac.edu/experience-the-bac/galleries/citylab-at-the-bac">
       <img src="images/bac.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       </a>
-      <div class="w3-container w3-white">
+      <div class="w3-container w3-white w3-border">
         <p><b>Boston Architectural College: City Lab</b></p>
         <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
       </div>
