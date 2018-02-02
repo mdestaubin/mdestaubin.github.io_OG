@@ -22,6 +22,10 @@ body {
     padding: 0px;
 }
 
+h6{font-family: "Verdana", sans-serif
+
+}
+
 /*header {
 position: fixed;
 }*/
@@ -95,20 +99,20 @@ position: fixed;
 
 .img__description_layer {
   position: absolute;
-  top: 0;
+  top: 210px;
   bottom: 0px;
   left: 0;
   right: 0;
-  background: rgba(0, 0, 0, 0.4);
-  color: white;
+  background: rgba(255, 255, 255, 1);
+  color: black;
   visibility: hidden;
   opacity: 0;
   display: flex;
-  /*align-items: center;*/
+  align-items: top;
   justify-content: left;
 
   /* transition effect. not necessary */
-  transition: opacity .2s, visibility .2s;
+  transition: opacity .1s, visibility .1s;
 }
 
 .img__wrap:hover .img__description_layer {
@@ -128,7 +132,7 @@ position: fixed;
 </style>
 
 
-<body class="w3-white w3-content" style="max-width:1600px">
+<body class="w3-white w3-content" style="max-width:1200px">
 
 <!-- Overlay effect when opening sidebar on small screens -->
 <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
@@ -145,7 +149,7 @@ position: fixed;
 
     </header>
 
-    <div class="w3-bar w3-top">
+    <div class="w3-bar w3-top" style="max-width:1200px">
       <div class="w3-right" id="myBtnContainer" style="margin-right: 16px">
 
         <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button w3-white"><i class="fa fa-user fa-fw w3-center"></i></a> 
@@ -157,8 +161,8 @@ position: fixed;
       <button class="btn active w3-bar-item" onclick="filterSelection('all')">All</button>
       <button class="btn w3-bar-item" onclick="filterSelection('thesis')">Thesis</button>
       <button class="btn w3-bar-item" onclick="filterSelection('architecture')">Architecture</button>
-      <button class="btn w3-bar-item" onclick="filterSelection('technology')">Technology</button>
-      <button class="btn w3-bar-item" onclick="filterSelection('research')">Research</button>
+      <button class="btn w3-bar-item" onclick="filterSelection('technology')">Research + Technology</button>
+      <!-- <button class="btn w3-bar-item" onclick="filterSelection('technology')">technology</button> -->
       <button class="btn w3-bar-item" onclick="filterSelection('teaching')">Teaching</button>
      </a>
     </div>
@@ -166,236 +170,342 @@ position: fixed;
 
   
   <!-- Photo Grid-->
-  <div class="w3-row-padding" style= "margin-bottom: 100px">
+  <div class="w3-row-padding w3-padding-16" style= "margin-bottom: 100px">
 
 
-    <div class="column thesis w3-third" style="font-size: 18px;">
+    <div class="column thesis w3-third">
       <div class="w3-white">
-        <p><b>Infectious Disease Outbreak Response Simulator</b></p>
+        <h6><b>Outbreak Response Simulator</b></h6>
       </div>
        <div class="img__wrap">
       <a href="https://mdestaubin.github.io/simulation">
       <img class="img__img" src="images/thesis.png" style="width:100%" class="w3-hover-opacity">
        <div class="img__description_layer">
-       <p class="w3-container img__description w3-padding-16 w3-margin-left w3-margin-right"><b>Master of Design Studies in Risk & Resilience Thesis Project. An agent-based simulation model to test infectious disease outbreak response capacities and strategies.</b></p>
-       </div>
-       </a>
-  </div>
-   </div>
-
-   <div class="column technology w3-third" style="font-size: 18px;">
-      <div class="w3-white">
-        <p><b>Interactive Ebola Response Map</b></p>
-      </div>
-       <div class="img__wrap">
-      <a href="https://mdestaubin.github.io/ebolaMap">
-      <img class="img__img" src="images/ebolaMap.jpg" style="width:100%" class="w3-hover-opacity">
-       <div class="img__description_layer">
-       <p class="w3-container img__description w3-padding-16 w3-margin-left w3-margin-right"><b>Interactive map that contains layers of data related to the 2014 West Africa Ebola Outbreak and the  international response. Completed as an assignment for a MIT data visualization course.</b></p>
+       <p class="img__description w3-margin-left w3-margin-bottom">Master of Design Studies in Risk & Resilience Thesis Project. An agent-based simulation model to test infectious disease outbreak response capacities and strategies.</p>
        </div>
        </a>
   </div>
    </div>
   
-    
-    <!-- <div class="column technology w3-third"> -->
-<!--         
-      <div class="w3-container w3-white w3-border">
-
-        <p><b>Ebola Response Map</b></p> -->
-        <!-- <p>Interactive map that contains layers of data related to the 2014 West Africa Ebola Outbreak and the international response. Completed as an assignment for a MIT data visualization course.</p> -->
-      <!-- </div>
-      <a href="https://mdestaubin.github.io/ebolaMap">
-      <img src="images/ebolaMap.jpg" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      </a>
-    </div> -->
-
-    <div class="column architecture w3-third" style="font-size: 18px;">
-      <div class="w3-white" >
-        <p><b>Ebola Triage Unit Prototype</b></p>
-      </div>
+    <div class="column technology w3-third">
        <div class="img__wrap">
-      <a href="https://www.healthcaredesignmagazine.com/trends/architecture/design-meets-ebola-door/#slide-5">
-      <img class="img__img" src="images/triage.png" style="width:100%" class="w3-hover-opacity">
-       <div class="img__description_layer">
-       <p class="w3-container img__description w3-padding-16 w3-margin-left w3-margin-right"><b>Design of a long term Ebola triage and isolation unit. Developed as a prototype to be used as a screening gateway into hospital campus's across West Africa and in replace of the UN temporary structures.</b></p>
+
+        <a href="https://mdestaubin.github.io/ebolaMap">
+      <img class="img__img" src="images/ebolaMap.jpg" alt="Norway" style="width:100%" class="w3-hover-opacity">
+
+      <div class="img__description_layer">
+        <div class="img__description">
+       <h6  class="w3-margin-bottom"><b>International Crisis Response Map</b></h6>
+
+        <p>Interactive map that contains layers of data related to the 2014 West Africa Ebola Outbreak and the international response. Completed as an assignment for a MIT data visualization course.</p>
+        
+        <p><b>Type:</b> Academic 
+        <b class="w3-right">2017</b></br>
+        <b>Location:</b> Liberia</br>
+        <b>School:</b> MIT</br></p>
+        </div>
        </div>
        </a>
-  </div>
-   </div>
 
-        <!-- <div class="column architecture w3-third"> 
-      <div class="w3-container w3-white w3-border">
+      <div class="w3-margin-top">
+        <h6><b>International Crisis Response Map</b></h6>
 
-        <p><b>Ebola Triage Unit Prototype</b></p>
-        <p>Design of a longterm Ebola triage and isolation unit. Developed as a prototype to be used as a screening gateway into hospital campus's across West Africa and in replace of the UN temporary structures.</p>
+        <p>Interactive map that contains layers of data related to the 2014 West Africa Ebola Outbreak and the international response. Completed as an assignment for a MIT data visualization course.</p>
       </div>
-      <a href="https://www.healthcaredesignmagazine.com/trends/architecture/design-meets-ebola-door/#slide-5">
-      <img src="images/triage.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      </a>
-    </div> -->
-
-     <div class="column thesis w3-third" style="font-size: 18px;">
-      <div class="w3-container w3-black">
-        <p><b>Infectious Disease Outbreak Response Simulator</b></p>
-      </div>
-       <div class="img__wrap">
-      <a href="https://mdestaubin.github.io/simulation">
-      <img class="img__img" src="images/thesis.png" style="width:100%" class="w3-hover-opacity">
-       <div class="img__description_layer">
-       <p class="w3-container img__description w3-padding-16 w3-margin-left w3-margin-right"><b>Master of Design Studies in Risk & Resilience Thesis Project. An agent-based simulation model to test infectious disease outbreak response capacities and strategies.</b></p>
-       </div>
-       </a>
-  </div>
-   </div>
-
-   <div class="column technology w3-third" style="font-size: 18px;">
-      <div class="w3-container w3-black">
-        <p><b>Interactive Ebola Response Map</b></p>
-      </div>
-       <div class="img__wrap">
-      <a href="https://mdestaubin.github.io/ebolaMap">
-      <img class="img__img" src="images/ebolaMap.jpg" style="width:100%" class="w3-hover-opacity">
-       <div class="img__description_layer">
-       <p class="w3-container img__description w3-padding-16 w3-margin-left w3-margin-right"><b>Interactive map that contains layers of data related to the 2014 West Africa Ebola Outbreak and the  international response. Completed as an assignment for a MIT data visualization course.</b></p>
-       </div>
-       </a>
-  </div>
-   </div>
-  
-    
-    <!-- <div class="column technology w3-third"> -->
-<!--         
-      <div class="w3-container w3-white w3-border">
-
-        <p><b>Ebola Response Map</b></p> -->
-        <!-- <p>Interactive map that contains layers of data related to the 2014 West Africa Ebola Outbreak and the international response. Completed as an assignment for a MIT data visualization course.</p> -->
-      <!-- </div>
-      <a href="https://mdestaubin.github.io/ebolaMap">
-      <img src="images/ebolaMap.jpg" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      </a>
-    </div> -->
-
-    <div class="column architecture w3-third" style="font-size: 18px;">
-      <div class="w3-container w3-black" >
-        <p><b>Ebola Triage Unit Prototype</b></p>
-      </div>
-       <div class="img__wrap">
-      <a href="https://www.healthcaredesignmagazine.com/trends/architecture/design-meets-ebola-door/#slide-5">
-      <img class="img__img" src="images/triage.png" style="width:100%" class="w3-hover-opacity">
-       <div class="img__description_layer">
-       <p class="w3-container img__description w3-padding-16 w3-margin-left w3-margin-right"><b>Design of a long term Ebola triage and isolation unit. Developed as a prototype to be used as a screening gateway into hospital campus's across West Africa and in replace of the UN temporary structures.</b></p>
-       </div>
-       </a>
-  </div>
-   </div>
-
-    <div class="column architecture w3-third">
-    <!-- <div class="w3-third w3-container w3-margin-bottom"> -->
-      <a href="http://www.shepleybulfinch.com/project/partners-in-health/A74/">
-      <img src="images/UGHE.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      <div class="w3-container w3-white w3-border">
-        </a>
-
-        <p><b>University of Global Health Equity</b></p>
-        <p>Acadmic campus design for Partners in Health new global health university. The project is located in Butaro, Rwanda and will act as a regional model for future global health education hubs in Africa.</p>
       </div>
     </div>
 
     <div class="column architecture w3-third">
-    <!-- <div class="w3-third w3-container w3-margin-bottom"> -->
-      <img src="images/ebola.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      <div class="w3-container w3-white w3-border">
-        <p><b>West Africa Healthcare Facilitiy Assessment</b></p>
+       <div class="img__wrap">
+
+        <a href="https://www.healthcaredesignmagazine.com/trends/architecture/design-meets-ebola-door/#slide-1p">
+      <img class="img__img" src="images/triage.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      
+      <div class="img__description_layer">
+        <div class="img__description">
+       <h6  class="w3-margin-bottom"><b>Triage + Isolation Treatment Unit</b></h6>
+
+        <p>Design of a long term Ebola triage and isolation unit. Developed as a prototype to be used as a screening gateway into hospital campus's across West Africa and in replace of the UN temporary structures.</p>
+        
+        <p><b>Type:</b> Professional 
+        <b class="w3-right">2015</b></br>
+        <b>Location:</b> Sierra Leone, Liberia</br>
+        <b>Client:</b> Partners in Health</br></p>
+        </div>
+       </div>
+       </a>
+
+      <div class="w3-margin-top">
+        <h6><b>Triage + Isolation Treatment Unit</b></h6>
+
+        <p>Design of a long term Ebola triage and isolation unit. Developed as a prototype to be used as a screening gateway into hospital campus's across West Africa and in replace of the UN temporary structures.</p>
+      </div>
+      </div>
+    </div>
+
+     <div class="column architecture w3-third">
+       <div class="img__wrap">
+
+        <a href="http://www.shepleybulfinch.com/project/partners-in-health/A74/">
+      <img class="img__img" src="images/UGHE.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      
+      <div class="img__description_layer">
+        <div class="img__description">
+       <h6  class="w3-margin-bottom"><b>University of Global Health Equity</b></h6>
+
+        <p>Acadmic campus design for Partners in Health new global health university. The project is located in Butaro, Rwanda and will act as a regional model for future global health education hubs in Africa</p>
+        
+        <p><b>Type:</b> Professional 
+        <b class="w3-right">2015 -  </b></br>
+        <b>Location:</b> Butaro, Rwanda</br>
+        <b>Client:</b> Partners in Health</br></p>
+        </div>
+       </div>
+       </a>
+
+      <div class="w3-margin-top">
+        <h6><b>University of Global Health Equity</b></h6>
+
+        <p>Acadmic campus design for Partners in Health new global health university. The project is located in Butaro, Rwanda and will act as a regional model for future global health education hubs in Africa</p>
+      </div>
+      </div>
+    </div>
+
+    <div class="column architecture w3-third">
+       <div class="img__wrap">
+
+        <a href="http://www.shepleybulfinch.com/project/partners-in-health/A74/">
+      <img class="img__img" src="images/ebola.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      
+      <div class="img__description_layer">
+        <div class="img__description">
+       <h6  class="w3-margin-bottom"><b>West Africa Health Facilitiy Assessment</b></h6>
+
+        <p>Hospital facility assessment conducted during the West Africa Ebola Outbreak. The report was prepared and given to PIH, so they understood the conditions of the facilities they were working at.</p>
+        
+        <p><b>Type:</b> Professional 
+        <b class="w3-right">2015</b></br>
+        <b>Location:</b> Sierra Leone, Liberia</br>
+        <b>Client:</b> Partners in Health</br></p>
+        </div>
+       </div>
+       </a>
+
+      <div class="w3-margin-top">
+        <h6><b>West Africa Health Facilitiy Assessment</b></h6>
+
         <p>Hospital facility assessment conducted during the West Africa Ebola Outbreak. The report was prepared and given to PIH, so they understood the conditions of the facilities they were working at.</p>
       </div>
+      </div>
     </div>
 
-    <div class="column research w3-third">
-    <!-- <div class="w3-third w3-container"> -->
+
+    <div class="column architecture w3-third">
+       <div class="img__wrap">
+
         <a href="https://www.youtube.com/watch?v=ZqaOAgRbHeI&t=88s">
-      <img src="images/haitiVideo.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      </a>
-      <div class="w3-container w3-white w3-border">
-        <p><b>The Role of the Designer in the Context of Social Agency</b></p>
+      <img class="img__img" src="images/haitiVideo.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      
+      <div class="img__description_layer">
+        <div class="img__description">
+       <h6  class="w3-margin-bottom"><b>The Role of the Designer</b></h6>
+
+        <p>A short video of interviews with foreign and haitian architects working in Haiti. It was completed as an assignment for a course at the GSD on examining social agency within architecture.</p>
+        
+        <p><b>Type:</b> Academic 
+        <b class="w3-right">2016</b></br>
+        <b>Location:</b> Haiti</br>
+        <b>School:</b> Harvard GSD</br></p>
+        </div>
+       </div>
+       </a>
+
+      <div class="w3-margin-top">
+        <h6><b>The Role of the Designer</b></h6>
+
         <p>A short video of interviews with foreign and haitian architects working in Haiti. It was completed as an assignment for a course at the GSD on examining social agency within architecture.</p>
       </div>
+      </div>
     </div>
 
+
     <div class="column technology w3-third">
-    <!-- <div class="w3-third w3-container"> -->
+       <div class="img__wrap">
+
         <a href="https://mdestaubin.github.io/ebolaAid">
-      <img src="images/ebolaAid.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      </a>
-      <div class="w3-container w3-white w3-border">
-        <p><b>Ebola International Aid Flow</b></p>
+      <img class="img__img" src="images/ebolaAid.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      
+      <div class="img__description_layer">
+        <div class="img__description">
+       <h6  class="w3-margin-bottom"><b>Global Humanitarian Aid Flow Model</b></h6>
+
+        <p>Data visualization of the flow of international humanitarian aid money to West Africa during the Ebola crisis. The dataset comes from the financial tracking service of the UN.</p>
+        
+        <p><b>Type:</b> Academic 
+        <b class="w3-right">2017</b></br>
+        <b>Location:</b> International</br>
+        <b>School:</b> Harvard GSD</br></p>
+        </div>
+       </div>
+       </a>
+
+      <div class="w3-margin-top">
+        <h6><b>Global Humanitarian Aid Flow Model</b></h6>
+
         <p>Data visualization of the flow of international humanitarian aid money to West Africa during the Ebola crisis. The dataset comes from the financial tracking service of the UN.</p>
       </div>
+      </div>
     </div>
 
-  <div class="column technology w3-third">
-    <!-- <div class="w3-third w3-container"> -->
+
+    <div class="column technology w3-third">
+       <div class="img__wrap">
+
         <a href="https://www.youtube.com/watch?v=dpGyz4hHQyM">
-      <img src="images/portal.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      </a>
-      <div class="w3-container w3-white w3-border">
-        <p><b>Portal Kinection</b></p>
+      <img class="img__img" src="images/portal.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      
+      <div class="img__description_layer">
+        <div class="img__description">
+       <h6  class="w3-margin-bottom"><b>Portal Kinect_ion</b></h6>
+
+        <p>The 2-way portal connects two different parts of a city, or world. It goes beyond the typical 2D world of screen projections with a sense of 3D interaction due to layering and head tracking by a Kinect.</p>
+        
+        <p><b>Type:</b> Academic 
+        <b class="w3-right">2017</b></br>
+        <b>Location:</b> Cambridge, MA - Bergamo, Italy</br>
+        <b>School:</b> Harvard GSD</br></p>
+        </div>
+       </div>
+       </a>
+
+      <div class="w3-margin-top">
+        <h6><b>Portal Kinect_ion</b></h6>
+
         <p>The 2-way portal connects two different parts of a city, or world. It goes beyond the typical 2D world of screen projections with a sense of 3D interaction due to layering and head tracking by a Kinect.</p>
       </div>
+      </div>
     </div>
 
+
     <div class="column architecture w3-third">
-    <!-- <div class="w3-third w3-container"> -->
-      <a href="http://www.shepleybulfinch.com/project/davidson-college/S16/">
-      <img src="images/davidson.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      </a>
-      <div class="w3-container w3-white w3-border">
-        <p><b>Davidson College Science Academic Center</b></p>
+       <div class="img__wrap">
+
+        <a href="http://www.shepleybulfinch.com/project/davidson-college/S16/">
+      <img class="img__img" src="images/davidson.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      
+      <div class="img__description_layer">
+        <div class="img__description">
+       <h6  class="w3-margin-bottom"><b>Davidson College Academic Center</b></h6>
+
+        <p>Large scale addition and renovation project for Davidson College's science and art departments. The central forum space acts as the social catalyst for cross-disciplinary interactions and sharing.</p>
+        
+        <p><b>Type:</b> Professional
+        <b class="w3-right">2012-2016</b></br>
+        <b>Location:</b> Davidson, NC</br>
+        <b>Client:</b> Davidson College</br></p>
+        </div>
+       </div>
+       </a>
+
+      <div class="w3-margin-top">
+        <h6><b>Davidson College Academic Center</b></h6>
+
         <p>Large scale addition and renovation project for Davidson College's science and art departments. The central forum space acts as the social catalyst for cross-disciplinary interactions and sharing.</p>
       </div>
-    </div>
-
-    <div class="column architecture w3-third">
-    <!-- <div class="w3-third w3-container"> -->
-       <a href="https://www.archdaily.com/400589/rose-lee-house-auburn-university-rural-studio">
-      <img src="images/rural.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      </a>
-      <div class="w3-container w3-white w3-border">
-        <p><b>Rural Studio: Rose Lee's House</b></p>
-        <p>A sustainable home in rural Alabama for Rose Lee and her two sons. The project was designed and built by a team of undergraduate students</p>
       </div>
     </div>
 
-     <div class="column teaching w3-third">
-    <!-- <div class="w3-third w3-container"> -->
-      <a href="http://communityservicefellowships.gsd.harvard.edu/youthbuild-bostons-designery-program-post-3/">
-      <img src="images/youthbuild.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      </a>
-      <div class="w3-container w3-white w3-border">
-        <p><b>YouthBuild Boston : Harvard CSFP Fellow</b></p>
+    <div class="column architecture w3-third">
+       <div class="img__wrap">
+
+        <a href="https://www.archdaily.com/400589/rose-lee-house-auburn-university-rural-studio">
+      <img class="img__img" src="images/rural.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      
+      <div class="img__description_layer">
+        <div class="img__description">
+       <h6  class="w3-margin-bottom"><b>Rose Lee's House</b></h6>
+
+        <p>A sustainable home in rural Alabama for Rose Lee and her two sons. The project was designed and built by a team of undergraduate students.</p>
+        
+        <p><b>Type:</b> Academic
+        <b class="w3-right">2008-2009</b></br>
+        <b>Location:</b> Footwash, AL</br>
+        <b>School:</b> Auburn University Rural Studio</br></p>
+        </div>
+       </div>
+       </a>
+
+      <div class="w3-margin-top">
+        <h6><b>Rose Lee's House</b></h6>
+        <p>A sustainable home in rural Alabama for Rose Lee and her two sons. The project was designed and built by a team of undergraduate students.</p>
+      </div>
+      </div>
+    </div>
+
+
+    <div class="column teaching w3-third">
+       <div class="img__wrap">
+
+        <a href="http://communityservicefellowships.gsd.harvard.edu/youthbuild-bostons-designery-program-post-3/">
+      <img class="img__img" src="images/youthbuild.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      
+      <div class="img__description_layer">
+        <div class="img__description">
+       <h6  class="w3-margin-bottom"><b>Harvard CSFP Fellow</b></h6>
+
         <p>2017 recipient of the Harvard GSD Community Service Fellowship Program. Led a team of local high school studnets through a summer design project based in Haiti.</p>
+        
+        <p><b>Type:</b> Fellowship
+        <b class="w3-right">2017</b></br>
+        <b>Location:</b> Boston, MA</br>
+        <b>Client:</b> YouthBuild Boston</br></p>
+        </div>
+       </div>
+       </a>
+
+      <div class="w3-margin-top">
+        <h6><b>Harvard CSFP Fellow</b></h6>
+        <p>2017 recipient of the Harvard GSD Community Service Fellowship Program. Led a team of local high school studnets through a summer design project based in Haiti.</p>
+      </div>
       </div>
     </div>
 
     <div class="column technology w3-third">
-    <!-- <div class="w3-third w3-container"> -->
-       <a href="https://mdestaubin.github.io/weather1/index.html">
-      <img src="images/weather.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      </a>
-      <div class="w3-container w3-white w3-border">
-        <p><b>Weather App</b></p>
+       <div class="img__wrap">
+
+        <a href="https://mdestaubin.github.io/weather1/index.html">
+      <img class="img__img" src="images/weather.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      
+      <div class="img__description_layer">
+        <div class="img__description">
+       <h6  class="w3-margin-bottom"><b>Weather App</b></h6>
+
+        <p>Created as an assignment for an MIT information and visualization course. The concept is for the weather app to translate quantitative data into descriptive text descriptions.</p>
+        
+        <p><b>Type:</b> Academic
+        <b class="w3-right">2017</b></br>
+        <b>Location:</b> Cambridge, MA</br>
+        <b>School:</b> MIT</br></p>
+        </div>
+       </div>
+       </a>
+
+      <div class="w3-margin-top">
+        <h6><b>Weather App</b></h6>
         <p>Created as an assignment for an MIT information and visualization course. The concept is for the weather app to translate quantitative data into descriptive text descriptions.</p>
       </div>
+      </div>
     </div>
+
 
     <div class="column architecture w3-third">
     <!-- <div class="w3-third w3-container"> -->
        <a href="http://www.summits.org/academy-1">
       <img src="images/haitiSchool.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       </a>
-      <div class="w3-container w3-white w3-border">
+      <div class="w3-container w3-white ">
         <p><b>Summits Academy</b></p>
-        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
+        <p>Conceptual design for a college prep academy located in the central plateau region of Haiti. The campus will include teaching, library, dining, athletics, and dwelling spaces.</p>
       </div>
     </div>
 
@@ -404,49 +514,49 @@ position: fixed;
        <!-- <a href="https://mdestaubin.github.io/weather1/index.html"> -->
       <img src="images/haitiRehab.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       <!-- </a> -->
-      <div class="w3-container w3-white w3-border">
+      <div class="w3-container w3-white ">
         <p><b>Haitian Rehabilitation Center</b></p>
+        <p>Multi-phased design of a rehabilitation clinic located on the Mirebalais Hospital campus in central Haiti. The first phase is a gym and the second phase includes the support spaces.</p>
+      </div>
+    </div>
+
+    <div class="column technology w3-third">
+    <!-- <div class="w3-third w3-container"> -->
+       <!-- <a href="https://the-bac.edu/experience-the-bac/galleries/citylab-at-the-bac"> -->
+      <img src="images/mexico.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      <!-- </a> -->
+      <div class="w3-container w3-white">
+        <p><b>Enironmental Health in Megacities</b></p>
         <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
       </div>
     </div>
 
-    <!-- <div class="column research w3-third"> -->
-    <!-- <div class="w3-third w3-container"> -->
-      <!--  <a href="https://the-bac.edu/experience-the-bac/galleries/citylab-at-the-bac">
-      <img src="images/mexico.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      </a>
-      <div class="w3-container w3-white">
-        <p><b>Enironmental Health in Megacities: Mexico City</b></p>
-        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
-      </div>
-    </div> -->
-
-    <!-- <div class="column research w3-third"> -->
+    <div class="column technology w3-third">
     <!-- <div class="w3-third w3-container"> -->
        <!-- <a href="https://the-bac.edu/experience-the-bac/galleries/citylab-at-the-bac"> -->
-      <!-- <img src="images/bike.png" alt="Norway" style="width:100%" class="w3-hover-opacity"> -->
+      <img src="images/bike.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       <!-- </a> -->
-      <!-- <div class="w3-container w3-white">
+      <div class="w3-container w3-white">
         <p><b>Promoting Cycling to Foster a Healthier Community</b></p>
         <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
       </div>
-    </div> -->
+    </div>
 
     <div class="column technology w3-third">
     <!-- <div class="w3-third w3-container"> -->
        <a href="https://vimeo.com/114768789">
       <img src="images/sparkle.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       </a>
-      <div class="w3-container w3-white w3-border">
+      <div class="w3-container w3-white ">
         <p><b>Sparkle and Chime</b></p>
-        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
+        <p>Hanging art installation in Evans Way Park in Boston, MA. The team consisted of volunteers at Shepley Bulfinch and the project was composed of 1000's of recycled hard disks and mirrors.</p>
       </div>
     </div>
 
-    <div class="column research w3-third">
+    <div class="column technology w3-third">
     <!-- <div class="w3-third w3-container"> -->
       <img src="images/plot.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      <div class="w3-container w3-white w3-border">
+      <div class="w3-container w3-white ">
         <p><b>Australia vs. Canada</b></p>
         <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
       </div>
@@ -458,7 +568,7 @@ position: fixed;
        <a href="https://the-bac.edu/experience-the-bac/galleries/citylab-at-the-bac">
       <img src="images/bac.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       </a>
-      <div class="w3-container w3-white w3-border">
+      <div class="w3-container w3-white ">
         <p><b>Boston Architectural College: City Lab</b></p>
         <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla.</p>
       </div>
@@ -471,22 +581,20 @@ position: fixed;
 
 
   <!-- About Me -->
-  <div class="w3-padding-48 w3-content w3-text-grey" id="about">
+  <div class="w3-padding-64 w3-text-grey" id="about">
 
     <div class="w3-row">
     <div class="w3-col s6 w3-padding-64">
-       <img class="w3-half" src="images/profile.png" style="width:420px">
+       <img class="w3-half" src="images/profile.png" style="width:430px">
     </div>
       
     <div class="w3-col s6 w3-left w3-text-grey w3-section w3-padding-32" >
-      <h3 class = "w3-text-black">    
-      Michael</br>
-      </h3>
+      <h3 class = "w3-text-black">Michael</h3>
       <hr>
       <p> 
       Born and raised in the southeast United States, I received a Bachelor of Architecture degree from Auburn University in 2012. I then worked professionally at an architecture firm for four years in Boston where I had the opportunity to work on multiple humanitarian and public health projects in developing countries. In 2016, I returned to school to pursue a masters degree at Harvard University Graduate School of Design. Throughout my education and career, I have always held a strong passion in designing for the well-being of others. At graduate school, I've focused on developing my interests in the emerging relationships between design, technology, public health, and humanitarian crisis response.</br></p>
       
-      <hr>
+      <hr></br></br>
 
       <p>
       <button class="w3-button w3-black w3-margin-top w3-margin-bottom">
@@ -520,8 +628,6 @@ position: fixed;
     </div>
  -->   
 
-
-     
      </br></br></br>
      <!-- <hr> -->
      </br></br></br>
@@ -529,12 +635,12 @@ position: fixed;
     </div>
   
   <!-- Contact Section -->
-  <div class="w3-container w3-padding-16" id="contact">
+  <div class="w3-container w3-padding-16 w3-text-black" id="contact">
     <!-- <h4 id="contact"><b>Locate</b></h4> -->
    <!--  <div class="w3-row-padding"> -->
         <p>
-                Cell: <span class="tel">404.933.3271</span><br />
-                Email: <a class="email" href="mailto:mdestaubin@gsd.harvard.edu">mdestaubin@gsd.harvard.edu</a><br />
+               <b>Cell: </b><span class="tel">404.933.3271</span><br />
+               <b>Email: </b><a class="email" href="mailto:mdestaubin@gsd.harvard.edu">mdestaubin@gsd.harvard.edu</a><br />
             </p>
              <img src="images/map2.png" alt="Norway" style="width:100%">
 
