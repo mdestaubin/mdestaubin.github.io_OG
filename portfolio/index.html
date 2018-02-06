@@ -1,102 +1,36 @@
 <!DOCTYPE html>
+
 <html>
-<head>
+
+<title>Michaels Portfolio</title>
+
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <style>
-* {box-sizing: border-box}
-body,h1,h4,h5,h6  {font-family: "Raleway", sans-serif; font-weight: bold;}
-.mySlides {display: none}
-img {vertical-align: middle;}
+body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 
-/* Slideshow container */
-.slideshow-container {
-  max-width: 1200px;
-  position: relative;
-  margin: auto;
+* {
+    box-sizing: border-box;
 }
 
-/* Next & previous buttons */
-.prev, .next {
-  cursor: pointer;
-  position: absolute;
-  top: 50%;
-  width: auto;
-  padding: 8px;
-  margin-top: 0px;
-  margin-right: -35px;
-  margin-left: -60px;
-  background-color: rgba(255,255,255,1);
-  color: black;
-  font-weight: bold;
-  font-size: 18px;
-  transition: 0.6s ease;
-  border-radius: 0 3px 3px 0;
+body {
+    background-color: #f1f1f1;
+    padding: 0px;
 }
 
-/* Position the "next button" to the right */
-.next {
-  right: 0;
-  border-radius: 3px 0 0 3px;
-}
-
-/* On hover, add a black background color with a little bit see-through */
-.prev:hover, .next:hover {
-  background-color: rgba(255,255,255,1);
-  color: grey;
-}
-
-/* Caption text */
-.text {
-  color: grey;
-  /*background-color: black;*/
-  font-size: 15px;
-  padding: 8px 12px;
-  position: absolute;
-  bottom: -5px;
-  width: 100%;
-  text-align: center;
-}
-
-/* Number text (1/3 etc) */
-.numbertext {
-  color: grey;
-  font-size: 14px;
-  padding: 8px 12px;
-  margin-top: 62px;
-  position: absolute;
-  top: 0;
-}
-
-
-/* Fading animation */
-.fade {
-  -webkit-animation-name: fade;
-  -webkit-animation-duration: 1s;
-  animation-name: fade;
-  animation-duration: 1s;
-}
-
-.btn {
-  border: none;
-  outline: none;
-  padding: 12px 0px;
-  background-color: white;
-  cursor: pointer;
-}
-
-.btn:hover {
-  background-color: white;
+h6{font-family: "Verdana", sans-serif
 
 }
 
-.btn.active {
-  background-color: black;
-  color: white;
-}
+/*header {
+position: fixed;
+}*/
 
+/* Center website */
 .main {
     max-width: 1000px;
     margin: auto;
@@ -107,107 +41,825 @@ img {vertical-align: middle;}
 }
 
 
-@-webkit-keyframes fade {
-  from {opacity: .4} 
-  to {opacity: 1}
+/* Add padding BETWEEN each column */
+.row,
+.row > .column {
+    padding: 8px;
 }
 
-@keyframes fade {
-  from {opacity: .4} 
-  to {opacity: 1}
+/* Create three equal columns that floats next to each other */
+.column {
+    float: left;
+    width: 33.33%;
+    display: none; /* Hide all elements by default */
+    margin-bottom: 5px;
+    margin-top: 10px;
 }
 
-/* On smaller screens, decrease text size */
-@media only screen and (max-width: 300px) {
-  .prev, .next,.text {font-size: 11px}
+/* Clear floats after rows */ 
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
 }
+
+/* Content */
+.content {
+    background-color: white;
+    /*padding: 10px;*/
+}
+
+/* The "show" class is added to the filtered elements */
+.show {
+  display: block;
+}
+
+/* Style the buttons */
+.btn {
+  border: none;
+  outline: none;
+  padding: 12px 16px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #ddd;
+}
+
+.btn.active {
+  background-color: black;
+  color: white;
+}
+
+/* over lay description */
+.img__wrap {
+  position: relative;
+}
+
+.img__description_layer {
+  position: absolute;
+  top: 210px;
+  bottom: 0px;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 1);
+  color: black;
+  visibility: hidden;
+  opacity: 0;
+  display: flex;
+  align-items: top;
+  justify-content: left;
+
+  /* transition effect. not necessary */
+  transition: opacity .1s, visibility .1s;
+}
+
+.img__wrap:hover .img__description_layer {
+  visibility: visible;
+  opacity: 1;
+}
+
+.img__description {
+  transition: .3s;
+  transform: translateY(1em);
+}
+
+.img__wrap:hover .img__description {
+  transform: translateY(0);
+}
+
 </style>
-</head>
-<body>
 
 
-  <div class="slideshow-container w3-row"> 
+<body class="w3-white w3-content" style="max-width:1200px">
 
-    <header id="portfolio">
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
 
-    <h2>West Africa Health Facilities Assessment</h2>
+<!-- !PAGE CONTENT! -->
+<div class="w3-main">
+
+  <!-- Header -->
+  <header id="portfolio">
+
+    <div class="w3-container">
+    <h1><b>Michael de St. Aubin</b></h1>
+    </div>
 
     </header>
 
-   <div class="w3-bar w3-top" style="max-width:1175px">
-      <div class="w3-right" id="myBtnContainer">
+    <div class="w3-bar w3-top" style="max-width:1200px">
+      <div class="w3-right" id="myBtnContainer" style="margin-right: 16px">
+    
+      <span class="w3-margin-left w3-bar-item w3-white">Work :</span> 
+      <a href="#portfolio"> 
+      <button class="btn active w3-bar-item" onclick="filterSelection('all')">All</button>
+      <button class="btn w3-bar-item" onclick="filterSelection('thesis')">Thesis</button>
+      <button class="btn w3-bar-item" onclick="filterSelection('architecture')">Architecture</button>
+      <button class="btn w3-bar-item" onclick="filterSelection('technology')">Research + Technology</button>
+      <!-- <button class="btn w3-bar-item" onclick="filterSelection('technology')">technology</button> -->
+      <button class="btn w3-bar-item" onclick="filterSelection('teaching')">Teaching</button>
+     </a>
+     <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button w3-white"><i class="fa fa-user fa-fw w3-center"></i></a> 
 
-
-      <a href="https://mdestaubin.github.io/portfolio" onclick="w3_close()" class="w3-bar-item w3-button w3-white">Back</a>
-
-      <!-- <a href="https://mdestaubin.github.io/portfolio/#about" onclick="w3_close()" class="w3-bar-item w3-button w3-white"><i class="fa fa-user fa-fw w3-center"></i></a>
-      <a href="https://mdestaubin.github.io/portfolio/#contact" onclick="w3_close()" class="w3-bar-item w3-button w3-padding w3-white"><i class=" fa fa-map-pin fa-fw w3-center"></i></a>
- -->
+        <a href="#contact" onclick="w3_close()" class="w3-bar-item w3-button w3-padding w3-white"><i class=" fa fa-map-pin fa-fw w3-center"></i></a>
     </div>
     </div>
 
+  
+  <!-- Photo Grid-->
+  <div class="w3-row-padding w3-padding-16" style= "margin-bottom: 100px">
 
- <div class = "w3-padding-16" style="max-width:1175px"> 
-<div class="mySlides fade">
-  <div class="numbertext"></div>
-  <img src="images/ebola.png" style="width:100%">
-  <div class="text">JJ Dossen Hospital</div>
+
+   <div class="column thesis w3-third">
+       <div class="img__wrap">
+
+        <a href="https://mdestaubin.github.io/simulation">
+      <img class="img__img" src="images/thesis.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+
+      <div class="img__description_layer">
+        <div class="img__description">
+       <h6  class="w3-margin-bottom"><b>Outbreak Response Simulator</b></h6>
+
+        <p>Master of Design Studies in Risk & Resilience Thesis Project. An agent-based simulation model to test infectious disease outbreak response capacities and strategies.</p>
+        
+        <!-- <div class ="w3-padding-16"> -->
+
+        <p>Academic
+        <i class="w3-right">2017-2018</i></br>
+         <b>Harvard University GSD</b>
+        <i class="w3-right">Cambridge, MA</i></br>
+         </p>
+        <!-- </div> -->
+        </div>
+       </div>
+       </a>
+
+      <div class="w3-margin-top">
+        <h6><b>Outbreak Response Simulator</b></h6>
+
+        <p>Master of Design Studies in Risk & Resilience Thesis Project. An agent-based simulation model to test infectious disease outbreak response capacities and strategies.</p>
+      </div>
+      </div>
+    </div>
+  
+    <div class="column technology w3-third">
+       <div class="img__wrap">
+
+        <a href="https://mdestaubin.github.io/ebolaMap">
+      <img class="img__img" src="images/ebolaMap.jpg" alt="Norway" style="width:100%" class="w3-hover-opacity">
+
+      <div class="img__description_layer">
+        <div class="img__description">
+       <h6  class="w3-margin-bottom"><b>International Crisis Response Map</b></h6>
+
+        <p>Interactive map that contains layers of data related to the 2014 West Africa Ebola Outbreak and the international response. Completed as an assignment for a MIT data visualization course.</p>
+
+        <p>Academic
+        <i class="w3-right">2017</i></br>
+         <b>MIT</b>
+        <i class="w3-right">Liberia</i></br>
+         </p>
+        </div>
+       </div>
+       </a>
+
+      <div class="w3-margin-top">
+        <h6><b>International Crisis Response Map</b></h6>
+
+        <p>Interactive map that contains layers of data related to the 2014 West Africa Ebola Outbreak and the international response. Completed as an assignment for a MIT data visualization course.</p>
+      </div>
+      </div>
+    </div>
+
+    <div class="column architecture w3-third">
+       <div class="img__wrap">
+
+        <a href="https://www.healthcaredesignmagazine.com/trends/architecture/design-meets-ebola-door/#slide-1p">
+      <img class="img__img" src="images/triage.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      
+      <div class="img__description_layer">
+        <div class="img__description">
+       <h6  class="w3-margin-bottom"><b>Triage + Isolation Treatment Unit</b></h6>
+
+        <p>Design of a long term Ebola triage and isolation unit. Developed as a prototype to be used as a screening gateway into hospital campus's across West Africa and in replace of the UN temporary structures.</p>
+
+        <p>Professional 
+        <i class="w3-right">2015</i></br>
+        <i class="w3-right">West Africa</i>
+         <b>Shepley Bulfinch</br>
+         Partners in Health</b>
+         </p>
+
+        </div>
+       </div>
+       </a>
+
+      <div class="w3-margin-top">
+        <h6><b>Triage + Isolation Treatment Unit</b></h6>
+
+        <p>Design of a long term Ebola triage and isolation unit. Developed as a prototype to be used as a screening gateway into hospital campus's across West Africa and in replace of the UN temporary structures.</p>
+      </div>
+      </div>
+    </div>
+
+     <div class="column architecture w3-third">
+       <div class="img__wrap">
+
+        <a href="http://www.shepleybulfinch.com/projects/partners-in-health-partners-in-health-university-of-global-health-equity/">
+      <img class="img__img" src="images/UGHE.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      
+      <div class="img__description_layer">
+        <div class="img__description">
+       <h6  class="w3-margin-bottom"><b>University of Global Health Equity</b></h6>
+
+        <p>Acadmic campus design for Partners in Health new global health university. The project is located in Butaro, Rwanda and will act as a regional model for future global health education hubs in Africa</p>
+
+        <p>Professional 
+        <i class="w3-right">2015 - </i></br>
+        <i class="w3-right">Rwanda</i>
+         <b>Shepley Bulfinch + MASS Design</br>
+         Partners in Health</b>
+         </p>
+        </div>
+       </div>
+       </a>
+
+      <div class="w3-margin-top">
+        <h6><b>University of Global Health Equity</b></h6>
+
+        <p>Acadmic campus design for Partners in Health new global health university. The project is located in Butaro, Rwanda and will act as a regional model for future global health education hubs in Africa</p>
+      </div>
+      </div>
+    </div>
+
+    <div class="column architecture w3-third">
+       <div class="img__wrap">
+
+        <a href="https://mdestaubin.github.io/portfolio/links/facilities/index">
+      <img class="img__img" src="images/ebola.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      
+      <div class="img__description_layer">
+        <div class="img__description">
+       <h6  class="w3-margin-bottom"><b>West Africa Health Facilitiy Assessment</b></h6>
+
+        <p>Hospital facility assessment conducted during the West Africa Ebola Outbreak. The report was prepared and given to PIH, so they understood the conditions of the facilities they were working at.</p>
+
+        <p>Professional 
+        <i class="w3-right">2015</i></br>
+        <i class="w3-right">Sierra Leone + Liberia</i>
+         <b>Shepley Bulfinch</br>
+         Partners in Health</b>
+
+         </p>
+        </div>
+       </div>
+       </a>
+
+      <div class="w3-margin-top">
+        <h6><b>West Africa Health Facilitiy Assessment</b></h6>
+
+        <p>Hospital facility assessment conducted during the West Africa Ebola Outbreak. The report was prepared and given to PIH, so they understood the conditions of the facilities they were working at.</p>
+      </div>
+      </div>
+    </div>
+
+
+    <div class="column technology w3-third">
+       <div class="img__wrap">
+
+        <a href="https://www.youtube.com/watch?v=ZqaOAgRbHeI&t=88s">
+      <img class="img__img" src="images/haitiVideo.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      
+      <div class="img__description_layer">
+        <div class="img__description">
+       <h6  class="w3-margin-bottom"><b>The Role of the Designer</b></h6>
+
+        <p>A short video of interviews with foreign and haitian architects working in Haiti. It was completed as an assignment for a course at the GSD on examining social agency within architecture.</p>
+
+        <p>Academic
+        <i class="w3-right">2016</i></br>
+        <i class="w3-right">Haiti</i>
+         <b>Harvard University GSD</br>
+         AA Haiti Visiting School</b>
+         </p>
+        </div>
+       </div>
+       </a>
+
+      <div class="w3-margin-top">
+        <h6><b>The Role of the Designer</b></h6>
+
+        <p>A short video of interviews with foreign and haitian architects working in Haiti. It was completed as an assignment for a course at the GSD on examining social agency within architecture.</p>
+      </div>
+      </div>
+    </div>
+
+
+    <div class="column technology w3-third">
+       <div class="img__wrap">
+
+        <a href="https://mdestaubin.github.io/ebolaAid">
+      <img class="img__img" src="images/ebolaAid.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      
+      <div class="img__description_layer">
+        <div class="img__description">
+       <h6  class="w3-margin-bottom"><b>Global Humanitarian Aid Flow Model</b></h6>
+
+        <p>Data visualization of the flow of international humanitarian aid money to West Africa during the Ebola crisis. The dataset comes from the financial tracking service of the UN.</p>
+
+        <p>Academic
+        <i class="w3-right">2017</i></br>
+         <b>MIT</b>
+        <i class="w3-right">Cambridge, MA</i></br>
+         </p>
+        </div>
+       </div>
+       </a>
+
+      <div class="w3-margin-top">
+        <h6><b>Global Humanitarian Aid Flow Model</b></h6>
+
+        <p>Data visualization of the flow of international humanitarian aid money to West Africa during the Ebola crisis. The dataset comes from the financial tracking service of the UN.</p>
+      </div>
+      </div>
+    </div>
+
+
+    <div class="column technology w3-third">
+       <div class="img__wrap">
+
+        <a href="https://www.youtube.com/watch?v=dpGyz4hHQyM">
+      <img class="img__img" src="images/portal.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      
+      <div class="img__description_layer">
+        <div class="img__description">
+       <h6  class="w3-margin-bottom"><b>Portal Kinect_ion</b></h6>
+
+        <p>The 2-way portal connects two different parts of a city, or world. It goes beyond the typical 2D world of screen projections with a sense of 3D interaction due to layering and head tracking by a Kinect.</p>
+
+        <p>Academic
+        <i class="w3-right">2017</i></br>
+         <b>Harvard University GSD</b>
+        <i class="w3-right">USA + Italy</i></br>
+        <b>University of Bergamo</b>
+         </p>
+        </div>
+       </div>
+       </a>
+
+      <div class="w3-margin-top">
+        <h6><b>Portal Kinect_ion</b></h6>
+
+        <p>The 2-way portal connects two different parts of a city, or world. It goes beyond the typical 2D world of screen projections with a sense of 3D interaction due to layering and head tracking by a Kinect.</p>
+      </div>
+      </div>
+    </div>
+
+
+    <div class="column architecture w3-third">
+       <div class="img__wrap">
+
+        <a href="http://www.shepleybulfinch.com/projects/davidson-college-davidson-college-e-craig-wall-jr-academic-center/">
+      <img class="img__img" src="images/davidson.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      
+      <div class="img__description_layer">
+        <div class="img__description">
+       <h6  class="w3-margin-bottom"><b>Davidson College Academic Center</b></h6>
+
+        <p>Large scale addition and renovation project for Davidson College's science and art departments. The central forum space acts as the social catalyst for cross-disciplinary interactions and sharing.</p>
+
+        <p>Professional
+        <i class="w3-right">2012-2016</i></br>
+         <b>Shepley Bulfinch</b>
+        <i class="w3-right">Davidson, NC</i></br>
+        <b>Davidson College</b>
+         </p>
+        </div>
+       </div>
+       </a>
+
+      <div class="w3-margin-top">
+        <h6><b>Davidson College Academic Center</b></h6>
+
+        <p>Large scale addition and renovation project for Davidson College's science and art departments. The central forum space acts as the social catalyst for cross-disciplinary interactions and sharing.</p>
+      </div>
+      </div>
+    </div>
+
+    <div class="column architecture w3-third">
+       <div class="img__wrap">
+
+        <a href="https://www.archdaily.com/400589/rose-lee-house-auburn-university-rural-studio">
+      <img class="img__img" src="images/rural.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      
+      <div class="img__description_layer">
+        <div class="img__description">
+       <h6  class="w3-margin-bottom"><b>Rose Lee's House</b></h6>
+
+        <p>A sustainable home in rural Alabama for Rose Lee and her two sons. The project was designed and built by a team of undergraduate students.</p>
+
+        <p>Academic
+        <i class="w3-right">2008-2009</i></br>
+         <b>Auburn University Rural Studio</b>
+        <i class="w3-right">Footwash, AL</i></br>
+         </p>
+
+        </div>
+       </div>
+       </a>
+
+      <div class="w3-margin-top">
+        <h6><b>Rose Lee's House</b></h6>
+        <p>A sustainable home in rural Alabama for Rose Lee and her two sons. The project was designed and built by a team of undergraduate students.</p>
+      </div>
+      </div>
+    </div>
+
+
+    <div class="column teaching w3-third">
+       <div class="img__wrap">
+
+        <a href="http://communityservicefellowships.gsd.harvard.edu/youthbuild-bostons-designery-program-post-3/">
+      <img class="img__img" src="images/youthbuild.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      
+      <div class="img__description_layer">
+        <div class="img__description">
+       <h6  class="w3-margin-bottom"><b>Harvard CSFP Fellow</b></h6>
+
+        <p>2017 recipient of the Harvard GSD Community Service Fellowship Program. Led a team of local high school studnets through a summer design project based in Haiti.</p>
+
+        <p>Fellowship
+        <i class="w3-right">2017</i></br>
+         <b>YouthBuild Boston</b>
+        <i class="w3-right">Footwash, AL</i></br>
+        <b>Harvard University GSD</b>
+         </p>
+        </div>
+       </div>
+       </a>
+
+      <div class="w3-margin-top">
+        <h6><b>Harvard CSFP Fellow</b></h6>
+        <p>2017 recipient of the Harvard GSD Community Service Fellowship Program. Led a team of local high school studnets through a summer design project based in Haiti.</p>
+      </div>
+      </div>
+    </div>
+
+    <div class="column technology w3-third">
+       <div class="img__wrap">
+
+        <a href="https://mdestaubin.github.io/weather1/index.html">
+      <img class="img__img" src="images/weather.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      
+      <div class="img__description_layer">
+        <div class="img__description">
+       <h6  class="w3-margin-bottom"><b>Weather App</b></h6>
+
+        <p>Created as an assignment for an MIT information and visualization course. The concept is for the weather app to translate quantitative data into descriptive text descriptions.</p>
+
+        <p>Academic
+        <i class="w3-right">2017</i></br>
+         <b>MIT</b>
+        <i class="w3-right">Cambridge, MA</i></br>
+         </p>
+        </div>
+       </div>
+       </a>
+
+      <div class="w3-margin-top">
+        <h6><b>Weather App</b></h6>
+        <p>Created as an assignment for an MIT information and visualization course. The concept is for the weather app to translate quantitative data into descriptive text descriptions.</p>
+      </div>
+      </div>
+    </div>
+
+
+    <div class="column architecture w3-third">
+       <div class="img__wrap">
+
+        <a href="http://www.summits.org/academy-1">
+      <img class="img__img" src="images/haitiSchool.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      
+      <div class="img__description_layer">
+        <div class="img__description">
+       <h6  class="w3-margin-bottom"><b>Summits Academy</b></h6>
+
+        <p>Conceptual design for a college prep academy located in the central plateau region of Haiti. The campus will include teaching, library, dining, athletics, and dwelling spaces.</p>
+        
+        <p>Professional
+        <i class="w3-right">2016</i></br>
+         <b>Shepley Bulfinch</b>
+        <i class="w3-right">Haiti</i></br>
+        <b>Summits Education</b>
+         </p>
+
+        </div>
+       </div>
+       </a>
+
+      <div class="w3-margin-top">
+        <h6><b>Summits Academy</b></h6>
+        <p>Conceptual design for a college prep academy located in the central plateau region of Haiti. The campus will include teaching, library, dining, athletics, and dwelling spaces.</p>
+      </div>
+      </div>
+    </div>
+
+
+    <div class="column architecture w3-third">
+       <div class="img__wrap">
+
+        <!-- <a href="http://www.summits.org/academy-1"> -->
+      <img class="img__img" src="images/haitiRehab.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      
+      <div class="img__description_layer">
+        <div class="img__description">
+       <h6  class="w3-margin-bottom"><b>Physical Rehabilitation Center</b></h6>
+
+        <p>Multi-phased design of a rehabilitation clinic located on the Mirebalais Hospital campus in central Haiti. The first phase is a gym and the second phase includes the support spaces.</p>
+
+        <p>Professional
+        <i class="w3-right">2012</i></br>
+         <b>Shepley Bulfinch</b>
+        <i class="w3-right">Haiti</i></br>
+        <b>Partners in Health</b>
+         </p>
+
+        </div>
+       </div>
+       <!-- </a> -->
+
+      <div class="w3-margin-top">
+        <h6><b>Physical Rehabilitation Center</b></h6>
+        <p>Multi-phased design of a rehabilitation clinic located on the Mirebalais Hospital campus in central Haiti. The first phase is a gym and the second phase includes the support spaces.</p>
+      </div>
+      </div>
+    </div>
+
+     <!-- <div class="column technology w3-third"> -->
+       <!-- <div class="img__wrap"> -->
+
+        <!-- <a href="http://www.summits.org/academy-1"> -->
+      <!-- <img class="img__img" src="images/mexico.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      
+      <div class="img__description_layer">
+        <div class="img__description">
+       <h6  class="w3-margin-bottom"><b>Environmental Health in Megacities</b></h6>
+
+        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla. congue gravida diam non fringilla.</p>
+        
+        <p><b>Type:</b> Academic
+        <b class="w3-right">2017</b></br>
+        <b>Location:</b> Mexico City, MEX</br>
+        <b>School:</b> Harvard HSPH</br></p>
+        </div>
+       </div> -->
+       <!-- </a> -->
+
+      <!-- <div class="w3-margin-top">
+        <h6><b>Environmental Health in Megacities</b></h6>
+        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla. congue gravida diam non fringilla.</p>
+      </div>
+      </div>
+    </div> -->
+
+
+<!--     <div class="column technology w3-third">
+       <div class="img__wrap"> -->
+
+        <!-- <a href="http://www.summits.org/academy-1"> -->
+    <!--   <img class="img__img" src="images/bike.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      
+      <div class="img__description_layer">
+        <div class="img__description">
+       <h6  class="w3-margin-bottom"><b>Promoting Cycling to Foster a Healthier City</b></h6>
+
+        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla. congue gravida diam non fringilla.</p>
+        
+        <p><b>Type:</b> Academic
+        <b class="w3-right">2016</b></br>
+        <b>Location:</b> Cambridge, MA</br>
+        <b>School:</b> Harvard GSD</br></p>
+        </div>
+       </div> -->
+       <!-- </a> -->
+
+     <!--  <div class="w3-margin-top">
+        <h6><b>Promoting Cycling to Foster a Healthier City</b></h6>
+        <p>Praesent tincidunt sed tellus ut rutrum. Sed vitae justo condimentum, porta lectus vitae, ultricies congue gravida diam non fringilla. congue gravida diam non fringilla.</p>
+      </div>
+      </div>
+    </div> -->
+
+
+    <div class="column technology w3-third">
+       <div class="img__wrap">
+
+        <a href="https://vimeo.com/114768789">
+      <img class="img__img" src="images/sparkle.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      
+      <div class="img__description_layer">
+        <div class="img__description">
+       <h6  class="w3-margin-bottom"><b>Sparkle and Chime</b></h6>
+
+        <p>Hanging art installation in Evans Way Park in Boston, MA. The team consisted of volunteers at Shepley Bulfinch and the project was composed of 1000's of recycled hard disks and mirrors.</p>
+
+        <p>Volunteer
+        <i class="w3-right">2014</i></br>
+         <b>Shepley Bulfinch</b>
+        <i class="w3-right">Boston, MA</i></br>
+        <b>Fenway Alliance</b>
+         </p>
+        </div>
+       </div>
+       </a>
+
+      <div class="w3-margin-top">
+        <h6><b>Sparkle and Chime</b></h6>
+        <p>Hanging art installation in Evans Way Park in Boston, MA. The team consisted of volunteers at Shepley Bulfinch and the project was composed of 1000's of recycled hard disks and mirrors.</p>
+      </div>
+      </div>
+    </div>
+    
+    <div class="column technology w3-third">
+       <div class="img__wrap">
+
+        <!-- <a href="http://www.summits.org/academy-1"> -->
+      <img class="img__img" src="images/plot.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      
+      <div class="img__description_layer">
+        <div class="img__description">
+       <h6  class="w3-margin-bottom"><b>Australia vs. Canada</b></h6>
+
+        <p>The project is a research-based experimental portrayal of the parallel and mirrored relationships between the mining industries and native populations in both Australia and Canada.</p>
+        
+        <p>Academic
+        <i class="w3-right">2016</i></br>
+         <b>Harvard GSD</b>
+        <i class="w3-right">Cambridge, MA</i></br>
+        </p>
+        </div>
+       </div>
+       <!-- </a> -->
+
+      <div class="w3-margin-top">
+        <h6><b>Australia vs. Canada</b></h6>
+        <p>The project is a research-based experimental portrayal of the parallel and mirrored relationships between the mining industries and native populations in both Australia and Canada.</p>
+      </div>
+      </div>
+    </div>
+
+
+    <div class="column teaching w3-third">
+       <div class="img__wrap">
+
+        <a href="https://the-bac.edu/experience-the-bac/galleries/citylab-at-the-bac">
+      <img class="img__img" src="images/bac.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
+      
+      <div class="img__description_layer">
+        <div class="img__description">
+       <h6  class="w3-margin-bottom"><b>Boston Architectural College: City Lab</b></h6>
+
+        <p>City Lab is an immersive orientation course for incoming students at the BAC. It focuses on introductory principals of design, architecture, and urbanism through the lens of exploring Boston.</p>
+
+        <p>Professional
+        <i class="w3-right">2013-2014</i></br>
+         <b>BAC</b>
+        <i class="w3-right">Boston, MA</i></br>
+        </p>
+        </div>
+       </div>
+       </a>
+
+      <div class="w3-margin-top">
+        <h6><b>Boston Architectural College: City Lab</b></h6>
+        <p>City Lab is an immersive orientation course for incoming students at the BAC. It focuses on introductory principals of design, architecture, and urbanism through the lens of exploring Boston.</p>
+      </div>
+      </div>
+    </div>
+    
+    </br></br></br>
+
+   </div>
+  </div>
+
+
+  <!-- About Me -->
+  <div class="w3-padding-64 w3-text-grey" id="about">
+    
+    </br></br></br>
+    <div class="w3-row">
+    <div class="w3-col s6 w3-padding-32">
+      <img class="w3-half" src="images/profile.png" style="width:430px">
+    </div>
+      
+    <div class="w3-col s6 w3-left w3-text-grey w3-section" >
+      <h3 class = "w3-text-black">Michael</h3>
+      <hr>
+      <p> 
+      Born and raised in the southeast United States, I received a Bachelor of Architecture degree from Auburn University in 2012. I then worked professionally at an architecture firm for four years in Boston where I had the opportunity to work on multiple humanitarian and public health projects in developing countries. In 2016, I returned to school to pursue a masters degree at Harvard University Graduate School of Design. Throughout my education and career, I have always held a strong passion in designing for the well-being of others. At graduate school, I've focused on developing my interests in the emerging relationships between design, technology, public health, and humanitarian crisis response.</br></p>
+      
+      <hr></br></br>
+
+      <p>
+      <button class="w3-button w3-black w3-margin-top w3-margin-bottom">
+      <a href="https://mdestaubin.github.io/resume/" <i></i>Resume</a>
+      </button>
+      </p>
+
+      <p class= "w3-text-black"> 
+      <strong>Harvard University</br>
+      Graduate School of Design</strong></br>
+      Master in Design Studies </br>
+      Risk + Resilience</br>
+      Fall 2016 - Spring 2018
+      </p>
+
+
+    <!-- <h4>Technical Skills</h4> -->
+
+    <!-- Progress bars / Skills -->
+<!--     <p>Photography</p>
+    <div class="w3-grey">
+      <div class="w3-container w3-dark-grey w3-padding w3-center" style="width:95%">95%</div>
+    </div>
+    <p>Web Design</p>
+    <div class="w3-grey">
+      <div class="w3-container w3-dark-grey w3-padding w3-center" style="width:85%">85%</div>
+    </div>
+    <p>Photoshop</p>
+    <div class="w3-grey">
+      <div class="w3-container w3-dark-grey w3-padding w3-center" style="width:80%">80%</div>
+    </div>
+ -->   
+
+     </br></br></br>
+     <!-- <hr> -->
+     </br></br></br>
+    </div>
+    </div>
+  
+  <!-- Contact Section -->
+  <div class="w3-container w3-padding-16 w3-text-black" id="contact">
+    <!-- <h4 id="contact"><b>Locate</b></h4> -->
+   <!--  <div class="w3-row-padding"> -->
+        <p>
+               <b>Cell: </b><span class="tel">404.933.3271</span><br />
+               <b>Email: </b><a class="email" href="mailto:mdestaubin@gsd.harvard.edu">mdestaubin@gsd.harvard.edu</a><br />
+            </p>
+             <img src="images/map2.png" alt="Norway" style="width:100%">
+
+<!-- End page content -->
 </div>
 
-<div class="mySlides fade">
-  <div class="numbertext"></div>
-  <iframe  height= 635 src="https://www.youtube.com/embed/60jqCuYUujQ?start=5" style="width: 100%" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-  <div class="text">JJ Dossen Facility Improvements</div>
-</div>
 
-<div class="mySlides fade">
-  <div class="numbertext"></div>
-  <img src="img_mountains_wide.jpg" style="width:100%">
-  <div class="text">Caption Three</div>
-</div>
-
-<a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-<a class="next" onclick="plusSlides(1)">&#10095;</a>
-
-</div>
-<br>
-</div>
-
-<!-- <div style="text-align:center">
-  <span class="dot" onclick="currentSlide(1)"></span> 
-  <span class="dot" onclick="currentSlide(2)"></span> 
-  <span class="dot" onclick="currentSlide(3)"></span> 
-</div> -->
-
-
+<!-- // Script to open and close sidebar -->
 <script>
-var slideIndex = 1;
-showSlides(slideIndex);
-
-function plusSlides(n) {
-  showSlides(slideIndex += n);
+filterSelection("all")
+function filterSelection(c) {
+  var x, i;
+  x = document.getElementsByClassName("column");
+  if (c == "all") c = "";
+  for (i = 0; i < x.length; i++) {
+    w3RemoveClass(x[i], "show");
+    if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "show");
+  }
 }
 
-function currentSlide(n) {
-  showSlides(slideIndex = n);
+function w3AddClass(element, name) {
+  var i, arr1, arr2;
+  arr1 = element.className.split(" ");
+  arr2 = name.split(" ");
+  for (i = 0; i < arr2.length; i++) {
+    if (arr1.indexOf(arr2[i]) == -1) {element.className += " " + arr2[i];}
+  }
 }
 
-function showSlides(n) {
-  var i;
-  var slides = document.getElementsByClassName("mySlides");
-  var dots = document.getElementsByClassName("dot");
-  if (n > slides.length) {slideIndex = 1}    
-  if (n < 1) {slideIndex = slides.length}
-  for (i = 0; i < slides.length; i++) {
-      slides[i].style.display = "none";  
+function w3RemoveClass(element, name) {
+  var i, arr1, arr2;
+  arr1 = element.className.split(" ");
+  arr2 = name.split(" ");
+  for (i = 0; i < arr2.length; i++) {
+    while (arr1.indexOf(arr2[i]) > -1) {
+      arr1.splice(arr1.indexOf(arr2[i]), 1);     
+    }
   }
-  for (i = 0; i < dots.length; i++) {
-      dots[i].className = dots[i].className.replace(" active", "");
-  }
-  slides[slideIndex-1].style.display = "block";  
-  dots[slideIndex-1].className += " active";
+  element.className = arr1.join(" ");
+}
+
+
+// Add active class to the current button (highlight it)
+var btnContainer = document.getElementById("myBtnContainer");
+var btns = btnContainer.getElementsByClassName("btn");
+for (var i = 0; i < btns.length; i++) {
+  btns[i].addEventListener("click", function(){
+    var current = document.getElementsByClassName("active");
+    current[0].className = current[0].className.replace(" active", "");
+    this.className += " active";
+  });
 }
 </script>
 
 </body>
-</html> 
+</html>
