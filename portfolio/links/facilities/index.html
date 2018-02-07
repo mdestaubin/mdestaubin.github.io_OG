@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html>
+
+<title>Facility Assessment</title>
+
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -16,6 +19,8 @@ img {vertical-align: middle;}
   max-width: 1200px;
   position: relative;
   margin: auto;
+  padding-left: 8px;
+
 }
 
 /* Next & previous buttons */
@@ -55,7 +60,7 @@ img {vertical-align: middle;}
   font-size: 15px;
   padding: 8px 12px;
   position: absolute;
-  bottom: -8px;
+  bottom: -5px;
   width: 100%;
   text-align: center;
 }
@@ -85,10 +90,12 @@ img {vertical-align: middle;}
   padding: 12px 0px;
   background-color: white;
   cursor: pointer;
+
 }
 
 .btn:hover {
-  background-color: white;
+    background-color: rgba(255,255,255,1);
+    color: white;
 
 }
 
@@ -130,7 +137,7 @@ img {vertical-align: middle;}
 
     <header id="portfolio">
 
-    <h2>West Africa Health Facilities Assessment</h2>
+    <h3>West Africa Health Facilities Assessment</h3>
 
     </header>
 
@@ -138,7 +145,7 @@ img {vertical-align: middle;}
       <div class="w3-right" id="myBtnContainer">
 
 
-      <a href="https://mdestaubin.github.io/portfolio" onclick="w3_close()" class="w3-bar-item w3-button w3-white">Back</a>
+      <a href="https://mdestaubin.github.io/portfolio" onclick="w3_close()" class="btn active fa fa-arrow-left w3-bar-item w3-button w3-white" style="font-size: 14px"></a>
 
       <!-- <a href="https://mdestaubin.github.io/portfolio/#about" onclick="w3_close()" class="w3-bar-item w3-button w3-white"><i class="fa fa-user fa-fw w3-center"></i></a>
       <a href="https://mdestaubin.github.io/portfolio/#contact" onclick="w3_close()" class="w3-bar-item w3-button w3-padding w3-white"><i class=" fa fa-map-pin fa-fw w3-center"></i></a>
@@ -147,7 +154,7 @@ img {vertical-align: middle;}
     </div>
 
 
- <div class = "w3-padding-16" style="max-width:1175px"> 
+ <div class = "w3-padding-16" style="max-width:1168px"> 
 <div class="mySlides fade">
   <div class="numbertext"></div>
   <img src="images/ebola.png" style="width:100%">
@@ -162,8 +169,8 @@ img {vertical-align: middle;}
 
 <div class="mySlides fade">
   <div class="numbertext"></div>
-  <img src="img_mountains_wide.jpg" style="width:100%">
-  <div class="text">Caption Three</div>
+  <img src="images/or.png" style="width:100%">
+  <div class="text">Operation Room</div>
 </div>
 
 <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
