@@ -26,6 +26,8 @@ h6{font-family: "Verdana", sans-serif
 
 }
 
+/*header{position: relative;}*/
+
 /*header {
 position: fixed;
 }*/
@@ -132,13 +134,13 @@ position: fixed;
   text-align: right;
   padding-right: 20px;
   line-height: 7px;
-  color: #808080;
+  color: #595959;
 }
 
-.html {width: 80%; background-color: #808080;}
-.css {width: 70%; background-color: #808080;}
-.js {width: 60%; background-color: #808080;}
-.php {width: 50%; background-color: #808080;}
+.html {width: 80%; background-color: #595959;}
+.css {width: 70%; background-color: #595959;}
+.js {width: 60%; background-color: #595959;}
+.php {width: 50%; background-color: #595959;}
 
 
 
@@ -168,11 +170,11 @@ position: fixed;
       <span class="w3-margin-left w3-bar-item w3-white">Work :</span> 
       <a href="#portfolio"> 
       <button class="btn active w3-bar-item" onclick="filterSelection('all')">All</button>
-      <button class="btn w3-bar-item w3-hover-green" onclick="filterSelection('thesis')">Thesis</button>
+      <button class="btn w3-bar-item w3-hover-green w3-hover-text-black" onclick="filterSelection('thesis')">Thesis</button>
       <button class="btn w3-bar-item w3-hover-light-blue" onclick="filterSelection('architecture')">Architecture</button>
       <button class="btn w3-bar-item w3-hover-grey" onclick="filterSelection('technology')">Research + Technology</button>
       <!-- <button class="btn w3-bar-item" onclick="filterSelection('technology')">technology</button> -->
-      <button class="btn w3-bar-item w3-hover-amber w3-hover-text-white" onclick="filterSelection('teaching')">Teaching</button>
+      <button class="btn w3-bar-item w3-hover-light-grey w3-hover-text-black" onclick="filterSelection('teaching')">Teaching</button>
      </a>
      <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button w3-white"><i class="fa fa-user fa-fw w3-center"></i></a> 
 
@@ -199,7 +201,7 @@ position: fixed;
         
         <!-- <div class ="w3-padding-16"> -->
 
-         <div class="w3-green w3-padding-small w3-text-white">
+         <div class="w3-green w3-padding-small w3-text-black">
         <p class="w3-margin-left">Academic
         <i class="w3-right w3-margin-right ">2017-2018</i></br>
          <b>Harvard University GSD</b>
@@ -233,7 +235,7 @@ position: fixed;
         <p>Interactive map that contains multiple layers of data pertaining to the 2014 West Africa Ebola Outbreak and the international response to it. Completed as an assignment for a data visualization course at MIT.</p>
 
 
-            <div class="w3-grey w3-padding-small w3-text-white">
+            <div class="w3-grey w3-padding-small w3-text-black">
         <p class="w3-margin-left">Academic
         <i class="w3-right w3-margin-right">2017</i></br>
          <b>MIT</b>
@@ -265,7 +267,7 @@ position: fixed;
 
         <p>Intended as an alternate to UN temporary structures, it was designed in collaboration with experts at PIH and developed as a prototype for a long term solution to infectious disease screening at hospital entrances.</p>
 
-         <div class="w3-light-blue w3-text-white w3-padding-small">
+         <div class="w3-light-blue w3-text-black w3-padding-small">
         <p class="w3-margin-left">Professional 
         <i class="w3-right w3-margin-right">2015</i></br>
          <b>Shepley Bulfinch</b>
@@ -304,7 +306,7 @@ position: fixed;
          Partners in Health</b>
          </p> -->
 
-         <div class="w3-light-blue w3-text-white w3-padding-small">
+         <div class="w3-light-blue w3-text-black w3-padding-small">
         <p class="w3-margin-left">Professional 
         <i class="w3-right w3-margin-right">2015 - </i></br>
          <b>Shepley Bulfinch</b>
@@ -342,7 +344,7 @@ position: fixed;
          <b>Shepley Bulfinch</br>
          Partners in Health</b> -->
 
-         <div class="w3-light-blue w3-text-white w3-padding-small">
+         <div class="w3-light-blue w3-text-black w3-padding-small">
         <p class="w3-margin-left">Professional 
         <i class="w3-right w3-margin-right">2015</i></br>
          <b>Shepley Bulfinch</b>
@@ -383,7 +385,7 @@ position: fixed;
          AA Haiti Visiting School</b>
          </p>
  -->
-         <div class="w3-grey w3-padding-small w3-text-white">
+         <div class="w3-grey w3-padding-small w3-text-black">
         <p class="w3-margin-left">Academic
         <i class="w3-right w3-margin-right ">2016</i></br>
          <b>Harvard University GSD</b>
@@ -415,12 +417,21 @@ position: fixed;
        <h6  class="w3-margin-bottom"><b>Global Humanitarian Aid Flow</b></h6>
 
         <p>Data visualization of the flow of international humanitarian aid money to West Africa during the Ebola crisis. The dataset comes from the financial tracking service of the UN.</p>
-
+<!-- 
         <p>Academic
         <i class="w3-right">2017</i></br>
          <b>MIT</b>
         <i class="w3-right">Cambridge, MA</i></br>
          </p>
+ -->
+         <div class="w3-grey w3-padding-small w3-text-black">
+        <p class="w3-margin-left">Academic
+        <i class="w3-right w3-margin-right ">2017</i></br>
+         <b>MIT</b>
+        <i class="w3-right w3-margin-right">Cambridge, MA</i></br>
+         </p>
+         </div>
+
         </div>
        </div>
        </a>
@@ -446,11 +457,20 @@ position: fixed;
 
         <p>The 2-way portal connects two different parts of a city, or world. It goes beyond the typical 2D world of screen projections with a sense of 3D interaction due to layering and head tracking by a Kinect.</p>
 
-        <p>Academic
+        <!-- <p>Academic
         <i class="w3-right">2017</i></br>
          <b>Harvard University GSD</b>
         <i class="w3-right">USA + Italy</i></br>
-        <b>University of Bergamo</b>
+        <b>University of Bergamo</b> -->
+
+        <div class="w3-grey w3-padding-small w3-text-black">
+        <p class="w3-margin-left">Academic
+        <i class="w3-right w3-margin-right ">2017</i></br>
+         <b>Harvard University GSD</b>
+        <i class="w3-right w3-margin-right">USA + Italy</i></br>
+         </p>
+         </div>
+
          </p>
         </div>
        </div>
@@ -477,11 +497,20 @@ position: fixed;
 
         <p>Large scale addition and renovation project for Davidson College's science and art departments. The central forum space acts as the social catalyst for cross-disciplinary interactions and sharing.</p>
 
-        <p>Professional
+       <!--  <p>Professional
         <i class="w3-right">2012-2016</i></br>
          <b>Shepley Bulfinch</b>
         <i class="w3-right">Davidson, NC</i></br>
-        <b>Davidson College</b>
+        <b>Davidson College</b> -->
+
+        <div class="w3-light-blue w3-padding-small w3-text-black">
+        <p class="w3-margin-left">Professional
+        <i class="w3-right w3-margin-right ">2012-2016</i></br>
+         <b>Shepley Bulfinch</b>
+        <i class="w3-right w3-margin-right">Davidson, NC</i></br>
+         </p>
+         </div>
+
          </p>
         </div>
        </div>
@@ -507,11 +536,19 @@ position: fixed;
 
         <p>A sustainable home in rural Alabama designed and built by a team of students for Rose Lee and her two sons. The low-cost design featured a large amount of donated reclaimed material from local barns.</p>
 
-        <p>Academic
+        <!-- <p>Academic
         <i class="w3-right">2008-2009</i></br>
          <b>Auburn University Rural Studio</b>
         <i class="w3-right">Footwash, AL</i></br>
+         </p> -->
+
+          <div class="w3-light-blue w3-padding-small w3-text-black">
+        <p class="w3-margin-left">Academic
+        <i class="w3-right w3-margin-right ">2008-2009</i></br>
+         <b>Auburn University Rural Studio</b>
+        <i class="w3-right w3-margin-right">Footwash, AL</i></br>
          </p>
+         </div>
 
         </div>
        </div>
@@ -537,7 +574,7 @@ position: fixed;
 
         <p>2017 recipient of the Harvard GSD Community Service Fellowship Program. Led a team of local high school studnets through a summer design project based in Haiti.</p>
 
-        <div class="w3-amber w3-padding-small">
+        <div class="w3-light-grey w3-padding-small">
         <p class="w3-margin-left">Fellowship
         <i class="w3-right w3-margin-right">2017</i></br>
          <b>YouthBuild Boston</b>
@@ -569,11 +606,20 @@ position: fixed;
 
         <p>Created as an assignment for an MIT information and visualization course. The concept is for the weather app to translate quantitative data into descriptive text descriptions.</p>
 
-        <p>Academic
+     <!--    <p>Academic
         <i class="w3-right">2017</i></br>
          <b>MIT</b>
         <i class="w3-right">Cambridge, MA</i></br>
+         </p> -->
+
+         <div class="w3-grey w3-padding-small w3-text-black">
+        <p class="w3-margin-left">Academic
+        <i class="w3-right w3-margin-right ">2017</i></br>
+         <b>MIT</b>
+        <i class="w3-right w3-margin-right">Cambridge, MA</i></br>
          </p>
+         </div>
+
         </div>
        </div>
        </a>
@@ -598,12 +644,20 @@ position: fixed;
 
         <p>Conceptual design for a college prep academy located in the central plateau region of Haiti. The campus will include teaching, library, dining, athletics, and dwelling spaces.</p>
         
-        <p>Professional
+      <!--   <p>Professional
         <i class="w3-right">2016</i></br>
          <b>Shepley Bulfinch</b>
         <i class="w3-right">Haiti</i></br>
         <b>Summits Education</b>
+         </p> -->
+
+         <div class="w3-light-blue w3-padding-small w3-text-black">
+        <p class="w3-margin-left">Professional
+        <i class="w3-right w3-margin-right ">2016</i></br>
+         <b>Shepley Bulfinch</b>
+        <i class="w3-right w3-margin-right">Central Plateau, Haiti</i></br>
          </p>
+         </div>
 
         </div>
        </div>
@@ -629,12 +683,20 @@ position: fixed;
 
         <p>Multi-phased design of a rehabilitation clinic located on the Mirebalais Hospital campus in central Haiti. The first phase is a gym and the second phase includes the clinical support spaces.</p>
 
-        <p>Professional
+        <!-- <p>Professional
         <i class="w3-right">2012</i></br>
          <b>Shepley Bulfinch</b>
         <i class="w3-right">Haiti</i></br>
         <b>Partners in Health</b>
+         </p> -->
+
+         <div class="w3-light-blue w3-padding-small w3-text-black">
+        <p class="w3-margin-left">Professional
+        <i class="w3-right w3-margin-right ">2012</i></br>
+         <b>Shepley Bulfinch</b>
+        <i class="w3-right w3-margin-right">Central Plateau, Haiti</i></br>
          </p>
+         </div>
 
         </div>
        </div>
@@ -660,12 +722,21 @@ position: fixed;
 
         <p>A hanging and dazaling art installation in Evans Way Park in Boston, MA. The team consisted of volunteers at Shepley Bulfinch and the project was composed of 1000's of recycled hard disks and mirrors.</p>
 
-        <p>Volunteer
+        <!-- <p>Volunteer
         <i class="w3-right">2014</i></br>
          <b>Shepley Bulfinch</b>
         <i class="w3-right">Boston, MA</i></br>
         <b>Fenway Alliance</b>
          </p>
+ -->
+         <div class="w3-grey w3-padding-small w3-text-black">
+        <p class="w3-margin-left">Volunteer
+        <i class="w3-right w3-margin-right ">2014</i></br>
+         <b>Shepley Bulfinch</b>
+        <i class="w3-right w3-margin-right">Boston, MA</i></br>
+         </p>
+         </div>
+
         </div>
        </div>
        </a>
@@ -690,11 +761,20 @@ position: fixed;
 
         <p>City Lab is an immersive orientation course for incoming students at the BAC. It focuses on introductory principals of design, architecture, and urbanism through the lens of exploring Boston.</p>
 
-        <p>Professional
+     <!--    <p>Professional
         <i class="w3-right">2013-2014</i></br>
          <b>BAC</b>
         <i class="w3-right">Boston, MA</i></br>
-        </p>
+        </p> -->
+
+        <div class="w3-light-grey w3-padding-small w3-text-black">
+        <p class="w3-margin-left">Professional
+        <i class="w3-right w3-margin-right ">2013-2014</i></br>
+         <b>BAC</b>
+        <i class="w3-right w3-margin-right">Boston, MA</i></br>
+         </p>
+         </div>
+
         </div>
        </div>
        </a>
@@ -731,7 +811,7 @@ position: fixed;
       <div class="w3-card w3-padding-small">
       Cell: <span class="tel">404.933.3271</span><br/>
       Email: <a class="email" href="mailto:mdestaubin@gsd.harvard.edu">mdestaubin@gsd.harvard.edu</a><br/><br/>
-      Throughout my education and career, I have always held a strong passion in designing for the well-being of others. At graduate school, I've focused on developing my interests in the emerging relationships between design, technology, public 
+      Born and raised in the southeast United States, I graduated with a Bachelor of Architecure degree from Auburn University in 2012. Currently, I am back at school focusing on the emerging related fields of design, technology, and public health. 
       </p>
       </div>
 
@@ -754,7 +834,7 @@ position: fixed;
                 </div>
                 
                 
-                <h3>SKILL LEVEL</h3>
+                <h3>Design Skills</h3>
 
                 <div class="w3-card w3-padding-small">
    
@@ -845,17 +925,15 @@ position: fixed;
 </div>
 
 </div>
+</br></br></br></br>
 
-    
-
-     </br></br></br>
-     <!-- <hr> -->
-     </br></br></br>
     </div>
     </div>
+
+
   
   <!-- Contact Section -->
-  <div class="w3-container w3-padding-16 w3-text-black" id="contact">
+  <div class="w3-container w3-padding-32 w3-text-black" id="contact">
     <!-- <h4 id="contact"><b>Locate</b></h4> -->
    <!--  <div class="w3-row-padding"> -->
      <!--    <p>
