@@ -126,8 +126,21 @@ position: fixed;
 }
 
 .img__wrap:hover .img__description {
-  transform: translateY(0);
+  transform: translateY(0);}
+
+  .skills {
+  text-align: right;
+  padding-right: 20px;
+  line-height: 7px;
+  color: #808080;
 }
+
+.html {width: 80%; background-color: #808080;}
+.css {width: 70%; background-color: #808080;}
+.js {width: 60%; background-color: #808080;}
+.php {width: 50%; background-color: #808080;}
+
+
 
 </style>
 
@@ -155,11 +168,11 @@ position: fixed;
       <span class="w3-margin-left w3-bar-item w3-white">Work :</span> 
       <a href="#portfolio"> 
       <button class="btn active w3-bar-item" onclick="filterSelection('all')">All</button>
-      <button class="btn w3-bar-item w3-hover-red" onclick="filterSelection('thesis')">Thesis</button>
-      <button class="btn w3-bar-item w3-hover-blue" onclick="filterSelection('architecture')">Architecture</button>
-      <button class="btn w3-bar-item w3-hover-purple" onclick="filterSelection('technology')">Research + Technology</button>
+      <button class="btn w3-bar-item w3-hover-green" onclick="filterSelection('thesis')">Thesis</button>
+      <button class="btn w3-bar-item w3-hover-light-blue" onclick="filterSelection('architecture')">Architecture</button>
+      <button class="btn w3-bar-item w3-hover-grey" onclick="filterSelection('technology')">Research + Technology</button>
       <!-- <button class="btn w3-bar-item" onclick="filterSelection('technology')">technology</button> -->
-      <button class="btn w3-bar-item w3-hover-yellow w3-hover-text-white" onclick="filterSelection('teaching')">Teaching</button>
+      <button class="btn w3-bar-item w3-hover-amber w3-hover-text-white" onclick="filterSelection('teaching')">Teaching</button>
      </a>
      <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button w3-white"><i class="fa fa-user fa-fw w3-center"></i></a> 
 
@@ -186,7 +199,7 @@ position: fixed;
         
         <!-- <div class ="w3-padding-16"> -->
 
-         <div class="w3-red w3-padding-small w3-text-black">
+         <div class="w3-green w3-padding-small w3-text-white">
         <p class="w3-margin-left">Academic
         <i class="w3-right w3-margin-right ">2017-2018</i></br>
          <b>Harvard University GSD</b>
@@ -220,7 +233,7 @@ position: fixed;
         <p>Interactive map that contains multiple layers of data pertaining to the 2014 West Africa Ebola Outbreak and the international response to it. Completed as an assignment for a data visualization course at MIT.</p>
 
 
-            <div class="w3-purple w3-padding-small w3-text-black">
+            <div class="w3-grey w3-padding-small w3-text-white">
         <p class="w3-margin-left">Academic
         <i class="w3-right w3-margin-right">2017</i></br>
          <b>MIT</b>
@@ -252,7 +265,7 @@ position: fixed;
 
         <p>Intended as an alternate to UN temporary structures, it was designed in collaboration with experts at PIH and developed as a prototype for a long term solution to infectious disease screening at hospital entrances.</p>
 
-         <div class="w3-blue w3-text-black w3-padding-small">
+         <div class="w3-light-blue w3-text-white w3-padding-small">
         <p class="w3-margin-left">Professional 
         <i class="w3-right w3-margin-right">2015</i></br>
          <b>Shepley Bulfinch</b>
@@ -291,7 +304,7 @@ position: fixed;
          Partners in Health</b>
          </p> -->
 
-         <div class="w3-blue w3-text-black w3-padding-small">
+         <div class="w3-light-blue w3-text-white w3-padding-small">
         <p class="w3-margin-left">Professional 
         <i class="w3-right w3-margin-right">2015 - </i></br>
          <b>Shepley Bulfinch</b>
@@ -329,7 +342,7 @@ position: fixed;
          <b>Shepley Bulfinch</br>
          Partners in Health</b> -->
 
-         <div class="w3-blue w3-text-black w3-padding-small">
+         <div class="w3-light-blue w3-text-white w3-padding-small">
         <p class="w3-margin-left">Professional 
         <i class="w3-right w3-margin-right">2015</i></br>
          <b>Shepley Bulfinch</b>
@@ -370,7 +383,7 @@ position: fixed;
          AA Haiti Visiting School</b>
          </p>
  -->
-         <div class="w3-purple w3-padding-small w3-text-black">
+         <div class="w3-grey w3-padding-small w3-text-white">
         <p class="w3-margin-left">Academic
         <i class="w3-right w3-margin-right ">2016</i></br>
          <b>Harvard University GSD</b>
@@ -524,7 +537,7 @@ position: fixed;
 
         <p>2017 recipient of the Harvard GSD Community Service Fellowship Program. Led a team of local high school studnets through a summer design project based in Haiti.</p>
 
-        <div class="w3-yellow w3-padding-small">
+        <div class="w3-amber w3-padding-small">
         <p class="w3-margin-left">Fellowship
         <i class="w3-right w3-margin-right">2017</i></br>
          <b>YouthBuild Boston</b>
@@ -702,7 +715,7 @@ position: fixed;
 
 
   <!-- About Me -->
-  <div class="w3-padding-64" id="about">
+  <div class="w3-padding-48" id="about">
 
 
 <div class="w3-row-padding">
@@ -713,7 +726,7 @@ position: fixed;
       <img src="images/profile.png" class="w3-card w3-margin-top" style="max-width: 380px">
       <br/><br/>
 
-      <h2>MICHAEL DE ST. AUBIN</h2>
+      <h3>MICHAEL DE ST. AUBIN</h3>
       <p>
       <div class="w3-card w3-padding-small">
       Cell: <span class="tel">404.933.3271</span><br/>
@@ -728,7 +741,7 @@ position: fixed;
 
     <div class="w3-margin-left">
       
-          <h2>EDUCATION</h2>
+          <h3>EDUCATION</h3>
 <div class="w3-card w3-padding-small">
     <p><b style="font-size: 16px">Harvard University</b> Graduate School of Design
                 Master in Design Studies <a href="http://www.gsd.harvard.edu/design-studies/risk-and-resilience/">Risk + Resilence</a><br/>
@@ -741,28 +754,43 @@ position: fixed;
                 </div>
                 
                 
-                <h2>SKILLS</h2>
+                <h3>SKILL LEVEL</h3>
 
                 <div class="w3-card w3-padding-small">
    
-                <p>Architecture</p>
-                <!-- <img src="images/stat01.png" id="pic" style= "width:585px;"/>  -->
-                    <p>Graphic</p>
-               <!--  <img src="images/stat04.png" id="pic" style= "width:585px;"/>  -->
-                    <p>Technology</p>
-                <!-- <img src="images/stat03.png" id="pic" style= "width:585px;"/> --> 
-                    <p>Research</p>
-                <!-- <img src="images/stat02.png" id="pic" style= "width:585px;"/>  -->
-                    <p>Teaching</p>
-                <!-- <img src="images/stat05.png" id="pic" style= "width:585px;"/>  -->
-                    <p>Microsoft Office</p>
-                    <!-- <img src="images/stat01a.png" id="pic2" style= "width:285px;"/>  -->
-                    <p>Adobe Creative Suite</p>
-                    <!-- <img src="images/stat01c.png" id="pic2" style= "width:285px;"/>  -->
-                    <p>AutoDesk</p>
-                    <!-- <img src="images/stat01b.png" id="pic2" style= "width:285px;"/>  -->
-                    <p>GIS</p>
-                    <!-- <img src="images/stat01f.png" id="pic2" style= "width:285px;"/>  -->
+                    <p>Architecture</p>
+                      <div class="container">
+                        <div class="skills html">.</div>
+                      </div>
+
+                      <p>Graphic</p>
+                      <div class="container">
+                        <div class="skills css">.</div>
+                      </div>
+
+                      <p>Programing</p>
+                      <div class="container">
+                        <div class="skills js">.</div>
+                      </div>
+
+                      <p>Fabrication</p>
+                      <div class="container">
+                        <div class="skills php">.</div>
+                      </div>
+
+                      <p>Research</p>
+                      <div class="container">
+                        <div class="skills css">.</div>
+                      </div>
+
+                      <p>Teaching</p>
+                      <div class="container">
+                        <div class="skills js">.</div>
+                      </div>
+                    </br>
+
+
+
                     </div>
 
     
@@ -773,7 +801,7 @@ position: fixed;
 
 <div class="w3-margin-left">
 
-<h2>PROFESSIONAL</h2>
+<h3>PROFESSIONAL</h3>
 
 <div class="w3-card w3-padding-small">
 
@@ -797,7 +825,7 @@ position: fixed;
            </div>
                   
 
-<h2>ACADEMIC</h2>
+<h3>ACADEMIC</h3>
 
 <div class="w3-card w3-padding-small">
 
@@ -810,8 +838,6 @@ position: fixed;
         Boston, MA | 2013 - 2014</p>
         <p>+ Co-taught orientaiton course on city design
          </p>
-               
-
            </div>
 
 </div>
