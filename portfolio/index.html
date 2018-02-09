@@ -10,6 +10,17 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+  <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+  <link rel="stylesheet" href="libraries/leaflet/leaflet.css"/>
+  <script language="javascript" type="text/javascript" src="libraries/p5.js"></script>
+  <script language="javascript" type="text/javascript" src="libraries/p5.dom.js"></script> 
+  <script src="libraries/leaflet/leaflet.js"></script>
+  <script src="leaflet.curve.js"></script>
+  <script src="leaflet-dvf.js"></script>
+  <script src="leaflet.dvf.lines.js"></script>
+  <script src="leaflet.dvf.linearfunctions.js"></script>
+  <script type="text/javascript" src="world-map.js"></script>    
+
 <style>
 body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 
@@ -142,7 +153,24 @@ position: fixed;
 .js {width: 60%; background-color: #595959;}
 .php {width: 50%; background-color: #595959;}
 
+    #map { 
+    width: 1165px; 
+    height: 600px;
+    background-color: 'white';
+    margin: auto;
+    /*position: static;*/ 
+  }
 
+    #container{
+    width:0px;
+    height:0px;
+    left:0px;
+    top:0px;
+    bottom: 0px;
+    background-color: 'white';
+    position:relative;
+    margin: auto;
+  }
 
 </style>
 
@@ -787,7 +815,7 @@ position: fixed;
     </div>
 
     <div class="w3-container w3-white">
-        </br></br></br></br></br></br></br></br></br> 
+        </br></br></br></br></br></br>
     </div>
 
    </div>
@@ -932,17 +960,20 @@ position: fixed;
 
   
   <!-- Contact Section -->
-  <div class="w3-container w3-padding-32 w3-text-black" id="contact">
-    <!-- <h4 id="contact"><b>Locate</b></h4> -->
-   <!--  <div class="w3-row-padding"> -->
-     <!--    <p>
-               <b>Cell: </b><span class="tel">404.933.3271</span><br />
-               <b>Email: </b><a class="email" href="mailto:mdestaubin@gsd.harvard.edu">mdestaubin@gsd.harvard.edu</a><br />
-            </p> -->
-             <img src="images/map2.png" alt="Norway" style="width:100%">
+  <div class="w3-container w3-padding-48" id="contact">
+
+          <p class="w3-text-grey">//UNDER CONSTRUCTION</p>
+          <div id='map'></div>
+          <div id='container'></div>
+          <script type="text/javascript" src="sketch.js"></script>
+          </br></br></br>
+          </div>
+
 
 <!-- End page content -->
 </div>
+
+
 
 
 <!-- // Script to open and close sidebar -->
