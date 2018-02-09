@@ -15,11 +15,8 @@
   <script language="javascript" type="text/javascript" src="libraries/p5.js"></script>
   <script language="javascript" type="text/javascript" src="libraries/p5.dom.js"></script> 
   <script src="libraries/leaflet/leaflet.js"></script>
-  <script src="leaflet.curve.js"></script>
-  <script src="leaflet-dvf.js"></script>
-  <script src="leaflet.dvf.lines.js"></script>
-  <script src="leaflet.dvf.linearfunctions.js"></script>
-  <script type="text/javascript" src="world-map.js"></script>    
+  <script type="text/javascript" src="world-map.js"></script>  
+  <script type="text/javascript" src="lib-ETU.js"></script>  
 
 <style>
 body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
@@ -198,11 +195,11 @@ position: fixed;
       <span class="w3-margin-left w3-bar-item w3-white">Work :</span> 
       <a href="#portfolio"> 
       <button class="btn active w3-bar-item" onclick="filterSelection('all')">All</button>
-      <button class="btn w3-bar-item w3-hover-green w3-hover-text-black" onclick="filterSelection('thesis')">Thesis</button>
-      <button class="btn w3-bar-item w3-hover-light-blue" onclick="filterSelection('architecture')">Architecture</button>
-      <button class="btn w3-bar-item w3-hover-grey" onclick="filterSelection('technology')">Research + Technology</button>
+      <button class="btn w3-bar-item w3-hover-yellow" onclick="filterSelection('thesis')">Thesis</button>
+      <button class="btn w3-bar-item" onclick="filterSelection('architecture')">Architecture</button>
+      <button class="btn w3-bar-item" onclick="filterSelection('technology')">Research + Technology</button>
       <!-- <button class="btn w3-bar-item" onclick="filterSelection('technology')">technology</button> -->
-      <button class="btn w3-bar-item w3-hover-light-grey w3-hover-text-black" onclick="filterSelection('teaching')">Teaching</button>
+      <button class="btn w3-bar-item" onclick="filterSelection('teaching')">Teaching</button>
      </a>
      <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button w3-white"><i class="fa fa-user fa-fw w3-center"></i></a> 
 
@@ -229,7 +226,7 @@ position: fixed;
         
         <!-- <div class ="w3-padding-16"> -->
 
-         <div class="w3-green w3-padding-small w3-text-black">
+         <div class="w3-yellow w3-padding-small w3-text-black">
         <p class="w3-margin-left">Academic
         <i class="w3-right w3-margin-right ">2017-2018</i></br>
          <b>Harvard University GSD</b>
@@ -263,8 +260,8 @@ position: fixed;
         <p>Interactive map that contains multiple layers of data pertaining to the 2014 West Africa Ebola Outbreak and the international response to it. Completed as an assignment for a data visualization course at MIT.</p>
 
 
-            <div class="w3-grey w3-padding-small w3-text-black">
-        <p class="w3-margin-left">Academic
+            <div class="w3-white w3-text-black">
+        <p >Academic
         <i class="w3-right w3-margin-right">2017</i></br>
          <b>MIT</b>
         <i class="w3-right w3-margin-right">Cambridge, MA</i></br>
@@ -295,8 +292,8 @@ position: fixed;
 
         <p>Intended as an alternate to UN temporary structures, it was designed in collaboration with experts at PIH and developed as a prototype for a long term solution to infectious disease screening at hospital entrances.</p>
 
-         <div class="w3-light-blue w3-text-black w3-padding-small">
-        <p class="w3-margin-left">Professional 
+         <div class="w3-white w3-text-black ">
+        <p >Professional 
         <i class="w3-right w3-margin-right">2015</i></br>
          <b>Shepley Bulfinch</b>
         <i class="w3-right w3-margin-right">Cambridge, MA</i></br>
@@ -334,8 +331,8 @@ position: fixed;
          Partners in Health</b>
          </p> -->
 
-         <div class="w3-light-blue w3-text-black w3-padding-small">
-        <p class="w3-margin-left">Professional 
+         <div class="w3-white w3-text-black w3-padding-small">
+        <p >Professional 
         <i class="w3-right w3-margin-right">2015 - </i></br>
          <b>Shepley Bulfinch</b>
         <i class="w3-right w3-margin-right">Rwanda</i></br>
@@ -372,8 +369,8 @@ position: fixed;
          <b>Shepley Bulfinch</br>
          Partners in Health</b> -->
 
-         <div class="w3-light-blue w3-text-black w3-padding-small">
-        <p class="w3-margin-left">Professional 
+         <div class="w3-white w3-text-black ">
+        <p >Professional 
         <i class="w3-right w3-margin-right">2015</i></br>
          <b>Shepley Bulfinch</b>
         <i class="w3-right w3-margin-right">Sierra Leone + Liberia</i></br>
@@ -413,8 +410,8 @@ position: fixed;
          AA Haiti Visiting School</b>
          </p>
  -->
-         <div class="w3-grey w3-padding-small w3-text-black">
-        <p class="w3-margin-left">Academic
+         <div class="w3-white  w3-text-black">
+        <p >Academic
         <i class="w3-right w3-margin-right ">2016</i></br>
          <b>Harvard University GSD</b>
         <i class="w3-right w3-margin-right">Haiti</i></br>
@@ -452,8 +449,8 @@ position: fixed;
         <i class="w3-right">Cambridge, MA</i></br>
          </p>
  -->
-         <div class="w3-grey w3-padding-small w3-text-black">
-        <p class="w3-margin-left">Academic
+         <div class="w3-white  w3-text-black">
+        <p >Academic
         <i class="w3-right w3-margin-right ">2017</i></br>
          <b>MIT</b>
         <i class="w3-right w3-margin-right">Cambridge, MA</i></br>
@@ -491,8 +488,8 @@ position: fixed;
         <i class="w3-right">USA + Italy</i></br>
         <b>University of Bergamo</b> -->
 
-        <div class="w3-grey w3-padding-small w3-text-black">
-        <p class="w3-margin-left">Academic
+        <div class="w3-white  w3-text-black">
+        <p >Academic
         <i class="w3-right w3-margin-right ">2017</i></br>
          <b>Harvard University GSD</b>
         <i class="w3-right w3-margin-right">USA + Italy</i></br>
@@ -531,8 +528,8 @@ position: fixed;
         <i class="w3-right">Davidson, NC</i></br>
         <b>Davidson College</b> -->
 
-        <div class="w3-light-blue w3-padding-small w3-text-black">
-        <p class="w3-margin-left">Professional
+        <div class="w3-white  w3-text-black">
+        <p >Professional
         <i class="w3-right w3-margin-right ">2012-2016</i></br>
          <b>Shepley Bulfinch</b>
         <i class="w3-right w3-margin-right">Davidson, NC</i></br>
@@ -570,8 +567,8 @@ position: fixed;
         <i class="w3-right">Footwash, AL</i></br>
          </p> -->
 
-          <div class="w3-light-blue w3-padding-small w3-text-black">
-        <p class="w3-margin-left">Academic
+          <div class="w3-white  w3-text-black">
+        <p >Academic
         <i class="w3-right w3-margin-right ">2008-2009</i></br>
          <b>Auburn University Rural Studio</b>
         <i class="w3-right w3-margin-right">Footwash, AL</i></br>
@@ -602,8 +599,8 @@ position: fixed;
 
         <p>2017 recipient of the Harvard GSD Community Service Fellowship Program. Led a team of local high school studnets through a summer design project based in Haiti.</p>
 
-        <div class="w3-light-grey w3-padding-small">
-        <p class="w3-margin-left">Fellowship
+        <div class="w3-white ">
+        <p >Fellowship
         <i class="w3-right w3-margin-right">2017</i></br>
          <b>YouthBuild Boston</b>
         <i class="w3-right w3-margin-right">Boston, MA</i></br>
@@ -640,8 +637,8 @@ position: fixed;
         <i class="w3-right">Cambridge, MA</i></br>
          </p> -->
 
-         <div class="w3-grey w3-padding-small w3-text-black">
-        <p class="w3-margin-left">Academic
+         <div class="w3-white  w3-text-black">
+        <p >Academic
         <i class="w3-right w3-margin-right ">2017</i></br>
          <b>MIT</b>
         <i class="w3-right w3-margin-right">Cambridge, MA</i></br>
@@ -679,8 +676,8 @@ position: fixed;
         <b>Summits Education</b>
          </p> -->
 
-         <div class="w3-light-blue w3-padding-small w3-text-black">
-        <p class="w3-margin-left">Professional
+         <div class="w3-white  w3-text-black">
+        <p >Professional
         <i class="w3-right w3-margin-right ">2016</i></br>
          <b>Shepley Bulfinch</b>
         <i class="w3-right w3-margin-right">Central Plateau, Haiti</i></br>
@@ -718,8 +715,8 @@ position: fixed;
         <b>Partners in Health</b>
          </p> -->
 
-         <div class="w3-light-blue w3-padding-small w3-text-black">
-        <p class="w3-margin-left">Professional
+         <div class="w3-white  w3-text-black">
+        <p >Professional
         <i class="w3-right w3-margin-right ">2012</i></br>
          <b>Shepley Bulfinch</b>
         <i class="w3-right w3-margin-right">Central Plateau, Haiti</i></br>
@@ -757,8 +754,8 @@ position: fixed;
         <b>Fenway Alliance</b>
          </p>
  -->
-         <div class="w3-grey w3-padding-small w3-text-black">
-        <p class="w3-margin-left">Volunteer
+         <div class="w3-white  w3-text-black">
+        <p >Volunteer
         <i class="w3-right w3-margin-right ">2014</i></br>
          <b>Shepley Bulfinch</b>
         <i class="w3-right w3-margin-right">Boston, MA</i></br>
@@ -795,8 +792,8 @@ position: fixed;
         <i class="w3-right">Boston, MA</i></br>
         </p> -->
 
-        <div class="w3-light-grey w3-padding-small w3-text-black">
-        <p class="w3-margin-left">Professional
+        <div class="w3-white  w3-text-black">
+        <p >Professional
         <i class="w3-right w3-margin-right ">2013-2014</i></br>
          <b>BAC</b>
         <i class="w3-right w3-margin-right">Boston, MA</i></br>
@@ -966,7 +963,7 @@ position: fixed;
           <div id='map'></div>
           <div id='container'></div>
           <script type="text/javascript" src="sketch.js"></script>
-          </br></br></br>
+          
           </div>
 
 

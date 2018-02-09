@@ -10,20 +10,20 @@ var leafletMap;
 var worldJSON;
 var path;
 
-
+var libJSON;
 
 function preload() {
   //my table is comma separated value "csv"
   //I'm ignoring the header 
-  // table       = loadTable("data/newData.csv", "csv");
-  // table2      = loadTable("data/testData.csv", "csv");
+  table       = loadTable("data/newData.csv", "csv");
+  table2      = loadTable("data/testData.csv", "csv");
   myFontThin  = loadFont('Text/frutiger-thin.otf');
   myFontBlack = loadFont('Text/frutiger-black.otf');
 }
 
 
 function setup() {  
-
+   background(255);
    var canvas = createCanvas(1600,800);  
    canvas.parent("container"); 
    createMap();
@@ -40,24 +40,27 @@ function createMap(){
   leafletMap = L.map('map').setView([25, 0], 2);
 
   L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.{ext}', {
-  //attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  //subdomains: 'abcd',
+
   minZoom: 0,
   maxZoom: 20,
   ext: 'png',
   opacity: 0.0,
   }).addTo(leafletMap);
 
-  leafletMap._handlers.forEach(function(handler) {
-    handler.disable();
 
-});
 
   worldJSON = L.geoJson(worldMap, {
     style: style,
    onEachFeature: onEachFeature
   }).addTo(leafletMap);  
-}
+
+
+  libJSON = L.geoJson(libETUData, {
+      style: ETUstyle,
+      pointToLayer : pointToLayer,
+      onEachFeature: onEachETU
+}).addTo(leafletMap); 
+  }
 
 /////////////////////////////////////////////////// Country Settings
 
@@ -76,50 +79,64 @@ function style(feature) {
 
 function onEachFeature(feature, layer) {
   layer.on({
-    mouseover: highlightFeature,
-    mouseout: resetHighlight,
-    click: activateGraph,
+    // mouseover: highlightFeature,
+    // mouseout: resetHighlight,
+    // click: activateGraph,
   });
 }
 
 
-function highlightFeature(e) {
+ function onEachETU(feature, layer) {
+     layer.bindPopup(
+           feature.properties.Type+ "<br>" + 
+           feature.properties.Beds_Plan  + "<br>" + 
+           feature.properties.Partner + "<br>" 
+          );
+    layer.on({
+    mouseover: highlightETU,
+    mouseout: resetETU,
+    //click: activateGraph
+  });
+    }
+
+function pointToLayer(feature, latlng) {
+  return new L.CircleMarker(latlng,{
+      radius: 6, 
+      weight: 3, 
+      color: '#a52222', 
+      fillOpacity: 0
+    });
+    }
+
+function ETUstyle(feature) {
+  return {      
+      radius: 3, 
+      weight: 3, 
+      color: '#000000', 
+      fillOpacity: 0};
+      }
+
+function highlightETU(e) {
   var layer = e.target;
 
-layer.setStyle({
-    weight: 2,
-    color: 'white',
-    // fill: false,
-    fillColor: '#000000',
-    fillOpacity: 0.3
+    layer.setStyle({
+    radius: 7,
+    weight: 3,
+    color: '#000000',
+    fillOpacity: 0,
   });
 
   if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
     layer.bringToFront();
   }
+}
+
+function resetETU(e) {
+  //ginJSON.resetStyle(e.target);
+  //slJSON.resetStyle(e.target);
+  libJSON.resetStyle(e.target);
   
 }
-
-
-function resetHighlight(e) {
-  worldJSON.resetStyle(e.target);
-
-}
-
-
-function activateGraph(e) {
-
-  //leafletMap.fitBounds(e.target.getBounds());
-  var layer = e.target;
-
-  var countryName = layer.feature.properties.admin;
-  var region = layer.feature.properties.region_wb;
-
-     console.log(countryName);
-    // createGraph(layer.feature.properties.admin);
-     playTimeline(layer.feature.properties.admin);
-
- }
 
 
 
