@@ -85,12 +85,23 @@ function onEachFeature(feature, layer) {
   });
 }
 
+function highlightFeature(e) {
+  var layer = e.target;
+
+    layer.setStyle({
+    weight: 3,
+    color: '#000000',
+    fillOpacity: 0,
+  });
+  }
+
 
  function onEachETU(feature, layer) {
      layer.bindPopup(
            feature.properties.Type+ "<br>" + 
            feature.properties.Beds_Plan  + "<br>" + 
-           feature.properties.Partner + "<br>" 
+           feature.properties.Partner + "<br>" + 
+           feature.properties.Lead_Donor
           );
     layer.on({
     mouseover: highlightETU,
@@ -131,11 +142,15 @@ function highlightETU(e) {
   }
 }
 
-function resetETU(e) {
-  //ginJSON.resetStyle(e.target);
-  //slJSON.resetStyle(e.target);
+function resetHighlight(e) {
+
   libJSON.resetStyle(e.target);
-  
+}
+
+
+function resetETU(e) {
+
+  libJSON.resetStyle(e.target);
 }
 
 
