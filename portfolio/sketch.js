@@ -24,8 +24,8 @@ function preload() {
 
 function setup() {  
    background(255);
-   var canvas = createCanvas(1600,800);  
-   canvas.parent("container"); 
+   // var canvas = createCanvas(1600,800);  
+   // canvas.parent("container"); 
    createMap();
    textFont(myFontThin);
     
