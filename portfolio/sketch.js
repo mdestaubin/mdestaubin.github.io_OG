@@ -73,6 +73,7 @@ function style(feature) {
     dashArray: '1',
     fillOpacity: '0',
     fillColor: '#58a52e'
+    
   };
 }
 
