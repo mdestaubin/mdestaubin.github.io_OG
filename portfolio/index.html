@@ -169,6 +169,10 @@ position: fixed;
     margin: auto;
   }
 
+  #myDIV {
+    width: 100%;
+}
+
 </style>
 
 
@@ -827,12 +831,13 @@ position: fixed;
     </div>
 
 
-<div class="w3-row-padding w3-padding-16">
-
+<div class="w3-row-padding w3-padding-32"
+>
   <div class="w3-third">
 <div class="img__wrap">
 
-      <img class="img__img w3-margin-top" src="images/profile2.png" alt="Norway" style="width: 100%" class="w3-hover-opacity">
+      <button class="w3-button" style="padding: 0px" onclick="myFunction()">
+      <img class="img__img" src="images/profile2.png" alt="Norway" style="width: 100%" class="w3-hover-opacity"> </button>
       
       <div class="img__description_layer">
         <div class="img__description">
@@ -857,16 +862,19 @@ position: fixed;
         </div>
        </div>
 
+
       <div class="w3-margin-top">
          <h4>About</h4>
 
         <p> Born and raised in the southeastern United States, I graduated with a Bachelor of Architecure degree from Auburn University in 2012. After working for 4 years in Boston, I enrolled at the Harvard Graduate School of Desin to study the emerging relationships between design, technology, and public health.</p>
       </div>
+
       </div>
+
     </div>
 
-
-<div class="w3-third" style="margin-left: 10px">
+<div id="Demo" class="w3-hide">
+<div class="w3-third" style="margin-left: 10px; margin-top: -15px">
 
     <div class="w3-margin-left">
       
@@ -876,7 +884,7 @@ position: fixed;
                 Master in Design Studies <a href="http://www.gsd.harvard.edu/design-studies/risk-and-resilience/">Risk + Resilence</a><br/>
                 August 2016 - May 2018</p>
 
-                <p><b style="font-size: 16px">Auburn University</b> College of Architecture
+                <p><b style="font-size: 16px">Auburn University</b> C.A.D.C.<br/>
                 Bachelor of Architecture<br/>
                 August 2007 - May 2012</p>
 
@@ -921,7 +929,7 @@ position: fixed;
 </div>
 
 
-<div class="w3-third" style="margin-left: -10px">
+<div class="w3-third" style="margin-left: -10px; margin-top: -15px">
 
   <h4>Professional</h4>
 
@@ -944,20 +952,21 @@ position: fixed;
 
             
    <div class="w3-padding-16">
-<h4>Teaching</h4>
+    <h4>Academic</h4>
 
-
-<p><b>YouthBuild Boston</b> Harvard CSFP Fellow<br/>
+    <p><b>YouthBuild Boston</b> Harvard CSFP Fellow<br/>
         Boston, MA | Summer 2017</p>
-         <p>+ Led a summer high school design studio
-         </p>
-
+         
         <p><b>Boston Architectural College</b> City Lab Instructor<br/>
         Boston, MA | 2013 - 2014</p>
-        <p>+ Co-taught orientaiton course on city design
-         </p>
+
+        <p><b>Auburn University Rural Studio</b> Student<br/>
+        Newbern, AL | 2008</p>
+        
 
          </div>
+
+</div>
 
 </div>
 
@@ -982,6 +991,10 @@ position: fixed;
 </br></br></br></br>
 
     </div>
+    </div>
+    
+        <div class="w3-container w3-white">
+        </br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br>
     </div>
 
 
@@ -1047,6 +1060,15 @@ for (var i = 0; i < btns.length; i++) {
     current[0].className = current[0].className.replace(" active", "");
     this.className += " active";
   });
+}
+
+function myFunction() {
+    var x = document.getElementById("Demo");
+    if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+    } else {
+        x.className = x.className.replace(" w3-show", "");
+    }
 }
 </script>
 
