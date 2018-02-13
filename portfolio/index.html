@@ -17,6 +17,7 @@
   <script src="libraries/leaflet/leaflet.js"></script>
   <script type="text/javascript" src="world-map.js"></script>  
   <script type="text/javascript" src="lib-ETU.js"></script>  
+  <script type="text/javascript" src="town-Data.js"></script>  
 
 <style>
 body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
@@ -25,9 +26,10 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
     box-sizing: border-box;
 }
 
-body {
-    background-color: #f1f1f1;
+html, body {
+    background-color: 'black';
     padding: 0px;
+    height: 2000;
 }
 
 h6{font-family: "Verdana", sans-serif
@@ -152,26 +154,28 @@ position: fixed;
 
     #map { 
     width: 1165px; 
-    height: 600px;
-    background-color: 'white';
+    height: 650px;
+    /*background-color: 'white';*/
     margin: auto;
     /*position: static;*/ 
   }
 
     #container{
     width:0px;
-    height:00px;
+    height:0px;
     left:0px;
     top:0px;
     bottom: 0px;
     background-color: 'white';
-    position:relative;
-    margin: auto;
+    /*position:absolute;*/
   }
 
   #myDIV {
     width: 100%;
+
 }
+
+
 
 </style>
 
@@ -826,13 +830,16 @@ position: fixed;
   <!-- About Me -->
   <div id="about">
 
+
     <div class="w3-container">
     <h1><b>Michael de St. Aubin</b></h1>
     </div>
 
 
-<div class="w3-row-padding w3-padding-32"
->
+<div class="w3-row-padding w3-padding-32">
+
+  <!-- <div class="w3-show"> -->
+
   <div class="w3-third">
 <div class="img__wrap">
 
@@ -844,13 +851,7 @@ position: fixed;
        <h4>About Me</h4>
 
         <p> Born and raised in the southeastern United States, I graduated with a Bachelor of Architecure degree from Auburn University in 2012. After working for 4 years in Boston, I enrolled at the Harvard Graduate School of Desin to study the emerging relationships between design, technology, and public health.</p>
-<!-- 
-        <p>Academic
-        <i class="w3-right">2017</i></br>
-         <b>MIT</b>
-        <i class="w3-right">Cambridge, MA</i></br>
-         </p>
- -->
+
          <div class="w3-white w3-text-black">
           <h4 class="w3-margin-top">Contact</h4>
         <p>
@@ -883,6 +884,10 @@ position: fixed;
       </div>
     </div>
     </div>
+
+<!-- show -->
+    <!-- </div>  -->
+
 
 <div id="Demo" class="w3-hide">
 <div class="w3-third w3-padding" style="margin-left: 10px; margin-top: -15px">

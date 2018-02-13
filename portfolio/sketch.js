@@ -11,6 +11,11 @@ var worldJSON;
 var path;
 
 var libJSON;
+var townJSON;
+
+var marker;
+
+// var address;
 
 function preload() {
   //my table is comma separated value "csv"
@@ -24,8 +29,8 @@ function preload() {
 
 function setup() {  
    background(255);
-   // var canvas = createCanvas(1600,800);  
-   // canvas.parent("container"); 
+   var canvas = createCanvas(800,800);  
+   canvas.parent("container"); 
    createMap();
    textFont(myFontThin);
     
@@ -37,7 +42,7 @@ function createMap(){
   background(255);
   //var state = findStateByName(admin);
 
-  leafletMap = L.map('map').setView([25, 0], 2);
+  leafletMap = L.map('map').setView([32, 0], 2);
 
   L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.{ext}', {
 
@@ -46,7 +51,6 @@ function createMap(){
   ext: 'png',
   opacity: 0.0,
   }).addTo(leafletMap);
-
 
 
   worldJSON = L.geoJson(worldMap, {
@@ -60,6 +64,13 @@ function createMap(){
       pointToLayer : pointToLayer,
       onEachFeature: onEachETU
 }).addTo(leafletMap); 
+
+  townJSON = L.geoJson(townData, {
+      style: townStyle,
+      pointToLayer : TpointToLayer,
+      onEachFeature: onEachTown
+}).addTo(leafletMap); 
+
   }
 
 /////////////////////////////////////////////////// Country Settings
@@ -71,9 +82,9 @@ function style(feature) {
     opacity: .5,
     color: '#000000',
     dashArray: '1',
-    fillOpacity: '0',
-    fillColor: '#58a52e'
-    
+    fillOpacity: '1',
+    fillColor: 'white',
+    background: 'white'
   };
 }
 
@@ -98,11 +109,11 @@ function highlightFeature(e) {
 
 
  function onEachETU(feature, layer) {
-     layer.bindPopup(
-           feature.properties.Type+ "<br>" + 
-           feature.properties.Beds_Plan  + "<br>" + 
-           feature.properties.Partner + "<br>" + 
-           feature.properties.Lead_Donor
+     layer.bindPopup( 
+
+      "<a href=' " + feature.properties.Lead_Donor + " '>" + "<br>"  +
+      "<img src=" + feature.properties.Type + " width = '200px'/> </a>" + "<br>" + 
+         feature.properties.Beds_Plan    
           );
     layer.on({
     mouseover: highlightETU,
@@ -120,10 +131,19 @@ function pointToLayer(feature, latlng) {
     });
     }
 
-function ETUstyle(feature) {
-  return {      
+    function TpointToLayer(feature, latlng) {
+  return new L.CircleMarker(latlng,{
       radius: 3, 
       weight: 3, 
+      color: '#000000', 
+      fillOpacity: 0
+    });
+    }
+
+function ETUstyle(feature) {
+  return {      
+      radius: 6, 
+      weight: 1.5, 
       color: '#000000', 
       fillOpacity: 0};
       }
@@ -132,10 +152,47 @@ function highlightETU(e) {
   var layer = e.target;
 
     layer.setStyle({
-    radius: 7,
+    radius: 12,
     weight: 3,
     color: '#000000',
     fillOpacity: 0,
+  });
+
+  if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+    layer.bringToFront();
+  }
+}
+
+function townStyle(feature) {
+  return {      
+      radius: 1, 
+      weight: 2, 
+      color: 'red', 
+      fillOpacity: 1};
+      }
+
+ function onEachTown(feature, layer) {
+     layer.bindPopup( 
+      feature.properties.title +
+      feature.properties.line1 + 
+      feature.properties.line2 + "<br>"  +
+      feature.properties.updated  
+          );
+    layer.on({
+    mouseover: highlightTown,
+    mouseout: resetTOWN,
+    //click: activateGraph
+  });
+    }
+
+    function highlightTown(e) {
+  var layer = e.target;
+
+    layer.setStyle({
+    radius: 3,
+    weight: 3,
+    color: 'red',
+    fillOpacity: 1,
   });
 
   if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
@@ -154,9 +211,13 @@ function resetETU(e) {
   libJSON.resetStyle(e.target);
 }
 
+function resetTOWN(e) {
+  townJSON.resetStyle(e.target);
+}
 
 
- 
+
+
 
 
 
