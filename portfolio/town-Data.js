@@ -6,7 +6,7 @@ var townData = {
 		"id": "lbr_heal_pt_unmeer_ebolacarefacilities.1",
 		"geometry": {
 			"type": "Point",
-			"coordinates": [-71.1097, 42.3736]
+			"coordinates": [-66, 42.3736]
 		},
 		"geometry_name": "the_geom",
 		"properties": {
