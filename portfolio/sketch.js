@@ -165,7 +165,7 @@ function highlightETU(e) {
 
 function townStyle(feature) {
   return {      
-      radius: 1, 
+      radius: 2, 
       weight: 2, 
       color: 'red', 
       fillOpacity: 1};
@@ -189,7 +189,7 @@ function townStyle(feature) {
   var layer = e.target;
 
     layer.setStyle({
-    radius: 3,
+    radius: 4,
     weight: 3,
     color: 'red',
     fillOpacity: 1,

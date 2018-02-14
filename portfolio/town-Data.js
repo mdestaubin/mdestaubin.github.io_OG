@@ -11,7 +11,7 @@ var townData = {
 		"geometry_name": "the_geom",
 		"properties": {
 
-			"title": '</br><b>Current Location: </b>',
+			"title": '<b>Current Location: </b>',
 			"line1": '</br>Cambridge, MA',
 			"line2": "",
 			"updated": "2012 - 2018"
@@ -26,7 +26,7 @@ var townData = {
 		"geometry_name": "the_geom",
 		"properties": {
 
-			"title": '</br><b>Hometown: </b>',
+			"title": '<b>Hometown: </b>',
 			"line1": '</br>Atlanta, GA',
 			"line2": "",
 			"updated": "1989 - 2007"
@@ -41,7 +41,7 @@ var townData = {
 		"geometry_name": "the_geom",
 		"properties": {
 
-			"title": '</br><b>Study Abroad: </b>',
+			"title": '<b>Study Abroad: </b>',
 			"line1": '</br>Rome, Italy',
 			"line2": "",
 			"updated": "Spring 2010"
