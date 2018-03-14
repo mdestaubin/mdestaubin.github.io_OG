@@ -90,6 +90,9 @@ position: fixed;
 .img__wrap {
   position: relative;
 }
+.img__wrap_2 {
+  position: relative;
+}
 .img__description_layer {
   position: absolute;
   top: 210px;
@@ -106,11 +109,37 @@ position: fixed;
   /* transition effect. not necessary */
   transition: opacity .1s, visibility .1s;
 }
+.img__description_layer_2 {
+  position: absolute;
+  top: 600px;
+  bottom: 0px;
+  left: 0px;
+  right: 10px;
+  background: rgba(255, 255, 255, 1);
+  color: black;
+  visibility: hidden;
+  opacity: 0;
+  display: flex;
+  align-items: top;
+  justify-content: right;
+  /* transition effect. not necessary */
+  transition: opacity .1s, visibility .1s;
+}
+
 .img__wrap:hover .img__description_layer {
   visibility: visible;
   opacity: 1;
 }
+
+.img__wrap_2:hover .img__description_layer_2 {
+  visibility: visible;
+  opacity: 1;
+}
 .img__description {
+  transition: .3s;
+  transform: translateY(1em);
+}
+.img__description_2 {
   transition: .3s;
   transform: translateY(1em);
 }
@@ -119,6 +148,14 @@ position: fixed;
   .skills {
   text-align: right;
   padding-right: 20px;
+  line-height: 6px;
+  color: #595959;
+}
+.img__wrap_2:hover .img__description {
+  transform: translateY(0);}
+  .skills {
+  text-align: left;
+  padding-right: 0px;
   line-height: 6px;
   color: #595959;
 }
@@ -172,6 +209,8 @@ position: fixed;
       <span class="w3-margin-left w3-bar-item w3-white">Work :</span> 
       <a href="#portfolio"> 
       <button class="btn active w3-bar-item" onclick="filterSelection('all')">All</button>
+      </a>
+      <a href="#photos"> 
       <button class="btn w3-bar-item w3-hover-yellow" onclick="filterSelection('thesis')">Thesis</button>
       <button class="btn w3-bar-item" onclick="filterSelection('architecture')">Architecture</button>
       <button class="btn w3-bar-item" onclick="filterSelection('technology')">Research + Technology</button>
@@ -184,11 +223,26 @@ position: fixed;
     </div>
     </div>
 
+    <!-- title images -->
+    <div class = "w3-row-padding w3-padding-16 w3-row w3-hide-small" style="max-width:1190px; padding-left: 16px"> 
+  
+       <div class="img__wrap_2">
+  <a href="https://mdestaubin.github.io/portfolio/links/facilities/index">
+      <img class="img__img" src="images/TITLE_ebola.png" class="w3-hover-opacity">
+      
+      <div class="img__description_layer_2">
+        <div class="img__description">
+       <h6><b>West Africa Health Facility Assessment</b></h6>
+          </div>
+       </div>
+       </a>
+  </div>
+</div>
   
   <!-- Photo Grid-->
-  <div class="w3-row-padding w3-padding-16 w3-row" style= "margin-bottom: 100px">
+  <div id="photos" class="w3-row-padding w3-padding-32 w3-row" style= "margin-bottom: 100px; margin-top: 20px">
 
-   <div class="column thesis w3-third" style = "min-width:355px">
+   <div class="column thesis w3-third" style = "min-width:360px">
        <div class="img__wrap">
 
         <a href="https://mdestaubin.github.io/simulation">
@@ -223,7 +277,7 @@ position: fixed;
       </div>
     </div>
   
-    <div class="column technology w3-third" style = "min-width:355px">
+    <div class="column technology w3-third" style = "min-width:360px">
        <div class="img__wrap">
 
         <a href="https://mdestaubin.github.io/ebolaMap">
@@ -256,7 +310,7 @@ position: fixed;
       </div>
     </div>
 
-    <div class="column architecture w3-third" style = "min-width:355px">
+    <div class="column architecture w3-third" style = "min-width:360px">
        <div class="img__wrap">
 
         <a href="https://www.healthcaredesignmagazine.com/trends/architecture/design-meets-ebola-door/#slide-1p">
@@ -289,7 +343,7 @@ position: fixed;
       </div>
     </div>
 
-     <div class="column architecture w3-third" style = "min-width:355px">
+     <div class="column architecture w3-third" style = "min-width:360px">
        <div class="img__wrap">
 
         <a href="http://www.shepleybulfinch.com/projects/partners-in-health-partners-in-health-university-of-global-health-equity/">
@@ -329,7 +383,7 @@ position: fixed;
       </div>
     </div>
 
-    <div class="column architecture w3-third" style = "min-width:355px">
+    <div class="column architecture w3-third" style = "min-width:360px">
        <div class="img__wrap">
 
         <a href="https://mdestaubin.github.io/portfolio/links/facilities/index">
@@ -369,7 +423,7 @@ position: fixed;
     </div>
 
 
-    <div class="column technology w3-third" style = "min-width:355px">
+    <div class="column technology w3-third" style = "min-width:360px">
        <div class="img__wrap">
 
         <a href="https://www.youtube.com/watch?v=ZqaOAgRbHeI&t=88s">
@@ -410,7 +464,7 @@ position: fixed;
     </div>
 
 
-    <div class="column technology w3-third" style = "min-width:355px">
+    <div class="column technology w3-third" style = "min-width:360px">
        <div class="img__wrap">
 
         <a href="https://mdestaubin.github.io/ebolaAid">
@@ -449,7 +503,7 @@ position: fixed;
     </div>
 
 
-    <div class="column technology w3-third" style = "min-width:355px">
+    <div class="column technology w3-third" style = "min-width:360px">
        <div class="img__wrap">
 
         <a href="https://www.youtube.com/watch?v=dpGyz4hHQyM">
@@ -490,7 +544,7 @@ position: fixed;
     </div>
 
 
-    <div class="column architecture w3-third" style = "min-width:355px">
+    <div class="column architecture w3-third" style = "min-width:360px">
        <div class="img__wrap">
 
         <a href="http://www.shepleybulfinch.com/projects/davidson-college-davidson-college-e-craig-wall-jr-academic-center/">
@@ -530,7 +584,7 @@ position: fixed;
       </div>
     </div>
 
-    <div class="column architecture w3-third" style = "min-width:355px">
+    <div class="column architecture w3-third" style = "min-width:360px">
        <div class="img__wrap">
 
         <a href="https://www.archdaily.com/400589/rose-lee-house-auburn-university-rural-studio">
@@ -569,7 +623,7 @@ position: fixed;
     </div>
 
 
-    <div class="column teaching w3-third" style = "min-width:355px">
+    <div class="column teaching w3-third" style = "min-width:360px">
        <div class="img__wrap">
 
         <a href="http://communityservicefellowships.gsd.harvard.edu/youthbuild-bostons-designery-program-post-3/">
@@ -601,7 +655,7 @@ position: fixed;
       </div>
     </div>
 
-    <div class="column technology w3-third" style = "min-width:355px">
+    <div class="column technology w3-third" style = "min-width:360px">
        <div class="img__wrap">
 
         <a href="https://mdestaubin.github.io/weather1/index.html">
@@ -639,7 +693,7 @@ position: fixed;
     </div>
 
 
-    <div class="column architecture w3-third" style = "min-width:355px">
+    <div class="column architecture w3-third" style = "min-width:360px">
        <div class="img__wrap">
 
         <a href="http://www.summits.org/academy-1">
@@ -679,7 +733,7 @@ position: fixed;
     </div>
 
 
-    <div class="column architecture w3-third" style = "min-width:355px">
+    <div class="column architecture w3-third" style = "min-width:360px">
        <div class="img__wrap">
 
         <a href="https://mdestaubin.github.io/portfolio/links/rehab/index">
@@ -712,7 +766,7 @@ position: fixed;
     </div>
 
 
-    <div class="column technology w3-third" style = "min-width:355px">
+    <div class="column technology w3-third" style = "min-width:360px">
        <div class="img__wrap">
 
         <a href="https://vimeo.com/114768789">
@@ -745,7 +799,7 @@ position: fixed;
     </div>
 
 
-    <div class="column teaching w3-third" style = "min-width:355px">
+    <div class="column teaching w3-third" style = "min-width:360px">
        <div class="img__wrap">
 
         <a href="https://the-bac.edu/experience-the-bac/galleries/citylab-at-the-bac">
@@ -839,9 +893,8 @@ position: fixed;
                 Master in Design Studies<br/><a href="http://www.gsd.harvard.edu/design-studies/risk-and-resilience/">Risk + Resilience</a><br/>
                 August 2016 - May 2018</p>
 
-                <p>+ CSFP Fellow: Boston, MA 2017<br/>
-                   + Harvard Humanitarian Initiative<br/>
-                   - Resarch Assistant: Spring 2018
+                <p>+ CSFP Fellow: Summer 2017<br/>
+                   + <a href="https://hhi.harvard.edu/">H.H.I</a> Internship: Spring 2018
                   </p>
 
                 <p><b style="font-size: 16px">Auburn University</b> <br/>
