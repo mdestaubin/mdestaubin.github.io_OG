@@ -95,6 +95,11 @@ position: fixed;
 .img__wrap_2 {
   position: relative;
 }
+
+.img__wrap_3 {
+  position: relative;
+}
+
 .img__description_layer {
   position: absolute;
   top: 210px;
@@ -128,12 +133,34 @@ position: fixed;
   transition: opacity .1s, visibility .1s;
 }
 
+.img__description_layer_3 {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  background: rgba(255, 255, 255, 1);
+  color: black;
+  visibility: hidden;
+  opacity: 0;
+  display: flex;
+  align-items: bottom;
+  justify-content: right;
+  /* transition effect. not necessary */
+  transition: opacity .1s, visibility .1s;
+}
+
 .img__wrap:hover .img__description_layer {
   visibility: visible;
   opacity: 1;
 }
 
 .img__wrap_2:hover .img__description_layer_2 {
+  visibility: visible;
+  opacity: .7;
+}
+
+.img__wrap_3:hover .img__description_layer_3 {
   visibility: visible;
   opacity: .7;
 }
@@ -145,6 +172,11 @@ position: fixed;
   transition: .3s;
   transform: translateY(1em);
 }
+
+.img__description_3 {
+  transition: .3s;
+  transform: translateY(1em);
+}
 .img__wrap:hover .img__description {
   transform: translateY(0);}
   .skills {
@@ -153,7 +185,16 @@ position: fixed;
   line-height: 6px;
   color: #595959;
 }
-.img__wrap_2:hover .img__description {
+.img__wrap_2:hover .img__description_2 {
+  transform: translateY(0);}
+  .skills {
+  text-align: bottom;
+  padding-right: 0px;
+  line-height: 6px;
+  color: #595959;
+}
+
+.img__wrap_3:hover .img__description_3 {
   transform: translateY(0);}
   .skills {
   text-align: bottom;
@@ -933,24 +974,172 @@ position: fixed;
 
   <div>
 
-
-     
-      <img  src="images/TITLE_resume.png" alt="Norway" style="width: 100%"> 
-
-      <a href="#Demo">
+<!--      <a href="#Demo">
        <button class="w3-button w3-right w3-black w3-hover-white w3-hover-text-black" style="margin-top: 0px; padding-top: 0px; padding-bottom: 0px; padding-left: 15px; padding-right: 15px;" onclick="myFunction()">
          <h6><b>RESUME</b></h6></button>
-       </a>
+       </a> -->
+      <!-- <img  src="images/TITLE_resume.png" alt="Norway" style="width: 100%"> --> 
          
 
-         <!-- <div class="w3-white w3-text-black">
-          <h4 class="w3-margin-top">Contact</h4>
-        <p>
+         <div class="img__wrap_3">
+  
+  <img class="img__img w3-padding-32" src="images/TITLE_resume.png" style="width:100%" class="w3-hover-opacity">
+  <div class="img__description_layer_3">
+        <div class="img__description w3-display-bottom">
+
+       <div class="w3-quarter w3-padding-48" style=" margin-top: -20px">
+      <div class="w3-margin-left">
+      
+          <!-- <h4>Personal</h4> -->
+
+          <p>
+          <b style="font-size: 16px">Contact</b></br>
           404.933.3271 </br>
           <a class="email" href="mailto:mdestaubin@gsd.harvard.edu">mdestaubin@gsd.harvard.edu</a></br>
           </br>
-         </p> -->
+         </p> 
+
+         <p> 
+         <b style="font-size: 16px">Bio</b></br>
+          Born and raised in the southeast United States, I graduated with a Bachelor of Architecture degree from Auburn University in 2012. After working professionally for 4 years in Boston, I enrolled at the Harvard University Graduate School of Design to study the emerging relationships between design, technology, and public health. </p>          
+</div>
+</div>
+
+<div class="w3-quarter w3-padding-48" style=" margin-top: -20px">
+
+    <div class="w3-margin-left">
+      
+          <!-- <h4>Education</h4> -->
+
+    <p><b style="font-size: 16px">Harvard University <br/>Graduate School of Design</b>
+                <br/>
+                Master in Design Studies<br/><a href="http://www.gsd.harvard.edu/design-studies/risk-and-resilience/">Risk + Resilience</a><br/>
+                August 2016 - May 2018</p>
+
+                <p>+ CSFP Fellow: Summer 2017<br/>
+                   + <a href="https://hhi.harvard.edu/">H.H.I</a> Internship: Spring 2018
+                  </p>
+
+                <p><b style="font-size: 16px">Auburn University</b> <br/>
+                Bachelor of Architecture<br/>
+                August 2007 - May 2012</p>
+
+                  <p>+ Study Abroad: Rome, Italy 2010<br/>
+                    + Rural Studio: Newbern, AL 2008
+                  </p>
+
+
+                <h4>Volunteer</h4>
+
+                <p><b style="font-size: 16px">WEGL 91.1 FM</b><br/>
+                Student Radio DJ<br/>
+                Auburn, AL | 2009 - 2012</p>
+
+                <p><b style="font-size: 16px">Adventures in Missions</b><br/>
+                Construction Volunteer<br/>
+                Mexico + Peru | 2004, 2005, 2007</p>
+
+                <!-- <p><b style="font-size: 16px">W.W.O.O.F.</b><br/>
+                Volunteer<br/>
+                Monticello, WI | 2010</p>
+ -->
+          
+</div>
+</div>
+
+
+<div class="w3-quarter w3-padding-48" style=" margin-top: -20px">
+
+  <!-- <h4>Professional</h4> -->
+
+
+<p><b style="font-size: 16px">Shepley Bulfinch</b> <br/>Junior Architect<br/>
+        Boston, MA | Sept 2012-July 2016</p>
+               
+        <p>+ Schematic and Conceptual Design<br/>
+           + Construction Documentation<br/>
+           + Project Coordination<br/>
+           + International Development</p>
+
+           <p><b style="font-size: 16px">Alta Planning + Design</b> <br/>Hubway Launch Team<br/>
+        Boston, MA | Summer 2011</p>
+               
+        <p>+ Deployed Stations<br/>
+           + Map Graphics<br/>
+           + Logistical Coordination<br/>
+           + Public Promotion</p>
+
+           <p><b style="font-size: 16px">Whole Town Solutions</b> <br/>Architectural Intern<br/>
+        Roswell, GA | 2006-2007</p>
+               
+        <p>+ Residential Drafting<br/>
+           + Survey Existing Conditions<br/>
+           + Town Planning Workshops<br/>
+           + Material Research</p>
+</div>
+            
+   <div class="w3-padding-48 w3-quarter" style="margin-top: -20px">
+    <!-- <h4>Academic</h4> -->
+
+    <p><b style="font-size: 16px">YouthBuild Boston</b> <br/>Harvard CSFP Fellow<br/>
+        Boston, MA | Summer 2017</p>
          
+        <p><b style="font-size: 16px">Boston Architectural College</b> <br/>City Lab Instructor<br/>
+        Boston, MA | 2013 - 2014</p>
+
+        
+         <h4>Design Skills</h4>
+   
+                    <p>Architecture</p>
+                      <div class="container">
+                        <div class="skills html">.</div>
+                      </div>
+
+                      <p>Graphic</p>
+                      <div class="container">
+                        <div class="skills css">.</div>
+                      </div>
+
+                      <p>Programming</p>
+                      <div class="container">
+                        <div class="skills php">.</div>
+                      </div>
+
+                      <p>GIS</p>
+                      <div class="container">
+                        <div class="skills js">.</div>
+                      </div>
+
+                      <p>Research</p>
+                      <div class="container">
+                        <div class="skills css">.</div>
+                      </div>
+
+                      <p>Teaching</p>
+                      <div class="container">
+                        <div class="skills php">.</div>
+                      </div>
+
+                    </br>
+
+         </div>
+
+</div>
+
+</div>
+
+
+</div>
+</br></br></br></br>
+
+    </div>
+    </div>
+
+          </div>
+       </div>
+      
+
+       </div>
 
         
          </div>
@@ -959,7 +1148,7 @@ position: fixed;
 <!-- show -->
     <!-- </div>  -->
 
-<div id="Demo" class="w3-hide w3-padding-64">
+<div id="Demo" class="w3-hide-large w3-padding-64">
 
   <div class="w3-quarter w3-padding" style=" margin-top: -20px">
 
