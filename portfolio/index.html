@@ -8,6 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link href="https://fonts.googleapis.com/css?family=Arvo|Montserrat:300,700|Roboto:400,900" rel="stylesheet">  
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
   <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
@@ -20,7 +21,7 @@
   <script type="text/javascript" src="town-Data.js"></script>  
 
 <style>
-body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
+body,h2,h3,h4 {font-family: "Roboto", sans-serif} 
 * {
     box-sizing: border-box;
 }
@@ -30,12 +31,23 @@ html, body {
     padding: 0px;
     height: 2000;
 }
-h6{font-family: "Verdana", sans-serif
+h6{font-family: "Arvo", serif;
+font-size: 14px;
+text-align: justify;
 }
-/*header{position: relative;}*/
-/*header {
-position: fixed;
-}*/
+
+a{font-family: "Roboto" , sans-serif;
+}
+
+h5{font-family: "Roboto" , sans-serif;
+font-style: black;
+font-size: 17px;
+}
+
+h1{font-family: "Roboto" , sans-serif;
+font-style: black;
+}
+
 /* Center website */
 .main {
     max-width: 1000px;
@@ -87,7 +99,6 @@ position: fixed;
   background-color: black;
   color: white;
 }
-
 /* over lay description */
 .img__wrap {
   position: relative;
@@ -95,11 +106,9 @@ position: fixed;
 .img__wrap_2 {
   position: relative;
 }
-
 .img__wrap_3 {
   position: relative;
 }
-
 .img__description_layer {
   position: absolute;
   top: 210px;
@@ -132,7 +141,6 @@ position: fixed;
   /* transition effect. not necessary */
   transition: opacity .1s, visibility .1s;
 }
-
 .img__description_layer_3 {
   position: absolute;
   top: 0px;
@@ -149,17 +157,14 @@ position: fixed;
   /* transition effect. not necessary */
   transition: opacity .1s, visibility .1s;
 }
-
 .img__wrap:hover .img__description_layer {
   visibility: visible;
   opacity: 1;
 }
-
 .img__wrap_2:hover .img__description_layer_2 {
   visibility: visible;
   opacity: 1;
 }
-
 .img__wrap_3:hover .img__description_layer_3 {
   visibility: visible;
   opacity: .7;
@@ -172,7 +177,6 @@ position: fixed;
   transition: .2;
   transform: translateY(0em);
 }
-
 .img__description_3 {
   transition: .3s;
   transform: translateY(1em);
@@ -193,7 +197,6 @@ position: fixed;
   line-height: 6px;
   color: #595959;
 }
-
 .img__wrap_3:hover .img__description_3 {
   transform: translateY(0);}
   .skills {
@@ -202,12 +205,10 @@ position: fixed;
   line-height: 6px;
   color: #595959;
 }
-
 .html {width: 80%; background-color: #595959;}
 .css {width: 70%; background-color: #595959;}
 .js {width: 60%; background-color: #595959;}
 .php {width: 50%; background-color: #595959;}
-
 #map { 
     width: 1165px; 
     height: 650px;
@@ -227,17 +228,14 @@ position: fixed;
   #myDIV {
     width: 100%;
 }
-
 @-webkit-keyframes fade {
   from {opacity: .4} 
   to {opacity: 1}
 }
-
 @keyframes fade {
   from {opacity: .4} 
   to {opacity: 1}
 }
-
 </style>
 
 
@@ -253,7 +251,7 @@ position: fixed;
   <header id="portfolio">
 
     <div class="w3-container">
-    <h1><b>Michael de St. Aubin</b></h1>
+    <h1 style="font-size: 41px; margin-top: -5px">MICHAEL DE ST. AUBIN</h1>
     </div>
 
     </header>
@@ -283,20 +281,17 @@ position: fixed;
 
 
 <!-- <div class="w3-content w3-display-container w3-row-padding w3-hide-small w3-padding-48 w3-row w3-hide-small" style="max-width:1185px; padding-left: 10px"> 
-
        <div class="img__wrap_2">
   <a href="https://mdestaubin.github.io/portfolio/links/thesis/index">
   <img class="mySlides img__img" src="images/TITLE_thesis.png" style="width:100%" class="w3-hover-opacity">
   <div class="img__description_layer_2">
         <div class="img__description" style="margin-top: -5px; margin-right: 420px">
                <h6><b>Outbreak Response Simulator</b></h6>
-
         <p>An agent-based simulation model to test infectious disease outbreak response strategies and capacities. It is being developed as a thesis project for the MDes Risk & Resilience program at Harvard GSD.</p>
           </div>
        </div>
        </a>
        </div>
-
               <div class="img__wrap_2">
   <a href="https://mdestaubin.github.io/ebolaMap/">
   <img class="mySlides img__img" src="images/TITLE_response.png" style="width:100%" class="w3-hover-opacity">
@@ -308,7 +303,6 @@ position: fixed;
        </div>
        </a>
        </div>
-
    <div class="img__wrap_2">
   <a href="https://mdestaubin.github.io/portfolio/links/facilities/index">
   <img class="mySlides img__img" src="images/TITLE_ebola.png" style="width:100%" class="w3-hover-opacity">
@@ -319,10 +313,7 @@ position: fixed;
           </div>
        </div>
        </a>
-
        </div>
-
-
        <div class="img__wrap_2">
   <a href="https://mdestaubin.github.io/portfolio/links/triage/index">
   <img class="mySlides img__img" src="images/TITLE_triage.png" style="width:100%" class="w3-hover-opacity">
@@ -334,9 +325,6 @@ position: fixed;
        </div>
        </a>
        </div>
-
-
-
        <div class="img__wrap_2">
   <a href="https://mdestaubin.github.io/portfolio/links/ughe/index">
   <img class="mySlides img__img" src="images/TITLE_ughe.png" style="width:100%" class="w3-hover-opacity">
@@ -348,7 +336,6 @@ position: fixed;
        </div>
        </a>
        </div>
-
        <div class="img__wrap_2">
   <a href="https://mdestaubin.github.io/portfolio/links/rural/index">
   <img class="mySlides img__img" src="images/TITLE_rural.png" style="width:100%" class="w3-hover-opacity">
@@ -360,7 +347,6 @@ position: fixed;
        </div>
        </a>
        </div>
-
   <button class="w3-button w3-white w3-display-topright w3-hover-black" style="margin-right: 45px; margin-top: 5px" onclick="plusDivs(-1)">&#10094;</button>
   <button class="w3-button w3-white w3-display-topright w3-hover-black" style="margin-right: 8px; margin-top: 5px"  onclick="plusDivs(1)">&#10095;</button>
 </div> -->
@@ -375,12 +361,12 @@ position: fixed;
         <a href="https://mdestaubin.github.io/portfolio/links/thesis/index">
       <img class="img__img" src="images/thesis.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
 
-      <div class="img__description_layer w3-hide-small">
+      <div class="img__description_layer w3-hide-small w3-yellow">
         <div class="img__description">
-       <h6  class="w3-margin-bottom"><b>Outbreak Response Simulator</b></h6>
-
-        <p>An agent-based simulation model to test infectious disease outbreak response strategies and capacities. It is being developed as a thesis project for the MDes Risk & Resilience program at Harvard GSD.</p>
-        
+        <h5><b>OUTBREAK RESPONSE SIMULATOR</b></h5>
+        <h6>
+        An agent-based simulation model to test infectious disease outbreak response strategies and capacities. It is being developed as a thesis project for the MDes Risk & Resilience program at Harvard GSD.
+      </h6>
         <!-- <div class ="w3-padding-16"> -->
 
          <div class="w3-yellow w3-padding-small w3-text-black">
@@ -396,10 +382,11 @@ position: fixed;
        </div>
        </a>
 
-      <div class="w3-margin-top">
-        <h6><b>Outbreak Response Simulator</b></h6>
-
-        <p>An agent-based simulation model to test infectious disease outbreak response strategies and capacities. It is being developed as a thesis project for the MDes Risk & Resilience program at Harvard GSD.</p>
+      <div>
+        <h5><b>OUTBREAK RESPONSE SIMULATOR</b></h5>
+        <h6>
+        An agent-based simulation model to test infectious disease outbreak response strategies and capacities. It is being developed as a thesis project for the MDes Risk & Resilience program at Harvard GSD.
+      </h6>
       </div>
       </div>
     </div>
@@ -412,10 +399,10 @@ position: fixed;
 
       <div class="img__description_layer w3-hide-small">
         <div class="img__description">
-       <h6  class="w3-margin-bottom"><b>International Crisis Response Map</b></h6>
-
-        <p>Interactive map that contains multiple layers of data pertaining to the 2014 West Africa Ebola Outbreak and the international response to it. Completed as an assignment for a data visualization course at MIT.</p>
-
+      <h5><b>INTERNATIONAL CRISIS RESPONSE MAP</b></h5>
+        <h6>
+        Interactive map that contains multiple layers of data pertaining to the 2014 West Africa Ebola Outbreak and the international response to it. Completed as an assignment for a data visualization course at MIT.
+      </h6>
 
             <div class="w3-white w3-text-black">
         <p >Academic
@@ -429,10 +416,12 @@ position: fixed;
        </div>
        </a>
 
-      <div class="w3-margin-top">
-        <h6><b>International Crisis Response Map</b></h6>
-
-        <p>Interactive map that contains multiple layers of data pertaining to the 2014 West Africa Ebola Outbreak and the international response to it. Completed as an assignment for a data visualization course at MIT.</p>
+      <div>
+        
+         <h5><b>INTERNATIONAL CRISIS RESPONSE MAP</b></h5>
+        <h6>
+        Interactive map that contains multiple layers of data pertaining to the 2014 West Africa Ebola Outbreak and the international response to it. Completed as an assignment for a data visualization course at MIT.
+      </h6>
       </div>
       </div>
     </div>
@@ -445,9 +434,10 @@ position: fixed;
       
       <div class="img__description_layer w3-hide-small">
         <div class="img__description">
-       <h6  class="w3-margin-bottom"><b>Triage + Isolation Treatment Unit</b></h6>
-
-        <p>Intended as an alternate to UN temporary structures, the unit was designed in collaboration with experts at PIH as a prototype for a long-term solution to infectious disease screening at hospital entrances.</p>
+        <h5><b>TRIAGE + ISOLATION TREATMENT UNIT</b></h5>
+        <h6>
+        Intended as an alternate to UN temporary structures, the unit was designed in collaboration with experts at PIH as a prototype for a long-term solution to infectious disease screening at hospital entrances.
+        </h6>
 
          <div class="w3-white w3-text-black ">
         <p >Professional 
@@ -461,11 +451,13 @@ position: fixed;
         </div>
        </div>
        </a>
+         
+      <div>
+        <h5><b>TRIAGE + ISOLATION TREATMENT UNIT</b></h5>
+        <h6>
+        Intended as an alternate to UN temporary structures, the unit was designed in collaboration with experts at PIH as a prototype for a long-term solution to infectious disease screening at hospital entrances.
+        </h6>
 
-      <div class="w3-margin-top">
-        <h6><b>Triage + Isolation Treatment Unit</b></h6>
-
-        <p>Intended as an alternate to UN temporary structures, the unit was designed in collaboration with experts at PIH as a prototype for a long-term solution to infectious disease screening at hospital entrances.</p>
       </div>
       </div>
     </div>
@@ -478,16 +470,10 @@ position: fixed;
       
       <div class="img__description_layer w3-hide-small">
         <div class="img__description">
-       <h6  class="w3-margin-bottom"><b>University of Global Health Equity</b></h6>
-
-        <p>Acadmic campus design for Partners in Health new global health university. The project is located in Butaro, Rwanda and will act as a regional model for future global health education hubs in Africa.</p>
-
-   <!--      <p>Professional 
-        <i class="w3-right">2015 - </i></br>
-        <i class="w3-right">Rwanda</i>
-         <b>Shepley Bulfinch + MASS Design</br>
-         Partners in Health</b>
-         </p> -->
+        <h5><b>UNIVERSITY OF GLOBAL HEALTH EQUITY</b></h5>
+        <h6>
+       Acadmic campus design for Partners in Health new global health university. The project is located in Butaro, Rwanda and will act as a regional model for future global health education hubs in Africa.
+      </h6>
 
          <div class="w3-white w3-text-black w3-padding-small">
         <p >Professional 
@@ -502,14 +488,15 @@ position: fixed;
        </div>
        </a>
 
-      <div class="w3-margin-top">
-        <h6><b>University of Global Health Equity</b></h6>
-
-        <p>Acadmic campus design for Partners in Health new global health university. The project is located in Butaro, Rwanda and will act as a regional model for future global health education hubs in Africa.</p>
-      </div>
+      <div>
+        <h5><b>UNIVERSITY OF GLOBAL HEALTH EQUITY</b></h5>
+        <h6>
+       Acadmic campus design for Partners in Health new global health university. The project is located in Butaro, Rwanda and will act as a regional model for future global health education hubs in Africa.
+      </h6>
       </div>
     </div>
-
+    </div>
+    
     <div class="column architecture w3-third" style = "min-width:360px">
        <div class="img__wrap">
 
@@ -518,9 +505,10 @@ position: fixed;
       
       <div class="img__description_layer w3-hide-small">
         <div class="img__description">
-       <h6  class="w3-margin-bottom"><b>West Africa Health Facility Assessment</b></h6>
-
-        <p>Hospital facility assessment conducted during the West Africa Ebola Outbreak. The report was prepared and given to PIH to understand the conditions and needs of the facilities they were working at.</p>
+        <h5><b>WEST AFRICA HEALTH FACILITY ASSESSMENT</b></h5>
+        <h6>
+       Hospital facility assessment conducted during the West Africa Ebola Outbreak. The report was prepared and given to PIH to understand the conditions and needs of the facilities they were working at
+      </h6>
 
    <!--      <p>Professional 
         <i class="w3-right">2015</i></br>
@@ -541,10 +529,11 @@ position: fixed;
        </div>
        </a>
 
-      <div class="w3-margin-top">
-        <h6><b>West Africa Health Facility Assessment</b></h6>
-
-        <p>Hospital facility assessment conducted during the West Africa Ebola Outbreak. The report was prepared and given to PIH to understand the conditions and needs of the facilities they were working at.</p>
+      <div>
+        <h5><b>WEST AFRICA HEALTH FACILITY ASSESSMENT</b></h5>
+        <h6>
+       Hospital facility assessment conducted during the West Africa Ebola Outbreak. The report was prepared and given to PIH to understand the conditions and needs of the facilities they were working at
+      </h6>
       </div>
       </div>
     </div>
@@ -992,7 +981,6 @@ position: fixed;
             <h4>Personal</h4>
             
             <img  class="w3-padding-16 w3-round-xlarge" src="images/profile.png" alt="Norway" style="width: 89%; margin-top: -3px" > 
-
           <p style="margin-top: 0px; margin-right: 20px">
           Cell: 404.933.3271 </br> Email:
           <a class="email" href="mailto:mdestaubin@gsd.harvard.edu">mdestaubin@gsd.harvard.edu</a></br>
@@ -1199,14 +1187,11 @@ function myFunction() {
         x.className = x.className.replace(" w3-show", "");
     }
 }
-
 var slideIndex = 1;
 showDivs(slideIndex);
-
 function plusDivs(n) {
   showDivs(slideIndex += n);
 }
-
 function showDivs(n) {
   var i;
   var x = document.getElementsByClassName("mySlides");
@@ -1217,7 +1202,6 @@ function showDivs(n) {
   }
   x[slideIndex-1].style.display = "block";  
 }
-
 </script>
 
 </body>
