@@ -10,6 +10,12 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <link href="https://fonts.googleapis.com/css?family=Arvo|Montserrat:300,700|Roboto:400,900" rel="stylesheet">  
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="https://fonts.googleapis.com/css?family=Gaegu:400,700" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Montserrat|Open+Sans" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Knewave" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Permanent+Marker" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Special+Elite" rel="stylesheet">
 
   <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
   <link rel="stylesheet" href="libraries/leaflet/leaflet.css"/>
@@ -31,23 +37,20 @@ html, body {
     padding: 0px;
     height: 2000;
 }
-h6{font-family: "Arvo", serif;
-font-size: 14px;
+h6{font-family: 'Noto Sans', sans-serif;
+/*font-style: thin;*/
+font-size: 13px;
 text-align: justify;
 }
-
 a{font-family: "Roboto" , sans-serif;
 }
-
 h5{font-family: "Roboto" , sans-serif;
 font-style: black;
 font-size: 17px;
 }
-
 h1{font-family: "Roboto" , sans-serif;
 font-style: black;
 }
-
 /* Center website */
 .main {
     max-width: 1000px;
@@ -111,11 +114,11 @@ font-style: black;
 }
 .img__description_layer {
   position: absolute;
-  top: 210px;
+  top: 0px;
   bottom: 0px;
   left: 0;
   right: 0;
-  background: rgba(255, 255, 255, 1);
+  background: rgba(255, 255, 255, 100);
   color: black;
   visibility: hidden;
   opacity: 0;
@@ -123,7 +126,7 @@ font-style: black;
   align-items: top;
   justify-content: left;
   /* transition effect. not necessary */
-  transition: opacity .1s, visibility .1s;
+  transition: opacity .1s, visibility .5s;
 }
 .img__description_layer_2 {
   position: absolute;
@@ -170,8 +173,8 @@ font-style: black;
   opacity: .7;
 }
 .img__description {
-  transition: .2s;
-  transform: translateY(1em);
+  transition: .5s;
+  transform: translateY(15em);
 }
 .img__description_2 {
   transition: .2;
@@ -251,7 +254,7 @@ font-style: black;
   <header id="portfolio">
 
     <div class="w3-container">
-    <h1 style="font-size: 41px; margin-top: -5px">MICHAEL DE ST. AUBIN</h1>
+    <h1 style="font-size: 45px; margin-top: 0px"><b>Michael de St. Aubin</b></h1>
     </div>
 
     </header>
@@ -353,7 +356,7 @@ font-style: black;
 
   
   <!-- Photo Grid-->
-  <div id="photos" class="w3-row-padding  w3-row" style= "margin-bottom: 100px; margin-top: 20px">
+  <div id="photos" class="w3-row-padding" style= "margin-bottom: 100px; margin-top: 20px">
   <!--  </br></br> -->
    <div class="column thesis w3-half" style = "min-width:360px">
        <div class="img__wrap">
@@ -361,23 +364,25 @@ font-style: black;
         <a href="https://mdestaubin.github.io/portfolio/links/thesis/index">
       <img class="img__img" src="images/thesis.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
 
-      <div class="img__description_layer w3-hide-small w3-yellow">
-        <div class="img__description">
-        <h5><b>OUTBREAK RESPONSE SIMULATOR</b></h5>
+      <div class="img__description_layer w3-hide-small">
+        <div class="img__description" style="margin-top: -10px;">
+        <h5 class="w3-yellow"><b>OUTBREAK RESPONSE SIMULATOR</b></h5>
         <h6>
         An agent-based simulation model to test infectious disease outbreak response strategies and capacities. It is being developed as a thesis project for the MDes Risk & Resilience program at Harvard GSD.
       </h6>
-        <!-- <div class ="w3-padding-16"> -->
 
-         <div class="w3-yellow w3-padding-small w3-text-black">
-        <p class="w3-margin-left">Academic
-        <i class="w3-right w3-margin-right ">2017-2018</i></br>
-         <b>Harvard University GSD</b>
-        <i class="w3-right w3-margin-right">Cambridge, MA</i></br>
+         <div class="w3-border-top"style="font-size: 14px;">
+        <p>Graduate Thesis
+        <i class="w3-right">2017-2018</i></br>
+           <b>Harvard GSD</b>
+        <i class="w3-right">Cambridge, MA</i></br></br>
+          <b>Roles:</b></br>
+          Individual Project, Conception, Research, Code Development, UX Design, Presentation</br></br>
+          <b>Tools Used:</b></br>
+         ArcMap, Processing, Java, Photoshop, After Effects, Premiere
          </p>
          </div>
 
-        <!-- </div> -->
         </div>
        </div>
        </a>
@@ -398,17 +403,21 @@ font-style: black;
       <img class="img__img" src="images/ebolaMap.jpg" alt="Norway" style="width:100%" class="w3-hover-opacity">
 
       <div class="img__description_layer w3-hide-small">
-        <div class="img__description">
+        <div class="img__description" style="margin-top: -10px;">
       <h5><b>INTERNATIONAL CRISIS RESPONSE MAP</b></h5>
-        <h6>
+        <h6 >
         Interactive map that contains multiple layers of data pertaining to the 2014 West Africa Ebola Outbreak and the international response to it. Completed as an assignment for a data visualization course at MIT.
       </h6>
 
-            <div class="w3-white w3-text-black">
-        <p >Academic
-        <i class="w3-right w3-margin-right">2017</i></br>
-         <b>MIT</b>
-        <i class="w3-right w3-margin-right">Cambridge, MA</i></br>
+         <div class="w3-border-top"style="font-size: 14px;">
+        <p>Academic
+        <i class="w3-right">2017</i></br>
+           <b>MIT 4.S02</b>
+        <i class="w3-right">Cambridge, MA</i></br></br>
+          <b>Roles: </b></br>
+          Individual Project, Conception, Research, Code Development, UX Design</br></br>
+          <b>Tools Used:</b> </br>
+         P5.js, Leaflet, Excel, HTML, CSS, JavaScript
          </p>
          </div>
 
@@ -433,18 +442,21 @@ font-style: black;
       <img class="img__img" src="images/triage.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       
       <div class="img__description_layer w3-hide-small">
-        <div class="img__description">
+        <div class="img__description" style="margin-top: -10px;">
         <h5><b>TRIAGE + ISOLATION TREATMENT UNIT</b></h5>
         <h6>
         Intended as an alternate to UN temporary structures, the unit was designed in collaboration with experts at PIH as a prototype for a long-term solution to infectious disease screening at hospital entrances.
         </h6>
 
-         <div class="w3-white w3-text-black ">
-        <p >Professional 
-        <i class="w3-right w3-margin-right">2015</i></br>
-         <b>Shepley Bulfinch</b>
-        <i class="w3-right w3-margin-right">Sierra Leone + Liberia</i></br>
-        <b>Partners in Health</b>
+         <div class="w3-border-top"style="font-size: 14px;">
+        <p>Professional 
+        <i class="w3-right">2015</i></br>
+           <b>Shepley Bulfinch</b>
+        <i class="w3-right">Sierra Leone + Liberia</i></br></br>
+          <b>Roles: </b></br>
+          Schematic Design, Research, Space Programming, Construction Documentation</br></br>
+          <b>Tools Used:</b> </br>
+         AutoCAD, Revit, Sketchup, Photoshop, Illustrator
          </p>
          </div>
 
@@ -469,18 +481,23 @@ font-style: black;
       <img class="img__img" src="images/UGHE.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       
       <div class="img__description_layer w3-hide-small">
-        <div class="img__description">
+        <div class="img__description" style="margin-top: -10px;">
         <h5><b>UNIVERSITY OF GLOBAL HEALTH EQUITY</b></h5>
         <h6>
        Acadmic campus design for Partners in Health new global health university. The project is located in Butaro, Rwanda and will act as a regional model for future global health education hubs in Africa.
       </h6>
 
-         <div class="w3-white w3-text-black w3-padding-small">
-        <p >Professional 
-        <i class="w3-right w3-margin-right">2015 - </i></br>
-         <b>Shepley Bulfinch</b>
-        <i class="w3-right w3-margin-right">Rwanda</i></br>
-        <b>Partners in Health</b>
+         <div class="w3-border-top"style="font-size: 14px;">
+        <p>Professional 
+        <i class="w3-right">2015 - </i></br>
+           <b>Shepley Bulfinch</b>
+        <i class="w3-right">Rwanda</i></br>
+           <b>Partners in Health</b>
+          </br></br>
+          <b>Roles: </b></br>
+          Material Research, Space Programming, Construction Documentation</br></br>
+          <b>Tools Used:</b> </br>
+         AutoCAD, Revit, Sketchup 
          </p>
          </div>
 
@@ -504,23 +521,23 @@ font-style: black;
       <img class="img__img" src="images/ebola.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       
       <div class="img__description_layer w3-hide-small">
-        <div class="img__description">
+        <div class="img__description" style="margin-top: -10px;">
         <h5><b>WEST AFRICA HEALTH FACILITY ASSESSMENT</b></h5>
         <h6>
        Hospital facility assessment conducted during the West Africa Ebola Outbreak. The report was prepared and given to PIH to understand the conditions and needs of the facilities they were working at
       </h6>
 
-   <!--      <p>Professional 
+          <div class="w3-border-top"style="font-size: 14px;">
+        <p>Professional 
         <i class="w3-right">2015</i></br>
-        <i class="w3-right">Sierra Leone + Liberia</i>
-         <b>Shepley Bulfinch</br>
-         Partners in Health</b> -->
-
-         <div class="w3-white w3-text-black ">
-        <p >Professional 
-        <i class="w3-right w3-margin-right">2015</i></br>
-         <b>Shepley Bulfinch</b>
-        <i class="w3-right w3-margin-right">Sierra Leone + Liberia</i></br>
+           <b>Shepley Bulfinch</b>
+        <i class="w3-right">Sierra Leone + Liberia</i></br>
+           <b>Partners in Health</b>
+          </br></br>
+          <b>Roles: </b></br>
+          Facility Surveying, Equipment and Space Assessment, Report Documentation</br></br>
+          <b>Tools Used:</b> </br>
+         Measuring Tape, Camera, Excel, AutoCAD, Indesign
          </p>
          </div>
 
@@ -546,24 +563,23 @@ font-style: black;
       <img class="img__img" src="images/haitiVideo.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       
       <div class="img__description_layer w3-hide-small">
-        <div class="img__description">
-       <h6  class="w3-margin-bottom"><b>Social Agency: The Role of the Designer</b></h6>
+        <div class="img__description" style="margin-top: -10px;">
+        <h5><b>SOCIAL AGENCY: THE ROLE OF THE DESIGNER</b></h5>
+        <h6>
+        A short video of interviews with foreign and local architects working in Haiti. It was completed as an assignment for a course at the GSD examining the role of social agency within architecture.
+        </h6>
 
-        <p>A short video of interviews with foreign and local architects working in Haiti. It was completed as an assignment for a course at the GSD examining the role of social agency within architecture.</p>
-
-<!--         <p>Academic
+         <div class="w3-border-top"style="font-size: 14px;">
+        <p>Academic
         <i class="w3-right">2016</i></br>
-        <i class="w3-right">Haiti</i>
-         <b>Harvard University GSD</br>
-         AA Haiti Visiting School</b>
-         </p>
- -->
-         <div class="w3-white  w3-text-black">
-        <p >Academic
-        <i class="w3-right w3-margin-right ">2016</i></br>
-         <b>Harvard University GSD</b>
-        <i class="w3-right w3-margin-right">Haiti</i></br>
-        <b>AA Haiti Visiting School</b>
+           <b>Harvard GSD</b>
+        <i class="w3-right">Haiti</i></br>
+            AA Haiti Visiting School
+          </br></br>
+          <b>Roles: </b></br>
+          2 Person Team, Production, Directing, Filming, Editing</br></br>
+          <b>Tools Used:</b> </br>
+         Video Camera, Premiere
          </p>
          </div>
 
@@ -571,10 +587,11 @@ font-style: black;
        </div>
        </a>
 
-      <div class="w3-margin-top">
-        <h6><b>Social Agency: The Role of the Designer</b></h6>
-
-        <p>A short video of interviews with foreign and local architects working in Haiti. It was completed as an assignment for a course at the GSD examining the role of social agency within architecture.</p>
+      <div>
+        <h5><b>SOCIAL AGENCY: THE ROLE OF THE DESIGNER</b></h5>
+        <h6>
+        A short video of interviews with foreign and local architects working in Haiti. It was completed as an assignment for a course at the GSD examining the role of social agency within architecture.
+        </h6>
       </div>
       </div>
     </div>
@@ -587,22 +604,22 @@ font-style: black;
       <img class="img__img" src="images/ebolaAid.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       
       <div class="img__description_layer w3-hide-small">
-        <div class="img__description">
-       <h6  class="w3-margin-bottom"><b>Global Humanitarian Aid Flow</b></h6>
+        <div class="img__description" style="margin-top: -10px;">
 
-        <p>Data visualization map of the flow of international humanitarian aid money to West Africa during the Ebola crisis. The dataset comes from the Financial Tracking Service of the UN.</p>
-<!-- 
+        <h5><b>GLOBAL HUMANITARIAN AID FLOW</b></h5>
+        <h6>
+        Data visualization map of the flow of international humanitarian aid money to West Africa during the Ebola crisis. The dataset comes from the Financial Tracking Service of the UN.
+        </h6>
+
+         <div class="w3-border-top"style="font-size: 14px;">
         <p>Academic
         <i class="w3-right">2017</i></br>
-         <b>MIT</b>
-        <i class="w3-right">Cambridge, MA</i></br>
-         </p>
- -->
-         <div class="w3-white  w3-text-black">
-        <p >Academic
-        <i class="w3-right w3-margin-right ">2017</i></br>
-         <b>MIT</b>
-        <i class="w3-right w3-margin-right">Cambridge, MA</i></br>
+           <b>MIT 4.S02</b>
+        <i class="w3-right">Cambridge, MA</i></br></br>
+          <b>Roles: </b></br>
+          Individual Project, Conception, Research, Code Development, UX Design</br></br>
+          <b>Tools Used:</b> </br>
+         P5.js, Leaflet, Excel, HTML, CSS, JavaScript
          </p>
          </div>
 
@@ -610,10 +627,11 @@ font-style: black;
        </div>
        </a>
 
-      <div class="w3-margin-top">
-        <h6><b>Global Humanitarian Aid Flow</b></h6>
-
-        <p>Data visualization map of the flow of international humanitarian aid money to West Africa during the Ebola crisis. The dataset comes from the Financial Tracking Service of the UN.</p>
+      <div>
+        <h5><b>GLOBAL HUMANITARIAN AID FLOW</b></h5>
+        <h6>
+        Data visualization map of the flow of international humanitarian aid money to West Africa during the Ebola crisis. The dataset comes from the Financial Tracking Service of the UN.
+        </h6>
       </div>
       </div>
     </div>
@@ -626,23 +644,24 @@ font-style: black;
       <img class="img__img" src="images/portal.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       
       <div class="img__description_layer w3-hide-small">
-        <div class="img__description">
-       <h6  class="w3-margin-bottom"><b>Portal || Kinect</b></h6>
+        <div class="img__description" style="margin-top: -10px;">
 
-        <p>The portal intends to create a civic visual connection between Cambridge, MA and Bergamo, Italy. To go beyond a typical 2D interaction, the project adds a 3D parallax effect through framing and layering.</p>
+        <h5><b>PORTAL || KINECT</b></h5>
+        <h6>
+        The portal intends to create a civic visual connection between Cambridge, MA and Bergamo, Italy. To go beyond a typical 2D interaction, the project adds a 3D parallax effect through framing and layering.
+        </h6>
 
-        <!-- <p>Academic
+         <div class="w3-border-top"style="font-size: 14px;">
+        <p>Academic
         <i class="w3-right">2017</i></br>
-         <b>Harvard University GSD</b>
-        <i class="w3-right">USA + Italy</i></br>
-        <b>University of Bergamo</b> -->
-
-        <div class="w3-white  w3-text-black">
-        <p >Academic
-        <i class="w3-right w3-margin-right ">2017</i></br>
-         <b>Harvard University GSD</b>
-        <i class="w3-right w3-margin-right">USA + Italy</i></br>
-        <b>University of Bergamo</b>
+           <b>Harvard GSD</b>
+        <i class="w3-right">Cambridge, MA</i></br>
+          <b>University of Bergamo</b>
+          </br></br>
+          <b>Roles: </b></br>
+          2 Person Team, Conception, Research, Code Development, UX Design</br></br>
+          <b>Tools Used:</b> </br>
+         Processing, Kinect, AutoCad, Raspberry Pi, Premiere, Sketchup, Video Camera
          </p>
          </div>
 
@@ -651,10 +670,11 @@ font-style: black;
        </div>
        </a>
 
-      <div class="w3-margin-top">
-        <h6><b>Portal || Kinect</b></h6>
-
-        <p>The portal intends to create a civic visual connection between Cambridge, MA and Bergamo, Italy. To go beyond a typical 2D interaction, the project adds a 3D parallax effect through framing and layering.</p>
+      <div>
+        <h5><b>PORTAL || KINECT</b></h5>
+        <h6>
+        The portal intends to create a civic visual connection between Cambridge, MA and Bergamo, Italy. To go beyond a typical 2D interaction, the project adds a 3D parallax effect through framing and layering.
+        </h6>
       </div>
       </div>
     </div>
@@ -667,23 +687,24 @@ font-style: black;
       <img class="img__img" src="images/davidson.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       
       <div class="img__description_layer w3-hide-small">
-        <div class="img__description">
-       <h6  class="w3-margin-bottom"><b>Davidson College Academic Center</b></h6>
+        <div class="img__description" style="margin-top: -10px;">
 
-        <p>Large scale addition and renovation project for Davidson College's science and art departments. The central forum space acts as the social catalyst for cross-disciplinary interactions and sharing.</p>
+        <h5><b>DAVIDSON COLLEGE ACADEMIC CENTER</b></h5>
+        <h6>
+       Large scale addition and renovation project for Davidson College's science and art departments. The central forum space acts as the social catalyst for cross-disciplinary interactions and sharing.
+        </h6>
 
-       <!--  <p>Professional
+          <div class="w3-border-top"style="font-size: 14px;">
+        <p>Professional 
         <i class="w3-right">2012-2016</i></br>
-         <b>Shepley Bulfinch</b>
+           <b>Shepley Bulfinch</b>
         <i class="w3-right">Davidson, NC</i></br>
-        <b>Davidson College</b> -->
-
-        <div class="w3-white  w3-text-black">
-        <p >Professional
-        <i class="w3-right w3-margin-right ">2012-2016</i></br>
-         <b>Shepley Bulfinch</b>
-        <i class="w3-right w3-margin-right">Davidson, NC</i></br>
-        <b>Davidson College</b>
+           <b>Davidson College</b>
+          </br></br>
+          <b>Roles: </b></br>
+          Schematic, Design Development, Construction Documentaiton, Construction Administration</br></br>
+          <b>Tools Used:</b> </br>
+         Sketchup, Model Making, Photoshop, Revit, AutoCad
          </p>
          </div>
 
@@ -692,10 +713,11 @@ font-style: black;
        </div>
        </a>
 
-      <div class="w3-margin-top">
-        <h6><b>Davidson College Academic Center</b></h6>
-
-        <p>Large scale addition and renovation project for Davidson College's science and art departments. The central forum space acts as the social catalyst for cross-disciplinary interactions and sharing.</p>
+      <div>
+        <h5><b>DAVIDSON COLLEGE ACADEMIC CENTER</b></h5>
+        <h6>
+       Large scale addition and renovation project for Davidson College's science and art departments. The central forum space acts as the social catalyst for cross-disciplinary interactions and sharing.
+        </h6>
       </div>
       </div>
     </div>
@@ -707,23 +729,24 @@ font-style: black;
       <img class="img__img" src="images/rural.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       
       <div class="img__description_layer w3-hide-small">
-        <div class="img__description">
-       <h6  class="w3-margin-bottom"><b>Rose Lee's House</b></h6>
+        <div class="img__description" style="margin-top: -10px;">
 
-        <p>A sustainable home in rural Alabama designed and built by a team of students for Rose Lee and her two sons. The low-cost design featured a large amount of donated and reclaimed material from local barns.</p>
+        <h5><b>ROSE LEE'S HOUSE</b></h5>
+        <h6>
+        A sustainable home in rural Alabama designed and built by a team of students for Rose Lee and her two sons. The low-cost design featured a large amount of donated and reclaimed material from local barns.
+        </h6>
 
-        <!-- <p>Academic
+         <div class="w3-border-top"style="font-size: 14px;">
+        <p>Academic
         <i class="w3-right">2008-2009</i></br>
-         <b>Auburn University Rural Studio</b>
+           <b>Auburn University</b>
         <i class="w3-right">Footwash, AL</i></br>
-         </p> -->
-
-          <div class="w3-white  w3-text-black">
-        <p >Academic
-        <i class="w3-right w3-margin-right ">2008-2009</i></br>
-         <b>Auburn University</b>
-        <i class="w3-right w3-margin-right">Footwash, AL</i></br>
-        <b>Rural Studio</b>
+          <b>Rural Studio</b>
+          </br></br>
+          <b>Roles: </b></br>
+          Class Project, Schematic, Phase Planning, Construction, Material Research</br></br>
+          <b>Tools Used:</b> </br>
+         AutoCad, Sketchup, Model Making, Hammer, Saw, Shovel, Bobcat
          </p>
          </div>
 
@@ -731,9 +754,11 @@ font-style: black;
        </div>
        </a>
 
-      <div class="w3-margin-top">
-        <h6><b>Rose Lee's House</b></h6>
-        <p>A sustainable home in rural Alabama designed and built by a team of students for Rose Lee and her two sons. The low-cost design featured a large amount of donated and reclaimed material from local barns.</p>
+      <div>
+        <h5><b>ROSE LEE'S HOUSE</b></h5>
+        <h6>
+        A sustainable home in rural Alabama designed and built by a team of students for Rose Lee and her two sons. The low-cost design featured a large amount of donated and reclaimed material from local barns.
+        </h6>
       </div>
       </div>
     </div>
@@ -746,17 +771,24 @@ font-style: black;
       <img class="img__img" src="images/youthbuild.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       
       <div class="img__description_layer w3-hide-small">
-        <div class="img__description">
-       <h6  class="w3-margin-bottom"><b>YouthBuild: Harvard CSFP Fellowship</b></h6>
+        <div class="img__description" style="margin-top: -10px;">
 
-        <p>2017 recipient of the Harvard GSD Community Service Fellowship Program. Led a team of local high school studentsts through a summer design project with a NGO working in Haiti.</p>
-  
-        <div class="w3-white ">
-        <p >Fellowship
-        <i class="w3-right w3-margin-right">2017</i></br>
-         <b>YouthBuild Boston</b>
-        <i class="w3-right w3-margin-right">Boston, MA</i></br>
-        <b>Harvard University GSD</b>
+        <h5><b>YOUTHBUILD BOSTON: HARVARD CSFP</b></h5>
+        <h6>
+        2017 recipient of the Harvard GSD Community Service Fellowship Program. Led a team of local high school studentsts through a summer design project with a NGO working in Haiti.
+        </h6>
+
+         <div class="w3-border-top"style="font-size: 14px;">
+        <p>Academic Fellowship
+        <i class="w3-right">2017</i></br>
+           <b>YouthBuild Boston</b>
+        <i class="w3-right">Boston, MA</i></br>
+          <b>Harvard GSD</b>
+          </br></br>
+          <b>Roles: </b></br>
+          Lead Designer, Teacher</br></br>
+          <b>Tools Taught:</b> </br>
+          Hand Drafting, Model Making, Sketchup, Photoshop
          </p>
          </div>
 
@@ -764,9 +796,11 @@ font-style: black;
        </div>
        </a>
 
-      <div class="w3-margin-top">
-        <h6><b>YouthBuild: Harvard CSFP Fellowship</b></h6>
-        <p>2017 recipient of the Harvard GSD Community Service Fellowship Program. Led a team of local high school students through a summer design project with a NGO working in Haiti.</p>
+      <div>
+        <h5><b>YOUTHBUILD BOSTON: HARVARD CSFP</b></h5>
+        <h6>
+        2017 recipient of the Harvard GSD Community Service Fellowship Program. Led a team of local high school studentsts through a summer design project with a NGO working in Haiti.
+        </h6>
       </div>
       </div>
     </div>
@@ -778,22 +812,22 @@ font-style: black;
       <img class="img__img" src="images/weather.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       
       <div class="img__description_layer w3-hide-small">
-        <div class="img__description">
-       <h6  class="w3-margin-bottom"><b>Weather App</b></h6>
+        <div class="img__description" style="margin-top: -10px;">
 
-        <p>Created as an assignment for a MIT data visualization course. The concept is for the weather app to translate quantitative data pulled from an API into qualitative, descriptive text predictions.</p>
+        <h5><b>WEATHER APP</b></h5>
+        <h6>
+        Created as an assignment for a MIT data visualization course. The concept is for the weather app to translate quantitative data pulled from an API into qualitative, descriptive text predictions.
+        </h6>
 
-     <!--    <p>Academic
+         <div class="w3-border-top"style="font-size: 14px;">
+        <p>Academic
         <i class="w3-right">2017</i></br>
-         <b>MIT</b>
-        <i class="w3-right">Cambridge, MA</i></br>
-         </p> -->
-
-         <div class="w3-white  w3-text-black">
-        <p >Academic
-        <i class="w3-right w3-margin-right ">2017</i></br>
-         <b>MIT</b>
-        <i class="w3-right w3-margin-right">Cambridge, MA</i></br>
+           <b>MIT 4.S02</b>
+        <i class="w3-right">Cambrdige, MA</i></br></br>
+          <b>Roles: </b></br>
+          Individual Project, Conception, Research, UX Design </br></br>
+          <b>Tools Used:</b> </br>
+         P5.js, HTML, CSS, JavaScrpit, Dark Sky API
          </p>
          </div>
 
@@ -801,10 +835,13 @@ font-style: black;
        </div>
        </a>
 
-      <div class="w3-margin-top">
-        <h6><b>Weather App</b></h6>
-        <p>Created as an assignment for a MIT data visualization course. The concept is for the weather app to translate quantitative data pulled from an API into qualitative, descriptive text predictions.</p>
+      <div>
+        <h5><b>WEATHER APP</b></h5>
+        <h6>
+        Created as an assignment for a MIT data visualization course. The concept is for the weather app to translate quantitative data pulled from an API into qualitative, descriptive text predictions.
+        </h6>
       </div>
+
       </div>
     </div>
 
@@ -816,24 +853,24 @@ font-style: black;
       <img class="img__img" src="images/haitiSchool.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       
       <div class="img__description_layer w3-hide-small">
-        <div class="img__description">
-       <h6  class="w3-margin-bottom"><b>Summits Academy</b></h6>
+        <div class="img__description" style="margin-top: -10px;">
 
-        <p>Conceptual design for a college prep academy located in the central plateau region of Haiti. The campus will include teaching, library, dining, athletics, and dwelling spaces.</p>
-        
-      <!--   <p>Professional
-        <i class="w3-right">2016</i></br>
-         <b>Shepley Bulfinch</b>
-        <i class="w3-right">Haiti</i></br>
-        <b>Summits Education</b>
-         </p> -->
+        <h5><b>SUMMITS ACADEMY</b></h5>
+        <h6>
+        Conceptual design for a college prep academy located in the central plateau region of Haiti. The campus will include teaching, library, dining, athletics, and dwelling spaces.
+        </h6>
 
-         <div class="w3-white  w3-text-black">
-        <p >Professional
-        <i class="w3-right w3-margin-right ">2015</i></br>
-         <b>Shepley Bulfinch</b>
-        <i class="w3-right w3-margin-right">Central Plateau, Haiti</i></br>
-        <b>Summits Education</b>
+         <div class="w3-border-top"style="font-size: 14px;">
+        <p>Professional
+          <i class="w3-right">2015</i></br>
+          <b>Shepley Bulfinch</b>
+          <i class="w3-right">Haiti</i></br>
+          <b>Summits Education</b>
+          </br></br>
+          <b>Roles: </b></br>
+          Schematic, Site Planning, Phase Planning, Renderings </br></br>
+          <b>Tools Used:</b> </br>
+          AutoCad, Hand Skething, Sketchup, Photoshop, Illustrator, Indesign
          </p>
          </div>
 
@@ -841,9 +878,11 @@ font-style: black;
        </div>
        </a>
 
-      <div class="w3-margin-top">
-        <h6><b>Summits Academy</b></h6>
-        <p>Conceptual design for a college prep academy located in the central plateau region of Haiti. The campus will include teaching, library, dining, athletics, and dwelling spaces.</p>
+      <div>
+        <h5><b>SUMMITS ACADEMY</b></h5>
+        <h6>
+        Conceptual design for a college prep academy located in the central plateau region of Haiti. The campus will include teaching, library, dining, athletics, and dwelling spaces.
+        </h6>
       </div>
       </div>
     </div>
@@ -856,17 +895,24 @@ font-style: black;
       <img class="img__img" src="images/haitiRehab.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       
       <div class="img__description_layer w3-hide-small">
-        <div class="img__description">
-       <h6  class="w3-margin-bottom"><b>Haitian Physical Rehabilitation Center</b></h6>
+        <div class="img__description" style="margin-top: -10px;">
 
-        <p>Multi-phased design of a rehabilitation clinic located on the Mirebalais Hospital campus in central Haiti. The first phase is a gym and the second phase includes clinical support spaces.</p>
+        <h5><b>HAITIAN PHYSICAL REHAB CENTER</b></h5>
+        <h6>
+        Multi-phased design of a rehabilitation clinic located on the Mirebalais Hospital campus in central Haiti. The first phase is a gym and the second phase includes clinical support spaces.
+        </h6>
 
-         <div class="w3-white  w3-text-black">
-        <p >Professional
-        <i class="w3-right w3-margin-right ">2012</i></br>
-         <b>Shepley Bulfinch</b>
-        <i class="w3-right w3-margin-right">Central Plateau, Haiti</i></br>
-        <b>Partners in Health</b>
+         <div class="w3-border-top"style="font-size: 14px;">
+        <p>Professional
+        <i class="w3-right">2012</i></br>
+          <b>Shepley Bulfinch</b>
+          <i class="w3-right">Haiti</i></br>
+          <b>Partners in Health</b>
+          </br></br>
+          <b>Roles: </b></br>
+          Schematic, Phase Planning, Material Research, Renderings</br></br>
+          <b>Tools Used:</b> </br>
+          AutoCad, Sketchup, Photoshop
          </p>
          </div>
 
@@ -874,9 +920,11 @@ font-style: black;
        </div>
        </a>
 
-      <div class="w3-margin-top">
-        <h6><b>Haitian Physical Rehabilitation Center</b></h6>
-        <p>Multi-phased design of a rehabilitation clinic located on the Mirebalais Hospital campus in central Haiti. The first phase is a gym and the second phase includes clinical support spaces.</p>
+      <div>
+        <h5><b>HAITIAN PHYSICAL REHAB CENTER</b></h5>
+        <h6>
+        Multi-phased design of a rehabilitation clinic located on the Mirebalais Hospital campus in central Haiti. The first phase is a gym and the second phase includes clinical support spaces.
+        </h6>
       </div>
       </div>
     </div>
@@ -889,17 +937,24 @@ font-style: black;
       <img class="img__img" src="images/sparkle.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       
       <div class="img__description_layer w3-hide-small">
-        <div class="img__description">
-       <h6  class="w3-margin-bottom"><b>Sparkle & Chime</b></h6>
+        <div class="img__description" style="margin-top: -10px;">
 
-        <p>A dazzling art installation in Evans Way Park in Boston, MA. The team consisted of volunteers at Shepley Bulfinch and the project was composed of 1000's of hanging recycled hard disks and mirrors.</p>
+        <h5><b>SPARKLE & CHIME</b></h5>
+        <h6>
+        A dazzling art installation in Evans Way Park in Boston, MA. The team consisted of volunteers at Shepley Bulfinch and the project was composed of 1000's of hanging recycled hard disks and mirrors.
+        </h6>
 
-         <div class="w3-white  w3-text-black">
-        <p >Volunteer
-        <i class="w3-right w3-margin-right ">2014</i></br>
-         <b>Shepley Bulfinch</b>
-        <i class="w3-right w3-margin-right">Boston, MA</i></br>
-        <b>Fenway Alliance</b>
+         <div class="w3-border-top"style="font-size: 14px;">
+        <p>Volunteer
+        <i class="w3-right">2014</i></br>
+           <b>Shepley Bulfinch</b>
+        <i class="w3-right">Boston, MA</i></br>
+          <b>Fenway Alliance</b>
+          </br></br>
+          <b>Roles: </b></br>
+          Design Development, Material Research, Installation, Video Promotion</br></br>
+          <b>Tools Used:</b> </br>
+          AutoCad, Hand Construction, Premiere
          </p>
          </div>
 
@@ -907,9 +962,11 @@ font-style: black;
        </div>
        </a>
 
-      <div class="w3-margin-top">
-        <h6><b>Sparkle & Chime</b></h6>
-        <p>A dazzling art installation in Evans Way Park in Boston, MA. The team consisted of volunteers at Shepley Bulfinch and the project was composed of 1000's of hanging recycled hard disks and mirrors.</p>
+      <div>
+        <h5><b>SPARKLE & CHIME</b></h5>
+        <h6>
+        A dazzling art installation in Evans Way Park in Boston, MA. The team consisted of volunteers at Shepley Bulfinch and the project was composed of 1000's of hanging recycled hard disks and mirrors.
+        </h6>
       </div>
       </div>
     </div>
@@ -922,22 +979,23 @@ font-style: black;
       <img class="img__img" src="images/bac.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
       
       <div class="img__description_layer w3-hide-small">
-        <div class="img__description">
-       <h6  class="w3-margin-bottom"><b>Boston Architectural College: City Lab</b></h6>
+        <div class="img__description" style="margin-top: -10px;">
 
-        <p>City Lab is an immersive orientation course for incoming students at the BAC. It focuses on introductory principals of design, architecture, and urbanism through the lens of exploring Boston.</p>
+        <h5><b>BOSTON ARCHITECTURAL COLLEGE: CITY LAB</b></h5>
+        <h6>
+        A dazzling art installation in Evans Way Park in Boston, MA. The team consisted of volunteers at Shepley Bulfinch and the project was composed of 1000's of hanging recycled hard disks and mirrors.
+        </h6>
 
-     <!--    <p>Professional
+         <div class="w3-border-top"style="font-size: 14px;">
+        <p>Professional
         <i class="w3-right">2013-2014</i></br>
-         <b>BAC</b>
-        <i class="w3-right">Boston, MA</i></br>
-        </p> -->
-
-        <div class="w3-white  w3-text-black">
-        <p >Professional
-        <i class="w3-right w3-margin-right ">2013-2014</i></br>
-         <b>BAC</b>
-        <i class="w3-right w3-margin-right">Boston, MA</i></br>
+           <b>BAC</b>
+        <i class="w3-right">Boston, MA</i>
+          </br></br>
+          <b>Roles: </b></br>
+          Co-Instructor</br></br>
+          <b>Tools Taught:</b> </br>
+         Hand Sketching, Critical Observation
          </p>
          </div>
 
@@ -945,9 +1003,11 @@ font-style: black;
        </div>
        </a>
 
-      <div class="w3-margin-top">
-        <h6><b>Boston Architectural College: City Lab</b></h6>
-        <p>City Lab is an immersive orientation course for incoming students at the BAC. It focuses on introductory principals of design, architecture, and urbanism through the lens of exploring Boston.</p>
+      <div>
+       <h5><b>BOSTON ARCHITECTURAL COLLEGE: CITY LAB</b></h5>
+        <h6>
+        A dazzling art installation in Evans Way Park in Boston, MA. The team consisted of volunteers at Shepley Bulfinch and the project was composed of 1000's of hanging recycled hard disks and mirrors.
+        </h6>
       </div>
       </div>
     </div>
@@ -965,7 +1025,7 @@ font-style: black;
 
 
     <div class="w3-container">
-    <h1><b>Michael de St. Aubin</b></h1>
+    <h1 style="font-size: 45px; margin-top: 0px;"><b>Michael de St. Aubin</b></h1>
     </div>
 
 
@@ -977,41 +1037,37 @@ font-style: black;
         <div id="Demo">
             <!-- <h4 style="margin-top: -20px"><b>Resume</b></h4> -->
 
-<!-- <div class="w3-quarter" style=" margin-top: 20px">
-            <h4>Personal</h4>
+<div class="w3-quarter" style=" margin-top: 28px">
             
-            <img  class="w3-padding-16 w3-round-xlarge" src="images/profile.png" alt="Norway" style="width: 89%; margin-top: -3px" > 
-          <p style="margin-top: 0px; margin-right: 20px">
-          Cell: 404.933.3271 </br> Email:
+          <img src="images/profile3.png" alt="Norway" style="width: 120%; margin-top: -15px; margin-left: -60px" > 
+          <p style="margin-top: 0px; text-align: center; margin-left: -60px">
+          </br> 404.933.3271 </br>
           <a class="email" href="mailto:mdestaubin@gsd.harvard.edu">mdestaubin@gsd.harvard.edu</a></br>
           </br>
-          Address:</br>
           353 Harvard Street #26</br>
-          Cambridge, MA 02138</br></br> -->
-          <!-- 
-          Status: </br>
-          Finishing Masters in May 2018 and in search of employment for post-graduation. -->
-<!--         </p>          
+          Cambridge, MA 02138</br></br>
+        </p>          
 </div>
-</div> -->
+</div>
 
 
-<div class="w3-third" style=" margin-top: 20px">
+<div class="w3-quarter" style=" margin-top: 20px">
 
  
       
-          <h4>Education</h4>
+          <h5 style="font-size: 25px"><b>Education</b></h5>
 
     <p><b style="font-size: 16px">Harvard University <br/>Graduate School of Design</b>
                 <br/>
-                Master in Design Studies<br/><a href="http://www.gsd.harvard.edu/design-studies/risk-and-resilience/">Risk + Resilience</a><br/>
+                Master in Design Studies<br/> Concentration: <a href="http://www.gsd.harvard.edu/design-studies/risk-and-resilience/">Risk + Resilience</a><br/>
                 August 2016 - May 2018</p>
 
-                <p>+ <a href="https://hhi.harvard.edu/">H.H.I</a> Internship: Spring 2018<br/>
+                <p> + <a href="https://hhi.harvard.edu/">H.H.I</a> Researcher: Summer 2018 <br/>
+                  + H.H.I Internship: Spring 2018 <br/>
                    + CSFP Summer Fellow 2017
                   </p>
 
-                <p><b style="font-size: 16px">Auburn University</b> <br/>
+                <p><b style="font-size: 16px">Auburn University</b><br/>
                 Bachelor of Architecture<br/>
                 August 2007 - May 2012</p>
 
@@ -1020,7 +1076,8 @@ font-style: black;
                   </p>
 
 
-                <h4>Volunteer</h4>
+                
+                <h5 style="font-size: 25px"><b>Volunteer</b></h5>
 
                 <p><b style="font-size: 16px">WEGL 91.1 FM</b><br/>
                 Student Radio DJ<br/>
@@ -1039,10 +1096,9 @@ font-style: black;
 
 
 
-<div class="w3-third" style=" margin-top: 20px;">
+<div class="w3-quarter" style=" margin-top: 20px;">
 
-  <h4>Professional</h4>
-
+  <h5 style="font-size: 25px"><b>Professional</b></h5>
 
 <p><b style="font-size: 16px">Shepley Bulfinch</b> <br/>Junior Architect<br/>
         Boston, MA | Sept 2012-July 2016</p>
@@ -1069,8 +1125,8 @@ font-style: black;
            + Material Research</p>
 </div>
             
-   <div class="w3-third" style="margin-top: 20px">
-    <h4>Teaching</h4>
+   <div class="w3-quarter" style="margin-top: 20px">
+    <h5 style="font-size: 25px"><b>Teaching</b></h5>
 
     <p><b style="font-size: 16px">YouthBuild Boston</b> <br/>Harvard CSFP Fellow<br/>
         Boston, MA | Summer 2017</p>
@@ -1078,29 +1134,18 @@ font-style: black;
         <p><b style="font-size: 16px">Boston Architectural College</b> <br/>City Lab Co-Instructor<br/>
         Boston, MA | 2013 - 2014</p>
 
-        
-         <h4>Skills</h4>
+        <h5 style="font-size: 25px"><b>Skills</b></h5>
    
-                    <p><b style="font-size: 16px">Advanced</b></p>
-                      <p>
-                       AutoCAD | Revit | Sketchup | </br>
-                       Photoshop | Illustrator | Indesign | </br>
-                       Premiere | Hand Sketching | Model Making
+                    <p class="w3-half">
+                       AutoCAD </br> Revit </br> Sketchup  </br>
+                       Photoshop </br> Illustrator </br> Indesign  </br>
+                       Premiere </br> Hand Sketching </br> Model Making </br>
+                       Excel </br>  Processing  </p>
+                      
+                       <p class="w3-half"> ArcMap </br>
+                       V-Ray </br> Podium </br> 3ds Max </br> After Effects 
+                     </br> P5.JS  </br> HTML </br> CSS </br> JavaScript </br>Rhino           
                       </p>
-
-                      <p><b style="font-size: 16px">Intermediate</b></p>
-                      <p>
-                       Excel | Processing | ArcMap| </br>
-                       V-Ray | Podium | 3ds Max | After Effects          
-                      </p>
-
-                      <p><b style="font-size: 16px">Novice</b></p>
-                      <p>
-                       P5.JS | HTML | CSS | 
-                       JavaScript | Rhino           
-                      </p>
-
-                    
 
          </div>
 
