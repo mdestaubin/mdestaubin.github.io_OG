@@ -54,7 +54,7 @@ function createMap(){
 
 
   worldJSON = L.geoJson(worldMap, {
-    style: style,
+   style: style,
    onEachFeature: onEachFeature
   }).addTo(leafletMap);  
 
@@ -79,12 +79,12 @@ function style(feature) {
 
   return {
     weight: .5,
-    opacity: .5,
+    opacity: .75,
     color: '#000000',
     dashArray: '1',
     fillOpacity: '1',
     fillColor: 'white',
-    background: 'white'
+    background: 'blue'
   };
 }
 
@@ -131,6 +131,18 @@ function pointToLayer(feature, latlng) {
     });
     }
 
+    // function pointToLayer(feature, latlng) {
+    // return new L.icon(latlng,{
+    // iconUrl: feature.properties.Type,
+
+    // iconSize:     [50, 50], // size of the icon
+    // // shadowSize:   [50, 64], // size of the shadow
+    // iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+    // // shadowAnchor: [4, 62],  // the same for the shadow
+    // popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+    // });
+    // }
+
     function TpointToLayer(feature, latlng) {
   return new L.CircleMarker(latlng,{
       radius: 3, 
@@ -142,8 +154,8 @@ function pointToLayer(feature, latlng) {
 
 function ETUstyle(feature) {
   return {      
-      radius: 6, 
-      weight: 1.5, 
+      radius: 2.0, 
+      weight: 3.0, 
       color: '#000000', 
       fillOpacity: 0};
       }
@@ -152,10 +164,11 @@ function highlightETU(e) {
   var layer = e.target;
 
     layer.setStyle({
-    radius: 12,
+    radius: 10,
     weight: 3,
     color: '#000000',
     fillOpacity: 0,
+
   });
 
   if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
