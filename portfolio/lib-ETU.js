@@ -1,39 +1,12 @@
 var libETUData = {
 	"type": "FeatureCollection",
 	"totalFeatures": 32,
-	"features": [{
+	"features": [ {
 		"type": "Feature",
 		"id": "lbr_heal_pt_unmeer_ebolacarefacilities.1",
 		"geometry": {
 			"type": "Point",
-			"coordinates": [-71.1097, 42.3736]
-		},
-		"geometry_name": "the_geom",
-		"properties": {
-			"ECF_Code": "LBR_0001",
-			"ECF_Name": "Barclayville",
-			"Status": "Under Construction",
-			"Type": "https://mdestaubin.github.io/portfolio/images/thesis.png",
-			"Beds_Open": '</br>',
-			"Beds_Plan": '</br><b>Outbreak Response Simulator</b>',
-			"Plan_Open": "2014-12-25T00:00:00Z",
-			"Partner": "",
-			"Lead_Donor": "",
-			"Latitude": 4.6765414949,
-			"Longitude": -8.23489494634,
-			"Accuracy": "WFP - GPS",
-			"Comment": "Scheduled to complete 26/12/2014 - opening date TBC",
-			"LabPresent": "No",
-			"DSTR_NM": "Grand Kru",
-			"ADM1_CODE": "LBR18",
-			"Updated": "2014-12-15T00:00:00Z"
-		}
-	}, {
-		"type": "Feature",
-		"id": "lbr_heal_pt_unmeer_ebolacarefacilities.1",
-		"geometry": {
-			"type": "Point",
-			"coordinates": [-72.3074, 18.5944]
+			"coordinates": [-74.5074, 18.5944]
 		},
 		"geometry_name": "the_geom",
 		"properties": {
@@ -46,6 +19,35 @@ var libETUData = {
 			"Plan_Open": "2014-12-25T00:00:00Z",
 			"Partner": "https://mdestaubin.github.io/portfolio/images/haitiSchool.png",
 			"Lead_Donor": "https://mdestaubin.github.io/portfolio/links/rehab/index",
+			"Latitude": 8.6765414949,
+			"Longitude": -9.23489494634,
+			"Accuracy": "WFP - GPS",
+			"Comment": "Scheduled to complete 26/12/2014 - opening date TBC",
+			"LabPresent": "No",
+			"DSTR_NM": "Grand Kru",
+			"ADM1_CODE": "LBR18",
+			"Updated": "2014-12-15T00:00:00Z"
+		}
+	}, 
+
+	{
+		"type": "Feature",
+		"id": "lbr_heal_pt_unmeer_ebolacarefacilities.1",
+		"geometry": {
+			"type": "Point",
+			"coordinates": [-70.3074, 18.5944]
+		},
+		"geometry_name": "the_geom",
+		"properties": {
+			"ECF_Code": "LBR_0001",
+			"ECF_Name": "Barclayville",
+			"Status": "",
+			"Type": "https://mdestaubin.github.io/portfolio/images/haitiSchool.png",
+			"Beds_Open": "",
+			"Beds_Plan": '</br><b>Summits Academy</b>',
+			"Plan_Open": "2014-12-25T00:00:00Z",
+			"Partner": "https://mdestaubin.github.io/portfolio/images/haitiSchool.png",
+			"Lead_Donor": "https://mdestaubin.github.io/portfolio/links/academy/index",
 			"Latitude": 8.6765414949,
 			"Longitude": -9.23489494634,
 			"Accuracy": "WFP - GPS",
@@ -91,7 +93,7 @@ var libETUData = {
 		"id": "lbr_heal_pt_unmeer_ebolacarefacilities.1",
 		"geometry": {
 			"type": "Point",
-			"coordinates": [-10.9694, 8.6448]
+			"coordinates": [-12.7694, 8.0448]
 		},
 		"geometry_name": "the_geom",
 		"properties": {
@@ -172,6 +174,122 @@ var libETUData = {
 			"Updated": "2014-12-15T00:00:00Z"
 		}
 	}, 
+	{
+		"type": "Feature",
+		"id": "lbr_heal_pt_unmeer_ebolacarefacilities.1",
+		"geometry": {
+			"type": "Point",
+			"coordinates": [-7.9999, 4.5000]
+		},
+		"geometry_name": "the_geom",
+		"properties": {
+			"ECF_Code": "LBR_0001",
+			"ECF_Name": "Barclayville",
+			"Status": "Under Construction",
+			"Type": "https://mdestaubin.github.io/portfolio/images/triage.png",
+			"Beds_Open": '',
+			"Beds_Plan": '</br><b>Triage + Isolation Unit</b>',
+			"Plan_Open": "2014-12-25T00:00:00Z",
+			"Partner": "",
+			"Lead_Donor": "https://mdestaubin.github.io/portfolio/links/triage/index",
+			"Latitude": 8.6765414949,
+			"Longitude": -9.23489494634,
+			"Accuracy": "WFP - GPS",
+			"Comment": "Scheduled to complete 26/12/2014 - opening date TBC",
+			"LabPresent": "No",
+			"DSTR_NM": "Grand Kru",
+			"ADM1_CODE": "LBR18",
+			"Updated": "2014-12-15T00:00:00Z"
+		}
+	}, 
+
+	{
+		"type": "Feature",
+		"id": "lbr_heal_pt_unmeer_ebolacarefacilities.1",
+		"geometry": {
+			"type": "Point",
+			"coordinates": [-69.0000, 42.3736]
+		},
+		"geometry_name": "the_geom",
+		"properties": {
+			"ECF_Code": "LBR_0001",
+			"ECF_Name": "Barclayville",
+			"Status": "Under Construction",
+			"Type": "https://mdestaubin.github.io/portfolio/images/ebolaMap.jpg",
+			"Beds_Open": '',
+			"Beds_Plan": '</br><b>International Crisis Response Map</b>',
+			"Plan_Open": "2014-12-25T00:00:00Z",
+			"Partner": "",
+			"Lead_Donor": "https://mdestaubin.github.io/ebolaMap/",
+			"Latitude": 8.6765414949,
+			"Longitude": -9.23489494634,
+			"Accuracy": "WFP - GPS",
+			"Comment": "Scheduled to complete 26/12/2014 - opening date TBC",
+			"LabPresent": "No",
+			"DSTR_NM": "Grand Kru",
+			"ADM1_CODE": "LBR18",
+			"Updated": "2014-12-15T00:00:00Z"
+		}
+	}, 
+
+	{
+		"type": "Feature",
+		"id": "lbr_heal_pt_unmeer_ebolacarefacilities.1",
+		"geometry": {
+			"type": "Point",
+			"coordinates": [-73.0097, 42.3736]
+		},
+		"geometry_name": "the_geom",
+		"properties": {
+			"ECF_Code": "LBR_0001",
+			"ECF_Name": "Barclayville",
+			"Status": "Under Construction",
+			"Type": "https://mdestaubin.github.io/portfolio/images/thesis.png",
+			"Beds_Open": '</br>',
+			"Beds_Plan": '</br><b>Outbreak Response Simulator</b>',
+			"Plan_Open": "2014-12-25T00:00:00Z",
+			"Partner": "",
+			"Lead_Donor": "https://mdestaubin.github.io/portfolio/links/thesis/index",
+			"Latitude": 4.6765414949,
+			"Longitude": -8.23489494634,
+			"Accuracy": "WFP - GPS",
+			"Comment": "Scheduled to complete 26/12/2014 - opening date TBC",
+			"LabPresent": "No",
+			"DSTR_NM": "Grand Kru",
+			"ADM1_CODE": "LBR18",
+			"Updated": "2014-12-15T00:00:00Z"
+		}
+	},
+
+	{
+		"type": "Feature",
+		"id": "lbr_heal_pt_unmeer_ebolacarefacilities.1",
+		"geometry": {
+			"type": "Point",
+			"coordinates": [-71.1097, 45.036]
+		},
+		"geometry_name": "the_geom",
+		"properties": {
+			"ECF_Code": "LBR_0001",
+			"ECF_Name": "Barclayville",
+			"Status": "Under Construction",
+			"Type": "https://mdestaubin.github.io/portfolio/images/ebolaAid.png",
+			"Beds_Open": '</br>',
+			"Beds_Plan": '</br><b>Global Humanitarian Aid Flow</b>',
+			"Plan_Open": "2014-12-25T00:00:00Z",
+			"Partner": "",
+			"Lead_Donor": "https://mdestaubin.github.io/ebolaAid/",
+			"Latitude": 4.6765414949,
+			"Longitude": -8.23489494634,
+			"Accuracy": "WFP - GPS",
+			"Comment": "Scheduled to complete 26/12/2014 - opening date TBC",
+			"LabPresent": "No",
+			"DSTR_NM": "Grand Kru",
+			"ADM1_CODE": "LBR18",
+			"Updated": "2014-12-15T00:00:00Z"
+		}
+	},
+
 
 	],
 

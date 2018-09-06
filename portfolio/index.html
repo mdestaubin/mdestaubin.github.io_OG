@@ -215,7 +215,10 @@ font-style: black;
 #map { 
     width: 1165px; 
     height: 650px;
-    /*background-color: 'white';*/
+    opacity: 1.0;
+    /*color: 'red';*/
+    color: #595959;
+    background-color: 'red';
     margin: auto;
     /*position: static;*/ 
   }
@@ -263,10 +266,10 @@ font-style: black;
       <div class="w3-right" id="myBtnContainer" style="margin-right: 16px">
     
       <span class="w3-margin-left w3-bar-item w3-white">Work :</span> 
-      <a href="#portfolio"> 
+      <a href="#photos"> 
       <button class="btn active w3-bar-item" onclick="filterSelection('all')">All</button>
       </a>
-      <a href="#portfolio"> 
+      <a href="#photos"> 
       <button class="btn w3-bar-item w3-hover-yellow" onclick="filterSelection('thesis')">Thesis</button>
       <button class="btn w3-bar-item" onclick="filterSelection('architecture')">Architecture</button>
       <button class="btn w3-bar-item" onclick="filterSelection('technology')">Research + Technology</button>
@@ -275,9 +278,19 @@ font-style: black;
      </a>
      <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button w3-white"><i class="fa fa-user fa-fw w3-center"></i></a> 
 
-        <a href="#contact" onclick="w3_close()" class="w3-bar-item w3-button w3-padding w3-white"><i class=" fa fa-map-pin fa-fw w3-center"></i></a>
+        <a href="#portfolio" onclick="w3_close()" class="w3-bar-item w3-button w3-padding w3-white"><i class=" fa fa-map-pin fa-fw w3-center"></i></a>
     </div>
     </div>
+
+      <!-- Contact Section -->
+  <div class="w3-container w3-padding-32 w3-hide-small" id="portfolio">
+
+          <!-- <h4 class="w3-text-grey">// UNDER CONSTRUCTION</h4> -->
+          <div id='container'></div>
+          <div id='map'></div>
+          <script type="text/javascript" src="sketch.js"></script>
+          
+          </div>
 
 
     <!-- title images -->
@@ -356,7 +369,7 @@ font-style: black;
 
   
   <!-- Photo Grid-->
-  <div id="photos" class="w3-row-padding" style= "margin-bottom: 100px; margin-top: 20px">
+  <div id="photos" class="w3-row-padding w3-padding-64" style= "margin-bottom: 100px; margin-top: 20px">
   <!--  </br></br> -->
    <div class="column thesis w3-half" style = "min-width:360px">
        <div class="img__wrap">
@@ -368,7 +381,7 @@ font-style: black;
         <div class="img__description" style="margin-top: -10px;">
         <h5 class="w3-yellow"><b>OUTBREAK RESPONSE SIMULATOR</b></h5>
         <h6>
-        An agent-based simulation model to test infectious disease outbreak response strategies and capacities. It is being developed as a thesis project for the MDes Risk & Resilience program at Harvard GSD.
+        An agent-based simulation model to test infectious disease outbreak response strategies and capacities. It began as a thesis project, but is currently being developed further at the Harvard Humanitarian Initiative. 
       </h6>
 
          <div class="w3-border-top"style="font-size: 14px;">
@@ -377,7 +390,7 @@ font-style: black;
            <b>Harvard GSD</b>
         <i class="w3-right">Cambridge, MA</i></br></br>
           <b>Roles:</b></br>
-          Individual Project, Conception, Research, Code Development, UX Design, Presentation</br></br>
+          Individual Project, Conception, Research, Code Development, UX Design, Data Visualization</br></br>
           <b>Tools Used:</b></br>
          ArcMap, Processing, Java, Photoshop, After Effects, Premiere
          </p>
@@ -390,7 +403,7 @@ font-style: black;
       <div>
         <h5><b>OUTBREAK RESPONSE SIMULATOR</b></h5>
         <h6>
-        An agent-based simulation model to test infectious disease outbreak response strategies and capacities. It is being developed as a thesis project for the MDes Risk & Resilience program at Harvard GSD.
+        An agent-based simulation model to test infectious disease outbreak response strategies and capacities. It began as a thesis project, but is currently being developed further at the Harvard Humanitarian Initiative.
       </h6>
       </div>
       </div>
@@ -1163,18 +1176,6 @@ font-style: black;
         <div class="w3-container w3-white">
         </br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br>
     </div>
-
-
-  
-  <!-- Contact Section -->
-  <div class="w3-container w3-padding-32 w3-hide-small" id="contact">
-
-          <h4 class="w3-text-grey">// UNDER CONSTRUCTION</h4>
-          <div id='container'></div>
-          <div id='map'></div>
-          <script type="text/javascript" src="sketch.js"></script>
-          
-          </div>
 
 
 <!-- End page content -->
