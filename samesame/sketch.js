@@ -38,11 +38,6 @@ function createMap(){
      //            });
 
 
-
-     
-
-
-
  var leafletMap = L.map('map',{
        center: [42.369, -71.109419],
        zoom: 14,
@@ -98,10 +93,10 @@ function highlightETU(e) {
   var layer = e.target;
 
     layer.setStyle({
-    radius: 6,
+    radius: 7,
     weight: 2,
     color: 'red',
-    fillOpacity: 0,
+    fillOpacity: .4,
 
   });
 
