@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+
+<html>
+
+<title>Same Same</title>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link href="https://fonts.googleapis.com/css?family=Arvo|Montserrat:300,700|Roboto:400,900" rel="stylesheet">  
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="https://fonts.googleapis.com/css?family=Gaegu:400,700" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Montserrat|Open+Sans" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Knewave" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Permanent+Marker" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Special+Elite" rel="stylesheet">
+
+  <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+  <link rel="stylesheet" href="libraries/leaflet/leaflet.css"/>
+  <script language="javascript" type="text/javascript" src="libraries/p5.js"></script>
+  <script language="javascript" type="text/javascript" src="libraries/p5.dom.js"></script> 
+  <script src="libraries/leaflet/leaflet.js"></script>
+  <script type="text/javascript" src="world-map.js"></script>  
+  <script type="text/javascript" src="lib-ETU.js"></script>  
+  <script type="text/javascript" src="town-Data.js"></script>  
+
+<style>
+body,h2,h3,h4 {font-family: "Roboto", sans-serif} 
+* {
+    box-sizing: border-box;
+}
+.mySlides {display: none}
+html, body {
+    background-color: 'black';
+    padding: 0px;
+    height: 2000;
+}
+h6{font-family: 'Noto Sans', sans-serif;
+/*font-style: thin;*/
+font-size: 13px;
+text-align: justify;
+}
+a{font-family: "Roboto" , sans-serif;
+}
+h5{font-family: "Roboto" , sans-serif;
+font-style: black;
+font-size: 17px;
+}
+h1{font-family: "Roboto" , sans-serif;
+font-style: black;
+}
+/* Center website */
+.main {
+    max-width: 1000px;
+    margin: auto;
+}
+.row {
+    margin: 10px -16px;
+}
+/* Add padding BETWEEN each column */
+.row,
+.row > .column {
+    padding: 8px;
+}
+/* Create three equal columns that floats next to each other */
+.column {
+    float: left;
+    width: 33.33%;
+    display: none; /* Hide all elements by default */
+    margin-bottom: 5px;
+    margin-top: 10px;
+}
+/* Clear floats after rows */ 
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+/* Content */
+.content {
+    background-color: white;
+    /*padding: 10px;*/
+}
+/* The "show" class is added to the filtered elements */
+.show {
+  display: block;
+}
+/* Style the buttons */
+.btn {
+  border: none;
+  outline: none;
+  padding: 12px 16px;
+  background-color: white;
+  cursor: pointer;
+}
+.btn:hover {
+  background-color: #ddd;
+}
+.btn.active {
+  background-color: black;
+  color: white;
+}
+/* over lay description */
+.img__wrap {
+  position: relative;
+}
+.img__wrap_2 {
+  position: relative;
+}
+.img__wrap_3 {
+  position: relative;
+}
+.img__description_layer {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 100);
+  color: black;
+  visibility: hidden;
+  opacity: 0;
+  display: flex;
+  align-items: top;
+  justify-content: left;
+  /* transition effect. not necessary */
+  transition: opacity .1s, visibility .5s;
+}
+.img__description_layer_2 {
+  position: absolute;
+  top: 480px;
+  bottom: 0px;
+  left: 00px;
+  right: 0px;
+  background: rgba(255, 255, 255, 1);
+  color: black;
+  visibility: hidden;
+  opacity: 0;
+  display: flex;
+  align-items: bottom;
+  justify-content: right;
+  /* transition effect. not necessary */
+  transition: opacity .1s, visibility .1s;
+}
+.img__description_layer_3 {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  background: rgba(255, 255, 255, 1);
+  color: black;
+  visibility: hidden;
+  opacity: 0;
+  display: flex;
+  align-items: bottom;
+  justify-content: right;
+  /* transition effect. not necessary */
+  transition: opacity .1s, visibility .1s;
+}
+.img__wrap:hover .img__description_layer {
+  visibility: visible;
+  opacity: 1;
+}
+.img__wrap_2:hover .img__description_layer_2 {
+  visibility: visible;
+  opacity: 1;
+}
+.img__wrap_3:hover .img__description_layer_3 {
+  visibility: visible;
+  opacity: .7;
+}
+.img__description {
+  transition: .5s;
+  transform: translateY(15em);
+}
+.img__description_2 {
+  transition: .2;
+  transform: translateY(0em);
+}
+.img__description_3 {
+  transition: .3s;
+  transform: translateY(1em);
+}
+.img__wrap:hover .img__description {
+  transform: translateY(0);}
+  .skills {
+  text-align: right;
+  padding-right: 20px;
+  line-height: 6px;
+  color: #595959;
+}
+.img__wrap_2:hover .img__description_2 {
+  transform: translateY(0);}
+  .skills {
+  text-align: bottom;
+  padding-right: 0px;
+  line-height: 6px;
+  color: #595959;
+}
+.img__wrap_3:hover .img__description_3 {
+  transform: translateY(0);}
+  .skills {
+  text-align: bottom;
+  padding-right: 0px;
+  line-height: 6px;
+  color: #595959;
+}
+.html {width: 80%; background-color: #595959;}
+.css {width: 70%; background-color: #595959;}
+.js {width: 60%; background-color: #595959;}
+.php {width: 50%; background-color: #595959;}
+#map { 
+    width: 1165px; 
+    height: 650px;
+    opacity: 1.0;
+    /*color: 'red';*/
+    /*color: #595959;*/
+    background-color: 'red';
+    margin: auto;
+    /*position: static;*/ 
+  }
+#container{
+    width:0px;
+    height:0px;
+    left:0px;
+    top:0px;
+    bottom: 0px;
+    background-color: 'white';
+    /*position:absolute;*/
+  }
+  #myDIV {
+    width: 100%;
+}
+@-webkit-keyframes fade {
+  from {opacity: .4} 
+  to {opacity: 1}
+}
+@keyframes fade {
+  from {opacity: .4} 
+  to {opacity: 1}
+}
+</style>
+
+
+<body class="w3-white w3-content" style="max-width:1200px">
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main">
+
+<!-- Header -->
+<header id="portfolio">
+  <div class="w3-container w3-center">
+  <h1 style="font-size: 45px; margin-top: 0px"><b>same same same</b></h1>
+  </div>
+</header>
+
+<!-- Contact Section -->
+<div class="w3-container" id="portfolio">
+  <div id='container'></div>
+  <div id='map'></div>
+  <script type="text/javascript" src="sketch.js"></script>
+</div>
+
+
+<!-- End page content -->
+</div>
+
+
+
+
+<!-- // Script to open and close sidebar -->
+<script>
+filterSelection("all")
+function filterSelection(c) {
+  var x, i;
+  x = document.getElementsByClassName("column");
+  if (c == "all") c = "";
+  for (i = 0; i < x.length; i++) {
+    w3RemoveClass(x[i], "show");
+    if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "show");
+  }
+}
+function w3AddClass(element, name) {
+  var i, arr1, arr2;
+  arr1 = element.className.split(" ");
+  arr2 = name.split(" ");
+  for (i = 0; i < arr2.length; i++) {
+    if (arr1.indexOf(arr2[i]) == -1) {element.className += " " + arr2[i];}
+  }
+}
+function w3RemoveClass(element, name) {
+  var i, arr1, arr2;
+  arr1 = element.className.split(" ");
+  arr2 = name.split(" ");
+  for (i = 0; i < arr2.length; i++) {
+    while (arr1.indexOf(arr2[i]) > -1) {
+      arr1.splice(arr1.indexOf(arr2[i]), 1);     
+    }
+  }
+  element.className = arr1.join(" ");
+}
+// Add active class to the current button (highlight it)
+var btnContainer = document.getElementById("myBtnContainer");
+var btns = btnContainer.getElementsByClassName("btn");
+for (var i = 0; i < btns.length; i++) {
+  btns[i].addEventListener("click", function(){
+    var current = document.getElementsByClassName("active");
+    current[0].className = current[0].className.replace(" active", "");
+    this.className += " active";
+  });
+}
+function myFunction() {
+    var x = document.getElementById("Demo");
+    if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+    } else {
+        x.className = x.className.replace(" w3-show", "");
+    }
+}
+var slideIndex = 1;
+showDivs(slideIndex);
+function plusDivs(n) {
+  showDivs(slideIndex += n);
+}
+function showDivs(n) {
+  var i;
+  var x = document.getElementsByClassName("mySlides");
+  if (n > x.length) {slideIndex = 1}    
+  if (n < 1) {slideIndex = x.length}
+  for (i = 0; i < x.length; i++) {
+     x[i].style.display = "none";  
+  }
+  x[slideIndex-1].style.display = "block";  
+}
+</script>
+
+</body>
+</html>
