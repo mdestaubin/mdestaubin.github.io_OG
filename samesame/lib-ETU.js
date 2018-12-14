@@ -15,11 +15,26 @@ var libETUData = {
 			"Beds_Plan": '</br><b>A.</b></br>353 Harvard Street',
 			"Partner": "https://raw.githubusercontent.com/mdestaubin/mdestaubin.github.io/master/samesame/images/353%20harvard%20st.png",
 			"Lead_Donor": "https://mdestaubin.github.io/portfolio/links/rehab/index",
-			"Updated": "2014-12-15T00:00:00Z"
+			"Updated": "2018-12-14T00:00:00Z"
 		}
 	}, 
 
-	
+	{
+		
+		"type": "Feature",
+		"id": "lbr_heal_pt_unmeer_ebolacarefacilities.1",
+		"geometry": {
+			"type": "Point",
+			"coordinates": [-71.105605, 42.379990]
+		},
+		"geometry_name": "the_geom",
+		"properties": {
+			"Type": "https://raw.githubusercontent.com/mdestaubin/mdestaubin.github.io/master/samesame/images/18%20skehan%20st.png",
+			"Beds_Plan": '</br><b>B.</b></br>18 Skehan Street',
+			"Lead_Donor": "https://mdestaubin.github.io/portfolio/links/rehab/index",
+			"Updated": "2018-12-14T00:00:00Z"
+		}
+	}, 
 
 	],
 
