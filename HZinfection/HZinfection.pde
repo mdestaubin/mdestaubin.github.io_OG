@@ -10,7 +10,8 @@ int currentPopulationSize = 0;
 
 float popFluxRate = 0.001250;
 
-
+PFont myFont;
+PFont altFont;
 
 PVector H1 = new PVector(180, 172);
 
@@ -76,7 +77,8 @@ void setup()
 
   healthZone  = loadImage( "DATA/zones4.png" ); 
 
-
+  myFont = createFont("Arial Black",32);
+  altFont = createFont("Arial",32);
 
   initailizePop();
 
@@ -267,18 +269,16 @@ void statsBar() {
   float percentHealthy = numHealthy / popSize * 100;
 
 
-
-
-
   fill(255);  
 
   textAlign(LEFT);
-
-  textSize(36);
-
-  text( "MODEL",xStat, yTitle,360,100);
-
-  textSize(12);
+  textFont(myFont);
+  textSize(32);
+  text( "OUTBREAK MODEL",xStat, yTitle,360,100);
+  
+  textFont(altFont);
+  textSize(15);
+  
 
   text( "DAY: " + dayCounter,xStat, yDay);
 
@@ -298,12 +298,22 @@ void statsBar() {
 
   text( "HEALTH STAFF: 20",xStat, yStaff);
 
+  //fill(255,255,255,100);
+  //rect(width/2-355,height-40,325,20);
   
-
+  //fill(0,0,0);
   textAlign(CENTER);
+  
+  textFont(altFont);
+  textSize(20);
 
-  text( " CLICK TO ADD SICK AGENT  | |  SPACE BAR TO RESET", width/2-200, height -25);
-
+  //String[] fontList = PFont.list();
+  //println(fontList);
+  
+  //if(frameCount < 200){
+  text( " CLICK TO ADD SICK AGENT  | |  SPACE BAR TO RESET", width/2-200, height-20);
+  //}
+  fill(255,255,255);
     
 
     float xScale = 100;
@@ -898,7 +908,7 @@ class Agent {
 
       fill( 255, 0, 0 );
 
-      rad = 3;
+      rad = 4;
 
     } 
 
@@ -906,7 +916,7 @@ class Agent {
 
       fill(255, 255, 0); 
 
-      rad = 3;
+      rad = 4;
 
     } 
 
@@ -914,7 +924,7 @@ class Agent {
 
       fill(0, 255, 0); 
 
-      rad = 3;
+      rad = 4;
 
     }
 
@@ -922,7 +932,7 @@ class Agent {
 
       fill(255); 
 
-      rad = 3;
+      rad = 4;
 
     }
 
@@ -938,11 +948,11 @@ class Agent {
 
     if ( sick == true) {
 
-      fill(255,0,0,150);
+      fill(255,0,0,100);
 
       stroke(255, 0, 0, 100);
 
-      ellipse(loc.x, loc.y, 10, 10);
+      ellipse(loc.x, loc.y, 12, 12);
 
     }
 
@@ -952,7 +962,7 @@ class Agent {
 
       stroke(0, 255, 0, 100);
 
-      ellipse(loc.x, loc.y, 10, 10);
+      ellipse(loc.x, loc.y, 12, 12);
 
     }
 
@@ -962,7 +972,7 @@ class Agent {
 
       stroke(255, 255, 0, 100);
 
-      ellipse(loc.x, loc.y, 10, 10);
+      ellipse(loc.x, loc.y, 12, 12);
 
     }
 
