@@ -1,4 +1,4 @@
-AuthUserFile https://github.com/mdestaubin/mdestaubin.github.io/blob/master/powerbi/.htpasswd
+AuthUserFile "https://github.com/mdestaubin/mdestaubin.github.io/blob/master/powerbi/.htpasswd"
 AuthName "Message to go on user's login screen"
 AuthType Basic
 Allow from all
