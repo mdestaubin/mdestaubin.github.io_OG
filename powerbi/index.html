@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <title>Simple Web Page</title>
+    <style>
+      h1 {
+        margin: 2em 0;
+      }
+      body, html {
+  		height: 100%;
+  		margin: 0;
+  	}
+  	  .bg {
+ 		 /* The image used */
+ 		 background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQi1NBh2yWMiSsobNwPdYl8fjenh-k_ItSTtV1_9uJWAZMW7Qe&s");
+
+  		/* Full height */
+  		height: 100%; 
+
+ 		 /* Center and scale the image nicely */
+ 	    background-position: center;
+  		background-repeat: no-repeat;
+ 	    background-size: cover;
+	  }	
+    </style>
+  </head>
+  <body>
+
+  <div class="bg">
+  	
+  <CENTER>
+<FORM>
+<input type="button" value="Enter Password" onClick="passWord()">
+</FORM>
+</CENTER>
+
+  </div>
+
+  </body>
+
+  <SCRIPT>
+function passWord() {
+var testV = 1;
+var pass1 = prompt('Please Enter Your Password',' ');
+while (testV < 3) {
+if (!pass1)
+history.go(-1);
+if (pass1.toLowerCase() == "cdcproject") {
+window.open('protectpage.html');
+break;
+}
+testV+=1;
+var pass1 =
+prompt('Access Denied - Password Incorrect, Please Try Again.','Password');
+}
+if (pass1.toLowerCase()!="password" & testV ==3)
+history.go(-1);
+return " ";
+}
+</SCRIPT>
+
+</html>
