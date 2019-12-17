@@ -1,0 +1,6 @@
+AuthUserFile "https://github.com/mdestaubin/simulator/blob/master/.htpasswd"
+AuthName "Message to go on user's login screen"
+AuthType Basic
+Allow from all
+Require valid-user
+Options +Indexes
