@@ -13,53 +13,25 @@
   		height: 100%;
   		margin: 0;
   	}
-  	  .bg {
- 		 /* The image used */
- 		 background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQi1NBh2yWMiSsobNwPdYl8fjenh-k_ItSTtV1_9uJWAZMW7Qe&s");
-
-  		/* Full height */
-  		height: 100%; 
-
- 		 /* Center and scale the image nicely */
- 	    background-position: center;
-  		background-repeat: no-repeat;
- 	    background-size: cover;
-	  }	
+  	 
     </style>
   </head>
   <body>
 
-  <div class="bg">
-  	
-  <CENTER>
-<FORM>
-<input type="button" value="Enter Password" onClick="passWord()">
-</FORM>
-</CENTER>
-
-  </div>
+  <!-- Start Bravenet.com Service Code -->
+<div style="text-align: right; width:210px; padding:5px;font: normal 13px arial;">
+  <form action="https://pub45.bravenet.com/passwd/show.php" method="post" target="_top">
+    <input type="hidden" name="usernum" value="3806776670">
+    <h3 style="text-align:center;margin:5px;">Login for Access</h3>
+    <div style="padding:5px;">Username: <input type="text" name="uname" size="15" maxlength="30" style="width: 100px;padding:5px;border-radius:5px;border:1px solid #ccc;"></div>
+    <div style="padding:5px;">Password: <input type="password" name="passwd" size="15" maxlength="30" style="width: 100px;padding:5px;border-radius:5px;border:1px solid #ccc;"></div>
+    <div style="padding:5px;"><a style="color:#00b" href="https://pub45.bravenet.com/passwd/requestpwd.php?usernum=3806776670" target="_top">Request an Account</a> &nbsp; <input type="submit" name="submit" value="Login" style="border-radius:5px;padding:5px 10px;background:#000;border:0;color:#fff;"></div>
+    <div style="padding:5px; font-size:11px;"><a href="https://www.bravenet.com" style="color:#00b;">Powered by Bravenet</a></div>
+  </form>
+</div>
+<!-- End Bravenet.com Service Code -->
 
   </body>
 
-  <SCRIPT>
-function passWord() {
-var testV = 1;
-var pass1 = prompt('Please Enter Your Password',' ');
-while (testV < 3) {
-if (!pass1)
-history.go(-1);
-if (pass1.toLowerCase() == "cdcproject") {
-window.open('protectpage.html');
-break;
-}
-testV+=1;
-var pass1 =
-prompt('Access Denied - Password Incorrect, Please Try Again.','Password');
-}
-if (pass1.toLowerCase()!="password" & testV ==3)
-history.go(-1);
-return " ";
-}
-</SCRIPT>
-
+ 
 </html>
