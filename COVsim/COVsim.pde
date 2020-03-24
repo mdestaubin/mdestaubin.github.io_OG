@@ -71,9 +71,7 @@ void setup()
 void draw()
 
 {
-    clear();
     background(0);
-
     for (Agent a: population) {
         a.update();
     }
