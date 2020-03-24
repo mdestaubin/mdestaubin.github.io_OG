@@ -895,4 +895,3 @@ void removeSurvivor()
   }
 
 }
-
