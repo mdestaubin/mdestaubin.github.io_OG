@@ -84,7 +84,7 @@ void draw()
         currentPopulationSize = population.size();
         removeDead();
         //popFlux();  
-        println( "DAY: " + dayCounter + "  POP: " + currentPopulationSize );
+        //println( "DAY: " + dayCounter + "  POP: " + currentPopulationSize );
         dayCounter += 1;
 
     }
@@ -92,7 +92,7 @@ void draw()
     infect();
     //surviveState();
     statsBar();
-    println(numDead);
+    //println(numDead);
 }
 
 ////////////////////////////////////////////////////////////////////////////// STATS BAR  
@@ -512,6 +512,8 @@ void keyPressed()
             dayCounter = 0;
 
         }
+        
+        numDead = 0;
 
     }
 
