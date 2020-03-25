@@ -23,9 +23,9 @@ int minDays = 2;
 
 int maxDays = 14;
 
-int spreadDistance = 6;
+int spreadDistance = 5;
 
-float infectionProbability = 0.5;
+float infectionProbability = 0.3;
 
 int xStat = 1220;
 
@@ -37,13 +37,15 @@ int yPop = 110;
 
 int yHealthy = 160;
 
-int ySick = 220;
+int ySick = 280;
 
-int yInfected = 280;
+int yInfected = 220;
 
 int ySurvivors = 340;
 
 int yDead = 400;
+
+int yCFR = 460;
 
 
 
@@ -100,6 +102,8 @@ void draw()
 void statsBar() {
 
     float popSize = population.size();
+    
+    float totalPop= popSize + numDead;
 
     float numSick = 0;
 
@@ -108,6 +112,8 @@ void statsBar() {
     float numHealed = 0;
 
     float numHealthy = 0;
+    
+    
 
     for (Agent person: population) {
 
@@ -131,7 +137,7 @@ void statsBar() {
 
     for (Agent person: population) {
 
-        if (person.healed == true) {
+        if (person.recovered == true) {
 
             numHealed += 1;
 
@@ -147,16 +153,24 @@ void statsBar() {
     //}
 
     for (Agent person: population) {
-        if (person.dead == false && person.healed == false && person.infected == false && person.sick == false) {
+        if (person.dead == false && person.recovered == false && person.infected == false && person.sick == false) {
             numHealthy += 1;
         }
     }
     
-    float percentSick = numSick / popSize * 100;
-    float percentInfected = numInfected / popSize * 100;
-    float percentHealed = numHealed / popSize * 100;
-    float percentDead = numDead / popSize * 100;
+    float numAffected = numHealed + numDead + numInfected + numSick;
+    
+    println("num" + numAffected);
+    
+    float percentSick = numSick / totalPop * 100;
+    float percentInfected = numInfected / totalPop * 100;
+    float percentHealed = numHealed / totalPop * 100;
+    float percentDead = numDead / totalPop * 100;
+    float percentCFR = (numDead / (numHealed + numDead)) * 100;
     float percentHealthy = numHealthy / popSize * 100;
+    float percentAffected = numAffected / totalPop * 100;
+    
+    println("percent" + percentAffected);
     
     fill(255);
     textAlign(LEFT);
@@ -169,17 +183,19 @@ void statsBar() {
 
     text("DAY: " + dayCounter, xStat, yDay);
 
-    text("POPULATION: " + popSize + " / " + initialPopulationSize, xStat, yPop);
+    text("POPULATION: " + int(popSize), xStat, yPop);
 
-    text("NUMBER HEALTHY: " + numHealthy + " | " + nf(percentHealthy, 0, 2) + "%", xStat, yHealthy);
+    text("PREVELANCE: " + nf(percentAffected, 0, 2) + "%", xStat, yHealthy);
 
-    text("NUMBER SICK: " + numSick + " | " + nf(percentSick, 0, 2) + "%", xStat, ySick);
+    text("ACTIVE SICK: " + int(numSick), xStat, ySick);
 
-    text("NUMBER INFECTED: " + numInfected + " (" + nf(percentInfected, 0, 2) + "%)", xStat, yInfected);
+    text("ACTIVE INFECTED: " + int(numInfected), xStat, yInfected);
 
-    text("SURVIVORS: " + numHealed + " | " + nf(percentHealed, 0, 2) + "%", xStat, ySurvivors);
+    text("TOTAL SURVIVORS: " + int(numHealed), xStat, ySurvivors);
 
-    text("DEATHS: " + numDead + " | " + nf(percentDead, 0, 2) + "%", xStat, yDead);
+    text("TOTAL DEATHS: " + int(numDead), xStat, yDead);
+    
+    text("FATALITY RATE: " + nf(percentCFR, 0, 2) + "%", xStat, yCFR);
 
 
     //fill(255,255,255,100);
@@ -204,7 +220,7 @@ void statsBar() {
 
 
 
-    float xHealthy = map(percentHealthy, 0, xScale, 0, 360);
+    float xHealthy = map(percentAffected, 0, xScale, 0, 360);
 
     float xSick = map(percentSick, 0, xScale, 0, 360);
 
@@ -213,6 +229,8 @@ void statsBar() {
     float xSurvivors = map(percentHealed, 0, xScale, 0, 360);
 
     float xDead = map(percentDead, 0, xScale, 0, 360);
+    
+    float xCFR = map(percentCFR, 0, xScale, 0, 360);
 
 
 
@@ -241,6 +259,8 @@ void statsBar() {
     rect(xStat, ySurvivors + 10, 360, 25);
 
     rect(xStat, yDead + 10, 360, 25);
+    
+    //rect(xStat, yCFR + 10, 360, 25);
 
 
 
@@ -260,9 +280,13 @@ void statsBar() {
 
     rect(xStat, ySurvivors + 10, xSurvivors, 25);
 
-    fill(255);
+    fill(138, 43, 226);
 
     rect(xStat, yDead + 10, xDead, 25);
+    
+    fill(255,100);
+
+    //rect(xStat, yCFR + 10, xCFR, 25);
 
 
 
@@ -319,7 +343,7 @@ void infect()
 
             // first condition
 
-            if (distance <= spreadDistance && person1.sick && !person2.sick && !person2.healed)
+            if (distance <= spreadDistance && person1.sick && !person2.sick && !person2.recovered)
 
             {
 
@@ -330,10 +354,10 @@ void infect()
                 if (prob(infectionProbability) == true) {
 
                     person2.getInfected();
-
+                    
                 }
 
-            } else if (distance <= spreadDistance && person2.sick && !person1.sick && !person1.healed)
+            } else if (distance <= spreadDistance && person2.sick && !person1.sick && !person1.recovered)
 
             {
 
@@ -342,14 +366,13 @@ void infect()
                 if (prob(infectionProbability) == true) {
 
                     person1.getInfected();
-
                 }
-
+                
             }
 
 
             //infectionLine(person1, person2);
-            //if(person1.healed || person2.healed){
+            //if(person1.recovered || person2.recovered){
             //removeSurvivor();
             //newSurvivor()
             //}
@@ -404,7 +427,7 @@ void surviveState() {
 
         Agent person1 = population.get(i);
 
-        if (person1.healed) {
+        if (person1.recovered) {
             removeSurvivor();
 
             survivors = new ArrayList < Agent > ();
@@ -422,7 +445,7 @@ void surviveState() {
 
 void infectionLine(Agent person1, Agent person2) {
 
-    if (person1.infected && person2.infected) {
+    if (person1.sick && person2.infected) {
 
         stroke(255, 40);
 
@@ -539,6 +562,8 @@ class Agent {
   PVector loc;
 
   PVector vel;
+  
+  PVector noVel;
 
   PVector accel;
 
@@ -548,15 +573,13 @@ class Agent {
 
   boolean sick = false;
 
-  boolean healed = false;
-  
-  //boolean survive = false;
+  boolean recovered = false;
 
   boolean infected = false;
 
   int haloGrowth = 0;
   
-  float deathRate = 0.5;
+  float deathRate = 0.25;
 
   PVector target;
 
@@ -631,8 +654,9 @@ class Agent {
   }
 
     //vel.limit(topspeed);
-
+    
     loc.add(vel);
+
 
    // recovered();
 
@@ -651,7 +675,7 @@ void survive()
 
       infected = false;
 
-      healed = true;
+      recovered = true;
 
       fill(0, 255, 0);
 
@@ -659,7 +683,7 @@ void survive()
 
      //survive = true;
      
-     //healed = false;
+     //recovered = false;
   }
 }
 
@@ -681,6 +705,10 @@ void dead()
       fill( 255, 0, 0 );
 
       rad = 10;
+      
+      if (randomNum < .3){
+      vel = new PVector(0, 0);
+      }
 
     } 
 
@@ -688,15 +716,15 @@ void dead()
 
       fill(255, 255, 0); 
 
-      rad = 10;
+      rad = 5;
 
     } 
 
-    else if (healed) {
+    else if (recovered) {
 
       fill(0, 255, 0); 
 
-      rad = 6;
+      rad = 5;
 
     }
     
@@ -704,7 +732,7 @@ void dead()
 
     //  fill(69, 255, 150); 
 
-    //  rad = 6;
+    //  rad = 5;
 
     //}
 
@@ -712,7 +740,7 @@ void dead()
 
       fill(255); 
 
-      rad = 6;
+      rad = 5;
 
     }
 
@@ -732,7 +760,7 @@ void dead()
 
     }
 
-    // if ( healed == true) {
+    // if ( recovered == true) {
 
     //  noFill();
 
@@ -784,7 +812,7 @@ void dead()
 
   {
 
-    if(healed == false){
+    if(recovered == false){
 
     infected = true;
 
@@ -890,7 +918,7 @@ void removeSurvivor()
 
     tempAgent = (Agent)iter.next();
 
-    if ( tempAgent.healed == true )
+    if ( tempAgent.recovered == true )
 
     {
 
