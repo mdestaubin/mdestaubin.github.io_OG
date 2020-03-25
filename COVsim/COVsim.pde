@@ -160,7 +160,7 @@ void statsBar() {
     
     float numAffected = numHealed + numDead + numInfected + numSick;
     
-    println("num" + numAffected);
+    //println("num" + numAffected);
     
     float percentSick = numSick / totalPop * 100;
     float percentInfected = numInfected / totalPop * 100;
@@ -170,7 +170,7 @@ void statsBar() {
     float percentHealthy = numHealthy / popSize * 100;
     float percentAffected = numAffected / totalPop * 100;
     
-    println("percent" + percentAffected);
+    //println("percent" + percentAffected);
     
     fill(255);
     textAlign(LEFT);
