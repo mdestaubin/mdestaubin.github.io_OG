@@ -530,7 +530,7 @@ class Agent {
 
   boolean dead = false;
 
-  boolean sick = true;
+  boolean sick = false;
 
   boolean healed = false;
   
@@ -582,7 +582,7 @@ class Agent {
 
   {    
 
-    if ( frameCount%framesPerDay == 0 && sick == true)
+    if ( frameCount%framesPerDay == 0 && sick)
 
     {
 
@@ -630,7 +630,8 @@ class Agent {
 
 void survive()
 {
-  sick = false;
+  if(sick){
+      sick = false;
 
       infected = false;
 
@@ -641,7 +642,9 @@ void survive()
       ellipse( loc.x, loc.y, 12, 12);
 
      survive = true;
+     
      healed = false;
+  }
 }
 
 void dead()
