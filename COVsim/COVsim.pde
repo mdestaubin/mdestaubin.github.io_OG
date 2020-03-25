@@ -573,10 +573,11 @@ class Agent {
     if (random(0, 100) < perHealthy) { 
 
       sick = false;
-      healed = false;
-      survive = false;
 
     }
+    
+      healed = false;
+      survive = false;
 
   }
 
