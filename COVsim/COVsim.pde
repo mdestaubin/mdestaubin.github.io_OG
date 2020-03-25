@@ -45,7 +45,7 @@ int ySurvivors = 340;
 
 int yDead = 400;
 
-int yCFR = 460;
+int yCFR = 490;
 
 
 
