@@ -575,9 +575,6 @@ class Agent {
       sick = false;
 
     }
-    
-      healed = false;
-      survive = false;
 
   }
 
