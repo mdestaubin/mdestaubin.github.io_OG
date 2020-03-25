@@ -85,7 +85,7 @@ void draw()
         currentPopulationSize = population.size();
         removeDead();
         //popFlux();  
-        println( "DAY: " + dayCounter + "  POP: " + currentPopulationSize );
+        //println( "DAY: " + dayCounter + "  POP: " + currentPopulationSize );
         dayCounter += 1;
 
     }
@@ -93,7 +93,7 @@ void draw()
     infect();
     //surviveState();
     statsBar();
-    println(numDead);
+    //println(numDead);
 }
 
 ////////////////////////////////////////////////////////////////////////////// STATS BAR  
@@ -410,7 +410,7 @@ void surviveState() {
             PVector G = new PVector(5, 5);
 
             survivors.add(new Agent(G));
-            println(survivors.size());
+            //println(survivors.size());
         }
 
     }
@@ -530,7 +530,7 @@ class Agent {
 
   boolean dead = false;
 
-  boolean sick = false;
+  boolean sick = true;
 
   boolean healed = false;
   
