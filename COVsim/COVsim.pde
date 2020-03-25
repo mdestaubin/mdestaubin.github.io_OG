@@ -1,4 +1,4 @@
-int initialPopulationSize = 100;
+int initialPopulationSize = 1000;
 
 ArrayList < Agent > population;
 ArrayList < Agent > survivors;
@@ -71,7 +71,9 @@ void setup()
 void draw()
 
 {
+    clear();
     background(0);
+
     for (Agent a: population) {
         a.update();
     }
@@ -84,7 +86,7 @@ void draw()
         currentPopulationSize = population.size();
         removeDead();
         //popFlux();  
-        //println( "DAY: " + dayCounter + "  POP: " + currentPopulationSize );
+        println( "DAY: " + dayCounter + "  POP: " + currentPopulationSize );
         dayCounter += 1;
 
     }
@@ -92,7 +94,7 @@ void draw()
     infect();
     //surviveState();
     statsBar();
-    //println(numDead);
+    println(numDead);
 }
 
 ////////////////////////////////////////////////////////////////////////////// STATS BAR  
@@ -181,9 +183,6 @@ void statsBar() {
 
     text("DEATHS: " + numDead + " | " + nf(percentDead, 0, 2) + "%", xStat, yDead);
 
-    text("HEALTH ZONES: 5", xStat, yHealth);
-
-    text("HEALTH STAFF: 20", xStat, yStaff);
 
     //fill(255,255,255,100);
     //rect(width/2-355,height-40,325,20);
@@ -322,7 +321,7 @@ void infect()
 
             // first condition
 
-            if (distance <= spreadDistance && person1.sick && !person2.sick)
+            if (distance <= spreadDistance && person1.sick && !person2.sick && !person2.survive)
 
             {
 
@@ -336,7 +335,7 @@ void infect()
 
                 }
 
-            } else if (distance <= spreadDistance && person2.sick && !person1.sick)
+            } else if (distance <= spreadDistance && person2.sick && !person1.sick && !person1.survive)
 
             {
 
@@ -510,10 +509,9 @@ void keyPressed()
             population.add(new Agent(L));
 
             dayCounter = 0;
+            numDead = 0;
 
         }
-        
-        numDead = 0;
 
     }
 
@@ -533,7 +531,7 @@ class Agent {
 
   boolean dead = false;
 
-  boolean sick = true;
+  boolean sick = false;
 
   boolean healed = false;
   
@@ -542,6 +540,8 @@ class Agent {
   boolean infected = false;
 
   int haloGrowth = 0;
+  
+  float deathRate = 0.5;
 
   PVector target;
 
@@ -552,6 +552,8 @@ class Agent {
   int days = 0;
 
   float t = frameCount;
+  
+  float randomNum = random(0, 1);
 
 
 
@@ -587,34 +589,18 @@ class Agent {
 
       days -=1;
 
-      if (days == 0 && prob(0.5)== true) { 
-      
-        dead = true;
-        
+      if (days == 0){ 
+        if(randomNum > deathRate){
+         survive();
       }
       
-      else if (days == 0 && prob(0.5) == false){
-        
-      sick = false;
-
-      infected = false;
-
-      healed = true;
-
-      fill(0, 255, 0);
-
-      ellipse( loc.x, loc.y, 12, 12);
-
-     if( healed ){
-     survive = true;
-     healed = false;
-     
-    }
- 
+      else {
+          dead(); 
       }
 
     }
-
+   }
+    
     if (infected)
 
     { 
@@ -627,7 +613,7 @@ class Agent {
 
       }
 
-    }
+  }
 
     vel.limit(topspeed);
 
@@ -643,20 +629,26 @@ class Agent {
 
   /////////////////////////////////////////////////////////////////// Check Environment Function
 
-  boolean prob(float probRate)
-
+void survive()
 {
+  sick = false;
 
-    if (random(0, 1) <= probRate) {
+      infected = false;
 
-        return true;
+      healed = true;
 
-    } else {
+      fill(0, 255, 0);
 
-        return false;
+      ellipse( loc.x, loc.y, 12, 12);
 
-    }
+     survive = true;
+     healed = false;
+}
 
+void dead()
+{
+ sick = false; 
+ dead = true;
 }
   
 
