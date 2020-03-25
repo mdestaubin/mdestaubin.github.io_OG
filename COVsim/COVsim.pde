@@ -29,25 +29,23 @@ float infectionProbability = 0.5;
 
 int xStat = 1220;
 
-int yTitle = 40;
+int yTitle = 5;
 
-int yDay = 140;
+int yDay = 80;
 
-int yPop = 170;
+int yPop = 110;
 
-int yHealthy = 230;
+int yHealthy = 160;
 
-int ySick = 290;
+int ySick = 220;
 
-int yInfected = 350;
+int yInfected = 280;
 
-int ySurvivors = 410;
+int ySurvivors = 340;
 
-int yDead = 470;
+int yDead = 400;
 
-int yHealth = 600;
 
-int yStaff = 630;
 
 int numDead = 0;
 
@@ -133,7 +131,7 @@ void statsBar() {
 
     for (Agent person: population) {
 
-        if (person.survive == true) {
+        if (person.healed == true) {
 
             numHealed += 1;
 
@@ -321,7 +319,7 @@ void infect()
 
             // first condition
 
-            if (distance <= spreadDistance && person1.sick && !person2.sick && !person2.survive)
+            if (distance <= spreadDistance && person1.sick && !person2.sick && !person2.healed)
 
             {
 
@@ -335,7 +333,7 @@ void infect()
 
                 }
 
-            } else if (distance <= spreadDistance && person2.sick && !person1.sick && !person1.survive)
+            } else if (distance <= spreadDistance && person2.sick && !person1.sick && !person1.healed)
 
             {
 
@@ -389,7 +387,7 @@ void initailizePop() {
 
     {
 
-        PVector L = new PVector(random(0, width - 400), random(0, height));
+        PVector L = new PVector(random(0, width - 406), random(0, height-6));
 
         population.add(new Agent(L));
 
@@ -535,7 +533,7 @@ class Agent {
 
   boolean healed = false;
   
-  boolean survive = false;
+  //boolean survive = false;
 
   boolean infected = false;
 
@@ -642,9 +640,9 @@ void survive()
 
       ellipse( loc.x, loc.y, 12, 12);
 
-     survive = true;
+     //survive = true;
      
-     healed = false;
+     //healed = false;
   }
 }
 
@@ -685,13 +683,13 @@ void dead()
 
     }
     
-    else if (survive) {
+    //else if (survive) {
 
-      fill(69, 255, 150); 
+    //  fill(69, 255, 150); 
 
-      rad = 10;
+    //  rad = 6;
 
-    }
+    //}
 
     else {
 
@@ -804,13 +802,13 @@ void dead()
 
     //bounce checks
 
-    if (loc.x < 0 || loc.x >= width-400) {
+    if (loc.x < 0 || loc.x >= width-405) {
 
       vel.x *= -1;
 
     }
 
-    if (loc.y < 0 || loc.y >= height) {
+    if (loc.y < 0 || loc.y >= height-5) {
 
       vel.y *= -1;
 
