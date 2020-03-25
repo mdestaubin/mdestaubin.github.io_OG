@@ -1,4 +1,4 @@
-int initialPopulationSize = 1000;
+int initialPopulationSize = 999;
 
 ArrayList < Agent > population;
 ArrayList < Agent > survivors;
@@ -392,6 +392,8 @@ void initailizePop() {
         population.add(new Agent(L));
 
     }
+    
+    infectedAgent();
 
 }
 
@@ -432,7 +434,20 @@ void infectionLine(Agent person1, Agent person2) {
 
 }
 
+void infectedAgent(){
+  
+  PVector L = new PVector(random(0, width - 400), random(0, height));
 
+    Agent infectedPerson = new Agent(L);
+
+    infectedPerson.getInfected();
+
+    infectedPerson.loc.x = (width-400)/2;
+
+    infectedPerson.loc.y = height/2;
+
+    population.add(infectedPerson);
+}
 
 ////////////////////////////////////////////////////////////////////////////////Pop Flux
 
@@ -510,6 +525,8 @@ void keyPressed()
             numDead = 0;
 
         }
+        
+        infectedAgent();
 
     }
 
@@ -561,7 +578,7 @@ class Agent {
 
     loc = L;
 
-    vel = new PVector(random(-1, 1), random(-1, 1));
+    vel = new PVector(random(-2, 2), random(-2, 2));
 
     topspeed = 1.3;
 
@@ -613,7 +630,7 @@ class Agent {
 
   }
 
-    vel.limit(topspeed);
+    //vel.limit(topspeed);
 
     loc.add(vel);
 
