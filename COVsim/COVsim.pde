@@ -58,10 +58,7 @@ void setup()
 
     frameRate(24);
 
-    //population = new ArrayList<Agent>();
-
-    //healthZone  = loadImage( "DATA/zones4.png" ); 
-
+    population = new ArrayList<Agent>();
     myFont = createFont("Arial Black", 32);
     altFont = createFont("Arial", 32);
 
@@ -72,6 +69,10 @@ void draw()
 
 {
     background(0);
+    noFill();
+    stroke(255);
+    strokeWeight(2);
+    rect(0,0,width-400,height);
 
     for (Agent a: population) {
         a.update();
