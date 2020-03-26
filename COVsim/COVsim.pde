@@ -47,6 +47,8 @@ int yDead = 400;
 
 int yCFR = 490;
 
+boolean isolate = false;
+
 
 
 int numDead = 0;
@@ -76,7 +78,8 @@ void draw()
 
     for (Agent a: population) {
         a.update();
-    }
+         }
+
 
 ///////////////////////////////////////////////////////////////////////////YEARLY CENSUS
 
@@ -84,17 +87,25 @@ void draw()
 
     {
         currentPopulationSize = population.size();
-        removeDead();
-        //popFlux();  
-        //println( "DAY: " + dayCounter + "  POP: " + currentPopulationSize );
+        removeAgent();
         dayCounter += 1;
-
     }
 
     infect();
-    //surviveState();
     statsBar();
-    //println(numDead);
+}
+
+void removeAgent() {
+ for (int i = population.size() - 1; i >= 0; i--) {
+          Agent d = population.get(i);
+        if (d.dead) {
+          population.remove(i);
+          noStroke();
+          fill(138, 43, 226);
+          ellipse( d.loc.x, d.loc.y, 25, 25);
+          numDead  += 1;
+     } 
+   } 
 }
 
 ////////////////////////////////////////////////////////////////////////////// STATS BAR  
@@ -230,7 +241,7 @@ void statsBar() {
 
     float xDead = map(percentDead, 0, xScale, 0, 360);
     
-    float xCFR = map(percentCFR, 0, xScale, 0, 360);
+    //float xCFR = map(percentCFR, 0, xScale, 0, 360);
 
 
 
@@ -420,27 +431,22 @@ void initailizePop() {
 
 }
 
-//focus here next 4_11
-void surviveState() {
+//void removeTest() {
+  
+//   Iterator iter = population.iterator();
 
-    for (int i = 0; i < population.size(); i += 1) {
+//  Agent tempAgent;
 
-        Agent person1 = population.get(i);
+//  while ( iter.hasNext() )
 
-        if (person1.recovered) {
-            removeSurvivor();
+//  {    
 
-            survivors = new ArrayList < Agent > ();
-            PVector G = new PVector(5, 5);
+//    tempAgent = (Agent)iter.next();
 
-            survivors.add(new Agent(G));
-            //println(survivors.size());
-        }
-
-    }
-
-}
-
+//    if ( tempAgent.dead == true )
+  
+  
+//}
 
 
 void infectionLine(Agent person1, Agent person2) {
@@ -550,12 +556,19 @@ void keyPressed()
         }
         
         infectedAgent();
-
+    }
+    
+    if (key == 'i') {
+      
+      isolate = true;
+    }
+    
+    if (key == 'n') {
+     
+      isolate = false;
     }
 
 }
-
-import java.util.Iterator;
 
 class Agent {
 
@@ -698,8 +711,14 @@ void dead()
 
   void drawAgent()
 
-  {     
-
+  {   
+    if (isolate) {
+      vel = new PVector(0, 0);  
+    }
+//if (!isolate)
+//{
+//  vel = new PVector(-2, 2); 
+//}
     if ( sick ) {
 
       fill( 255, 0, 0 );
@@ -863,73 +882,3 @@ void dead()
 
 
 }//////////////////////////////////// End of Class
-
-
-
-//////////////////////////////////////////////////////////////////////////////// Remove Dead
-
-void removeDead()
-
-{
-
-  Iterator iter = population.iterator();
-
-  Agent tempAgent;
-
-
-
-  while ( iter.hasNext() )
-
-  {    
-
-    tempAgent = (Agent)iter.next();
-
-    if ( tempAgent.dead == true )
-
-    {
-
-      fill(255, 0, 0);
-
-      ellipse( tempAgent.loc.x, tempAgent.loc.y, 20, 20);
-
-      iter.remove();
-      numDead  += 1;
-
-    }
-
-  }
-
-}
-
-
-void removeSurvivor()
-
-{
-
-  Iterator iter = population.iterator();
-
-  Agent tempAgent;
-
-
-
-  while ( iter.hasNext() )
-
-  {    
-
-    tempAgent = (Agent)iter.next();
-
-    if ( tempAgent.recovered == true )
-
-    {
-
-      fill(0, 255, 0);
-
-      ellipse( tempAgent.loc.x, tempAgent.loc.y, 40, 40);
-
-      iter.remove();
-
-    }
-
-  }
-
-}
