@@ -112,8 +112,8 @@ void removeAgent() {
       //fill(138, 43, 226);
       //ellipse( a.loc.x, a.loc.y, 25, 25);
       numDead  += 1;
-      redraw();
-      return;
+      //redraw();
+      //return;
     }
      
      
@@ -222,7 +222,7 @@ void statsBar() {
 
     text("TOTAL DEATHS: " + int(numDead), xStat, yDead);
     
-    text("FATALITY RATE: " + nf(percentCFR, 0, 2) + "%", xStat+200, yDead);
+    text("FATALITY RATE: " + nf(percentCFR, 0, 2) + "%", xStat+180, yDead);
 
 
     //fill(255,255,255,100);
