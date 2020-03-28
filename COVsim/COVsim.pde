@@ -105,16 +105,23 @@ void removeAgent() {
  //         ellipse( d.loc.x, d.loc.y, 25, 25);
  //         numDead  += 1;
  //    } 
-     for (int len = population.size(), a = len; a-- != 0; )
-    if (population.get(a).dead) {
-      population.set(a, population.get(--len));
-      population.remove(len);
-      //fill(138, 43, 226);
-      //ellipse( a.loc.x, a.loc.y, 25, 25);
-      numDead  += 1;
-      //redraw();
-      //return;
-    }
+    // for (int len = population.size(), a = len; a-- != 0; )
+    //if (population.get(a).dead) {
+    //  population.set(a, population.get(--len));
+    //  population.remove(len);
+    //  //fill(138, 43, 226);
+    //  //ellipse( a.loc.x, a.loc.y, 25, 25);
+    //  numDead  += 1;
+    //  //redraw();
+    //  //return;
+    //}
+    
+    for( int i =population.size()-1; i >= 0; i-- ){
+  if( population.get(i).dead ){
+    population.remove(i);
+    numDead  += 1;
+  }
+}
      
      
      
