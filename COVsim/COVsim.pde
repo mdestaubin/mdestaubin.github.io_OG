@@ -787,17 +787,17 @@ void drawAgent()
 
     }
     
+    else if (susceptible){
+      fill(255); 
+      rad = 5;
+    }
+    
     else if (dead) {
       susceptible = false;
       noFill();
       vel = new PVector(0,0);
       rad = 0;
 
-    }
-    
-    else if (susceptible){
-      fill(255); 
-      rad = 5;
     }
 
     noStroke();
