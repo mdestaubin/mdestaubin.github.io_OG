@@ -481,16 +481,15 @@ void infectionLine(Agent person1, Agent person2) {
     
   float distance2 = dist(person1.loc.x, person1.loc.y, person2.loc.x, person2.loc.y); 
   
-    if (person1.infected || person2.sick) {
+    if ((person1.infected && person2.sick)||(person1.sick && person2.infected)) {
       
-      if (distance2 <= spreadDistance+100){
+      if (distance2 <= spreadDistance+80){
 
         stroke(255, 40);
 
         strokeWeight(2);
 
         line(person1.loc.x, person1.loc.y, person2.loc.x, person2.loc.y);
-
     }
   }
 }
@@ -738,6 +737,9 @@ void survive()
 void dead()
 {
  sick = false; 
+ susceptible = false;
+ infected = false;
+ recovered = false;
  dead = true;
 }
   
