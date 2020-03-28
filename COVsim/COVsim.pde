@@ -699,6 +699,15 @@ class Agent {
       }
 
   }
+  
+  if (dead){
+     sick = false; 
+     susceptible = false;
+     infected = false;
+     recovered = false;
+     dead = true;
+    
+  }
 
     //vel.limit(topspeed);
     
@@ -736,11 +745,7 @@ void survive()
 
 void dead()
 {
- sick = false; 
- susceptible = false;
- infected = false;
- recovered = false;
- dead = true;
+dead = true;
 }
   
 
