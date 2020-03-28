@@ -1,4 +1,4 @@
-int initialPopulationSize = 149;
+int initialPopulationSize = 300;
 
 ArrayList < Agent > population;
 ArrayList < Agent > survivors;
@@ -96,6 +96,7 @@ void draw()
 }
 
 void removeAgent() {
+
  //for (int i = population.size() - 1; i >= 0; i--) {
  //         Agent d = population.get(i);
  //       if (d.dead == true) {
@@ -116,14 +117,18 @@ void removeAgent() {
     //  //return;
     //}
     
-    for( int i =population.size()-1; i >= 0; i-- ){
-  if( population.get(i).dead ){
-    population.remove(i);
-    numDead  += 1;
-  }
-}
+  //  for( int i =population.size()-1; i >= 0; i-- ){
+  //if(population.get(i).dead){
+  //  //population.remove(i);
+  //  numDead  += 1;
+  //}
+    //}
      
-     
+   for (Agent a: population) {
+        if(a.dead){
+          numDead  += 1;
+         }
+}   
      
    } 
 //}
@@ -473,17 +478,21 @@ void initailizePop() {
 
 
 void infectionLine(Agent person1, Agent person2) {
-
-    if (person1.sick && person2.infected) {
+    
+  float distance2 = dist(person1.loc.x, person1.loc.y, person2.loc.x, person2.loc.y); 
+  
+    if (person1.infected || person2.sick) {
+      
+      if (distance2 <= spreadDistance+100){
 
         stroke(255, 40);
 
-        strokeWeight(1);
+        strokeWeight(2);
 
         line(person1.loc.x, person1.loc.y, person2.loc.x, person2.loc.y);
 
     }
-
+  }
 }
 
 void infectedAgent(){
@@ -768,6 +777,14 @@ void drawAgent()
       susceptible = false;
       fill(0, 255, 0); 
       rad = 5;
+
+    }
+    
+    else if (dead) {
+      susceptible = false;
+      noFill();
+      vel = new PVector(0,0);
+      rad = 0;
 
     }
     
