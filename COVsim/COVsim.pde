@@ -1,4 +1,4 @@
-int initialPopulationSize = 300;
+int initialPopulationSize = 999;
 
 ArrayList < Agent > population;
 ArrayList < Agent > survivors;
@@ -70,8 +70,8 @@ void setup()
 void draw()
 
 {
-    background(0);
-    noFill();
+    background(50);
+    fill(50);
     stroke(255);
     strokeWeight(2);
     rect(0,0,width-400,height);
@@ -96,7 +96,6 @@ void draw()
 }
 
 void removeAgent() {
-
  //for (int i = population.size() - 1; i >= 0; i--) {
  //         Agent d = population.get(i);
  //       if (d.dead == true) {
@@ -110,25 +109,20 @@ void removeAgent() {
     //if (population.get(a).dead) {
     //  population.set(a, population.get(--len));
     //  population.remove(len);
-    //  //fill(138, 43, 226);
-    //  //ellipse( a.loc.x, a.loc.y, 25, 25);
-    //  numDead  += 1;
-    //  //redraw();
-    //  //return;
-    //}
-    
-  //  for( int i =population.size()-1; i >= 0; i-- ){
-  //if(population.get(i).dead){
-  //  //population.remove(i);
-  //  numDead  += 1;
-  //}
-    //}
+      //fill(138, 43, 226);
+      //ellipse( a.loc.x, a.loc.y, 25, 25);
      
-   for (Agent a: population) {
-        if(a.dead){
-          numDead  += 1;
-         }
-}   
+      for (int i = population.size() - 1; i >= 0; i--) {
+      Agent d = population.get(i);
+      if (d.dead){
+      numDead  += 1;
+      }
+      //redraw();
+     // return;
+      }
+
+     
+     
      
    } 
 //}
@@ -234,7 +228,7 @@ void statsBar() {
 
     text("TOTAL DEATHS: " + int(numDead), xStat, yDead);
     
-    text("FATALITY RATE: " + nf(percentCFR, 0, 2) + "%", xStat+180, yDead);
+    text("FATALITY RATE: " + nf(percentCFR, 0, 2) + "%", xStat+200, yDead);
 
 
     //fill(255,255,255,100);
@@ -250,14 +244,12 @@ void statsBar() {
     //println(fontList);
 
     //if(frameCount < 200){
-    text(" CLICK TO ADD EXPOSED AGENT  | |  SPACE BAR TO RESET", width / 2 - 200, height - 20);
+   // text(" CLICK TO ADD EXPOSED AGENT  | |  SPACE BAR TO RESET", width / 2 - 200, height - 20);
     //}
     fill(255, 255, 255);
 
 
     float xScale = 100;
-
-
 
     float xHealthy = map(percentAffected, 0, xScale, 0, 360);
 
@@ -287,7 +279,7 @@ void statsBar() {
 
     noStroke();
 
-    fill(255, 50);
+    fill(0, 50);
 
     rect(xStat, yHealthy + 10, 360, 25);
 
@@ -303,7 +295,7 @@ void statsBar() {
 
 
 
-    fill(255,200);
+    fill(0,50);
 
     rect(xStat, yHealthy + 10, xHealthy, 25);
 
@@ -405,12 +397,25 @@ void infect()
                 if (prob(infectionProbability) == true) {
 
                     person1.getInfected();
+                    
+                  
                 }
                 
             }
+            
+            infectionLine(person1,person2);
+                  //if (prob(infectionProbability) == true && person1.infected){
+                  // stroke(255, 40);
+                  // strokeWeight(3);
+                  // line(person1.loc.x, person1.loc.y, person2.loc.x, person2.loc.y);
+                  //}
+                  //if(person2.infected){
+                  // stroke(255, 40);
+                  // strokeWeight(3);
+                  // line(person1.loc.x, person1.loc.y, person2.loc.x, person2.loc.y);
+                  //}
 
-
-            infectionLine(person1, person2);
+            
             //if(person1.recovered || person2.recovered){
             //removeSurvivor();
             //newSurvivor()
@@ -478,20 +483,21 @@ void initailizePop() {
 
 
 void infectionLine(Agent person1, Agent person2) {
-    
-  float distance2 = dist(person1.loc.x, person1.loc.y, person2.loc.x, person2.loc.y); 
   
-    if ((person1.infected && person2.sick)||(person1.sick && person2.infected)) {
+  float spreadDist = dist(person1.loc.x, person1.loc.y, person2.loc.x, person2.loc.y);
+
+   if ((person1.infected && person2.sick) || (person2.infected && person1.sick)) {
       
-      if (distance2 <= spreadDistance+80){
+      if (spreadDist < 100){
 
         stroke(255, 40);
 
-        strokeWeight(2);
+        strokeWeight(3);
 
         line(person1.loc.x, person1.loc.y, person2.loc.x, person2.loc.y);
+      }
     }
-  }
+
 }
 
 void infectedAgent(){
@@ -699,15 +705,6 @@ class Agent {
       }
 
   }
-  
-  if (dead){
-     sick = false; 
-     susceptible = false;
-     infected = false;
-     recovered = false;
-     dead = true;
-    
-  }
 
     //vel.limit(topspeed);
     
@@ -745,7 +742,8 @@ void survive()
 
 void dead()
 {
-dead = true;
+ sick = false; 
+ dead = true;
 }
   
 
@@ -762,7 +760,7 @@ void drawAgent()
 
       fill(238, 109, 3);
       susceptible = false;
-      rad = 7;
+      rad = 5;
       if (randomNum < sickIsolateRate){
         sickIsolate = true;
         vel = new PVector(0, 0);
@@ -776,28 +774,28 @@ void drawAgent()
     if (infected) {
       susceptible = false;
       fill(255, 255, 0); 
-      rad = 5;
+      rad = 5 ;
 
     } 
 
-    else if (recovered) {
+    if (recovered) {
       susceptible = false;
       fill(0, 255, 0); 
-      rad = 5;
+      rad = 3;
 
     }
     
-    else if (susceptible){
-      fill(255); 
-      rad = 5;
-    }
-    
-    else if (dead) {
+    if (dead) {
       susceptible = false;
       noFill();
       vel = new PVector(0,0);
       rad = 0;
 
+    }
+    
+    if (susceptible){
+      fill(255); 
+      rad = 3;
     }
 
     noStroke();
