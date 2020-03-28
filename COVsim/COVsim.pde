@@ -49,6 +49,8 @@ int yCFR = 490;
 
 boolean isolate = false;
 
+boolean isSetup = false;
+
 
 
 int numDead = 0;
@@ -75,10 +77,12 @@ void draw()
     fill(38,38,38);
     stroke(255);
     strokeWeight(2);
-    rect(20,20,width-420,height-200);
+    rect(20,20,width-420,height-200); 
 
     for (Agent a: population) {
-        a.update();
+      if(isSetup){
+        a.update(); 
+      }
          }
 
 ///////////////////////////////////////////////////////////////////////////YEARLY CENSUS
@@ -210,7 +214,14 @@ void statsBar() {
     //text("SCENARIO SIMULATOR", xStat, yTitle+33, 360, 100);
     textSize(15);
 
-
+    if(!isSetup){
+     textAlign(CENTER);
+     text("PRESS SPACE TO START", (width-420)/2, (height-180)/2);
+     dayCounter = 0;
+    }
+    
+    textAlign(LEFT);
+    
     text("DAY: " + dayCounter, xStat, yDay);
 
     text("POPULATION: " + int(popSize), xStat, yPop);
@@ -348,6 +359,14 @@ void statsBar() {
     //line(0, height-35, width, height-35);
 
     //line(1200, 0, 1200, height);
+    
+      if (numSick == 0 && numInfected == 0 && dayCounter > 2) {
+    if (looping) {
+      noLoop();
+    } else {
+      loop();
+    }
+  }
 
 }
 
@@ -510,7 +529,7 @@ void infectedAgent(){
 
     infectedPerson.loc.x = (width-400)/2;
 
-    infectedPerson.loc.y = height/2;
+    infectedPerson.loc.y = (height-180)/2;
 
     population.add(infectedPerson);
 }
@@ -575,24 +594,29 @@ void keyPressed()
 
 {
 
+
     if (key == ' ') {
 
         population.clear();
 
         for (int i = 0; i < initialPopulationSize; i += 1)
 
-        {
+        { 
+          if(!isSetup){
+            isSetup = true;
+          }
 
-            PVector L = new PVector(random(0, width - 400), random(0, height));
+            PVector L = new PVector(random(25, width - 406), random(25, height-186));
 
             population.add(new Agent(L));
-
             dayCounter = 0;
             numDead = 0;
 
         }
         
+        isolate = false;
         infectedAgent();
+        loop();
     }
     
     if (key == 'i') {
@@ -629,7 +653,7 @@ class Agent {
 
   int haloGrowth = 0;
   
-  float deathRate = 0.4;
+  float deathRate = 0.1;
 
   PVector target;
 
