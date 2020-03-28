@@ -70,8 +70,8 @@ void setup()
 void draw()
 
 {
-    background(50);
-    fill(50);
+    background(89,89,89);
+    fill(89,89,89);
     stroke(255);
     strokeWeight(2);
     rect(0,0,width-400,height);
@@ -96,15 +96,15 @@ void draw()
 }
 
 void removeAgent() {
- //for (int i = population.size() - 1; i >= 0; i--) {
- //         Agent d = population.get(i);
- //       if (d.dead == true) {
- //         population.remove(i);
- //         noStroke();
- //         fill(138, 43, 226);
- //         ellipse( d.loc.x, d.loc.y, 25, 25);
- //         numDead  += 1;
- //    } 
+ for (int i = population.size() - 1; i >= 0; i--) {
+          Agent d = population.get(i);
+        if (d.dead == true) {
+          population.remove(i);
+          noStroke();
+          fill(138, 43, 226);
+          ellipse( d.loc.x, d.loc.y, 25, 25);
+          numDead  += 1;
+     } 
     // for (int len = population.size(), a = len; a-- != 0; )
     //if (population.get(a).dead) {
     //  population.set(a, population.get(--len));
@@ -112,17 +112,14 @@ void removeAgent() {
       //fill(138, 43, 226);
       //ellipse( a.loc.x, a.loc.y, 25, 25);
      
-      for (int i = population.size() - 1; i >= 0; i--) {
-      Agent d = population.get(i);
-      if (d.dead){
-      numDead  += 1;
+    //  for (Agent d : population){
+    //  if (d.dead){
+    //  numDead  += 1;
+    //  }
+    //redraw();
+  // return;
       }
-      //redraw();
-     // return;
-      }
-
-     
-     
+ 
      
    } 
 //}
@@ -666,6 +663,7 @@ class Agent {
     if (random(0, 100) < perHealthy) { 
 
       sick = false;
+      susceptible = true;
 
     }
 
@@ -686,9 +684,9 @@ class Agent {
          survive();
       }
       else {
-         dead(); 
+      dead = true; 
+         
       }
-
     }
    }
     
@@ -723,7 +721,7 @@ class Agent {
 
 void survive()
 {
-  if(sick){
+  if (sick){
       sick = false;
 
       infected = false;
@@ -743,6 +741,7 @@ void survive()
 void dead()
 {
  sick = false; 
+ recovered = false;
  dead = true;
 }
   
@@ -756,6 +755,12 @@ void drawAgent()
       vel = new PVector(0, 0);  
     }
 
+    if (susceptible){
+      dead = false;
+      fill(255); 
+      rad = 3;
+    }
+
     if ( sick ) {
 
       fill(238, 109, 3);
@@ -767,10 +772,6 @@ void drawAgent()
       }
     } 
     
-    //if (recovered && sickIsolate){
-    //  vel = new PVector(-2, 2);
-    //}
-
     if (infected) {
       susceptible = false;
       fill(255, 255, 0); 
@@ -790,13 +791,8 @@ void drawAgent()
       noFill();
       vel = new PVector(0,0);
       rad = 0;
-
     }
     
-    if (susceptible){
-      fill(255); 
-      rad = 3;
-    }
 
     noStroke();
 
