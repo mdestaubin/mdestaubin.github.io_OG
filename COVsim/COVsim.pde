@@ -1,4 +1,4 @@
-int initialPopulationSize = 999;
+int initialPopulationSize = 149;
 
 ArrayList < Agent > population;
 ArrayList < Agent > survivors;
@@ -25,15 +25,15 @@ int maxDays = 14;
 
 int spreadDistance = 5;
 
-float infectionProbability = 0.3;
+float infectionProbability = 0.15;
 
 int xStat = 1220;
 
 int yTitle = 5;
 
-int yDay = 80;
+int yDay = 95;
 
-int yPop = 110;
+int yPop = 115;
 
 int yHealthy = 160;
 
@@ -87,8 +87,8 @@ void draw()
 
     {
         currentPopulationSize = population.size();
-        removeAgent();
         dayCounter += 1;
+        removeAgent();
     }
 
     infect();
@@ -96,17 +96,30 @@ void draw()
 }
 
 void removeAgent() {
- for (int i = population.size() - 1; i >= 0; i--) {
-          Agent d = population.get(i);
-        if (d.dead) {
-          population.remove(i);
-          noStroke();
-          fill(138, 43, 226);
-          ellipse( d.loc.x, d.loc.y, 25, 25);
-          numDead  += 1;
-     } 
+ //for (int i = population.size() - 1; i >= 0; i--) {
+ //         Agent d = population.get(i);
+ //       if (d.dead == true) {
+ //         population.remove(i);
+ //         noStroke();
+ //         fill(138, 43, 226);
+ //         ellipse( d.loc.x, d.loc.y, 25, 25);
+ //         numDead  += 1;
+ //    } 
+     for (int len = population.size(), a = len; a-- != 0; )
+    if (population.get(a).dead) {
+      population.set(a, population.get(--len));
+      population.remove(len);
+      //fill(138, 43, 226);
+      //ellipse( a.loc.x, a.loc.y, 25, 25);
+      numDead  += 1;
+      redraw();
+      return;
+    }
+     
+     
+     
    } 
-}
+//}
 
 ////////////////////////////////////////////////////////////////////////////// STATS BAR  
 
@@ -187,8 +200,11 @@ void statsBar() {
     textAlign(LEFT);
     textFont(myFont);
     textSize(24);
-    text("COVID-19 SIMULATOR", xStat, yTitle, 360, 100);
+    text("COVID-19", xStat, yTitle, 360, 100);
+    
     textFont(altFont);
+    textSize(24);
+    text("SCENARIO SIMULATOR", xStat, yTitle+33, 360, 100);
     textSize(15);
 
 
@@ -198,15 +214,15 @@ void statsBar() {
 
     text("PREVELANCE: " + nf(percentAffected, 0, 2) + "%", xStat, yHealthy);
 
-    text("ACTIVE SICK: " + int(numSick), xStat, ySick);
+    text("ACTIVE INFECTED: " + int(numSick), xStat, ySick);
 
-    text("ACTIVE INFECTED: " + int(numInfected), xStat, yInfected);
+    text("ACTIVE EXPOSED: " + int(numInfected), xStat, yInfected);
 
-    text("TOTAL SURVIVORS: " + int(numHealed), xStat, ySurvivors);
+    text("TOTAL RECOVERED: " + int(numHealed), xStat, ySurvivors);
 
     text("TOTAL DEATHS: " + int(numDead), xStat, yDead);
     
-    text("FATALITY RATE: " + nf(percentCFR, 0, 2) + "%", xStat, yCFR);
+    text("FATALITY RATE: " + nf(percentCFR, 0, 2) + "%", xStat+200, yDead);
 
 
     //fill(255,255,255,100);
@@ -275,11 +291,11 @@ void statsBar() {
 
 
 
-    fill(255);
+    fill(255,200);
 
     rect(xStat, yHealthy + 10, xHealthy, 25);
 
-    fill(255, 0, 0, 150);
+    fill(238, 109, 3, 150);
 
     rect(xStat, ySick + 10, xSick, 25);
 
@@ -287,11 +303,11 @@ void statsBar() {
 
     rect(xStat, yInfected + 10, xInfected, 25);
 
-    fill(0, 255, 0, 150);
+    fill(0, 255, 0, 100);
 
     rect(xStat, ySurvivors + 10, xSurvivors, 25);
 
-    fill(138, 43, 226);
+    fill(138, 43, 226,150);
 
     rect(xStat, yDead + 10, xDead, 25);
     
@@ -382,7 +398,7 @@ void infect()
             }
 
 
-            //infectionLine(person1, person2);
+            infectionLine(person1, person2);
             //if(person1.recovered || person2.recovered){
             //removeSurvivor();
             //newSurvivor()
@@ -592,7 +608,7 @@ class Agent {
 
   int haloGrowth = 0;
   
-  float deathRate = 0.25;
+  float deathRate = 0.4;
 
   PVector target;
 
@@ -606,7 +622,11 @@ class Agent {
   
   float randomNum = random(0, 1);
 
-
+  float sickIsolateRate = 0.3;
+  
+  boolean sickIsolate = false;
+  
+  boolean susceptible = true;
 
   Agent(PVector L)
 
@@ -644,9 +664,8 @@ class Agent {
         if(randomNum > deathRate){
          survive();
       }
-      
       else {
-          dead(); 
+         dead(); 
       }
 
     }
@@ -693,11 +712,11 @@ void survive()
       fill(0, 255, 0);
 
       ellipse( loc.x, loc.y, 12, 12);
-
-     //survive = true;
-     
-     //recovered = false;
+      
+      if (recovered && sickIsolate){
+         vel = new PVector(-2, 2);
   }
+ }
 }
 
 void dead()
@@ -709,58 +728,45 @@ void dead()
 
   /////////////////////////////////////////////////////////////////////////////// DrawAgent Function
 
-  void drawAgent()
+void drawAgent()
 
   {   
     if (isolate) {
       vel = new PVector(0, 0);  
     }
-//if (!isolate)
-//{
-//  vel = new PVector(-2, 2); 
-//}
+
     if ( sick ) {
 
-      fill( 255, 0, 0 );
-
-      rad = 10;
-      
-      if (randomNum < .3){
-      vel = new PVector(0, 0);
+      fill(238, 109, 3);
+      susceptible = false;
+      rad = 7;
+      if (randomNum < sickIsolateRate){
+        sickIsolate = true;
+        vel = new PVector(0, 0);
       }
-
     } 
+    
+    //if (recovered && sickIsolate){
+    //  vel = new PVector(-2, 2);
+    //}
 
     if (infected) {
-
+      susceptible = false;
       fill(255, 255, 0); 
-
       rad = 5;
 
     } 
 
     else if (recovered) {
-
+      susceptible = false;
       fill(0, 255, 0); 
-
       rad = 5;
 
     }
     
-    //else if (survive) {
-
-    //  fill(69, 255, 150); 
-
-    //  rad = 5;
-
-    //}
-
-    else {
-
+    else if (susceptible){
       fill(255); 
-
       rad = 5;
-
     }
 
     noStroke();
@@ -770,36 +776,14 @@ void dead()
     //add Halos
 
     if ( sick == true) {
-
-      fill(255,0,0,100);
-
-      stroke(255, 0, 0, 100);
-
+      noFill();
+      stroke(238, 109, 3, 100);
       ellipse(loc.x, loc.y, 16, 16);
+      //drawHalo();
 
     }
 
-    // if ( recovered == true) {
-
-    //  noFill();
-
-    //  stroke(0, 255, 0, 100);
-
-    //  ellipse(loc.x, loc.y, 12, 12);
-
-    //}
-    
-    //if ( survive == true) {
-
-    //  noFill();
-
-    //  stroke(0, 255, 0, 100);
-
-    //  ellipse(loc.x, loc.y, 16, 16);
-
-    //}
-
-     if (infected == true) {
+    if (infected == true) {
 
       noFill();
 
@@ -813,19 +797,30 @@ void dead()
 
   void drawHalo()
       {
+        
+        
 
-          if( haloGrowth <= 48 )
+          if( haloGrowth <= 400 )
           {
               float radius = haloGrowth;
-              float alpha  = map(haloGrowth, 0, 48, 255, 0 );
+              float alpha  = map(haloGrowth, 0, 200, 180, 10 );
               
-              noFill();
-              stroke(255, alpha);
+              fill(255, 0, 0,alpha);
+              stroke(255, 0, 0,alpha);
+              if(dead){
+              stroke(138, 43, 226,alpha);
+              fill(138, 43, 226,alpha);
+              }
+
+              strokeWeight(1);
               ellipse( loc.x, loc.y, radius, radius ); 
               
-              haloGrowth += 1;
-          }
-      }
+              haloGrowth += 4;
+              if (haloGrowth == 400){
+                  haloGrowth = 0; 
+                }
+            }
+        }
 
   void getInfected()
 
