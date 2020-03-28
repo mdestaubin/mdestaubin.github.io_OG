@@ -27,13 +27,13 @@ int spreadDistance = 5;
 
 float infectionProbability = 0.15;
 
-int xStat = 1220;
+int xStat = 1240;
 
 int yTitle = 5;
 
-int yDay = 25;
+int yDay = 35;
 
-int yPop = 55;
+int yPop = 60;
 
 int yHealthy = 100;
 
@@ -56,7 +56,7 @@ int numDead = 0;
 void setup()
 
 {
-    size(1600, 800);
+    size(1620, 1000);
     //fullScreen();
 
     frameRate(24);
@@ -71,11 +71,11 @@ void setup()
 void draw()
 
 {
-    background(89,89,89);
-    fill(89,89,89);
+    background(38,38,38);
+    fill(38,38,38);
     stroke(255);
     strokeWeight(2);
-    rect(0,0,width-400,height);
+    rect(20,20,width-420,height-200);
 
     for (Agent a: population) {
         a.update();
@@ -276,7 +276,7 @@ void statsBar() {
 
     noStroke();
 
-    fill(0, 50);
+    fill(25);
 
     rect(xStat, yHealthy + 10, 360, 25);
 
@@ -292,7 +292,7 @@ void statsBar() {
 
 
 
-    fill(0,50);
+    fill(180,180);
 
     rect(xStat, yHealthy + 10, xHealthy, 25);
 
@@ -454,7 +454,7 @@ void initailizePop() {
 
     {
 
-        PVector L = new PVector(random(0, width - 406), random(0, height-6));
+        PVector L = new PVector(random(25, width - 407), random(25, height-186));        
 
         population.add(new Agent(L));
 
@@ -905,13 +905,14 @@ void drawAgent()
 
     //bounce checks
 
-    if (loc.x < 0 || loc.x >= width-405) {
+    if (loc.x < 25 || loc.x >= width-405) {
 
       vel.x *= -1;
 
     }
 
-    if (loc.y < 0 || loc.y >= height-5) {
+    if (loc.y < 30 || loc.y >= height-180) {
+      
 
       vel.y *= -1;
 
