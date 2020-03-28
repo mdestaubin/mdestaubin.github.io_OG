@@ -31,19 +31,19 @@ int xStat = 1220;
 
 int yTitle = 5;
 
-int yDay = 95;
+int yDay = 25;
 
-int yPop = 115;
+int yPop = 55;
 
-int yHealthy = 160;
+int yHealthy = 100;
 
-int ySick = 280;
+int ySick = 220;
 
-int yInfected = 220;
+int yInfected = 160;
 
-int ySurvivors = 340;
+int ySurvivors = 280;
 
-int yDead = 400;
+int yDead = 340;
 
 int yCFR = 490;
 
@@ -57,6 +57,7 @@ void setup()
 
 {
     size(1600, 800);
+    //fullScreen();
 
     frameRate(24);
 
@@ -80,7 +81,6 @@ void draw()
         a.update();
          }
 
-
 ///////////////////////////////////////////////////////////////////////////YEARLY CENSUS
 
     if (frameCount % framesPerDay == 0)
@@ -101,8 +101,8 @@ void removeAgent() {
         if (d.dead == true) {
           population.remove(i);
           noStroke();
-          fill(138, 43, 226);
-          ellipse( d.loc.x, d.loc.y, 25, 25);
+          fill(138, 43, 226,100);
+          ellipse( d.loc.x, d.loc.y, 16, 16);
           numDead  += 1;
      } 
     // for (int len = population.size(), a = len; a-- != 0; )
@@ -203,11 +203,11 @@ void statsBar() {
     textAlign(LEFT);
     textFont(myFont);
     textSize(24);
-    text("COVID-19", xStat, yTitle, 360, 100);
+    //text("COVID-19", xStat, yTitle, 360, 100);
     
     textFont(altFont);
     textSize(24);
-    text("SCENARIO SIMULATOR", xStat, yTitle+33, 360, 100);
+    //text("SCENARIO SIMULATOR", xStat, yTitle+33, 360, 100);
     textSize(15);
 
 
@@ -366,8 +366,11 @@ void infect()
         {
 
             Agent person2 = population.get(j);
-
+            
+            
+            if (person1.sick || person2.sick){
             float distance = dist(person1.loc.x, person1.loc.y, person2.loc.x, person2.loc.y);
+
 
             // first condition
 
@@ -393,12 +396,12 @@ void infect()
 
                 if (prob(infectionProbability) == true) {
 
-                    person1.getInfected();
-                    
+                    person1.getInfected();      
                   
                 }
                 
             }
+                        }
             
             infectionLine(person1,person2);
                   //if (prob(infectionProbability) == true && person1.infected){
@@ -791,6 +794,7 @@ void drawAgent()
       noFill();
       vel = new PVector(0,0);
       rad = 0;
+      //drawHalo();
     }
     
 
@@ -800,23 +804,38 @@ void drawAgent()
 
     //add Halos
 
-    if ( sick == true) {
+    if ( sick ) {
       noFill();
-      stroke(238, 109, 3, 100);
+      stroke(238, 109, 3, 200);
       ellipse(loc.x, loc.y, 16, 16);
       //drawHalo();
 
     }
 
-    if (infected == true) {
+    if (infected) {
 
       noFill();
-
+      
+      strokeWeight(1);
+      
       stroke(255, 255, 0, 100);
 
-      ellipse(loc.x, loc.y, 16, 16);
+      ellipse(loc.x, loc.y, 12, 12);
 
     }
+    
+    if (recovered) {
+
+      noFill();
+      
+      strokeWeight(1);
+
+      stroke(0, 255, 0,100);
+
+      ellipse(loc.x, loc.y, 8, 8);
+
+    }
+    
   }
   
 
@@ -825,7 +844,7 @@ void drawAgent()
         
         
 
-          if( haloGrowth <= 400 )
+          if( haloGrowth <= 500 )
           {
               float radius = haloGrowth;
               float alpha  = map(haloGrowth, 0, 200, 180, 10 );
