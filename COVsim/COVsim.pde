@@ -17,6 +17,8 @@ PFont altFont;
 
 PImage healthZone;
 
+HScrollbar hs1;
+
 //////////////////////// infection variables
 
 int minDays = 2;
@@ -66,8 +68,9 @@ void setup()
     population = new ArrayList<Agent>();
     myFont = createFont("Arial Black", 32);
     altFont = createFont("Arial", 32);
-
     initailizePop();
+    
+    hs1 = new HScrollbar(xStat, yDead+200, 360, 6, 6);
 }
 
 void draw()
@@ -97,6 +100,24 @@ void draw()
 
     infect();
     statsBar();
+    scrollBar();
+}
+
+void scrollBar() {
+
+  hs1.updateScroll();
+  hs1.displayScroll();
+  
+  float xValue  = hs1.getPos();
+  
+  int    travel = round(map(xValue, xStat, xStat + 360, 0, 100));
+  String travelPercent = nfc(travel);
+  
+  textSize(13);
+  textAlign(CENTER);
+  fill(255);
+  text(travelPercent + "%", hs1.spos+5, hs1.ypos-18); 
+  
 }
 
 void removeAgent() {
@@ -237,7 +258,13 @@ void statsBar() {
     text("TOTAL DEATHS: " + int(numDead), xStat, yDead);
     
     text("FATALITY RATE: " + nf(percentCFR, 0, 2) + "%", xStat+200, yDead);
+    
+    text("SELF ISOLATION", xStat, yDead+160);
+    
+    textFont(myFont);
+    textSize(16);
 
+    text("INTERVENTIONS", xStat, yDead+110);
 
     //fill(255,255,255,100);
     //rect(width/2-355,height-40,325,20);
@@ -577,12 +604,16 @@ void mousePressed()
     Agent infectedPerson = new Agent(L);
 
     infectedPerson.getInfected();
+    
+    if(mouseY < (height-180) && mouseX  < (width-400)){
 
     infectedPerson.loc.x = mouseX;
 
     infectedPerson.loc.y = mouseY;
 
     population.add(infectedPerson);
+    
+    }
 
 }
 
@@ -790,7 +821,7 @@ void drawAgent()
 
     if ( sick ) {
 
-      fill(238, 109, 3);
+      fill(238, 90, 30);
       susceptible = false;
       rad = 5;
       if (randomNum < sickIsolateRate){
@@ -830,7 +861,7 @@ void drawAgent()
 
     if ( sick ) {
       noFill();
-      stroke(238, 109, 3, 200);
+      stroke(238, 90, 30);
       ellipse(loc.x, loc.y, 16, 16);
       //drawHalo();
 
@@ -904,9 +935,7 @@ void drawAgent()
 
   }
 
-  
 
-  
   void getSick(int minDay, int maxDay)
 
   {
@@ -918,7 +947,6 @@ void drawAgent()
     days = (int)random(minDay, maxDay);
 
   }
-
 
 
   ///////////////////////////////////////////////////////////////////////////// Bounce Function
@@ -935,7 +963,7 @@ void drawAgent()
 
     }
 
-    if (loc.y < 30 || loc.y >= height-180) {
+    if (loc.y < 30 || loc.y >= height-185) {
       
 
       vel.y *= -1;
