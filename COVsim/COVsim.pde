@@ -5,7 +5,7 @@ ArrayList < Agent > survivors;
 
 int dayCounter = 0;
 
-int framesPerDay = 24;
+int framesPerDay = 60;
 
 int currentPopulationSize = 0;
 
@@ -31,21 +31,21 @@ float infectionProbability = 0.15;
 
 int xStat = 1240;
 
-int yTitle = 5;
+int yTitle = 35;
 
-int yDay = 35;
+int yDay = 65;
 
-int yPop = 60;
+int yPop = 90;
 
-int yHealthy = 100;
+int yHealthy = 140;
 
-int ySick = 220;
+int ySick = 260;
 
-int yInfected = 160;
+int yInfected = 200;
 
-int ySurvivors = 280;
+int ySurvivors = 320;
 
-int yDead = 340;
+int yDead = 380;
 
 int yCFR = 490;
 
@@ -60,16 +60,15 @@ int numDead = 0;
 void setup()
 
 {
-    size(1620, 1000);
+    size(1620,1000);
     //fullScreen();
 
-    frameRate(24);
+    frameRate(60);
 
     population = new ArrayList<Agent>();
     myFont = createFont("Arial Black", 32);
     altFont = createFont("Arial", 32);
     initailizePop();
-    
     hs1 = new HScrollbar(xStat, yDead+200, 360, 6, 6);
 }
 
@@ -237,7 +236,7 @@ void statsBar() {
 
     if(!isSetup){
      textAlign(CENTER);
-     text("PRESS SPACE TO START", (width-420)/2, (height-180)/2);
+     text("CLICK TO START", (width-420)/2, (height-180)/2);
      dayCounter = 0;
     }
     
@@ -261,10 +260,11 @@ void statsBar() {
     
     text("SELF ISOLATION", xStat, yDead+160);
     
-    textFont(myFont);
-    textSize(16);
+    //textFont(myFont);
+    textSize(18);
 
-    text("INTERVENTIONS", xStat, yDead+110);
+    text("INTERVENTIONS", xStat, yDead+120);
+    text("STATS", xStat, yTitle);
 
     //fill(255,255,255,100);
     //rect(width/2-355,height-40,325,20);
@@ -506,7 +506,7 @@ void initailizePop() {
 
     }
     
-    infectedAgent();
+    //infectedAgent();
 
 }
 
@@ -606,6 +606,10 @@ void mousePressed()
     infectedPerson.getInfected();
     
     if(mouseY < (height-180) && mouseX  < (width-400)){
+    
+    if(!isSetup){
+            isSetup = true;
+          }
 
     infectedPerson.loc.x = mouseX;
 
@@ -614,6 +618,8 @@ void mousePressed()
     population.add(infectedPerson);
     
     }
+    
+
 
 }
 
@@ -633,16 +639,11 @@ void keyPressed()
         for (int i = 0; i < initialPopulationSize; i += 1)
 
         { 
-          if(!isSetup){
-            isSetup = true;
-          }
-
+          
             PVector L = new PVector(random(25, width - 406), random(25, height-186));
-
             population.add(new Agent(L));
             dayCounter = 0;
             numDead = 0;
-
         }
         
         isolate = false;
@@ -754,7 +755,7 @@ class Agent {
 
       t += 1;
 
-      if (t >= random(72,336)) {    
+      if (t >= random(120,840)) {    
 
         getSick(minDays, maxDays);
 
