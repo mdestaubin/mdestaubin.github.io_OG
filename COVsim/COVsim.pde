@@ -33,7 +33,7 @@ float travelProbability;
 
 int xStat = 1240;
 
-int yTitle = 40;
+int yTitle = 42;
 
 int yDay = 80;
 
@@ -105,10 +105,11 @@ void draw()
     stroke(255);
     strokeWeight(2);
     rect(20,20,width-420,800,6); 
+    stroke(150);
     line(xStat,yDead+80,xStat+360,yDead+80);
     line(xStat,yButton1-48,xStat+360,yButton1-48);
-    //iline(xStat,yTitle+15,xStat+360,yTitle+15);
-    line(xStat,yTitle-18,xStat+360,yTitle-18);
+    line(xStat,yTitle+12,xStat+360,yTitle+15);
+     //line(xStat,yTitle-18,xStat+360,yTitle-18);
 
     for (Agent a: population) {
       if(isSetup){
@@ -316,7 +317,7 @@ void statsBar() {
     
    // textAlign(CENTER);
     textSize(22);
-    text("ViRS | COVID-19 SIM", xStat+3, yTitle+12);
+    text("ViRS | COVID-19 SIM", xStat+3, yTitle);
 
     //fill(255,255,255,100);
     //rect(width/2-355,height-40,325,20);
@@ -773,6 +774,63 @@ void mousePressed()
     
     }
 
+   if(mouseX >= xStat && mouseX <= (xStat+80) && mouseY >= yButton1 && mouseY <= (yButton1+35)){
+      s1 = true;
+      s2 = false;
+      s3 = false;
+      s4 = false;
+    }
+    
+    if(mouseX >= xStat+92 && mouseX <= (xStat+182) && mouseY >= yButton1 && mouseY <= (yButton1+35)){
+      s1 = false;
+      s2 = true;
+      s3 = false;
+      s4 = false;
+    }
+    
+    if(mouseX >= xStat+184 && mouseX <= (xStat+264) && mouseY >= yButton1 && mouseY <= (yButton1+35)){
+      s1 = false;
+      s2 = false;
+      s3 = true;
+      s4 = false;
+    }
+    
+    if(mouseX >= xStat+276 && mouseX <= (xStat+356) && mouseY >= yButton1 && mouseY <= (yButton1+35)){
+      s1 = false;
+      s2 = false;
+      s3 = false;
+      s4 = true;
+    }
+    
+    
+    
+    if(mouseX >= xStat && mouseX <= (xStat+80) && mouseY >= yButton2 && mouseY <= (yButton2+35)){
+      su1 = true;
+      su2 = false;
+      su3 = false;
+      su4 = false;
+    }
+    
+    if(mouseX >= xStat+92 && mouseX <= (xStat+182) && mouseY >= yButton2 && mouseY <= (yButton2+35)){
+      su1 = false;
+      su2 = true;
+      su3 = false;
+      su4 = false;
+    }
+    
+    if(mouseX >= xStat+184 && mouseX <= (xStat+264) && mouseY >= yButton2 && mouseY <= (yButton2+35)){
+      su1 = false;
+      su2 = false;
+      su3 = true;
+      su4 = false;
+    }
+    if(mouseX >= xStat+276 && mouseX <= (xStat+356) && mouseY >= yButton2 && mouseY <= (yButton2+35)){
+      su1 = false;
+      su2 = false;
+      su3 = false;
+      su4 = true;
+    }
+
 }
 
 //void button01()
@@ -857,6 +915,12 @@ void keyPressed()
       su3 = false;
       su4 = true;
     }
+    
+    if ( key == 'p' )
+    looping = !looping;
+ 
+if ( key == 'l' && looping==false )
+    redraw();
 
     if (key == ' ') {
 
