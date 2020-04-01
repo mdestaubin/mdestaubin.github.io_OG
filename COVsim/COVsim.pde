@@ -142,7 +142,7 @@ void scrollBar() {
   String travelPercent = nfc(travel);
   
   infectionProbability =  map(xValue, xStat, xStat + 360, 0, 0.2);
-  println(infectionProbability);
+ 
   
   textSize(16);
   textAlign(CENTER);
