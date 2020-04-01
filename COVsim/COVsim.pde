@@ -79,6 +79,8 @@ int yButton2 = 780;
 int yButton3 = 805;
 int yRvalue = 585;
 
+int contactDays = 0;
+
 void setup()
 
 {
@@ -142,7 +144,6 @@ void scrollBar() {
   String travelPercent = nfc(travel);
   
   infectionProbability =  map(xValue, xStat, xStat + 360, 0, 0.2);
- 
   
   textSize(16);
   textAlign(CENTER);
@@ -683,6 +684,8 @@ void infectionLine(Agent person1, Agent person2) {
   float spreadDist = dist(person1.loc.x, person1.loc.y, person2.loc.x, person2.loc.y);
 
    if ((person1.infected && person2.sick) || (person2.infected && person1.sick)) {
+     
+     if(contactDays <= 1){
       
       if (spreadDist < 100){
 
@@ -692,6 +695,7 @@ void infectionLine(Agent person1, Agent person2) {
 
         line(person1.loc.x, person1.loc.y, person2.loc.x, person2.loc.y);
       }
+     }
     }
 
 }
@@ -1177,6 +1181,8 @@ void drawAgent()
     if(recovered == false){
 
     infected = true;
+    
+    contactDays =+1;
 
     t = 0;
 
