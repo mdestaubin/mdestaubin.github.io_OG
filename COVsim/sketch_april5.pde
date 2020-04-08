@@ -31,7 +31,7 @@ float infectionProbability = .18;
 
 float travelProbability;
 
-int xStat = 840;
+int xStat = 740;
 
 int yTitle = 42;
 
@@ -104,7 +104,7 @@ void setup()
 
 {
     //size(1620,840);
-    size(1220,840);
+    size(1120,740);
     //fullScreen();
 
     frameRate(60);
@@ -126,7 +126,7 @@ void draw()
     fill(38,38,38);
     stroke(255);
     strokeWeight(2);
-    rect(20,20,width-420,800,6); 
+    rect(20,20,width-420,700,6); 
     stroke(150);
     line(xStat,yAssumption+10,xStat+360,yAssumption+10);
     line(xStat,yButton1-43,xStat+360,yButton1-43);
@@ -299,7 +299,7 @@ void statsBar() {
      //virs.resize(0,120);
      //image(virs,((width-420)/2)-85,((height-40)/2)-220);
      text("START SIMULATION",(width-420)/2,((height-40)/2)-35);
-     text("INSTRUCTIONS", (width-420)/2,((height-40)/2));
+     text("SETUP", (width-420)/2,((height-40)/2));
      text("ABOUT", (width-420)/2,((height-40)/2)+35);
      }
      if(about){
