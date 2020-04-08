@@ -31,7 +31,7 @@ float infectionProbability = .18;
 
 float travelProbability;
 
-int xStat = 940;
+int xStat = 1240;
 
 int yTitle = 42;
 
@@ -103,8 +103,8 @@ boolean adjust2 = false;
 void setup()
 
 {
-    //size(1620,840);
-    size(1320,840);
+    size(1620,840);
+    //size(1320,840);
     //fullScreen();
 
     frameRate(60);
