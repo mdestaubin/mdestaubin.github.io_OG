@@ -31,7 +31,7 @@ float infectionProbability = .18;
 
 float travelProbability;
 
-int xStat = 1240;
+int xStat = 840;
 
 int yTitle = 42;
 
@@ -103,8 +103,8 @@ boolean adjust2 = false;
 void setup()
 
 {
-    size(1620,840);
-    //size(1320,840);
+    //size(1620,840);
+    size(1220,840);
     //fullScreen();
 
     frameRate(60);
@@ -117,8 +117,6 @@ void setup()
     virs = loadImage("DATA/virslogo.png");
     hhi = loadImage("DATA/hhilogo.png");
     //hs1 = new HScrollbar(xStat, yRvalue, 360, 6, 7);
-    
-    //y = new int[360];
 }
 
 void draw()
