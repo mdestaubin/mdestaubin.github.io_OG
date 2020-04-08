@@ -103,7 +103,7 @@ boolean adjust2 = false;
 void setup()
 
 {
-    size(1620,840);
+    size(1350,700);
     //fullScreen();
 
     frameRate(60);
