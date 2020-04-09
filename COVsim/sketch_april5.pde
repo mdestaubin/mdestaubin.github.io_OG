@@ -299,15 +299,15 @@ void statsBar() {
      fill(80,200);
     rect(xStat-350,yButton2-29,320,56,7);
     fill(220);
-    text("Controls the proportion agents who are immobile",xStat-340,yButton2-5);
-    text("and assumes a lesser chance of transmission.",xStat-340,yButton2+15);
+    text("Controls the proportion of agents who are",xStat-340,yButton2-5);
+    text("immobile and assumes low transmissability.",xStat-340,yButton2+15);
     }
     
      if(mouseX >  xStat && mouseX < xStat+150 && mouseY > yButton3-25 && mouseY < yButton3-10){
      fill(80,200);
     rect(xStat-350,yButton3-29,320,56,7);
     fill(220);
-    text("Controls the proportion agents who come in",xStat-340,yButton3-5);
+    text("Controls the proportion of agents who come in",xStat-340,yButton3-5);
     text("contact with an infected agent and isolate.",xStat-340,yButton3+15);
     }
     
@@ -316,7 +316,7 @@ void statsBar() {
     rect(xStat-350,yDay-19,320,56,7);
     fill(220);
     text("The number of agents that are actively exposed",xStat-340,yDay+3);
-    text("and in their incubation period.",xStat-340,yDay+23);
+    text("and are in their incubation period.",xStat-340,yDay+23);
     }
     
      if(mouseX >  xStat && mouseX < xStat+100 && mouseY > yInfect-15 && mouseY < yInfect){
@@ -332,7 +332,7 @@ void statsBar() {
     rect(xStat-350,ySick-19,320,56,7);
     fill(220);
     text("The number of agents that are asymptomatic",xStat-340,ySick+3);
-    text("and assumes a lesser chance of transmission.",xStat-340,ySick+23);
+    text("and assumes a lower chance of transmission.",xStat-340,ySick+23);
     }
     
     if(mouseX > xStat + 250 && mouseX < xStat+360 && mouseY > yDay-15 && mouseY < yDay){
@@ -355,8 +355,8 @@ void statsBar() {
     fill(80,200);
     rect(xStat-350,ySick-19,320,56,7);
     fill(220);
-    text("The number of agents that are asymptomatic",xStat-340,ySick+3);
-    text("and assumes a lesser chance of transmission.",xStat-340,ySick+23);
+    text("The case fatality rate is the proportion of",xStat-340,ySick+3);
+    text("affected agents that do not survive.",xStat-340,ySick+23);
     }
     
     if(mouseX >  xStat && mouseX < xStat+360 && mouseY > yHealthy+5 && mouseY < yHealthy+45){
@@ -455,16 +455,17 @@ void statsBar() {
     textAlign(RIGHT);
     //textSize(17);
     text(int(popSize) +"  AGENTS", xStat+360, yAssumption);
-    text(round(numSick+numHealed+numDead) + " CASES | " + dayCounter+ " DAYS" , xStat+360, yStats); 
+    text(nf(round(numSick+numHealed+numDead),3) + " CASES | " + dayCounter+ " DAYS" , xStat+360, yStats); 
     
     //textSize(14);
     text("FATALITY RATE: " + nf(percentCFR, 0, 2) + "%", xStat+360, ySick);
     
-    text("RECOVERED: " + int(numHealed), xStat+360, yDay);
+    text("RECOVERED: " + nf(int(numHealed),3), xStat+360, yDay);
 
-    text("DEATHS: " + int(numDead), xStat+360, yInfect);
+    text("DEATHS: " + nf(int(numDead),3), xStat+360, yInfect);
     
     text("SUSCEPTIBILITY: "+ round(100-map(numHealed,0, 1000, 0, 100)) + "%" , xStat+360, yAssumption+35);
+   
     text("R 0: 2", xStat+360, yAssumption+60);
 
     textAlign(LEFT);
@@ -473,11 +474,11 @@ void statsBar() {
     
     text("INFECTION: 3-7 DAYS" , xStat, yAssumption+60);
 
-    text("INFECTED: " + int(numSick), xStat, yInfect);
+    text("INFECTED: " + int(numSick), xStat+18, yInfect);
     
     text("EPIDEMIC CURVE ", xStat, yCFR-110);
 
-    text("EXPOSED: " + int(numInfected), xStat, yDay);
+    text("EXPOSED: " + int(numInfected), xStat+18, yDay);
 
     text("INFECTED IN ISOLATION", xStat, yButton1-10);
     
@@ -500,12 +501,31 @@ void statsBar() {
 
     fill(255);
 
-   // textFont(myFont);
     textSize(23);
+    
     text("COVID-19 SIMULATOR", xStat, yTitle+2);
+    
+    fill(255, 255, 0); 
+    noStroke();
+    ellipse( xStat+5, yDay-5, 5, 5);
+    strokeWeight(1);
+    noFill();
+    stroke(255, 255, 0, 100);
+    ellipse(xStat+5, yDay-5, 13, 13);
+    
+    fill(238, 90, 30); 
+    noStroke();
+    ellipse( xStat+5, yInfect-5, 5, 5);
+    strokeWeight(1);
+    noFill();
+    stroke(238, 90, 30);
+    ellipse(xStat+5, yInfect-5, 13, 13);
+    
+    fill(88, 150, 255); 
+    noStroke();
+    ellipse( xStat+230, yDay-5, 5, 5);
 
     textAlign(CENTER);
-
     textFont(altFont);
     textSize(20);
 
@@ -884,7 +904,7 @@ void infectionLine(Agent person1, Agent person2) {
 
    if ((person2.sick) || (person1.sick)) {
 
-      if (spreadDist < 25){
+      if (spreadDist < 20){
 
         stroke(255,70);
 
@@ -1419,7 +1439,7 @@ void drawAgent()
     if ( sick ) {
       noFill();
       stroke(238, 90, 30);
-      ellipse(loc.x, loc.y, 15, 15);
+      ellipse(loc.x, loc.y, 13, 13);
       //drawHalo();
 
     }
