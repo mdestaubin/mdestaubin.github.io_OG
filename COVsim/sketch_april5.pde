@@ -17,7 +17,7 @@ PFont altFont;
 
 PImage healthZone;
 
-HScrollbar hs1;
+
 
 //////////////////////// infection variables
 
@@ -116,7 +116,7 @@ void setup()
     initailizePop();
     virs = loadImage("DATA/virslogo.png");
     hhi = loadImage("DATA/hhilogo.png");
-    //hs1 = new HScrollbar(xStat, yRvalue, 360, 6, 7);
+   
 }
 
 void draw()
@@ -152,26 +152,7 @@ void draw()
    // scrollBar();
 }
 
-void scrollBar() {
 
-  hs1.updateScroll();
-  hs1.displayScroll();
-  
-  float xValue  = hs1.getPos();
-  
-  int    travel = round(map(xValue, xStat, xStat + 360, 0, 4));
-  String travelPercent = nfc(travel);
-  
-  //infectionProbability =  map(xValue, xStat, xStat + 360, 0, 0.2);
-//  infectionProbability =  0.12;
-  
-  textSize(16);
-  textAlign(CENTER);
-  fill(255);
-  text("R", hs1.spos-3, hs1.ypos-18); 
-  textSize(13);
-  text(travelPercent, hs1.spos+10, hs1.ypos-18);  
-}
 
 void removeAgent() {
  for (int i = population.size() - 1; i >= 0; i--) {
@@ -270,6 +251,134 @@ void statsBar() {
     textAlign(LEFT);
     textFont(altFont);
     textSize(14);
+    
+    noStroke(); 
+    textAlign(LEFT);
+    
+    if(mouseX > xStat && mouseX < xStat+125 && mouseY > yAssumption+35-20 && mouseY < yAssumption+35){
+    fill(80,200);
+    rect(xStat-350,yAssumption+19,320,56,7);
+    fill(220);
+    text("The incubation period is the time elapsed",xStat-340,yAssumption+43);
+    text("between exposure to infection and symptoms.",xStat-340,yAssumption+63);
+    }
+    
+    if(mouseX > xStat + 200 && mouseX < xStat+360 && mouseY > yAssumption+35-20 && mouseY < yAssumption+35){
+    fill(80,200);
+    rect(xStat-350,yAssumption+19,320,56,7);
+    fill(220);
+    text("Susceptibility is the proportion of the population",xStat-340,yAssumption+43);
+    text("that is not immune to the virus and vulnerable.",xStat-340,yAssumption+63);
+    }
+    
+    if(mouseX > xStat && mouseX < xStat+125 && mouseY > yAssumption+60-20 && mouseY < yAssumption+60){
+    fill(80,200);
+    rect(xStat-350,yAssumption+44,320,56,7);
+    fill(220);
+    text("The infection period is the time from symptom",xStat-340,yAssumption+68);
+    text("onset and contagiousness to recovery.",xStat-340,yAssumption+88);
+    }
+    
+    if(mouseX >  xStat + 320 && mouseX < xStat+360 && mouseY > yAssumption+60-20 && mouseY < yAssumption+60){
+    fill(80,200);
+    rect(xStat-350,yAssumption+44,320,56,7);
+    fill(220);
+    text("The reproduction number is the average number",xStat-340,yAssumption+68);
+    text("of infections caused by one infectious agent.",xStat-340,yAssumption+88);
+    }
+    
+    if(mouseX >  xStat && mouseX < xStat+150 && mouseY > yButton1-25 && mouseY < yButton1-10){
+    fill(80,200);
+    rect(xStat-350,yButton1-29,320,56,7);
+    fill(220);
+    text("Controls the proportion of infected agents in",xStat-340,yButton1-5);
+    text("isolation and assumes 0% transmissability.",xStat-340,yButton1+15);
+    }
+    
+    if(mouseX >  xStat && mouseX < xStat+150 && mouseY > yButton2-25 && mouseY < yButton2-10){
+     fill(80,200);
+    rect(xStat-350,yButton2-29,320,56,7);
+    fill(220);
+    text("Controls the proportion agents who are immobile",xStat-340,yButton2-5);
+    text("and assumes a lesser chance of transmission.",xStat-340,yButton2+15);
+    }
+    
+     if(mouseX >  xStat && mouseX < xStat+150 && mouseY > yButton3-25 && mouseY < yButton3-10){
+     fill(80,200);
+    rect(xStat-350,yButton3-29,320,56,7);
+    fill(220);
+    text("Controls the proportion agents who come in",xStat-340,yButton3-5);
+    text("contact with an infected agent and isolate.",xStat-340,yButton3+15);
+    }
+    
+    if(mouseX >  xStat && mouseX < xStat+100 && mouseY > yDay-15 && mouseY < yDay){
+    fill(80,200);
+    rect(xStat-350,yDay-19,320,56,7);
+    fill(220);
+    text("The number of agents that are actively exposed",xStat-340,yDay+3);
+    text("and in their incubation period.",xStat-340,yDay+23);
+    }
+    
+     if(mouseX >  xStat && mouseX < xStat+100 && mouseY > yInfect-15 && mouseY < yInfect){
+    fill(80,200);
+    rect(xStat-350,yInfect-19,320,56,7);
+    fill(220);
+    text("The number of agents that are actively infected",xStat-340,yInfect+3);
+    text("and are in a contagious state.",xStat-340,yInfect+23);
+    }
+    
+     if(mouseX >  xStat && mouseX < xStat+150 && mouseY > ySick-15 && mouseY < ySick){
+    fill(80,200);
+    rect(xStat-350,ySick-19,320,56,7);
+    fill(220);
+    text("The number of agents that are asymptomatic",xStat-340,ySick+3);
+    text("and assumes a lesser chance of transmission.",xStat-340,ySick+23);
+    }
+    
+    if(mouseX > xStat + 250 && mouseX < xStat+360 && mouseY > yDay-15 && mouseY < yDay){
+    fill(80,200);
+    rect(xStat-350,yDay-19,320,56,7);
+    fill(220);
+    text("The total number of agents that have recovered",xStat-340,yDay+3);
+    text("and are assumed to be immune to reinfection.",xStat-340,yDay+23);
+    }
+    
+     if(mouseX > xStat + 290 && mouseX < xStat+360 && mouseY > yInfect-15 && mouseY < yInfect){
+    fill(80,200);
+    rect(xStat-350,yInfect-19,320,56,7);
+    fill(220);
+    text("The total number of agents that did not survive",xStat-340,yInfect+3);
+    text("and have been removed from the simulation.",xStat-340,yInfect+23);
+    }
+    
+     if(mouseX > xStat + 230 && mouseX < xStat+360 && mouseY > ySick-15 && mouseY < ySick){
+    fill(80,200);
+    rect(xStat-350,ySick-19,320,56,7);
+    fill(220);
+    text("The number of agents that are asymptomatic",xStat-340,ySick+3);
+    text("and assumes a lesser chance of transmission.",xStat-340,ySick+23);
+    }
+    
+    if(mouseX >  xStat && mouseX < xStat+360 && mouseY > yHealthy+5 && mouseY < yHealthy+45){
+    fill(80,200);
+    rect(xStat-350,yHealthy-13,320,56,7);
+    fill(220);
+    text("The prevalence bar shows the total proportion",xStat-340,yHealthy+10);
+    text("of agents that have been affected by the virus.",xStat-340,yHealthy+30);
+    }
+    
+    if(mouseX >  xStat && mouseX < xStat+360 && mouseY > yCFR-100 && mouseY < yCFR){
+    fill(80,200);
+    rect(xStat-350,yCFR-125,320,56,7);
+    fill(220);
+    text("The epidemic curve shows the active number of",xStat-340,yCFR-103);
+    text("infected agents over time.",xStat-340,yCFR-83);
+    }
+    
+    fill(255);
+    textAlign(LEFT);
+    textFont(altFont);
+    textSize(14);
 
     if(!isSetup){
     // fill(0,100);
@@ -287,10 +396,10 @@ void statsBar() {
      //ellipse(((width-420)/2)-20,((height-40)/2)-123,12,12);
     // ellipse(((width-420)/2)-85,((height-40)/2)-105,26,26);
      fill(255);
-     virs.resize(0,130);
+     virs.resize(0,110);
      hhi.resize(0,60);
      image(hhi,50,50);
-     image(virs,((width-380)/2)-82,((height-40)/2)-180);
+     image(virs,((width-380)/2)-62,((height-40)/2)-150);
      
      //text("V",(width-420)/2,((height-40)/2)-75);
      textFont(altFont);
@@ -298,9 +407,9 @@ void statsBar() {
      if(!about){
      //virs.resize(0,120);
      //image(virs,((width-420)/2)-85,((height-40)/2)-220);
-     text("START SIMULATION",(width-400)/2,((height-40)/2)-35);
-     //text("SETUP", (width-420)/2,((height-40)/2));
-     text("ABOUT", (width-400)/2,((height-40)/2)+35);
+     text("START SIMULATION",(width-380)/2,((height-40)/2));
+     text("ABOUT", (width-380)/2,((height-40)/2)+35);
+    // text("INFO ON COVID-19", (width-380)/2,((height-40)/2)+70);
      }
      if(about){
      // hhi.resize(0,60);
@@ -311,21 +420,21 @@ void statsBar() {
     //  text("ViRS",(width-420)/2,((height-40)/2)-80);
      textFont(altFont);
      textSize(15);
-     text("The Visual Response Simulator | ViRS | is an agent-based modeling project designed to explore", (width-380)/2,((height-40)/2)-35);
-     text("and visualize how disease dynamics and social behaviors interact over space and time.",(width-380)/2,((height-40)/2)-15);
-     text("Originating as an individual thesis project at the Harvard Graduate School of Design,", (width-380)/2,((height-40)/2)+5);
-     text("ViRS is now a collaborative, cross-disciplinary research effort at the Harvard Humanitarian Initiative.", (width-380)/2,((height-40)/2)+25);
+     text("The Visual Response Simulator | ViRS | is an agent-based modeling project designed to explore", (width-380)/2,((height-40)/2));
+     text("and visualize how disease dynamics and social behaviors interact over space and time.",(width-380)/2,((height-40)/2)+20);
+     text("Originating as an individual thesis project at the Harvard Graduate School of Design,", (width-380)/2,((height-40)/2)+40);
+     text("ViRS is now a collaborative, cross-disciplinary research effort at the Harvard Humanitarian Initiative.", (width-380)/2,((height-40)/2)+60);
      
-     text("This particular simulation of ViRS is a spatially abstract COVID-19 transmission study model.", (width-380)/2,((height-40)/2)+65);
-     text("It intends to demonstrate the level of impact non-clinical public health measures have on", (width-380)/2,((height-40)/2)+85);
-     text("containing and stopping a COVID-19 outbreak within a population of agents.", (width-380)/2,((height-40)/2)+105);
+     text("This particular simulation of ViRS is a spatially abstract COVID-19 transmission study model.", (width-380)/2,((height-40)/2)+100);
+     text("It intends to demonstrate the level of impact non-clinical public health measures have on", (width-380)/2,((height-40)/2)+120);
+     text("containing and stopping a COVID-19 outbreak within a population of agents.", (width-380)/2,((height-40)/2)+140);
      
-     text("Note this is not a prediction model, its primary purpose is to act as an educational tool that", (width-380)/2,((height-40)/2)+145);
-     text("gives the user the ability to control certain parameters and visualize their effects on an outbreak.", (width-380)/2,((height-40)/2)+165);
-     text("This model is part of an ongoing project and will be updated with improvements periodically.", (width-380)/2,((height-40)/2)+185);
+     text("Note this is not a prediction model, its primary purpose is to act as an educational tool that", (width-380)/2,((height-40)/2)+180);
+     text("gives the user the ability to control certain parameters and visualize their effects on an outbreak.", (width-380)/2,((height-40)/2)+200);
+     text("This model is part of an ongoing project and will be updated with improvements periodically.", (width-380)/2,((height-40)/2)+220);
      
-     text("For any questions or comments, please email", (width-380)/2,((height-40)/2)+225);
-     text("Michael de St. Aubin, mdestaubin@hsph.harvard.edu", (width-380)/2,((height-40)/2)+245);
+     text("For any questions or comments, please email", (width-380)/2,((height-40)/2)+260);
+     text("Michael de St. Aubin, mdestaubin@hsph.harvard.edu", (width-380)/2,((height-40)/2)+280);
     
      textSize(18);
      text("BACK", (width-380)/2,((height-40)/2)+335);
@@ -364,9 +473,9 @@ void statsBar() {
     
     text("INFECTION: 3-7 DAYS" , xStat, yAssumption+60);
 
-    text("SYMPTOMATIC: " + int(numSick), xStat, yInfect);
+    text("INFECTED: " + int(numSick), xStat, yInfect);
     
-    text("EPI CURVE ", xStat, yCFR-110);
+    text("EPIDEMIC CURVE ", xStat, yCFR-110);
 
     text("EXPOSED: " + int(numInfected), xStat, yDay);
 
@@ -561,38 +670,12 @@ void statsBar() {
 
      if(isSetup){
      stroke(225);
-     strokeWeight(3);
+     strokeWeight(2);
      noFill();
-     //rect(xStat+335,25,5,20);
-     //rect(xStat+345,25,5,20);
-     line(xStat+340,27,xStat+360,27);
+     line(xStat+340,28,xStat+360,28);
      line(xStat+340,35,xStat+360,35);
-     line(xStat+340,43,xStat+360,43);
+     line(xStat+340,42,xStat+360,42);
      }
-     
-    if(mouseX > xStat && mouseX < xStat+125 && mouseY > yAssumption+35-20 && mouseY < yAssumption+35){
-    noStroke();
-    fill(255,150);
-    rect(xStat-30,yAssumption+19,-350,56,7);
-    fill(0);
-    textAlign(LEFT);
-    text("The incubation period is the time elapsed",xStat-370,yAssumption+43);
-    text("between exposure to infection and symptoms.",xStat-370,yAssumption+63);
-    }
-    
-    if(mouseX > xStat && mouseX < xStat+125 && mouseY > yStats-20 && mouseY < yStats){
-    noStroke();
-    fill(255,100);
-    rect(xStat-40,yStats-16,-350,350,7);
-    }
-    
-    if(mouseX > xStat && mouseX < xStat+125 && mouseY > yButton1-55-20 && mouseY < yButton1-55){
-    noStroke();
-    fill(255,100);
-    rect(xStat-40,yButton1-55-16,-350,350,7);
-    }
-
-    //triangle(xStat+298, 25, xStat+316, 35, xStat+298, 45);
 
     noStroke();
 
@@ -619,35 +702,7 @@ void statsBar() {
     rect(xStat, yHealthy + 10, xDead, 35);
     
     fill(255,100);
-    
-    
-
-    //rect(xStat, yCFR + 10, xCFR, 25);
-
-
-
-    //fill(255);
-
-    //rect(0,height-30,xxHealthy, 30);
-
-    //fill(255,0,0,150);
-
-    //rect(xxHealthy,height-30,xxSick, 30);
-
-    //fill(255,255,0,150);
-
-    //rect(xxSick+ xxHealthy,height-30, xxInfected, 30);
-
-    //fill(0,255,0,150);
-
-    //rect(xxInfected + xxSick + xxHealthy,height-30,xxSurvivors, 30);
-
-    //fill(255);
-
-    //rect(xxSurvivors + xxInfected + xxSick + xxHealthy,height-30,xxDead, 30);
-
-
-    //epiCurve();
+   
    
     sickHistory.add(yCFR-(numSick));
     strokeWeight(2);
@@ -676,12 +731,6 @@ void statsBar() {
     if (adjust2) { 
         yInfected   = (yInfected+yCFR)/2; 
     } 
-    //else if (numSick > 40) {
-    //  // adjust = false; 
-    //  adjust2 = true;
-    //  ySick   = (ySick*2 +yCFR)/2;
-
-    //}
     
     strokeWeight(1);
 
@@ -690,14 +739,8 @@ void statsBar() {
     noFill();
     stroke(238, 109, 3, 30);
     line(xCord1, yInfected, xCord1, yCFR);
-    
-    //stroke(100,10);
-    //line(xCord1,yDead,xCord1,yDead+200);
-    //noFill();
-    //stroke(180,180);
-    //line(xCord1, yTotal, xCord1, yDead);
 
-   xCord1 = xCord1 + .06;
+    xCord1 = xCord1 + .06;
 
      }
     }
@@ -939,8 +982,8 @@ void mousePressed()
     Agent infectedPerson = new Agent(L);
 
     infectedPerson.getInfected();
-    if(mouseX<width-420 && mouseY<height-30 && !over){
-    if(mouseX >= ((width-420)/2)-90 && mouseX <= ((width-420)/2)+90 && mouseY >= ((height-40)/2)-50 && mouseY <= ((height-40)/2)-35){
+    if(mouseX<width-410 && mouseY<height-30 && !over){
+    if(mouseX >= ((width-400)/2)-90 && mouseX <= ((width-400)/2)+90 && mouseY >= ((height-40)/2)-15 && mouseY <= ((height-40)/2)){
     if(!isSetup){
             isSetup = true;
             population.clear();
@@ -1304,10 +1347,9 @@ void drawAgent()
       if(su5){
         travelIsolate = 1.0;
       }
-    if (susceptible || infected || sick){
+    if (susceptible || infected || sick || recovered){
       if (randomNum < travelIsolate){
          socialDistance = true;
-        // bounce2();
       }
       else { socialDistance = false; }
     }
@@ -1484,79 +1526,3 @@ void drawAgent()
 
 
 
-class HScrollbar {
-  int swidth, sheight;    // width and height of bar
-  float xpos, ypos;       // x and y position of bar
-  float spos, newspos;    // x position of slider
-  float sposMin, sposMax; // max and min values of slider
-  int loose;              // how loose/heavy
-  boolean over;           // is the mouse over the slider?
-  boolean locked;
-  float ratio;
-
-  HScrollbar (float xp, float yp, int sw, int sh, int l) {
-    swidth = sw;
-    sheight = sh;
-    int widthtoheight = sw - sh;
-    ratio = (float)sw / (float)widthtoheight;
-    xpos = xp;
-    ypos = yp-sheight/2;
-    spos = xpos + swidth/2 - sheight/2;
-    newspos = spos;
-    sposMin = xpos;
-    sposMax = xpos + swidth;
-    loose = l;
-  }
-
-  void updateScroll() {
-    if (overEvent()) {
-      over = true;
-    } else {
-      over = false;
-    }
-    if (mousePressed && over) {
-      locked = true;
-    }
-    if (!mousePressed) {
-      locked = false;
-    }
-    if (locked) {
-      newspos = constrain(mouseX-sheight/2, sposMin, sposMax);
-    }
-    if (abs(newspos - spos) > 1) {
-      spos = spos + (newspos-spos)/loose;
-    }
-  }
-
-  float constrain(float val, float minv, float maxv) {
-    return min(max(val, minv), maxv);
-  }
-
-  boolean overEvent() {
-    if (mouseX > xpos && mouseX < xpos+swidth &&
-       mouseY > ypos && mouseY < ypos+sheight) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  void displayScroll() {
-    noStroke();
-    fill(0,100);
-    rect(xpos, ypos, swidth, sheight);
-    fill(255,50);
-    rect(xpos,ypos,spos-xStat,sheight);
-    fill(200);
-
-    rect(spos, ypos-10, 8, sheight+20);   
-  }
-  
- 
-
-  float getPos() {
-    // Convert spos to be values between
-    // 0 and the total width of the scrollbar
-    return spos * ratio;
-  }
-}
