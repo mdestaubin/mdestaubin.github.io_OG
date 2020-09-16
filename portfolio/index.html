@@ -237,6 +237,40 @@ font-style: black;
   }
   #myDIV {
     width: 100%;
+
+    .hero-image {
+  background-image: url("https://github.com/mdestaubin/mdestaubin.github.io/blob/master/portfolio/images/profile2.png");
+  /*height: 50%;*/
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+}
+
+.hero-text {
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+}
+
+.hero-text button {
+  border: none;
+  outline: 0;
+  display: inline-block;
+  padding: 10px 25px;
+  color: black;
+  background-color: #ddd;
+  text-align: center;
+  cursor: pointer;
+}
+
+.hero-text button:hover {
+  background-color: #555;
+  color: white;
+}
 }
 @-webkit-keyframes fade {
   from {opacity: .4} 
@@ -285,6 +319,14 @@ font-style: black;
       <a href="#press" onclick="w3_close()" class="w3-bar-item w3-button w3-white"><i class="fa fa-file-alt fa-fw w3-center"></i></a> 
       </div>
     </div>
+
+    <div class="hero-image">
+  <div class="hero-text">
+    <h1 style="font-size:50px">Hi,</h1>
+    <p>I've been nominated for the BSA Director-at-Large</p>
+    <button>Learn More</button>
+  </div>
+</div>
 
 
   <!-- Photo Grid-->
@@ -955,12 +997,11 @@ font-style: black;
    </div>
   </div>
 
-
         <!-- Contact Section -->
   <div class="w3-container w3-padding-32 w3-hide-small" id="plot">
         
           
-          </br></br></br></br>
+          </br></br></br></br></br>
           <h5><b>PROJECT MAP</b></h5>
           <div id='container'></div>
           <div id='map'></div>
