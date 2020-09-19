@@ -93,6 +93,8 @@ font-style: black;
     border-color: black;
 }
 
+ul.a {list-style-type: circle;}
+
 /* Clear floats after rows */ 
 .row:after {
     content: "";
@@ -316,7 +318,7 @@ font-style: black;
   <header id="photos">
 
     <div class="w3-container">
-    <h1 style="font-size: 45px; margin-top: 0px"><b>Michael de St. Aubin</b></h1>
+    <h1 style="font-size: 40px; margin-top: 0px; position: fixed; background-color:   #FFFFFF;"><b>Michael de St. Aubin</b></h1>
     </div>
 
     </header>
@@ -329,7 +331,7 @@ font-style: black;
       <button class="btn active w3-bar-item" onclick="filterSelection('all')">All</button>
       </a>
       <a href="#photos"> 
-      <button class="btn w3-bar-item w3-hover-yellow" onclick="filterSelection('thesis')">Thesis</button>
+      <button class="btn w3-bar-item" onclick="filterSelection('thesis')">Thesis</button>
       <button class="btn w3-bar-item" onclick="filterSelection('technology')">Research & Technology</button>
       <button class="btn w3-bar-item" onclick="filterSelection('architecture')">Architecture</button>
       <!-- <button class="btn w3-bar-item" onclick="filterSelection('technology')">technology</button> -->
@@ -344,7 +346,7 @@ font-style: black;
       </div>
     </div>
 
-  <!--   <div class="hero-image w3-row-padding w3-padding-64" style= "margin-bottom: 0px; margin-top: 0px">
+    <div class="hero-image w3-row-padding w3-padding-64" style= "margin-bottom: 0px; margin-top: 0px">
     <img class="column thesis architecture technology teaching img__img" src="images/profile3.png" alt="Norway" style="max-width: 500px;">
     <div class="column thesis architecture technology teaching img__img" style="padding: 0px; width: 630px; margin-right: -0px">
     <h1 style="font-size:30px;">Hello,</h1>
@@ -353,7 +355,7 @@ font-style: black;
     <br><br>
     <img class="column thesis architecture technology teaching img__img" src="images/bsa.png" alt="bsa" style="max-width: 70px;">
     </div>
-    </div> -->
+    </div>
 
 
   <!-- Photo Grid-->
@@ -1029,7 +1031,7 @@ font-style: black;
    <div id="press">
     <div class="w3-container w3-padding-16" style="height: 1000px;"
     </br></br>
-    <div class="w3-half column column thesis architecture technology teaching w3-padding-16 w3-hide-small" style="width: 50%;" >
+    <div class="w3-half column column thesis architecture technology teaching w3-padding-16" style="width: 50%;" >
       <h5 style="font-size: 25px"><b>Press</b></h5>
       <div>
         <br>
@@ -1039,7 +1041,7 @@ font-style: black;
        </a>
        </div>
       </div>
-         <div class="w3-half column column thesis architecture technology teaching w3-padding-16 w3-hide-small" style="width: 50%;"> 
+         <div class="w3-half column column thesis architecture technology teaching w3-padding-16" style="width: 50%;"> 
       <h5 style="font-size: 25px"><b>Academic</b></h5>
       <ul style="border-left-style: solid;border-left-width: .5px">
       <li>
