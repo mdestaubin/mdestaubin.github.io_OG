@@ -1,0 +1,2868 @@
+---
+title: "Community Rapid Assessment - Pakistan 1st Round"
+author: "Annika Squires - UNICEF EO ILU"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(fig.width=10, fig.height=6,echo=FALSE) 
+
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+## Including Plots
+
+You can also embed plots, for example:
+
+
+```{r echo=FALSE}
+# STEP 1 READ IN PACKAGES AND SPREADSHEET
+#Packages Needed
+library(readxl)
+library(readr)
+library(haven)
+#library(car)
+library(plyr)
+library(dplyr)
+
+
+library(foreign)
+library(rgeos)
+library(maptools)
+library(colorRamps)
+library(RColorBrewer)
+library(ggplot2)
+library(mapproj)
+library(rgdal)
+library(sf)
+library(colorspace)
+library(raster)
+#library(treemap)
+library(ggplotify)
+library(ggrepel)
+library(ggalt)
+library(ggthemes)
+#library(ggpubr)
+library(scales)
+library(sjPlot)
+library(likert)
+library(tidyr)
+library(formattable)
+library(data.table)
+library(HH)
+library(tidyverse)
+library(rlang)
+
+if(!require(pacman))install.packages("pacman")
+
+pacman::p_load('dplyr', 'tidyr', 'gapminder',
+               'ggplot2',  'ggalt',
+               'forcats', 'R.utils', 'png', 
+               'grid', 'ggpubr', 'scales',
+               'bbplot')
+
+
+
+customGreen0 = "#DeF7E9"
+customGreen = "#71CA97"
+customRed = "#ff7f7f"
+
+```
+
+```{r}
+Pakistan_raw1=read_excel('/Users/annikasquires/Desktop/UNICEF_OFFICIAL /CRA/Pakistan/Data/First Round/RCCE Survey Raw Data.xlsx')
+```
+
+```{r}
+names(Pakistan_raw1)[names(Pakistan_raw1)=='Source']<- 'Setting'
+
+names(Pakistan_raw1)[names(Pakistan_raw1)=='Please confirm what age bracket you belong to:']<- 'Age'
+
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "Please confirm your gender:"] <- "Gender"
+
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "Please confirm your highest level of education:"] <- "Education"
+
+Pakistan_raw1$Education [Pakistan_raw1$Education == "Completed Post-secondary Schooling (e.g. vocational, technical education or university)"] <- " Completed Post-secondary \n  Schooling "
+
+Pakistan_raw1$Education [Pakistan_raw1$Education == "Completed Higher Secondary Schooling (Intermediate)"] <- "Completed Intermediate Schooling"
+
+Pakistan_raw1$Education [Pakistan_raw1$Education =="Completed Secondary Schooling (Matric)"]<-"Completed Matric \n Schooling"
+
+Pakistan_raw1$Education [Pakistan_raw1$Education =="Completed Primary Schooling"]<-"Completed Primary \n Schooling"
+
+
+
+Pakistan_raw1$Province[Pakistan_raw1$Province == "Islamabad Capital Territory"] <- "Islamabad \n Capital Territory"
+
+Pakistan_raw1$Province[Pakistan_raw1$Province == "Azad Jammu and Kashmir"] <- "Azad Jammu \n and Kashmir"
+
+Pakistan_raw1$Province[Pakistan_raw1$Province == "Khyber Pakhtunkhwa"] <-"Khyber \n Pakhtunkhwa"
+
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "During a regular week, how often do you learn about COVID-19?"] <- "how_often_hear"
+
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "Where do you receive most of your information about COVID-19?"] <- "Where_hear"
+
+
+
+
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "What is the most trusted source of information you rely on about COVID19?"]<-"Most_trust_source"
+
+
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "Why do you receive most of your information from this source?"] <- "Why_source"
+
+
+
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "What is the main reason you trust this source?"]<-"reason_trust"
+
+
+
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "How much do you trust health workers and experts giving you information about COVID?"]<-"trust_healthcare_w"
+
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "How much do you trust your religious leaders and institutions for information about COVID-19?"]<-"trust_religious_w"
+
+
+
+
+
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "How much do you trust NGOs giving you information about COVID?"]<-"trust_ngo"
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "Which of the following is NOT true about COVID-19?"]<-"false_covid"
+
+Pakistan_raw1$false_covid[Pakistan_raw1$false_covid == "Social distancing, handwashing with soap or sanitizers and use of facemasks reduce transmission risks"] <- "Social distancing, handwashing with soap \n  or sanitizers and use of facemasks \n reduce transmission risks"
+
+Pakistan_raw1$false_covid[Pakistan_raw1$false_covid == "It can spread from close contacts between an infected person and others"] <- "It can spread from close \n contacts between an infected \n  person and others"
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "Do you think you are at risk of being infected with Covid-19?"]<-"risk_covid"
+
+
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "In your opinion, how dangerous would contracting Covid-19 be for you and your family?"]<-"danger_covid"
+
+
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "Over the past 30 days, how often have you washed hands with water and soap for 20 seconds to prevent infection from COVID-19?"]<-"wash_covid"
+
+
+
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "Over the past 30 days, how often have you been wearing a mask to prevent infection from COVID-19?"]<-"mask_covid"
+
+
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "Over the past 30 days, how often have you been able to stay home as much as possible to prevent infection from COVID-19?"]<-"stay_home_covid"
+
+
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "Over the past 30 days, in public places, how often have you kept at least 2 meters away from people to prevent infection from COVID-19?"]<-"distance_covid"
+
+
+
+
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "Over the past 30 days, how often have you avoided touching your face?"]<-"avoid_face_covid"
+
+
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "The main reason that I adopted these behaviors is to:"]<-"adopt_action"
+
+
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "The main reason keeping me from practicing protective measures is:"]<-"prevent_measures_reason"
+
+
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "If I think I have COVID symptoms, the first thing I would do is to:"]<-"do_covid"
+
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "The main reason why I would NOT seek testing or treatment for COVID19 is:"]<-"not_treatment_covid"
+
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "What form of stigma linked to COVID 19 is the one that would concern you the most?"]<-"stigma_concern"
+
+
+Pakistan_raw1$stigma_concern[Pakistan_raw1$stigma_concern == "Losing my housing and/or job because of association with COVID 19"] <- "Losing my housing \n and/or job because of \n association with COVID 19"
+
+Pakistan_raw1$stigma_concern[Pakistan_raw1$stigma_concern == "Being discriminated for not being able to pay for my health care"] <- "Being discriminated \n for not being able to \n pay for my health care"
+
+
+Pakistan_raw1$stigma_concern[Pakistan_raw1$stigma_concern == "Being treated differently at home, in community and work"] <- "Being treated \n differently at home, in \n community and work"
+
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "How confident are you in providing what is needed for your family during this pandemic?"]<-"confident_provide"
+
+Pakistan_raw1$confident_provide[Pakistan_raw1$confident_provide == "Not sure"] <- "Not Sure"
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "Over the past 30 days, did anyone in your household sell household assets (radio, furniture, TV, livestock, bicycle, sewing machine, etc.) due to loss of income because of COVID-19?"]<-"sell_covid"
+
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "Over the past 30 days, did you send children in the house to work due to loss of income because of COVID-19?"]<-"children_work"
+
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "Over the past 30 days, did you or anyone in your family borrow money from others due to loss of income because of COVID-19?"]<-"borrow_money_covid"
+
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "Over the past 30 days, did you receive any financial assistance from the Government?"]<-"financial_gov_covid"
+
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "Are you aware of any first aid and counselling support and services available for addressing your fear/stress/anxiety or mental health issues related to COVID 19?"]<-"support_covid"
+
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "Over the past 30 days, did you or any member of your family receive psychosocial first aid or counselling services to alleviate fear/stress/anxiety or mental health issues etc?"]<-"mental_health_covid"
+
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "If Not, why:"]<-"why_not_mental_health_covid"
+
+
+Pakistan_raw1$why_not_mental_health_covid[Pakistan_raw1$why_not_mental_health_covid == "Not aware of the availability of mental health services /counselling"] <- "Not aware of \n  the availability of mental \n health services / \n counselling"
+ 
+
+Pakistan_raw1$why_not_mental_health_covid[Pakistan_raw1$why_not_mental_health_covid == "Fear of stigma associated with mental health"] <- "Fear of stigma \n associated with mental \n health"
+
+
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "How would you rate your satisfaction level to the services received on the psychosocial first aid and counselling support to alleviate anxiety/stress etc if you have used it?"]<-"satisfaction_mental_health"
+
+names(Pakistan_raw1)[names(Pakistan_raw1) == "The main concern that I have for my children during COVID-19 is:"]<-"concern_children"
+		
+```
+
+# Weights Code - See full weights Markdown for formula and other details like trimming process and final design effect
+
+```{r}
+
+##Dialed Numbers as Reported by Vianmo
+Dial<- 405899
+
+##Mobile/Telephone Cellullar Subscriptions (Depending if country calls only cellphones or all numbers) as reported from World Bank/ITU 2019 https://data.worldbank.org/indicator/IT.CEL.SETS.P2?locations=KE
+Subs<- 165405847
+
+##Initial Base Weight
+BW1 <- Subs/Dial
+
+##Cellphone Coverage (Subscriptions per 100 habitants) Adjustment as reported by World Bank/ITU
+Cov <- 0.76377
+BW2 <- BW1 * (1/Cov)
+
+##Adding BW2 to Database
+Pakistan_raw1$BW <- BW2
+
+Pakistan_NHS1 <- read_dta("Pakistan_ForWeights.dta") #Full Dataset National Household Survey
+Pakistan.PS <- xtabs(~Set + Age1, data = Pakistan_NHS1) 
+
+Pakistan.PS2 <- read_excel("C:/Users/andre/OneDrive - UNICEF/CRA - ROSA/Pakistan/Data/First Round/Census 2017 Pakistan.xlsx")  #2017 Census Including prelominary figures for gender with transgender category
+Pakistan.PS2 <- as.data.frame(Pakistan.PS2)
+Pakistan.PS2 <- xtabs(Count ~ ., data = Pakistan.PS2)
+
+Pakistan.PS3 <- read_excel("C:/Users/andre/OneDrive - UNICEF/CRA - ROSA/Pakistan/Data/First Round/Education Distribution.xlsx")
+Pakistan.PS3 <- as.data.frame(Pakistan.PS3)
+Pakistan.PS3 <- xtabs(Count ~ ., data = Pakistan.PS3)
+
+###Preparing Survey Object as Numeric Factors
+
+Pakistan_raw1$Sex <- 1
+Pakistan_raw1$Sex [Pakistan_raw1$Gender == 'Female'] <- 2
+Pakistan_raw1$Sex [Pakistan_raw1$Gender == 'Transgender'] <- 3
+Pakistan_raw1$Sex <- as.numeric(Pakistan_raw1$Sex)
+
+Pakistan_raw1$Set <- 1
+Pakistan_raw1$Set [Pakistan_raw1$Setting == 'Urban'] <- 2
+
+Pakistan_raw1$Age1 <- 1
+Pakistan_raw1$Age1 [Pakistan_raw1$Age == '25-29 years'] <- 2
+Pakistan_raw1$Age1 [Pakistan_raw1$Age == '30-39 years'] <- 3
+Pakistan_raw1$Age1 [Pakistan_raw1$Age == '40-49 years'] <- 4
+Pakistan_raw1$Age1 [Pakistan_raw1$Age == '50 and above'] <- 5
+
+Pakistan_raw1$Edu <- 1
+Pakistan_raw1$Edu [Pakistan_raw1$Education == 'Completed Primary \n Schooling'] <- 2
+Pakistan_raw1$Edu [Pakistan_raw1$Education ==  'Completed Secondary \n Schooling (Matric)'] <-3
+Pakistan_raw1$Edu [Pakistan_raw1$Education == 'Completed Higher \n Secondary Schooling \n(Intermediate)'] <- 4
+Pakistan_raw1$Edu [Pakistan_raw1$Education == ' Completed Post-secondary \n  Schooling (e.g. vocational, \n technical education or \n university)'] <- 5
+
+Pakistan_raw1$Edu1 <- "1.No School"
+Pakistan_raw1$Edu1 [Pakistan_raw1$Edu == 2] <-'2.Primary'
+Pakistan_raw1$Edu1 [Pakistan_raw1$Edu == 3] <-'3.Matric'
+Pakistan_raw1$Edu1 [Pakistan_raw1$Edu == 4] <-'4.Intermediate'
+Pakistan_raw1$Edu1 [Pakistan_raw1$Edu == 5] <-'5.Post-secondary'
+
+### Establishing Survey Object
+PAK_WtdR1 <- svydesign( ids = ~0, data =Pakistan_raw1, weights = ~BW ) 
+ps.dsgn <-postStratify(design = PAK_WtdR1, strata = ~Set + Sex, population = Pakistan.PS2)
+ps.weight <- ps.dsgn$postStrata[[1]] %>% attributes() %>% .[["weights"]]
+Pakistan_raw1$PsW <-ps.weight
+
+PAK_WtdR2.1 <- svydesign( ids = ~0, data =Pakistan_raw1, weights = ~PsW ) 
+ps.dsgn2.1 <-postStratify(design = PAK_WtdR2.1, strata = ~Set + Age1, population = Pakistan.PS)
+ps.weight2.1 <- ps.dsgn2.1$postStrata[[1]] %>% attributes() %>% .[["weights"]]
+Pakistan_raw1$PsW2.1 <-ps.weight2.1
+
+PAK_WtdR2 <- svydesign( ids = ~0, data =Pakistan_raw1, weights = ~PsW2.1 ) 
+ps.dsgn2 <-postStratify(design = PAK_WtdR2, strata = ~Edu, population = Pakistan.PS3)
+ps.weight2 <- ps.dsgn2$postStrata[[1]] %>% attributes() %>% .[["weights"]]
+Pakistan_raw1$PsW2 <-ps.weight2
+
+PAK_WtdR3 <- svydesign( ids = ~0, data =Pakistan_raw1, weights = ~PsW2 ) 
+ps.dsgn3 <-postStratify(design = PAK_WtdR3, strata = ~Set + Sex, population = Pakistan.PS2)
+ps.weight3 <- ps.dsgn3$postStrata[[1]] %>% attributes() %>% .[["weights"]]
+Pakistan_raw1$PsW3 <-ps.weight3
+
+PAK_WtdR4.1 <- svydesign( ids = ~0, data =Pakistan_raw1, weights = ~PsW3 ) 
+ps.dsgn4.1 <-postStratify(design = PAK_WtdR4.1, strata = ~Set + Age1, population = Pakistan.PS)
+ps.weight4.1 <- ps.dsgn4.1$postStrata[[1]] %>% attributes() %>% .[["weights"]]
+Pakistan_raw1$PsW4.1 <-ps.weight4.1
+
+PAK_WtdR4 <- svydesign( ids = ~0, data =Pakistan_raw1, weights = ~PsW4.1 ) 
+ps.dsgn4 <-postStratify(design = PAK_WtdR4, strata = ~Edu, population = Pakistan.PS3)
+ps.weight4 <- ps.dsgn4$postStrata[[1]] %>% attributes() %>% .[["weights"]]
+Pakistan_raw1$PsW4 <-ps.weight4
+
+PAK_WtdR5 <- svydesign( ids = ~0, data =Pakistan_raw1, weights = ~PsW4 ) 
+ps.dsgn5 <-postStratify(design = PAK_WtdR5, strata = ~Set + Sex, population = Pakistan.PS2)
+ps.weight5 <- ps.dsgn5$postStrata[[1]] %>% attributes() %>% .[["weights"]]
+Pakistan_raw1$Wt <-ps.weight5
+
+```
+
+```{r}
+#Weighted
+
+new_df_demographics<- function(name,clean_df,column_df_1,new_name){
+
+name<- plyr::count(clean_df,column_df_1, wt_var= "Wt")
+name$new_name <- round(name$freq /sum(name$freq),4)
+colnames(name)[3]<-new_name
+
+return(name)
+}
+```
+
+
+
+```{r}
+#weighted
+
+Sex_group_2 <- function(name,df,count_df_1,count_df_2,count1,count2,name_perct){
+
+name<- df %>% dplyr::count({{count_df_1}}, {{count_df_2}}, wt = Wt)
+names(name)<- c(count1,count2,"n")
+name <- name %>% group_by({{count_df_1}}) %>% mutate(name_perct = round(n/sum(n),6))
+name <- name [-c(3)]
+name <- spread(name,Sex,name_perct)
+
+return(name)
+}
+
+
+```
+
+
+```{r}
+
+
+
+setting_gender<-function(df,column_1,column_2,title,subtitle){
+ggplot(df, aes(reorder ({{column_1}},{{column_2}}),{{column_2}}, label={{column_2}}, color = Gender)) + facet_wrap(Setting ~ Gender, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "none" ) + geom_linerange(aes(y={{column_2}}, ymin=0, x={{column_1}}, ymax={{column_2}}, color = Gender), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0,1.1)) + ggtitle(title,subtitle =subtitle ) + coord_flip()}
+
+
+
+
+#setting_urban_other(Pak_Where_hear_rural_urban,where_hear_perct,Percent_where_hear_set,"COVID-19 Most Concerned Social Consequences by Sex and #Setting","Percentages of Respondents per Concern")
+
+
+```
+
+```{r}
+
+demographics_group_3 <- function(name,clean_df,count_df_1,count_df_2,count_df_3,name_perct,name_perct_2,name_1,name_2,name_3,name_4,name_5,name_6){
+name <- clean_df %>% count({{count_df_1}}, {{count_df_2}},{{count_df_3}}, wt = Wt)
+name <- name %>% group_by({{count_df_1}}) %>% mutate(name_perct = round(n/sum(n),3))
+name <- name %>% group_by({{count_df_1}},{{count_df_2}}) %>% mutate(name_perct_2 = round(n/sum(n),3))
+names(name) <- c(name_1,name_2,name_3,name_4,name_5,name_6)
+return(name)
+}
+```
+
+
+```{r }
+group_2<-function(name,clean_df,column_df_1,name_perct,name_group,column_df_2,name_perct_2){
+name_group <- clean_df %>% dplyr::count({{column_df_2}}, {{column_df_1}}, wt = Wt)
+name_group <- name_group %>% group_by({{column_df_2}}) %>% mutate(name_perct_2= round(n/sum(n),6))
+colnames(name_group)[4]<-name_perct_2
+return (name_group)
+}
+
+```
+
+
+```{r}
+
+new_df<- function(name,clean_df,column_df_1,label_enter,category){
+name<- plyr::count(clean_df,column_df_1, wt_var= "Wt")
+name <- name %>% mutate(perc= round(freq/sum(freq),3))
+name$label_enter <- paste(100 * name$perc,"%")
+names(name) <- c(category, "Recipients","Percentage","label")
+
+
+return(name)
+}
+
+
+```
+
+
+```{r}
+
+
+first_df_demographics<-function(name_group,column1){
+name_group <- plyr::count({{column1}}, wt_var= "Wt")
+#column_2 <- name_group$Sex_perct
+name_group$Sex_perct <- name_group$freq /sum(name_group$freq)
+return(name_group)}
+  
+
+
+```
+
+```
+```
+
+```{r}
+new_df_demographics_2<- function(name,clean_df,column_df_1,new_name,count_df_1,name_group,name_perct){
+name <- plyr::count(clean_df,{{column_df_1}}, wt_var= "Wt")
+name$new_name <- name$freq / sum(name$freq)
+name_group <- clean_df %>% count({{column_df_1}}, count_df_1)
+name_group <- name_group %>% group_by({{count_df_1}}) %>% mutate(name_perct = round(n/sum(n),3))
+#NEXT MOVE IS GO THROUGH KENYA_SEXGROUP2
+return(name_group)
+}
+
+```
+
+
+```{r}
+group_2<-function(name,clean_df,column_df_1,name_perct,name_group,column_df_2,name_perct_2){
+name_group <- clean_df %>% dplyr::count({{column_df_2}},{{column_df_1}}, wt = Wt)
+name_group <- name_group %>% group_by({{column_df_2}}) %>% mutate(name_perct_2= round(n/sum(n),3))
+colnames(name_group)[4]<-name_perct_2
+return (name_group)}
+
+
+```
+
+
+```{r}
+urban_rural<- function(name,df,column_1,column_2,topic_1,perct_type,c1,c2,t1,t2){
+name<- df %>% group_by({{column_1}},{{column_2}}) %>% count({{topic_1}}, wt = Wt)
+name<- name %>% group_by({{column_1}},{{column_2}}) %>% mutate(perct_type=round(n/sum(n),3))
+name$label <- paste(100*(name$perct_type),"%")
+names(name)<-c(c1,c2,t1,"n",t2,"label")
+return(name)}
+
+
+```
+
+
+```{r}
+category_df<- function(name,clean_df,column_df_1,column_df_2,cat_perct,label,col_1,col_2,col_3,col_4,col_5){
+
+name <- clean_df %>% group_by({{column_df_1}}) %>% dplyr::count({{column_df_2}}, wt = Wt)
+name <- name %>% group_by({{column_df_1}}) %>% mutate(cat_perct = round(n/sum(n),3))
+name$label_enter <- paste(100*(name$cat_perct),"%")
+names(name) <- c(col_1,col_2, col_3,col_4,col_5)
+
+return(name)
+}
+```
+
+
+
+
+```{r}
+
+category_df_2<- function(name,clean_df,column_df_1,column_df_2,count_df_1,cat_perct,label,col_1,col_2,col_3,col_4,col_5,col_6){
+
+name <- clean_df %>% group_by({{column_df_1}},{{column_df_2}}) %>% count({{count_df_1}}, wt = Wt)
+name <- name %>% group_by({{column_df_1}},{{column_df_2}}) %>% mutate(cat_perct = round(n/sum(n),3))
+name$label_enter <- paste(100*(name$cat_perct),"%")
+names(name) <- c(col_1,col_2, col_3,col_4,col_5,col_6)
+
+return(name)
+
+}
+
+
+```
+
+
+```{r}
+Pak_Set<-new_df_demographics(Pak_Set,Pakistan_raw1,"Setting","set_perct")
+Pak_Age <-new_df_demographics(Pak_Age,Pakistan_raw1,"Age","Age_perct")
+
+
+
+Pak_SetGroup<- group_2(Pak_Set,Pakistan_raw1,Setting,"Set_perct",Pak_SetGroup,Province,"set_perct")
+Pak_AgeGroup<- group_2(Pak_Age,Pakistan_raw1,Gender,"Sex_perct",Pak_AgeGroup,Age,"sex_perct")
+```
+
+
+```{r}
+Pak_Sex <-new_df_demographics(Pak_Sex,Pakistan_raw1,"Gender","Sex_perct")
+
+Pak_SexGroup<-group_2(Pak_Sex,Pakistan_raw1,Province,Pak_Sex_Group,Gender,Gender,"sex_perct")
+Pak_SexGroup2<-Sex_group_2(Pak_sex_group2,Pakistan_raw1,Province,Gender,"Province","Sex",Sex_perct )
+Pak_SexGroup3<-demographics_group_3(Pak_SexGroup3,Pakistan_raw1,Province,Gender,Setting,Sex_perct,Set_perct,"Region","Sex","Set","n","Sex_perct","Set_perct")
+
+Pak_Sex$Level <- "National" #1 National
+Pak_Sex1 <- Pak_Sex[-c(2)]
+Pak_Sex2 <- spread(Pak_Sex1, Gender, Sex_perct)
+Pak_Sex2$labelF <- paste("Female",round(100*(Pak_Sex2$Female),2),"%")
+Pak_Sex2$labelM <- paste("Male",round(100*(Pak_Sex2$Male),2),"%")
+
+```
+
+
+
+```{r echo=FALSE}
+
+gender_distribution <- function(mydf, myxcol ,myxend, myy, mygroup, mytitle, mysubtitle,mylevel){
+  ggplot2::ggplot(data=mydf,aes(x={{myxcol}},xend={{myxend}},y={{myy}},group={{mygroup}}))+
+   geom_dumbbell(color="#F7BC08", 
+                      size=2.5, 
+                      colour_x = "#395B74") +  
+        scale_x_continuous(label=percent) + 
+    labs(x=NULL, y=NULL, 
+             title=mytitle, 
+             subtitle=mysubtitle)+
+    theme(plot.title = element_text(hjust=0.5, face="bold"),
+              plot.background=element_rect(fill="#f7f7f7"),
+              panel.background=element_rect(fill="#f7f7f7"),
+              panel.grid.minor=element_blank(),
+              panel.grid.major.y=element_blank(),
+              panel.grid.major.x=element_line(),
+              axis.ticks=element_blank(),
+              legend.position="top",
+              panel.border=element_blank()) +
+    ggplot2::geom_text( data = filter(mydf, Level == "National"), aes(x = Female, y = Level), label = mydf$labelF, fontface = "bold", color = "#F7BC08",
+vjust = -0.75, hjust = .45,position = position_nudge(y = -0.1)) + ggplot2::geom_text( data = filter(mydf, Level == "National"), aes(x = Male, y = Level), label = mydf$labelM, fontface = "bold", color = "#395B74", vjust = -0.75, hjust = 0.75) +  
+    
+    coord_cartesian(xlim = c(0.15, 0.95))+theme_clean()
+    
+   
+}
+
+
+```
+
+```{r}
+Sex_by_province <-function(mydf,myxcol,myxend,myregiongroup){
+ggplot(mydf, aes(x={{myxcol}}, xend={{myxend}}, y= {{myregiongroup}}, group={{myregiongroup}})) + 
+        geom_dumbbell(color="#F7BC08", 
+                      size=2, 
+                      colour_x = "#395B74") +  
+        scale_x_continuous(label=percent) + 
+        labs(x=NULL, y=NULL, 
+             title="Sex Respondents by Province Distribution", 
+             subtitle="Female and Male Respondents") +
+        theme(plot.title = element_text(hjust=0.5, face="bold"),
+              plot.background=element_rect(fill="#f7f7f7"),
+              panel.background=element_rect(fill="#f7f7f7"),
+              panel.grid.minor=element_blank(),
+              panel.grid.major.y=element_blank(),
+              panel.grid.major.x=element_line(),
+              axis.ticks=element_blank(),
+              legend.position="top",
+              panel.border=element_blank()) + coord_cartesian(xlim = c(0.15, 0.95)) + geom_text( data = mydf, aes(x = {{myxend}}, y = {{myregiongroup}}), label = scales::percent(mydf$Female), fontface = "bold", color = "#F7BC08", size = 2.75, vjust = 1.5) + geom_text( data = mydf, aes(x = {{myxcol}}, y = {{myregiongroup}}), label = scales::percent(mydf$Male), fontface = "bold", color = "#395B74", size = 2.75, vjust = 1.5) + theme_clean() + geom_text(data =  mydf, aes(x ={{ myxend}}, y ={{ myregiongroup}}, label = "F"), fontface = "bold", color = "#F7BC08", size = 3, vjust = -0.75) + geom_text(data =  mydf, aes(x ={{ myxcol}}, y = {{myregiongroup}} , label = "M"), fontface = "bold", color = "#395B74", size = 3, vjust = -0.75)}
+
+```
+
+
+```{r}
+Age_distribution<- function (my_df,myxcol,my_ycol,my_title,my_subtitle,my_ylab){
+
+ggplot(my_df, aes(x = {{myxcol}}, y = {{my_ycol}})) + geom_bar(stat = "identity", position="identity", fill="#1380A1") + geom_text(aes(label= scales::percent({{my_ycol}}, accuracy = 0.01), y = {{my_ycol}}, x = {{myxcol}}), vjust =  3.4, size = 3.5, color = "white") + geom_hline(yintercept = 0, size = 1, colour="#333333")+ labs(title=my_title,subtitle = my_subtitle) +theme_clean() + xlab(NULL) +ylab({{my_ylab}}) + scale_y_continuous(labels = scales::percent)
+
+}
+
+
+```
+
+
+
+
+```{r}
+Age_distribution_sex<- function (my_df,myxcol,my_ycol,my_fill,my_title,my_subtitle,my_fill_title,my_ylab){
+ggplot(my_df, aes(x = {{myxcol}}, y = {{my_ycol}}, fill = {{my_fill}} )) + geom_bar(stat = "identity", position="dodge") + geom_text(aes(label= scales::percent({{my_ycol}}, accuracy = 0.1), y = {{my_ycol}}, x ={{myxcol}}), vjust = 2.5, size = 2.7, color = "white", position = position_dodge(width = 1), fontface = "bold") + geom_hline(yintercept = 0, size = 1, colour="#333333")+ labs(title=my_title,subtitle = my_subtitle, fill = my_fill_title) +theme_clean() + xlab(NULL) +ylab(my_ylab) + scale_y_continuous(labels = scales::percent) + theme(legend.position = "bottom")
+  
+}
+
+
+```
+
+
+
+```{r}
+
+Barriers <- function(my_df,reorder1,reorder2,mylabel,mylabel2,my_title,my_subtitle,my_x,my_xend,my_yend){
+  ggplot(my_df, aes(reorder ({{reorder1}},{{reorder2}}),{{mylabel}}, label={{mylabel}})) + geom_point(col="black",size=2) + geom_text(aes(label={{mylabel2}}),vjust=.2,hjust=-.2, color="black", size=3)  + labs(title=my_title, subtitle=my_subtitle) +coord_flip() + geom_segment(aes(x={{my_x}}, xend={{my_xend}}, y=0, yend={{my_yend}})) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank())+ theme(plot.title = element_text(vjust = .6))+ scale_y_continuous(expand = c(0,0.08), labels = percent) }
+                                                                          
+ 
+
+```
+
+```{r}
+Barriers_Sex <- function(my_df,reorder1,reorder2,mylabel,mylabel2,my_color,my_label3,my_y,my_x,my_ymax,my_color_2,my_title,my_subtitle){
+   wrap <- function(x) stringr::str_wrap(x, 10)
+ggplot(my_df, aes(reorder ({{reorder1}},{{reorder2}}),{{mylabel}}, label={{mylabel2}}, color = {{my_color}})) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label={{my_label3}}),size=3,,hjust=- .2, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6,margin = margin(t = 0, r = 20, b = 0, l = 0)), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom")+ geom_linerange(aes(y={{my_y}}, ymin=-0, x={{my_x}}, ymax={{my_ymax}}, color = {{my_color_2}}), position = position_dodge(0.7))+ scale_y_continuous(expand = c(-.1,0.15), labels = percent) + ggtitle(my_title,subtitle =my_subtitle)}#+ scale_x_discrete(labels = wrap)}
+```
+
+
+```{r}
+Barriers_Age <- function(my_df,reorder1,reorder2,mylabel,mylabel2,my_color,my_facet_wrap,facetrows,my_label3,my_y,my_x,my_ymax,my_color_2,my_label4,my_title,my_subtitle){
+  wrap <- function(x) stringr::str_wrap(x, 10)
+ggplot(my_df, aes(reorder ({{reorder1}},{{reorder2}}),{{mylabel}}, label={{mylabel2}}, color = {{my_color}})) + facet_wrap({{my_facet_wrap}}, nrow = facetrows)+geom_point(size= 2,position = position_dodge(.7)) + geom_text(aes(label={{my_label3}}),size=3 ,,hjust=- 0.27, position = position_dodge(1)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6,margin = margin(t = 0, r = 0, b = 0, l =40)), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank())+ geom_linerange(aes(y={{my_y}}, ymin=0, x={{my_x}}, ymax={{my_ymax}}, color = {{my_color_2}}), position = position_dodge(0.7))+ theme( legend.position="none", legend.box="vertical", legend.text = element_text(size=5),legend.margin=margin(6,6,6,10))+scale_y_continuous(expand = c(0,0.08), labels = {{my_label4}},limits = c(0, 1.1)) + ggtitle(my_title,subtitle =my_subtitle)+theme(plot.title = element_text(size =12))}#+ scale_x_discrete(labels = wrap)}
+
+
+
+```
+
+## Sex Distribution
+```{r}
+gender_distribution (Pak_Sex2, Male ,Female, Level,Level,'Sex Respondents',"Female and Male Respondents Proportion at National Level",National )
+```
+
+## Sex Distribution by Province
+```{r}
+Sex_by_province(Pak_SexGroup2,Male,Female,Province)
+```
+
+## Age Distribution
+```{r}
+Age_distribution(Pak_Age,Age,Age_perct,"Age Distribution","Respondents Age Groups","Percentage")
+```
+
+
+## Age Distribution by Sex
+```{r}
+Age_distribution_sex(Pak_AgeGroup,Age,sex_perct,Gender,"Age Distribution by Sex","Respondents Sex by Age Groups","Sex","Percentage")
+```
+
+
+## Education by Rural/Urban
+```{r}
+Pak_Edu <- plyr::count(Pakistan_raw1,'Edu1', wt_var= "Wt")
+Pak_Edu$Edu_perct <- round(Pak_Edu$freq / sum(Pak_Edu$freq),4)
+Pak_EduGroup <- Pakistan_raw1 %>% count(Edu1, Setting, wt = Wt)
+Pak_EduGroup <- Pak_EduGroup%>% group_by(Edu1) %>% mutate(Edu_perct=round(n/sum(n),3))
+
+
+ggplot(Pak_Edu, aes(x = Edu1, y = Edu_perct)) + geom_bar(stat = "identity", position="identity", fill="#1380A1") + geom_text(aes(label= scales::percent(Edu_perct, accuracy = 0.01), y = Edu_perct, x = Edu1), vjust =  1.4, size = 4.5, color = "white") + geom_hline(yintercept = 0, size = 1, colour="#333333")+ labs(title="Education Distribution",subtitle = "Respondents Education Groups") +theme_clean() + xlab(NULL) +ylab("Percentage") + scale_y_continuous(labels = scales::percent)
+```
+
+## Urban/Rural Setting Distribution
+```{r}
+Age_distribution(Pak_Set,Setting,set_perct,"Urban / Rural Setting Distribution","Respondents Urban / Rural Settings","Percentages")
+```
+## Urban/Rural Setting by Province 
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+ggplot(Pak_SetGroup, aes(x = Province, y = set_perct, fill = Setting )) + geom_bar(stat = "identity", position="dodge") + geom_text(aes(label= scales::percent(set_perct, accuracy = 0.1), y = set_perct, x = Province), vjust =  -0.25, size = 2.9, color = "black", position = position_dodge(width = 1), fontface = "bold") + geom_hline(yintercept = 0, size = 1, colour="#333333")+ labs(title="Rural / Urban Distribution by Province",subtitle = "Respondents Setting", fill = "Setting") +theme_clean() + xlab(NULL) +ylab("Percentage") + scale_y_continuous(labels = scales::percent) + theme(legend.position = "bottom")
+```
+
+
+
+
+
+## Urban/Rural Setting By Sex and Province
+
+```{r echo= FALSE, fig.dim=c(10,6)}
+ggplot(Pak_SexGroup3, aes(x = Sex, y = Sex_perct, fill = Set )) + geom_bar(stat = "identity") + geom_hline(yintercept = 0, size = 1, colour="#333333")+ labs(title="Rural/Urban Distribution by Sex and Province",subtitle = "Rural/Urban Setting on Each Province by Sex", fill = "Setting") +theme_clean() + xlab(NULL) +ylab("Percentage") + scale_y_continuous(labels = scales::percent_format(accuracy = 1)) + theme(legend.position = "bottom") + facet_wrap(Region ~ ., scales = "free_y" ,nrow = 2)
+```
+
+
+
+
+## During a regular week, how often do you learn about COVID-19
+```{r echo= FALSE, fig.dim=c(10,6)}
+how_often_hear_pak <-plyr::count(Pakistan_raw1, 'how_often_hear', wt_var= "Wt")
+how_often_hear_pak <- spread(how_often_hear_pak, 'how_often_hear', freq)
+how_often_hear_pak$Area <-"Frequency" 
+names(how_often_hear_pak) <- c("Never", "Sometimes", "Often","All the time","Area")
+col_order2 <- c("Area","Never", "Sometimes", "Often","All the time")
+how_often_hear_pak <- how_often_hear_pak[, col_order2]
+
+
+how_often_hear_pak <- how_often_hear_pak %>% dplyr::mutate_if(is.character,as.factor)
+how_often_hear_pak <- as.data.frame(how_often_hear_pak)
+
+
+how_often_hear_plot <-HH::likert(Area ~ ., data = how_often_hear_pak, ylab=NULL, as.percent=TRUE, main = list("During a regular week, how often do you learn about COVID-19?",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE"  ), rightAxis = FALSE)
+plot(how_often_hear_plot)
+
+
+```
+
+
+## During a regular week, how often do you learn about COVID-19 by Sex 
+```{r echo= FALSE, fig.dim=c(10,6)}
+how_often_hear_sex<-Pakistan_raw1%>% group_by(Gender)  %>% count(how_often_hear, wt = Wt)
+how_often_hear_sex<- spread(how_often_hear_sex,how_often_hear, n)
+how_often_hear_sex$Area <- "Frequency"
+names(how_often_hear_sex) <- c("Sex","Never", "Sometimes", "Often","All the time","Area")
+col_order3 <- c("Sex","Area", "Never", "Sometimes", "Often","All the time")
+how_often_hear_sex<- how_often_hear_sex[, col_order3]
+
+how_often_hear_sex<-HH::likert(Area ~ .|Sex, data = how_often_hear_sex, layout=c(1,3), ylab=NULL, as.percent=TRUE, main = list("During a regular week, how often do you learn about COVID-19?",x=unit(.55, "npc")), sub= list("By Sex",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.7, lines=1, x = unit(.25,"npc")), cex=1, resize.height.tuning=2, rightAxis = FALSE)   
+plot(how_often_hear_sex)
+
+```
+
+
+## During a regular week, how often do you learn about COVID-19 by Age
+```{r echo= FALSE}
+how_often_hear_Age<-Pakistan_raw1%>% group_by(Age)  %>% count(how_often_hear, wt = Wt)
+how_often_hear_Age<- spread(how_often_hear_Age,how_often_hear, n)
+how_often_hear_Age$Area <- "Frequency"
+names(how_often_hear_Age) <- c("Age","Never", "Sometimes", "Often","All the time","Area")
+col_order3 <- c("Age","Area", "Never", "Sometimes", "Often","All the time")
+how_often_hear_Age<- how_often_hear_Age[, col_order3]
+
+how_often_hear_Age<-HH::likert(Area ~ .|Age, data = how_often_hear_Age, ylab=NULL, as.percent=TRUE, main = list("During a regular week, how often do you learn about COVID-19?",x=unit(.55, "npc")), sub= list("By Age",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE"), strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.7, lines=3, x = unit(.25,"npc")),  layout=c(1,5), rightAxis = FALSE )
+plot(how_often_hear_Age)
+
+
+
+
+```
+
+
+## During a regular week, how often do you learn about COVID-19 by Setting
+```{r echo= FALSE,fig.dim=c(10,4)}
+how_often_hear_Setting<-Pakistan_raw1%>% group_by(Setting)  %>% count(how_often_hear, wt = Wt)
+how_often_hear_Setting<- spread(how_often_hear_Setting,how_often_hear, n)
+how_often_hear_Setting$Area <- "Frequency"
+names(how_often_hear_Setting) <- c("Setting","Never", "Sometimes", "Often","All the time","Area")
+col_order3 <- c("Setting","Area", "Never", "Sometimes", "Often","All the time")
+how_often_hear_Setting<- how_often_hear_Setting[, col_order3]
+
+how_often_hear_Setting<-HH::likert(Area ~ .|Setting, data = how_often_hear_Setting, layout=c(1,2), ylab=NULL, as.percent=TRUE, main = list("During a regular week, how often do you learn about COVID-19?",x=unit(.55, "npc")), sub= list("By Setting",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=1, lines=1, x = unit(.25,"npc")), resize.height.tuning=2, rightAxis = FALSE)   
+plot(how_often_hear_Setting)
+
+
+
+
+
+
+
+```
+
+
+## During a regular week, how often do you learn about COVID-19 by Province
+```{r echo= FALSE,fig.dim=c(10,8)}
+how_often_hear_Province<-Pakistan_raw1%>% group_by(Province)  %>% count(how_often_hear, wt = Wt)
+how_often_hear_Province<- spread(how_often_hear_Province,how_often_hear, n)
+how_often_hear_Province$Area <- "Frequency"
+names(how_often_hear_Province) <- c("Province","Never", "Sometimes", "Often","All the time","Area")
+col_order3 <- c("Province","Area", "Never", "Sometimes", "Often","All the time")
+how_often_hear_Province<- how_often_hear_Province[, col_order3]
+
+how_often_hear_Province<-HH::likert(Area ~ .|Province, data = how_often_hear_Province, as.percent=TRUE, main = list("During a regular week, how often do you learn about COVID-19?",x=unit(.55, "npc")), sub= list("By Province",x=unit(.57, "npc")),xlim=c(-70,-50,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE"), ylab=NULL,  par.strip.text=list(cex=.5, lines=3, x = unit(.05,"npc")),
+strip.left= TRUE, strip = FALSE,  layout=c(1,4), rightAxis = FALSE)   
+plot(how_often_hear_Province)
+
+
+
+
+```
+
+
+## During a regular week, how often do you learn about COVID-19 by Education
+```{r echo= FALSE,fig.dim=c(10,8)}
+how_often_hear_Education<-Pakistan_raw1%>% group_by(Edu1)  %>% count(how_often_hear, wt = Wt)
+how_often_hear_Education<- spread(how_often_hear_Education,how_often_hear, n)
+how_often_hear_Education$Area <- "Frequency"
+names(how_often_hear_Education) <- c("Education","Never", "Sometimes", "Often","All the time","Area")
+col_order3 <- c("Education","Area", "Never", "Sometimes", "Often","All the time")
+how_often_hear_Education<- how_often_hear_Education[, col_order3]
+
+how_often_hear_Education<-HH::likert(Area ~ .|Education, data = how_often_hear_Education, ylab=NULL, as.percent=TRUE, main = list("During a regular week, how often do you learn about COVID-19?",x=unit(.55, "npc")), sub= list("By Education",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE,  par.strip.text=list(cex=.7, lines=5, x = unit(.25,"npc")), resize.height.tuning=2, rightAxis = FALSE,  layout=c(1,5))   
+plot(how_often_hear_Education)
+```
+
+
+## During a regular week, how often do you learn about COVID-19 by Sex and Setting
+```{r echo= FALSE}
+how_often_hear_SexSet <- Pakistan_raw1 %>% group_by(Setting, Gender) %>% count(how_often_hear, wt = Wt)
+how_often_hear_SexSet <- spread(how_often_hear_SexSet, how_often_hear, n)
+how_often_hear_SexSet$SexSet <- paste(how_often_hear_SexSet$Setting," ", how_often_hear_SexSet$Gender)
+how_often_hear_SexSet <- how_often_hear_SexSet[-c(1:2)]
+how_often_hear_SexSet$Area <- "Frequency of Hearing"
+names(how_often_hear_SexSet) <- c("Never", "Sometimes", "Often","All the time","Profile","Area")
+col_order3 <- c("Area","Profile","Never", "Sometimes", "Often","All the time")
+how_often_hear_SexSet <- how_often_hear_SexSet[, col_order3]
+how_often_hear_SexSet[is.na(how_often_hear_SexSet)] <- 0
+
+
+how_often_hear_SexSet <-HH::likert(Area ~ .|Profile, data = how_often_hear_SexSet, as.percent=TRUE, main = list("During a regular week, how often do you learn about COVID-19?",x=unit(.55, "npc")), sub= list("By Sex and Setting",x=unit(.57, "npc")),xlim=c(-60,-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE"), ylab = NULL, par.strip.text=list(cex=0.7, lines=2.5, x = unit(.05,"npc")), strip.left = TRUE, strip = FALSE, layout = c(3,2), rightAxis = FALSE, rightAxis = FALSE, )
+plot(how_often_hear_SexSet)
+```
+
+## Where do you receive most of your information on COVID-19
+```{r}
+Where_hear_Pak<-new_df(Where_hear_Pak,Pakistan_raw1,"Where_hear",label,"Where_hear")
+Barriers(Where_hear_Pak,Where_hear,Percentage,Percentage,label,"Where do you receive most of your information \n about COVID-19?","Percent of Respondents",Where_hear,Where_hear,Percentage)
+```
+
+## Where do you receive most of your information on COVID-19 by Sex
+```{r,fig.dim=c(10,8)}
+Pak_Where_hear_sex<-category_df(Pak_Where_hear_sex,Pakistan_raw1,Gender,Where_hear,"rad_perct",label,"Gender","Where_hear","Recipients","Percentage","label")
+
+
+Barriers_Sex(Pak_Where_hear_sex,Where_hear,Percentage,Percentage,Percentage,Gender,label,Percentage,Where_hear,Percentage,Gender,"Where do you receive most of your information about COVID-19?","Percentages of Respondents by Sex")
+```
+
+
+## Where do you receive most of your information on COVID-19 by Age
+```{r, fig.dim=c(10,11)}
+Pak_Where_hear_Age<-category_df(Pak_Where_hear_Age,Pakistan_raw1,Age,Where_hear,"rad_perct",label,"Age","Where_hear","Recipients","Percentage","label")
+
+Barriers_Age(Pak_Where_hear_Age,Where_hear,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,Where_hear,Percentage,Age,NULL,"Where do you receive most of your information about COVID-19?","Percentages of Respondents by Age")
+
+
+```
+
+## Where do you receive most of your information on COVID-19 by Setting
+```{r,fig.dim=c(10,8)}
+Pak_Where_hear_Setting<-category_df(Pak_Where_hear_Setting,Pakistan_raw1,Setting,Where_hear,"rad_perct",label,"Setting","Where_hear","Recipients","Percentage","label")
+
+Barriers_Age(Pak_Where_hear_Setting,Where_hear,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,Where_hear,Percentage,Setting,NULL,"Where do you receive most of your information about COVID-19?","Percentages of Respondents by Setting")
+
+
+```
+
+
+
+## Where do you receive most of your information on COVID-19 by Province
+```{r, fig.dim=c(10,11)}
+Pak_Where_hear_Province<-category_df(Pak_Where_hear_Province,Pakistan_raw1,Province,Where_hear,"rad_perct",label,"Province","Where_hear","Recipients","Percentage","label")
+
+Barriers_Age(Pak_Where_hear_Province,Where_hear,Percentage,Percentage,Percentage,Province,~Province,2,label,Percentage,Where_hear,Percentage,Province,NULL,"Where do you receive most of your information about COVID-19?","Percentages of Respondents by Province")
+
+
+```
+
+
+
+## Where do you receive most of your information on COVID-19 by Education
+```{r, fig.dim=c(10,11)}
+Pak_Where_hear_Education<-category_df(Pak_Where_hear_Education,Pakistan_raw1,Edu1,Where_hear,"rad_perct",label,"Education","Where_hear","Recipients","Percentage","label")
+
+Barriers_Age(Pak_Where_hear_Education,Where_hear,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,Where_hear,Percentage,Education,NULL,"Where do you receive most of your information about COVID-19?","Percentages of Respondents by Education")
+
+```
+
+
+## Where do you receive most of your information on COVID-19 by Sex and Setting
+```{r}
+Pak_Where_hear_rural_urban<-urban_rural(Pak_Where_hear_rural,Pakistan_raw1,Setting,Gender,Where_hear,where_hear_perct,"Setting","Gender","where_hear_perct","Percent_where_hear_set")
+
+
+setting_gender(Pak_Where_hear_rural_urban,where_hear_perct,Percent_where_hear_set,"Where do you receive most of your information about COVID-19?","Percentages of Respondents by Sex and Setting")
+```
+
+
+## Why do you receive most of your information from this source
+```{r}
+Why_source_Pak<-new_df(Why_source_Pak,Pakistan_raw1,"Why_source",label,"Why_source")
+Barriers(Why_source_Pak,Why_source,Percentage,Percentage,label,"Why do you receive most of your information \n from this source?","Percent of Respondents",Why_source,Why_source,Percentage)
+```
+
+
+
+## Why do you receive most of your information from this source by Sex
+```{r}
+Pak_Why_source_sex<-category_df(Pak_Why_source_sex,Pakistan_raw1,Gender,Why_source,"rad_perct",label,"Gender","Why_source","Recipients","Percentage","label")
+
+
+Barriers_Sex(Pak_Why_source_sex,Why_source,Percentage,Percentage,Percentage,Gender,label,Percentage,Why_source,Percentage,Gender,"Why do you receive most of your information from this source?","Percentages of Respondents by Sex")
+```
+
+
+
+## Why do you receive most of your information from this source by Age
+```{r}
+Pak_Why_source_Age<-category_df(Pak_Why_source_Age,Pakistan_raw1,Age,Why_source,"rad_perct",label,"Age","Why_source","Recipients","Percentage","label")
+
+Barriers_Age(Pak_Why_source_Age,Why_source,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,Why_source,Percentage,Age,NULL,"Why do you receive most of your information from this source?","Percentages of Respondents by Age")
+
+
+```
+
+
+
+## Why do you receive most of your information from this source by Setting
+```{r}
+Pak_Why_source_Setting<-category_df(Pak_Why_source_Setting,Pakistan_raw1,Setting,Why_source,"rad_perct",label,"Setting","Why_source","Recipients","Percentage","label")
+
+Barriers_Age(Pak_Why_source_Setting,Why_source,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,Why_source,Percentage,Setting,NULL,"Why do you receive most of your information from this source?","Percentages of Respondents by Setting")
+
+
+```
+
+
+
+## Why do you receive most of your information from this source by Province
+```{r}
+Pak_Why_source_Province<-category_df(Pak_Why_source_Province,Pakistan_raw1,Province,Why_source,"rad_perct",label,"Province","Why_source","Recipients","Percentage","label")
+
+Barriers_Age(Pak_Why_source_Province,Why_source,Percentage,Percentage,Percentage,Province,~Province,2,label,Percentage,Why_source,Percentage,Province,NULL,"Why do you receive most of your information from this source?","Percentages of Respondents by Province")
+
+
+```
+
+
+
+## Why do you receive most of your information from this source by Education
+```{r}
+Pak_Why_source_Education<-category_df(Pak_Why_source_Education,Pakistan_raw1,Edu1,Why_source,"rad_perct",label,"Education","Why_source","Recipients","Percentage","label")
+
+Barriers_Age(Pak_Why_source_Education,Why_source,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,Why_source,Percentage,Education,NULL,"Why do you receive most of your information from this source?","Percentages of Respondents by Education")
+
+```
+
+
+
+## Why do you receive most of your information from this source by Sex and Setting
+```{r}
+Pak_Why_source_rural_urban<-urban_rural(Pak_Why_source_rural,Pakistan_raw1,Setting,Gender,Why_source,Why_source_perct,"Setting","Gender","Why_source_perct","Percent_Why_source_set")
+
+
+
+setting_gender(Pak_Why_source_rural_urban,Why_source_perct,Percent_Why_source_set,"Why do you receive most of your information from this source?","Percentages of Respondents by by Sex and Setting")
+```
+
+
+
+## What is the most trusted source of information on COVID-19
+```{r}
+Most_trust_source_Pak<-new_df(Most_trust_source_Pak,Pakistan_raw1,"Most_trust_source",label,"Most_trust_source")
+Barriers(Most_trust_source_Pak,Most_trust_source,Percentage,Percentage,label,"What is the most trusted source of information \n you rely on about COVID19?","Percent of Respondents",Most_trust_source,Most_trust_source,Percentage)
+```
+
+
+## What is the most trusted source of information on COVID-19 by Sex
+```{r}
+Pak_Most_trust_source_sex<-category_df(Pak_Most_trust_source_sex,Pakistan_raw1,Gender,Most_trust_source,"rad_perct",label,"Gender","Most_trust_source","Recipients","Percentage","label")
+
+
+Barriers_Sex(Pak_Most_trust_source_sex,Most_trust_source,Percentage,Percentage,Percentage,Gender,label,Percentage,Most_trust_source,Percentage,Gender,"What is the most trusted source of information you rely on about COVID19?","Percentages of Respondents by Sex")
+```
+
+
+## What is the most trusted source of information on COVID-19 by Age
+```{r}
+Pak_Most_trust_source_Age<-category_df(Pak_Most_trust_source_Age,Pakistan_raw1,Age,Most_trust_source,"rad_perct",label,"Age","Most_trust_source","Recipients","Percentage","label")
+
+Barriers_Age(Pak_Most_trust_source_Age,Most_trust_source,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,Most_trust_source,Percentage,Age,NULL,"What is the most trusted source of information you rely on about COVID19?","Percentages of Respondents by Age")
+
+
+```
+
+
+## What is the most trusted source of information on COVID-19 by Setting
+```{r}
+Pak_Most_trust_source_Setting<-category_df(Pak_Most_trust_source_Setting,Pakistan_raw1,Setting,Most_trust_source,"rad_perct",label,"Setting","Most_trust_source","Recipients","Percentage","label")
+
+Barriers_Age(Pak_Most_trust_source_Setting,Most_trust_source,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,Most_trust_source,Percentage,Setting,NULL,"What is the most trusted source of information you rely on about COVID19?","Percentages of Respondents by Setting")
+
+
+```
+
+
+## What is the most trusted source of information on COVID-19 by Province
+```{r}
+Pak_Most_trust_source_Province<-category_df(Pak_Most_trust_source_Province,Pakistan_raw1,Province,Most_trust_source,"rad_perct",label,"Province","Most_trust_source","Recipients","Percentage","label")
+
+Barriers_Age(Pak_Most_trust_source_Province,Most_trust_source,Percentage,Percentage,Percentage,Province,~Province,2,label,Percentage,Most_trust_source,Percentage,Province,NULL,"What is the most trusted source of information you rely on about COVID19?","Percentages of Respondents by Province")
+
+
+```
+
+
+## What is the most trusted source of information on COVID-19 by Education
+```{r}
+Pak_Most_trust_source_Education<-category_df(Pak_Most_trust_source_Education,Pakistan_raw1,Edu1,Most_trust_source,"rad_perct",label,"Education","Most_trust_source","Recipients","Percentage","label")
+
+Barriers_Age(Pak_Most_trust_source_Education,Most_trust_source,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,Most_trust_source,Percentage,Education,NULL,"What is the most trusted source of information you rely on about COVID19?","Percentages of Respondents by Education")
+
+```
+
+
+## What is the most trusted source of information on COVID-19 by Sex and Setting
+```{r}
+Pak_Most_trust_source_rural_urban<-urban_rural(Pak_Most_trust_source_rural,Pakistan_raw1,Setting,Gender,Most_trust_source,Most_trust_source_perct,"Setting","Gender","Most_trust_source_perct","Percent_Most_trust_source_set")
+
+
+
+setting_gender(Pak_Most_trust_source_rural_urban,Most_trust_source_perct,Percent_Most_trust_source_set,"What is the most trusted source of information you rely on about COVID19?","Percentages of Respondents by by Sex and Setting")
+```
+
+
+## Main reason trust source 
+```{r}
+reason_trust_Pak<-new_df(reason_trust_Pak,Pakistan_raw1,"reason_trust",label,"reason_trust")
+Barriers(reason_trust_Pak,reason_trust,Percentage,Percentage,label,"What is the main reason you trust this source?","Percent of Respondents",reason_trust,reason_trust,Percentage)
+```
+```{r}
+Pak_reason_trust_sex<-category_df(Pak_reason_trust_sex,Pakistan_raw1,Gender,reason_trust,"rad_perct",label,"Gender","reason_trust","Recipients","Percentage","label")
+
+
+Barriers_Sex(Pak_reason_trust_sex,reason_trust,Percentage,Percentage,Percentage,Gender,label,Percentage,reason_trust,Percentage,Gender,"What is the main reason you trust this source?","Percentages of Respondents by Sex")
+```
+
+
+
+## Main reason trust source by Age
+```{r}
+Pak_reason_trust_Age<-category_df(Pak_reason_trust_Age,Pakistan_raw1,Age,reason_trust,"rad_perct",label,"Age","reason_trust","Recipients","Percentage","label")
+
+Barriers_Age(Pak_reason_trust_Age,reason_trust,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,reason_trust,Percentage,Age,NULL,"What is the main reason you trust this source?","Percentages of Respondents by Age")
+
+
+```
+
+
+
+## Main reason trust source by Setting
+```{r}
+Pak_reason_trust_Setting<-category_df(Pak_reason_trust_Setting,Pakistan_raw1,Setting,reason_trust,"rad_perct",label,"Setting","reason_trust","Recipients","Percentage","label")
+
+Barriers_Age(Pak_reason_trust_Setting,reason_trust,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,reason_trust,Percentage,Setting,NULL,"What is the main reason you trust this source?","Percentages of Respondents by Setting")
+
+
+```
+
+
+## Main reason trust source by Province
+```{r}
+Pak_reason_trust_Province<-category_df(Pak_reason_trust_Province,Pakistan_raw1,Province,reason_trust,"rad_perct",label,"Province","reason_trust","Recipients","Percentage","label")
+
+Barriers_Age(Pak_reason_trust_Province,reason_trust,Percentage,Percentage,Percentage,Province,~Province,2,label,Percentage,reason_trust,Percentage,Province,NULL,"What is the main reason you trust this source?","Percentages of Respondents by Province")
+
+
+```
+
+
+
+## Main reason trust source by Education
+```{r}
+Pak_reason_trust_Education<-category_df(Pak_reason_trust_Education,Pakistan_raw1,Edu1,reason_trust,"rad_perct",label,"Education","reason_trust","Recipients","Percentage","label")
+
+Barriers_Age(Pak_reason_trust_Education,reason_trust,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,reason_trust,Percentage,Education,NULL,"What is the main reason you trust this source?","Percentages of Respondents by Education")
+
+```
+
+## Main reason trust source by Sex and Setting
+```{r}
+Pak_reason_trust_source_rural_urban<-urban_rural(Pak_reason_trust_source_rural_urban,Pakistan_raw1,Setting,Gender,reason_trust,reson_trust_source_perct,"Setting","Gender","reason_trust_source_perct","Percent_reason_trust_source_set")
+
+
+
+setting_gender(Pak_reason_trust_source_rural_urban,reason_trust_source_perct,Percent_reason_trust_source_set,"What is the main reason you trust this source?","Percentages of Respondents by by Sex and Setting")
+```
+
+
+## Trust Essential and Community Workers 
+```{r echo= FALSE, fig.dim=c(10,6)}
+Pak_trust_healthcare_workers<- plyr::count(Pakistan_raw1,'trust_healthcare_w', wt_var= "Wt")
+Pak_trust_healthcare_workers$Name <- "Trust healthcare workers" 
+Pak_trust_healthcare_workers<- spread(Pak_trust_healthcare_workers, 'trust_healthcare_w', freq)
+Pak_mask_covid <- plyr::count(Pakistan_raw1,'trust_religious_w',  wt_var= "Wt")
+Pak_mask_covid$Name <- "Trust religious workers"
+Pak_mask_covid <- spread(Pak_mask_covid, 'trust_religious_w', freq)
+Pak_trust_Ngo <- plyr::count(Pakistan_raw1,'trust_ngo',  wt_var= "Wt")
+Pak_trust_Ngo$Name <- "Trust NGO workers"
+Pak_trust_Ngo <- spread(Pak_trust_Ngo, 'trust_ngo', freq)
+Pak_Likert <- rbind(Pak_trust_healthcare_workers, Pak_mask_covid)
+Pak_Likert <- rbind(Pak_Likert, Pak_trust_Ngo)
+names(Pak_Likert) <-c("Practice", "Highly distrust","Highly trust","Neutral","Somewhat distrust","Somewhat trust")
+col_order <- c("Practice", "Highly distrust", "Somewhat distrust","Neutral", "Somewhat trust", "Highly trust")
+Pak_Likert <- Pak_Likert[, col_order]
+
+Pak_LikertPlot <-HH::likert(Practice ~ ., data = Pak_Likert, ylab=NULL, as.percent=TRUE, main = list("How much do you trust workers and experts giving you \n information about COVID?",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-100,-40,-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ), rightAxis = FALSE)
+plot(Pak_LikertPlot)
+```
+
+
+## Trust Essential and Community Workers by Sex
+```{r echo= FALSE, fig.dim=c(10,6)}
+Pak_trust_workersSex <- Pakistan_raw1 %>% group_by(Gender)  %>% count(trust_healthcare_w, wt = Wt)
+Pak_trust_workersSex$Name <- "Trust healthcare workers" 
+Pak_trust_workersSex <- spread(Pak_trust_workersSex, trust_healthcare_w, n)
+Pak_trust_religious_workersSex <- Pakistan_raw1 %>% group_by(Gender)  %>% count(trust_religious_w, wt = Wt)
+Pak_trust_religious_workersSex$Name <- "Trust religious workers"
+Pak_trust_religious_workersSex <- spread(Pak_trust_religious_workersSex, trust_religious_w, n)
+Pak_trust_Ngo <- Pakistan_raw1 %>% group_by(Gender)  %>% count(trust_ngo, wt = Wt)
+Pak_trust_Ngo$Name <- "Trust NGO workers" 
+Pak_trust_Ngo <- spread(Pak_trust_Ngo, trust_ngo, n)
+Pak_LikertSex <- rbind(Pak_trust_workersSex, Pak_trust_religious_workersSex)
+Pak_LikertSex <- rbind(Pak_LikertSex, Pak_trust_Ngo)
+
+names(Pak_LikertSex) <-c("Sex","Practice","Highly distrust","Highly trust","Neutral","Somewhat distrust","Somewhat trust")
+col_orderSex <- c("Sex","Practice", "Highly distrust", "Somewhat distrust","Neutral", "Somewhat trust", "Highly trust")
+Pak_LikertSex <- Pak_LikertSex[, col_orderSex]
+
+
+
+
+Pak_LikertPlotSex <-HH::likert(Practice ~ .|Sex, data = Pak_LikertSex, layout=c(1,3), ylab=NULL, as.percent=TRUE, main = list("How much do you trust workers and experts giving you \n information about COVID?",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=1, lines=1, x = unit(.25,"npc")), cex=1, resize.height.tuning=2, rightAxis = FALSE)   
+plot(Pak_LikertPlotSex)
+
+
+```
+
+
+
+
+## Trust Essential and Community Workers by Age
+```{r echo= FALSE, fig.dim=c(10,8)}
+Pak_trust_workersAge <- Pakistan_raw1 %>% group_by(Age)  %>% count(trust_healthcare_w, wt = Wt)
+Pak_trust_workersAge$Name <- "Trust healthcare workers" 
+Pak_trust_workersAge <- spread(Pak_trust_workersAge, trust_healthcare_w, n)
+Pak_trust_religious_workersAge <- Pakistan_raw1 %>% group_by(Age)  %>% count(trust_religious_w, wt = Wt)
+Pak_trust_religious_workersAge$Name <- "Trust religious workers"
+Pak_trust_religious_workersAge <- spread(Pak_trust_religious_workersAge, trust_religious_w, n)
+Pak_trust_Ngo <- Pakistan_raw1 %>% group_by(Age)  %>% count(trust_ngo, wt = Wt)
+Pak_trust_Ngo$Name <- "Trust NGO workers" 
+Pak_trust_Ngo <- spread(Pak_trust_Ngo, trust_ngo, n)
+Pak_LikertAge <- rbind(Pak_trust_workersAge, Pak_trust_religious_workersAge)
+Pak_LikertAge <- rbind(Pak_LikertAge, Pak_trust_Ngo)
+names(Pak_LikertAge) <-c("Age","Practice", "Highly distrust","Highly trust","Neutral","Somewhat distrust","Somewhat trust")
+col_orderAge <- c("Age","Practice","Highly distrust", "Somewhat distrust","Neutral", "Somewhat trust", "Highly trust")
+Pak_LikertAge <- Pak_LikertAge[, col_orderAge]
+
+
+
+
+Pak_LikertPlotAge <-HH::likert(Practice ~ .|Age, data = Pak_LikertAge, layout=c(1,5), ylab=NULL, as.percent=TRUE, main = list("How much do you trust workers and experts giving you \n information about COVID?",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.7, lines=3, x = unit(.25,"npc")), cex=1, resize.height.tuning=2, rightAxis = FALSE)   
+plot(Pak_LikertPlotAge)
+
+
+```
+
+
+
+## Trust Essential and Community Workers by Setting
+```{r echo= FALSE,fig.dim=c(10,4)}
+Pak_trust_workersSetting <- Pakistan_raw1 %>% group_by(Setting)  %>% count(trust_healthcare_w, wt = Wt)
+Pak_trust_workersSetting$Name <- "Trust healthcare workers" 
+Pak_trust_workersSetting <- spread(Pak_trust_workersSetting, trust_healthcare_w, n)
+Pak_trust_religious_workersSetting <- Pakistan_raw1 %>% group_by(Setting)  %>% count(trust_religious_w, wt = Wt)
+Pak_trust_religious_workersSetting$Name <- "Trust religious workers"
+Pak_trust_religious_workersSetting <- spread(Pak_trust_religious_workersSetting, trust_religious_w, n)
+Pak_trust_Ngo <- Pakistan_raw1 %>% group_by(Setting)  %>% count(trust_ngo, wt = Wt)
+Pak_trust_Ngo$Name <- "Trust NGO workers" 
+Pak_trust_Ngo <- spread(Pak_trust_Ngo, trust_ngo, n)
+Pak_LikertSetting <- rbind(Pak_trust_workersSetting, Pak_trust_religious_workersSetting)
+Pak_LikertSetting <- rbind(Pak_LikertSetting, Pak_trust_Ngo)
+names(Pak_LikertSetting) <-c("Setting","Practice", "Highly distrust","Highly trust","Neutral","Somewhat distrust","Somewhat trust")
+col_orderSetting <- c("Setting","Practice","Highly distrust", "Somewhat distrust","Neutral", "Somewhat trust", "Highly trust")
+Pak_LikertSetting <- Pak_LikertSetting[, col_orderSetting]
+
+
+
+
+Pak_LikertPlotSetting <-HH::likert(Practice ~ .|Setting, data = Pak_LikertSetting, layout=c(1,2), ylab=NULL, as.percent=TRUE, main = list("How much do you trust workers and experts giving you \n information about COVID?",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=1, lines=2, x = unit(.25,"npc")), cex=1, resize.height.tuning=2, rightAxis = FALSE)   
+plot(Pak_LikertPlotSetting)
+
+
+```
+
+
+## Trust Essential and Community Workers by Province
+```{r echo= FALSE,fig.dim=c(10,8)}
+Pak_trust_workersProvince <- Pakistan_raw1 %>% group_by(Province)  %>% count(trust_healthcare_w, wt = Wt)
+Pak_trust_workersProvince$Name <- "Trust healthcare workers" 
+Pak_trust_workersProvince <- spread(Pak_trust_workersProvince, trust_healthcare_w, n)
+Pak_trust_religious_workersProvince <- Pakistan_raw1 %>% group_by(Province)  %>% count(trust_religious_w, wt = Wt)
+Pak_trust_religious_workersProvince$Name <- "Trust religious workers"
+Pak_trust_religious_workersProvince <- spread(Pak_trust_religious_workersProvince, trust_religious_w, n)
+Pak_trust_Ngo <- Pakistan_raw1 %>% group_by(Province)  %>% count(trust_ngo, wt = Wt)
+Pak_trust_Ngo$Name <- "Trust NGO workers" 
+Pak_trust_Ngo <- spread(Pak_trust_Ngo, trust_ngo, n)
+Pak_LikertProvince <- rbind(Pak_trust_workersProvince, Pak_trust_religious_workersProvince)
+Pak_LikertProvince <- rbind(Pak_LikertProvince, Pak_trust_Ngo)
+names(Pak_LikertProvince) <-c("Province","Practice", "Highly distrust","Highly trust","Neutral","Somewhat distrust","Somewhat trust")
+col_orderProvince <- c("Province","Practice","Highly distrust", "Somewhat distrust","Neutral", "Somewhat trust", "Highly trust")
+Pak_LikertProvince <- Pak_LikertProvince[, col_orderProvince]
+
+
+
+
+Pak_LikertPlotProvince <-HH::likert(Practice ~ .|Province, data = Pak_LikertProvince, ylab=NULL, as.percent=TRUE, main = list("How much do you trust workers and experts giving you \n information about COVID?",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.7, lines=3, x = unit(.25,"npc")), resize.height.tuning=2, rightAxis = FALSE, layout = c(1,4))   
+plot(Pak_LikertPlotProvince)
+
+
+```
+
+
+## Trust Essential and Community Workers by Education
+```{r echo= FALSE,fig.dim=c(10,8)}
+Pak_trust_workersEducation <- Pakistan_raw1 %>% group_by(Edu1)  %>% count(trust_healthcare_w, wt = Wt)
+Pak_trust_workersEducation$Name <- "Trust healthcare workers" 
+Pak_trust_workersEducation <- spread(Pak_trust_workersEducation, trust_healthcare_w, n)
+Pak_trust_religious_workersEducation <- Pakistan_raw1 %>% group_by(Edu1)  %>% count(trust_religious_w, wt = Wt)
+Pak_trust_religious_workersEducation$Name <- "Trust religious workers"
+Pak_trust_religious_workersEducation <- spread(Pak_trust_religious_workersEducation, trust_religious_w, n)
+Pak_trust_Ngo <- Pakistan_raw1 %>% group_by(Edu1)  %>% count(trust_ngo, wt = Wt)
+Pak_trust_Ngo$Name <- "Trust NGO workers" 
+Pak_trust_Ngo <- spread(Pak_trust_Ngo, trust_ngo, n)
+Pak_LikertEducation <- rbind(Pak_trust_workersEducation, Pak_trust_religious_workersEducation)
+Pak_LikertEducation <- rbind(Pak_LikertEducation, Pak_trust_Ngo)
+names(Pak_LikertEducation) <-c("Education","Practice", "Highly distrust","Highly trust","Neutral","Somewhat distrust","Somewhat trust")
+col_orderEducation <- c("Education","Practice","Highly distrust", "Somewhat distrust","Neutral", "Somewhat trust", "Highly trust")
+Pak_LikertEducation <- Pak_LikertEducation[, col_orderEducation]
+
+
+
+
+Pak_LikertPlotEducation <-HH::likert(Practice ~ .|Education, data = Pak_LikertEducation, layout=c(1,5), ylab=NULL, as.percent=TRUE, main = list("How much do you trust workers and experts giving you \n information about COVID?",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.7, lines=5, x = unit(.25,"npc")), resize.height.tuning=2, rightAxis = FALSE)   
+plot(Pak_LikertPlotEducation)
+
+
+```
+
+## Trust Essential and Community Workers by Sex and Setting
+```{r echo= FALSE,fig.dim=c(10,8)}
+
+Pak_trust_workersSexSet <- Pakistan_raw1 %>% group_by(Setting,Gender)  %>% count(trust_healthcare_w, wt = Wt)
+Pak_trust_workersSexSet$Name <- "Trust healthcare workers" 
+Pak_trust_workersSexSet <- spread(Pak_trust_workersSexSet, trust_healthcare_w, n)
+
+Pak_trust_religious_workersSexSet <- Pakistan_raw1 %>% group_by(Setting,Gender)  %>% count(trust_religious_w, wt = Wt)
+Pak_trust_religious_workersSexSet$Name <- "Trust religious workers"
+Pak_trust_religious_workersSexSet <- spread(Pak_trust_religious_workersSexSet, trust_religious_w, n)
+
+Pak_trust_NgoSexSet <- Pakistan_raw1 %>% group_by(Setting,Gender)  %>% count(trust_ngo, wt = Wt)
+Pak_trust_NgoSexSet$Name <- "Trust NGO workers" 
+Pak_trust_NgoSexSet <- spread(Pak_trust_NgoSexSet, trust_ngo, n)
+
+PakLikert_trust_SexSet <- rbind(Pak_trust_workersSexSet, Pak_trust_religious_workersSexSet)
+PakLikert_trust_SexSet <- rbind(PakLikert_trust_SexSet, Pak_trust_NgoSexSet)
+PakLikert_trust_SexSet$SexSet <- paste(PakLikert_trust_SexSet$Setting," ",PakLikert_trust_SexSet$Gender)
+PakLikert_trust_SexSet <- PakLikert_trust_SexSet[-c(1:2)]
+
+
+
+names(PakLikert_trust_SexSet) <-c("Practice","Highly distrust","Highly trust","Neutral","Somewhat distrust","Somewhat trust","SexSet")
+col_ordertrustSexSet<- c("SexSet","Practice","Highly distrust", "Somewhat distrust","Neutral", "Somewhat trust", "Highly trust")
+PakLikert_trust_SexSet <- PakLikert_trust_SexSet[, col_ordertrustSexSet]
+
+PakLikert_trust_SexSet[is.na(PakLikert_trust_SexSet)] <- 0
+
+
+
+
+
+
+
+PakLikertPlotSexSet <-HH::likert(Practice ~ .|SexSet, data = PakLikert_trust_SexSet, as.percent=TRUE, main = list("How much do you trust workers and experts giving you \n information about COVID?",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-100,-60,-40,-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ), ylab = NULL, par.strip.text=list(cex=0.65, lines=2.5, x = unit(.05,"npc")), strip.left = TRUE, strip = FALSE, layout = c(3,2), rightAxis = FALSE)
+plot(PakLikertPlotSexSet)
+
+
+
+
+```
+
+
+## False Facts COVID-19
+```{r}
+false_covid_Pak<-new_df(false_covid_Pak,Pakistan_raw1,"false_covid",label,"false_covid")
+Barriers(false_covid_Pak,false_covid,Percentage,Percentage,label,"Which of the following is NOT true about COVID-19?","Percent of Respondents",false_covid,false_covid,Percentage)
+```
+
+
+## False Facts COVID-19 by Sex
+```{r}
+Pak_false_covid_sex<-category_df(Pak_false_covid_sex,Pakistan_raw1,Gender,false_covid,"rad_perct",label,"Gender","false_covid","Recipients","Percentage","label")
+
+
+Barriers_Sex(Pak_false_covid_sex,false_covid,Percentage,Percentage,Percentage,Gender,label,Percentage,false_covid,Percentage,Gender,"Which of the following is NOT true about COVID-19?","Percentages of Respondents by Sex")
+```
+
+## False Facts COVID-19 by Age
+```{r}
+Pak_false_covid_Age<-category_df(Pak_false_covid_Age,Pakistan_raw1,Age,false_covid,"rad_perct",label,"Age","false_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_false_covid_Age,false_covid,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,false_covid,Percentage,Age,NULL,"Which of the following is NOT true about COVID-19?","Percentages of Respondents by Age")
+
+
+```
+
+
+## False Facts COVID-19 by Setting
+```{r}
+Pak_false_covid_Setting<-category_df(Pak_false_covid_Setting,Pakistan_raw1,Setting,false_covid,"rad_perct",label,"Setting","false_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_false_covid_Setting,false_covid,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,false_covid,Percentage,Setting,NULL,"Which of the following is NOT true about COVID-19?","Percentages of Respondents by Setting")
+
+
+```
+
+
+## False Facts COVID-19 by Province
+```{r fig.dim=c(10,9)}
+Pak_false_covid_Province<-category_df(Pak_false_covid_Province,Pakistan_raw1,Province,false_covid,"rad_perct",label,"Province","false_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_false_covid_Province,false_covid,Percentage,Percentage,Percentage,Province,~Province,2,label,Percentage,false_covid,Percentage,Province,NULL,"Which of the following is NOT true about COVID-19?","Percentages of Respondents by Province")
+
+
+```
+
+
+## False Facts COVID-19 by Education
+```{r fig.dim=c(10,9)}
+Pak_false_covid_Education<-category_df(Pak_false_covid_Education,Pakistan_raw1,Edu1,false_covid,"rad_perct",label,"Education","false_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_false_covid_Education,false_covid,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,false_covid,Percentage,Education,NULL,"Which of the following is NOT true about COVID-19?","Percentages of Respondents by Education")
+
+```
+
+
+## False Facts COVID-19 by Sex and Setting
+```{r }
+Pak_false_covid_rural_urban<-urban_rural(Pak_false_covid_rural,Pakistan_raw1,Setting,Gender,false_covid,false_covid_perct,"Setting","Gender","false_covid_perct","Percent_false_covid_set")
+
+
+
+setting_gender(Pak_false_covid_rural_urban,false_covid_perct,Percent_false_covid_set,"Which of the following is NOT true about COVID-19?","Percentages of Respondents by by Sex and Setting")
+```
+
+## Infection Risk Covid
+
+```{r}
+risk_covid_Pak<-new_df(risk_covid_Pak,Pakistan_raw1,"risk_covid",label,"risk_covid")
+Barriers(risk_covid_Pak,risk_covid,Percentage,Percentage,label,"Do you think you are at risk of being infected with Covid-19?","Percent of Respondents",risk_covid,risk_covid,Percentage)
+```
+
+## Infection Risk Covid by Sex
+```{r}
+Pak_risk_covid_sex<-category_df(Pak_risk_covid_sex,Pakistan_raw1,Gender,risk_covid,"rad_perct",label,"Gender","risk_covid","Recipients","Percentage","label")
+
+
+Barriers_Sex(Pak_risk_covid_sex,risk_covid,Percentage,Percentage,Percentage,Gender,label,Percentage,risk_covid,Percentage,Gender,"Do you think you are at risk of being infected with Covid-19?","Percentages of Respondents by Sex")
+```
+
+## Infection Risk Covid by Age
+```{r}
+Pak_risk_covid_Age<-category_df(Pak_risk_covid_Age,Pakistan_raw1,Age,risk_covid,"rad_perct",label,"Age","risk_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_risk_covid_Age,risk_covid,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,risk_covid,Percentage,Age,NULL,"Do you think you are at risk of being infected with Covid-19?","Percentages of Respondents by Age")
+
+
+```
+
+## Infection Risk Covid by Setting
+```{r}
+Pak_risk_covid_Setting<-category_df(Pak_risk_covid_Setting,Pakistan_raw1,Setting,risk_covid,"rad_perct",label,"Setting","risk_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_risk_covid_Setting,risk_covid,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,risk_covid,Percentage,Setting,NULL,"Do you think you are at risk of being infected with Covid-19?","Percentages of Respondents by Setting")
+
+
+```
+
+## Infection Risk Covid by Province
+```{r}
+Pak_risk_covid_Province<-category_df(Pak_risk_covid_Province,Pakistan_raw1,Province,risk_covid,"rad_perct",label,"Province","risk_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_risk_covid_Province,risk_covid,Percentage,Percentage,Percentage,Province,~Province,2,label,Percentage,risk_covid,Percentage,Province,NULL,"Do you think you are at risk of being infected with Covid-19?","Percentages of Respondents by Province")
+
+
+```
+
+
+## Infection Risk Covid by Education
+```{r}
+Pak_risk_covid_Education<-category_df(Pak_risk_covid_Education,Pakistan_raw1,Edu1,risk_covid,"rad_perct",label,"Education","risk_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_risk_covid_Education,risk_covid,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,risk_covid,Percentage,Education,NULL,"Do you think you are at risk of being infected with Covid-19?","Percentages of Respondents by Education")
+
+```
+
+
+## Infection Risk Covid by Sex and Setting
+```{r}
+Pak_risk_covid_rural_urban<-urban_rural(Pak_risk_covid_rural,Pakistan_raw1,Setting,Gender,risk_covid,risk_covid_perct,"Setting","Gender","risk_covid_perct","Percent_risk_covid_set")
+
+
+
+setting_gender(Pak_risk_covid_rural_urban,risk_covid_perct,Percent_risk_covid_set,"Do you think you are at risk of being infected with Covid-19?","Percentages of Respondents by by Sex and Setting")
+```
+
+
+## Family Danger Covid
+```{r fig.dim=c(10,6)}
+danger_covid_pak <-plyr::count(Pakistan_raw1,'danger_covid',  wt_var= "Wt")
+danger_covid_pak <- spread(danger_covid_pak, 'danger_covid', freq)
+danger_covid_pak$Area <-"Risk" 
+names(danger_covid_pak) <- c("Dangerous","Moderately dangerous","Not dangerous","Slightly dangerous","Very dangerous","Area")
+col_order2 <- c("Area","Not dangerous","Slightly dangerous","Moderately dangerous","Dangerous","Very dangerous")
+danger_covid_pak <- danger_covid_pak[, col_order2]
+
+
+danger_covid_pak <- danger_covid_pak %>% dplyr::mutate_if(is.character,as.factor)
+danger_covid_pak <- as.data.frame(danger_covid_pak)
+
+
+danger_covid_plot <-HH::likert(Area ~ ., data = danger_covid_pak, ylab=NULL, as.percent=TRUE, main = list("In your opinion, how dangerous would contracting Covid-19 be for you and your family?",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C"  ), rightAxis = FALSE)
+plot(danger_covid_plot)
+
+
+
+```
+
+
+## Family Danger Covid by Sex
+```{r fig.dim=c(10,6)}
+danger_covid_sex<-Pakistan_raw1%>% group_by(Gender)  %>% count(danger_covid, wt = Wt)
+danger_covid_sex<- spread(danger_covid_sex,danger_covid, n)
+danger_covid_sex$Area <- "Risk" 
+names(danger_covid_sex) <- c("Sex","Dangerous","Moderately dangerous","Not dangerous","Slightly dangerous","Very dangerous","Area")
+col_order3 <- c("Sex","Area", "Not dangerous","Slightly dangerous","Moderately dangerous","Dangerous","Very dangerous")
+danger_covid_sex<- danger_covid_sex[, col_order3]
+
+danger_covid_sex<-HH::likert(Area ~ .|Sex, data = danger_covid_sex, layout=c(1,3), ylab=NULL, as.percent=TRUE, main = list("In your opinion, how dangerous would contracting Covid-19 be for you and your family?",x=unit(.55, "npc")), sub= list("By Sex",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.7, lines=3, x = unit(.25,"npc")), resize.height.tuning=2, rightAxis = FALSE)   
+plot(danger_covid_sex)
+
+```
+
+
+## Family Danger Covid by Age
+```{r fig.dim=c(10,8)}
+danger_covid_Age<-Pakistan_raw1%>% group_by(Age)  %>% count(danger_covid, wt = Wt)
+danger_covid_Age<- spread(danger_covid_Age,danger_covid, n)
+danger_covid_Age$Area <- "Risk"
+names(danger_covid_Age) <- c("Age","Dangerous","Moderately dangerous","Not dangerous","Slightly dangerous","Very dangerous","Area")
+col_order3 <- c("Age","Area", "Not dangerous","Slightly dangerous","Moderately dangerous","Dangerous","Very dangerous")
+danger_covid_Age<- danger_covid_Age[, col_order3]
+
+danger_covid_Age<-HH::likert(Area ~ .|Age, data = danger_covid_Age, layout=c(1,5), ylab=NULL, as.percent=TRUE, main = list("In your opinion, how dangerous would contracting Covid-19 be for you and your family?",x=unit(.55, "npc")), sub= list("By Age",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.7, lines=3, x = unit(.25,"npc")), resize.height.tuning=2, rightAxis = FALSE)   
+plot(danger_covid_Age)
+```
+
+## Family Danger Covid by Setting
+```{r fig.dim=c(10,4)}
+danger_covid_Setting<-Pakistan_raw1%>% group_by(Setting)  %>% count(danger_covid, wt = Wt)
+danger_covid_Setting<- spread(danger_covid_Setting,danger_covid, n)
+danger_covid_Setting$Area <- "Risk"
+names(danger_covid_Setting) <- c("Setting","Dangerous","Moderately dangerous","Not dangerous","Slightly dangerous","Very dangerous","Area")
+col_order3 <- c("Setting","Area", "Not dangerous","Slightly dangerous","Moderately dangerous","Dangerous","Very dangerous")
+danger_covid_Setting<- danger_covid_Setting[, col_order3]
+
+danger_covid_Setting<-HH::likert(Area ~ .|Setting, data = danger_covid_Setting, layout=c(1,2), ylab=NULL, as.percent=TRUE, main = list("In your opinion, how dangerous would contracting Covid-19 be for you and your family?",x=unit(.55, "npc")), sub= list("By Setting",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=1, lines=2, x = unit(.25,"npc")), cex=1, resize.height.tuning=2, rightAxis = FALSE)   
+plot(danger_covid_Setting)
+```
+
+
+## Family Danger Covid by Province
+```{r}
+danger_covid_Province<-Pakistan_raw1%>% group_by(Province)  %>% count(danger_covid, wt = Wt)
+danger_covid_Province<- spread(danger_covid_Province,danger_covid, n)
+danger_covid_Province$Area <- "Risk"
+names(danger_covid_Province) <- c("Province","Dangerous","Moderately dangerous","Not dangerous","Slightly dangerous","Very dangerous","Area")
+col_order3 <- c("Province","Area","Not dangerous","Slightly dangerous","Moderately dangerous","Dangerous","Very dangerous")
+danger_covid_Province<- danger_covid_Province[, col_order3]
+
+danger_covid_Province<-HH::likert(Area ~ .|Province, data = danger_covid_Province, ylab=NULL, as.percent=TRUE, main = list("In your opinion, how dangerous would contracting Covid-19 be for you and your family?",x=unit(.55, "npc")), sub= list("By Province",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.7, lines=3, x = unit(.25,"npc")), resize.height.tuning=2, rightAxis = FALSE, layout = c(1,4))   
+plot(danger_covid_Province)
+```
+
+
+## Family Danger Covid by Education
+```{r}
+danger_covid_Education<-Pakistan_raw1%>% group_by(Edu1)  %>% count(danger_covid, wt = Wt)
+danger_covid_Education<- spread(danger_covid_Education,danger_covid, n)
+danger_covid_Education$Area <- "Danger of Covid"
+
+
+names(danger_covid_Education) <- c("Education","Dangerous","Moderately dangerous","Not dangerous","Slightly dangerous","Very dangerous","Area")
+
+
+col_order3 <- c("Education","Area","Not dangerous","Slightly dangerous","Moderately dangerous","Dangerous","Very dangerous")
+danger_covid_Education<- danger_covid_Education[, col_order3]
+
+danger_covid_plot_Education<-HH::likert(Area ~ .|Education, data = danger_covid_Education, layout=c(1,5), ylab=NULL, as.percent=TRUE, main = list("In your opinion, how dangerous would contracting Covid-19 be \nfor you and your family?",x=unit(.55, "npc")), sub= list("By Education",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.7, lines=5, x = unit(.25,"npc")), resize.height.tuning=2, rightAxis = FALSE)   
+plot(danger_covid_plot_Education)
+
+```
+
+## Family Danger Covid by Sex and Setting
+```{r}
+danger_covid_SexSet <- Pakistan_raw1 %>% group_by(Setting, Gender) %>% count(danger_covid, wt = Wt)
+danger_covid_SexSet <- spread(danger_covid_SexSet, danger_covid, n)
+danger_covid_SexSet$SexSet <- paste(danger_covid_SexSet$Setting," ", danger_covid_SexSet$Gender)
+danger_covid_SexSet <- danger_covid_SexSet[-c(1:2)]
+danger_covid_SexSet$Area <- "Risk"
+
+names(danger_covid_SexSet) <- c("Dangerous","Moderately dangerous","Not dangerous","Slightly dangerous","Very dangerous","Profile","Area")
+
+col_order3 <- c("Profile","Area","Not dangerous","Slightly dangerous","Moderately dangerous","Dangerous","Very dangerous")
+
+danger_covid_SexSet [is.na(danger_covid_SexSet)] <- 0
+danger_covid_SexSet <- danger_covid_SexSet[, col_order3]
+
+danger_covid_SexSet <-HH::likert(Area ~ .|Profile, data = danger_covid_SexSet, as.percent=TRUE, main = list("In your opinion, how dangerous would contracting Covid-19 be for you and your family?",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-100,-20,0,40,60,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C"), ylab = NULL, par.strip.text=list(cex=0.65, lines=2.5, x = unit(.05,"npc")), strip.left = TRUE, strip = FALSE, layout = c(3,2), rightAxis = FALSE)
+plot(danger_covid_SexSet)
+```
+
+
+
+
+## Protective Practices
+```{r fig.dim=c(10,6)}
+Pak_wash_covid<- plyr::count(Pakistan_raw1, 'wash_covid', wt_var= "Wt")
+Pak_wash_covid$Name <- "Washed hands with soap and water for 20 seconds "
+Pak_wash_covid<- spread(Pak_wash_covid, 'wash_covid', freq)
+
+Pak_mask_covid <- plyr::count(Pakistan_raw1, 'mask_covid', wt_var= "Wt")
+Pak_mask_covid$Name <- "Worn a mask"
+Pak_mask_covid <- spread(Pak_mask_covid, 'mask_covid', freq)
+
+Pak_stay_home_covid <- plyr::count(Pakistan_raw1, 'stay_home_covid', wt_var= "Wt")
+Pak_stay_home_covid$Name <- "Stayed home "
+Pak_stay_home_covid <- spread(Pak_stay_home_covid, 'stay_home_covid', freq)
+
+Pak_distance_covid<- plyr::count(Pakistan_raw1,'distance_covid', wt_var= "Wt")
+Pak_distance_covid$Name <- "Social distanced 2 meters in public?"
+Pak_distance_covid<- spread(Pak_distance_covid, 'distance_covid', freq)
+
+Pak_avoid_face_covid <- plyr::count(Pakistan_raw1, 'avoid_face_covid', wt_var= "Wt")
+Pak_avoid_face_covid$Name <- "Avoided touching face?"
+Pak_avoid_face_covid <- spread(Pak_avoid_face_covid, 'avoid_face_covid', freq)
+
+
+Pak_Likert <- rbind(Pak_wash_covid, Pak_mask_covid)
+Pak_Likert <- rbind(Pak_Likert, Pak_stay_home_covid)
+Pak_Likert <- rbind(Pak_Likert,Pak_distance_covid)
+Pak_Likert <- rbind(Pak_Likert,Pak_avoid_face_covid)
+
+names(Pak_Likert) <-c("Practice","All the time","Most of the time","Never","Rarely","Sometimes")
+col_order <- c("Practice","Never","Rarely","Sometimes","Most of the time","All the time")
+Pak_Likert <- Pak_Likert[, col_order]
+
+Pak_LikertPlot <-HH::likert(Practice ~ ., data = Pak_Likert, ylab=NULL, as.percent=TRUE, main = list("Over the past 30 days,how often have you:",x=unit(.55, "npc")), sub= list("Frequency",x=unit(.57, "npc")),xlim=c(-100,-40,-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ), rightAxis = FALSE)
+plot(Pak_LikertPlot)
+```
+
+
+## Protective Practices by Sex
+```{r fig.dim=c(10,6)}
+Pak_wash_covidSex <- Pakistan_raw1 %>% group_by(Gender)  %>% count(wash_covid, wt = Wt)
+Pak_wash_covidSex$Name <-  "Washed hands with soap and water for 20 seconds"
+Pak_wash_covidSex <- spread(Pak_wash_covidSex, wash_covid, n)
+
+Pak_mask_covidSex <- Pakistan_raw1 %>% group_by(Gender)  %>% count(mask_covid, wt = Wt)
+Pak_mask_covidSex$Name <-  "Worn a mask"
+Pak_mask_covidSex <- spread(Pak_mask_covidSex, mask_covid, n)
+
+Pak_stay_home_covidSex <- Pakistan_raw1 %>% group_by(Gender)  %>% count(stay_home_covid, wt = Wt)
+Pak_stay_home_covidSex$Name <- "Stayed home"
+Pak_stay_home_covidSex <- spread(Pak_stay_home_covidSex,stay_home_covid, n)
+
+Pak_distance_covid <- Pakistan_raw1 %>% group_by(Gender)  %>% count(distance_covid, wt = Wt)
+Pak_distance_covid$Name <-"Social distanced 2 meters in public?"
+Pak_distance_covid <- spread(Pak_distance_covid, distance_covid, n)
+
+Pak_avoid_face_covid <- Pakistan_raw1 %>% group_by(Gender)  %>% count(avoid_face_covid, wt = Wt)
+Pak_avoid_face_covid$Name <- "Avoided touching your face?"
+Pak_avoid_face_covid <- spread(Pak_avoid_face_covid, avoid_face_covid, n)
+
+
+Pak_LikertSex <- rbind(Pak_wash_covidSex, Pak_mask_covidSex)
+Pak_LikertSex <- rbind(Pak_LikertSex,Pak_stay_home_covidSex)
+Pak_LikertSex <- rbind(Pak_LikertSex, Pak_distance_covid)
+Pak_LikertSex <- rbind(Pak_LikertSex, Pak_avoid_face_covid)
+names(Pak_LikertSex) <-c("Sex","Practice","All the time","Most of the time","Never","Rarely","Sometimes")
+col_orderSex <- c("Sex","Practice","Never","Rarely","Sometimes","Most of the time","All the time")
+Pak_LikertSex <- Pak_LikertSex[, col_orderSex]
+
+
+
+
+Pak_LikertPlotSex <-HH::likert(Practice ~ .|Sex, data = Pak_LikertSex, layout=c(1,3), ylab=NULL, as.percent=TRUE, main = list("Over the past 30 days, how often have you:",x=unit(.55, "npc")), sub= list("Frequency",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=1, lines=1, x = unit(.25,"npc")), cex=1, resize.height.tuning=2, rightAxis = FALSE)   
+plot(Pak_LikertPlotSex)
+
+
+```
+
+## Protective Practices by Age
+```{r fig.dim=c(10,8)}
+Pak_wash_covidAge <- Pakistan_raw1 %>% group_by(Age)  %>% count(wash_covid, wt = Wt)
+Pak_wash_covidAge$Name <- "Washed hands with soap and water for 20 seconds"
+Pak_wash_covidAge <- spread(Pak_wash_covidAge, wash_covid, n)
+Pak_mask_covidAge <- Pakistan_raw1 %>% group_by(Age)  %>% count(mask_covid, wt = Wt)
+Pak_mask_covidAge$Name <-  "Worn a mask"
+Pak_mask_covidAge <- spread(Pak_mask_covidAge, mask_covid, n)
+Pak_stay_home_covidAge <- Pakistan_raw1 %>% group_by(Age)  %>% count(stay_home_covid, wt = Wt)
+Pak_stay_home_covidAge$Name <- "Stayed home"
+Pak_stay_home_covidAge <- spread(Pak_stay_home_covidAge,stay_home_covid, n)
+Pak_distance_covid <- Pakistan_raw1 %>% group_by(Age)  %>% count(distance_covid, wt = Wt)
+Pak_distance_covid$Name <-"Social distanced 2 meters in public?"
+Pak_distance_covid <- spread(Pak_distance_covid, distance_covid, n)
+Pak_avoid_face_covid <- Pakistan_raw1 %>% group_by(Age)  %>% count(avoid_face_covid, wt = Wt)
+Pak_avoid_face_covid$Name <- "How often have you avoided touching your face?"
+Pak_avoid_face_covid <- spread(Pak_avoid_face_covid, avoid_face_covid, n)
+
+
+Pak_LikertAge <- rbind(Pak_wash_covidAge, Pak_mask_covidAge)
+Pak_LikertAge <- rbind(Pak_LikertAge,Pak_stay_home_covidAge)
+Pak_LikertAge <- rbind(Pak_LikertAge, Pak_distance_covid)
+Pak_LikertAge <- rbind(Pak_LikertAge, Pak_avoid_face_covid)
+names(Pak_LikertAge) <-c("Age","Practice","All the time","Most of the time","Never","Rarely","Sometimes")
+col_orderAge <- c("Age","Practice","Never","Rarely","Sometimes","Most of the time","All the time")
+Pak_LikertAge <- Pak_LikertAge[, col_orderAge]
+
+
+
+
+Pak_LikertPlotAge <-HH::likert(Practice ~ .|Age, data = Pak_LikertAge, layout=c(1,5), ylab=NULL, as.percent=TRUE, main = list("Over the past 30 days, how often have you:",x=unit(.55, "npc")), sub= list("Frequency",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.7, lines=3, x = unit(.25,"npc")), resize.height.tuning=2, rightAxis = FALSE)   
+plot(Pak_LikertPlotAge)
+
+
+```
+
+
+## Protective Practices by Setting
+```{r fig.dim=c(10,4)}
+Pak_wash_covidSetting <- Pakistan_raw1 %>% group_by(Setting)  %>% count(wash_covid, wt = Wt)
+Pak_wash_covidSetting$Name <- "Washed hands with soap and water for 20 seconds"
+Pak_wash_covidSetting <- spread(Pak_wash_covidSetting, wash_covid, n)
+Pak_mask_covidSetting <- Pakistan_raw1 %>% group_by(Setting)  %>% count(mask_covid, wt = Wt)
+Pak_mask_covidSetting$Name <-  "Worn a mask"
+Pak_mask_covidSetting <- spread(Pak_mask_covidSetting, mask_covid, n)
+Pak_stay_home_covidSetting <- Pakistan_raw1 %>% group_by(Setting)  %>% count(stay_home_covid, wt = Wt)
+Pak_stay_home_covidSetting$Name <- "Stayed home"
+Pak_stay_home_covidSetting <- spread(Pak_stay_home_covidSetting,stay_home_covid, n)
+Pak_distance_covid <- Pakistan_raw1 %>% group_by(Setting)  %>% count(distance_covid, wt = Wt)
+Pak_distance_covid$Name <-"Social distanced 2 meters in public?"
+Pak_distance_covid <- spread(Pak_distance_covid, distance_covid, n)
+Pak_avoid_face_covid <- Pakistan_raw1 %>% group_by(Setting)  %>% count(avoid_face_covid, wt = Wt)
+Pak_avoid_face_covid$Name <- "Avoided touching your face?"
+Pak_avoid_face_covid <- spread(Pak_avoid_face_covid, avoid_face_covid, n)
+
+
+Pak_LikertSetting <- rbind(Pak_wash_covidSetting, Pak_mask_covidSetting)
+Pak_LikertSetting <- rbind(Pak_LikertSetting,Pak_stay_home_covidSetting)
+Pak_LikertSetting <- rbind(Pak_LikertSetting, Pak_distance_covid)
+Pak_LikertSetting <- rbind(Pak_LikertSetting, Pak_avoid_face_covid)
+names(Pak_LikertSetting) <-c("Setting","Practice","All the time","Most of the time","Never","Rarely","Sometimes")
+col_orderSetting <- c("Setting","Practice","Never","Rarely","Sometimes","Most of the time","All the time")
+Pak_LikertSetting <- Pak_LikertSetting[, col_orderSetting]
+
+
+
+
+Pak_LikertPlotSetting <-HH::likert(Practice ~ .|Setting, data = Pak_LikertSetting, layout=c(1,2), ylab=NULL, as.percent=TRUE, main = list("Over the past 30 days, how often have you:",x=unit(.55, "npc")), sub= list("Frequency",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=1, lines=1, x = unit(.25,"npc")), cex=1, resize.height.tuning=2, rightAxis = FALSE)   
+plot(Pak_LikertPlotSetting)
+
+
+```
+
+
+## Protective Practices by Province
+```{r fig.dim=c(10,8)}
+Pak_wash_covidProvince <- Pakistan_raw1 %>% group_by(Province)  %>% count(wash_covid, wt = Wt)
+Pak_wash_covidProvince$Name <- "Washed hands with soap and water for 20 seconds"
+Pak_wash_covidProvince <- spread(Pak_wash_covidProvince, wash_covid, n)
+Pak_mask_covidProvince <- Pakistan_raw1 %>% group_by(Province)  %>% count(mask_covid, wt = Wt)
+Pak_mask_covidProvince$Name <-  "Worn a mask"
+Pak_mask_covidProvince <- spread(Pak_mask_covidProvince, mask_covid, n)
+Pak_stay_home_covidProvince <- Pakistan_raw1 %>% group_by(Province)  %>% count(stay_home_covid, wt = Wt)
+Pak_stay_home_covidProvince$Name <- "Stayed home"
+Pak_stay_home_covidProvince <- spread(Pak_stay_home_covidProvince,stay_home_covid, n)
+Pak_distance_covid <- Pakistan_raw1 %>% group_by(Province)  %>% count(distance_covid, wt = Wt)
+Pak_distance_covid$Name <-"Social distanced 2 meters in public?"
+Pak_distance_covid <- spread(Pak_distance_covid, distance_covid, n)
+Pak_avoid_face_covid <- Pakistan_raw1 %>% group_by(Province)  %>% count(avoid_face_covid, wt = Wt)
+Pak_avoid_face_covid$Name <- "Avoided touching your face?"
+Pak_avoid_face_covid <- spread(Pak_avoid_face_covid, avoid_face_covid, n)
+
+
+Pak_LikertProvince <- rbind(Pak_wash_covidProvince, Pak_mask_covidProvince)
+Pak_LikertProvince <- rbind(Pak_LikertProvince,Pak_stay_home_covidProvince)
+Pak_LikertProvince <- rbind(Pak_LikertProvince, Pak_distance_covid)
+Pak_LikertProvince <- rbind(Pak_LikertProvince, Pak_avoid_face_covid)
+names(Pak_LikertProvince) <-c("Province","Practice","All the time","Most of the time","Never","Rarely","Sometimes")
+col_orderProvince <- c("Province","Never","Rarely","Sometimes","Most of the time","All the time")
+Pak_LikertProvince <- Pak_LikertProvince[, col_orderProvince]
+
+
+
+
+Pak_LikertPlotProvince <-HH::likert(Practice ~ .|Province, data = Pak_LikertProvince, layout=c(1,4), ylab=NULL, as.percent=TRUE, main = list("Over the past 30 days, how often have you:",x=unit(.55, "npc")), sub= list("Frequency",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.7, lines=3, x = unit(.25,"npc")), cex=1, resize.height.tuning=2, rightAxis = FALSE)   
+plot(Pak_LikertPlotProvince)
+
+
+```
+
+
+## Protective Practices by Education
+```{r fig.dim=c(10,10)}
+Pak_wash_covidEducation <- Pakistan_raw1 %>% group_by(Edu1)  %>% count(wash_covid, wt = Wt)
+Pak_wash_covidEducation$Name <-  "Washed hands with soap and water for 20 seconds"
+Pak_wash_covidEducation <- spread(Pak_wash_covidEducation, wash_covid, n)
+Pak_mask_covidEducation <- Pakistan_raw1 %>% group_by(Edu1)  %>% count(mask_covid, wt = Wt)
+Pak_mask_covidEducation$Name <-  "Worn a mask"
+Pak_mask_covidEducation <- spread(Pak_mask_covidEducation, mask_covid, n)
+Pak_stay_home_covidEducation <- Pakistan_raw1 %>% group_by(Edu1)  %>% count(stay_home_covid, wt = Wt)
+Pak_stay_home_covidEducation$Name <- "Stayed home"
+Pak_stay_home_covidEducation <- spread(Pak_stay_home_covidEducation,stay_home_covid, n)
+Pak_distance_covid <- Pakistan_raw1 %>% group_by(Edu1)  %>% count(distance_covid, wt = Wt)
+Pak_distance_covid$Name <- "Social distanced 2 meters in public?"
+Pak_distance_covid <- spread(Pak_distance_covid, distance_covid, n)
+Pak_avoid_face_covid <- Pakistan_raw1 %>% group_by(Edu1)  %>% count(avoid_face_covid, wt = Wt)
+Pak_avoid_face_covid$Name <- "Avoided touching your face?"
+Pak_avoid_face_covid <- spread(Pak_avoid_face_covid, avoid_face_covid, n)
+
+
+Pak_LikertEducation <- rbind(Pak_wash_covidEducation, Pak_mask_covidEducation)
+Pak_LikertEducation <- rbind(Pak_LikertEducation,Pak_stay_home_covidEducation)
+Pak_LikertEducation <- rbind(Pak_LikertEducation, Pak_distance_covid)
+Pak_LikertEducation <- rbind(Pak_LikertEducation, Pak_avoid_face_covid)
+
+
+names(Pak_LikertEducation) <-c("Education","Practice","All the time","Most of the time","Never","Rarely","Sometimes")
+col_orderEducation <- c("Education","Practice","Never","Rarely","Sometimes","Most of the time","All the time")
+Pak_LikertEducation <- Pak_LikertEducation[, col_orderEducation]
+
+
+Pak_LikertPlotEducation <-HH::likert(Practice ~ .|Education, data = Pak_LikertEducation, layout=c(1,5), ylab=NULL, as.percent=TRUE, main = list("Over the past 30 days, how often have you:",x=unit(.55, "npc")), sub= list("Frequency",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.5, lines=5, x = unit(.25,"npc")), cex=1, resize.height.tuning=2, rightAxis = FALSE)   
+plot(Pak_LikertPlotEducation)
+
+
+
+
+```
+
+
+
+
+## Protective Practices By Sex and Setting
+```{r echo= FALSE, fig.dim=c(10,11)}
+
+
+Pak_wash_covidSex_Set <- Pakistan_raw1 %>% group_by(Setting,Gender)  %>% count(wash_covid, wt = Wt)
+Pak_wash_covidSex_Set$Name <-  "Washed hands with soap and water for 20 seconds"
+Pak_wash_covidSex_Set <- spread(Pak_wash_covidSex_Set, wash_covid, n)
+Pak_mask_covidSex_Set <- Pakistan_raw1 %>% group_by(Setting,Gender)  %>% count(mask_covid, wt = Wt)
+Pak_mask_covidSex_Set$Name <-  "Worn a mask"
+Pak_mask_covidSex_Set <- spread(Pak_mask_covidSex_Set, mask_covid, n)
+Pak_stay_home_covidSex_Set <- Pakistan_raw1 %>% group_by(Setting,Gender)  %>% count(stay_home_covid, wt = Wt)
+Pak_stay_home_covidSex_Set$Name <- "Stayed home"
+Pak_stay_home_covidSex_Set <- spread(Pak_stay_home_covidSex_Set,stay_home_covid, n)
+Pak_distance_covidSex_Set <- Pakistan_raw1 %>% group_by(Setting,Gender)  %>% count(distance_covid, wt = Wt)
+Pak_distance_covidSex_Set$Name <- "Social distanced 2 meters in public?"
+Pak_distance_covidSex_Set <- spread(Pak_distance_covidSex_Set, distance_covid, n)
+Pak_avoid_face_covidSex_Set <- Pakistan_raw1 %>% group_by(Setting,Gender)  %>% count(avoid_face_covid, wt = Wt)
+Pak_avoid_face_covidSex_Set$Name <- "Over the past 30 days, how often have you avoided touching your face?"
+Pak_avoid_face_covidSex_Set <- spread(Pak_avoid_face_covidSex_Set, avoid_face_covid, n)
+
+
+
+Pak_Likert_Practice_Sex_Set <- rbind(Pak_wash_covidSex_Set, Pak_mask_covidSex_Set)
+Pak_Likert_Practice_Sex_Set <- rbind(Pak_Likert_Practice_Sex_Set,Pak_stay_home_covidSex_Set)
+Pak_Likert_Practice_Sex_Set <- rbind(Pak_Likert_Practice_Sex_Set, Pak_distance_covidSex_Set)
+Pak_Likert_Practice_Sex_Set <- rbind(Pak_Likert_Practice_Sex_Set, Pak_avoid_face_covidSex_Set)
+
+Pak_Likert_Practice_Sex_Set$SexSet <- paste(Pak_Likert_Practice_Sex_Set$Setting," ", Pak_Likert_Practice_Sex_Set$Gender)
+Pak_Likert_Practice_Sex_Set <- Pak_Likert_Practice_Sex_Set[-c(1:2)]
+
+
+
+
+names(Pak_Likert_Practice_Sex_Set) <-c("Practice","All the time","Most of the time","Never","Rarely","Sometimes","SexSet")
+col_orderSex_Set <- c("SexSet","Practice","Never","Rarely","Sometimes","Most of the time","All the time")
+Pak_Likert_Practice_Sex_Set <- Pak_Likert_Practice_Sex_Set[, col_orderSex_Set]
+Pak_Likert_Practice_Sex_Set[is.na(Pak_Likert_Practice_Sex_Set)] <- 0
+
+
+
+
+
+Pak_Likert_Practice_Sex_Set <-HH::likert(Practice ~ .|SexSet, data =Pak_Likert_Practice_Sex_Set , as.percent=TRUE, main = list(" Protective Practices CRA COVID-19 by Sex and Setting",x=unit(.55, "npc")), sub= list("Frequency of Practice",x=unit(.57, "npc")),xlim=c(-100,-80,-60,-40,-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ), ylab = NULL, par.strip.text=list(cex=0.7, lines=2.5, x = unit(.05,"npc")), strip.left = TRUE, strip = FALSE, layout = c(3,2), rightAxis = FALSE)
+plot(Pak_Likert_Practice_Sex_Set)
+
+
+```
+
+
+
+## Reasons Adopt Protective Measures
+```{r}
+adopt_action_Pak<-new_df(adopt_action_Pak,Pakistan_raw1,"adopt_action",label,"adopt_action")
+Barriers(adopt_action_Pak,adopt_action,Percentage,Percentage,label,"The main reason that I adopted these behaviors is to:","Percent of Respondents",adopt_action,adopt_action,Percentage)
+```
+
+## Reasons Adopt Protective Measures by Sex
+```{r}
+Pak_adopt_action_sex<-category_df(Pak_adopt_action_sex,Pakistan_raw1,Gender,adopt_action,"rad_perct",label,"Gender","adopt_action","Recipients","Percentage","label")
+
+
+Barriers_Sex(Pak_adopt_action_sex,adopt_action,Percentage,Percentage,Percentage,Gender,label,Percentage,adopt_action,Percentage,Gender,"The main reason that I adopted these behaviors is to:","Percentages of Respondents by Sex")
+```
+
+## Reasons Adopt Protective Measures by Age
+```{r}
+Pak_adopt_action_Age<-category_df(Pak_adopt_action_Age,Pakistan_raw1,Age,adopt_action,"rad_perct",label,"Age","adopt_action","Recipients","Percentage","label")
+
+Barriers_Age(Pak_adopt_action_Age,adopt_action,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,adopt_action,Percentage,Age,NULL,"The main reason that I adopted these behaviors is to:","Percentages of Respondents by Age")
+
+
+```
+
+## Reasons Adopt Protective Measures by Setting
+```{r}
+Pak_adopt_action_Setting<-category_df(Pak_adopt_action_Setting,Pakistan_raw1,Setting,adopt_action,"rad_perct",label,"Setting","adopt_action","Recipients","Percentage","label")
+
+Barriers_Age(Pak_adopt_action_Setting,adopt_action,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,adopt_action,Percentage,Setting,NULL,"The main reason that I adopted these behaviors is to:","Percentages of Respondents by Setting")
+
+
+```
+
+## Reasons Adopt Protective Measures by Province
+```{r}
+Pak_adopt_action_Province<-category_df(Pak_adopt_action_Province,Pakistan_raw1,Province,adopt_action,"rad_perct",label,"Province","adopt_action","Recipients","Percentage","label")
+
+Barriers_Age(Pak_adopt_action_Province,adopt_action,Percentage,Percentage,Percentage,Province,~Province,2,label,Percentage,adopt_action,Percentage,Province,NULL,"The main reason that I adopted these behaviors is to:","Percentages of Respondents by Province")
+
+
+```
+
+## Reasons Adopt Protective Measures by Education
+```{r}
+Pak_adopt_action_Education<-category_df(Pak_adopt_action_Education,Pakistan_raw1,Edu1,adopt_action,"rad_perct",label,"Education","adopt_action","Recipients","Percentage","label")
+
+Barriers_Age(Pak_adopt_action_Education,adopt_action,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,adopt_action,Percentage,Education,NULL,"The main reason that I adopted these behaviors is to:","Percentages of Respondents by Education")
+
+```
+
+
+## Reasons Adopt Protective Measures by Sex and Setting
+```{r}
+Pak_adopt_action_rural_urban<-urban_rural(Pak_adopt_action_rural,Pakistan_raw1,Setting,Gender,adopt_action,adopt_action_perct,"Setting","Gender","adopt_action_perct","Percent_adopt_action_set")
+
+
+
+setting_gender(Pak_adopt_action_rural_urban,adopt_action_perct,Percent_adopt_action_set,"The main reason that I adopted these behaviors is to:","Percentages of Respondents by by Sex and Setting")
+
+```
+
+## Barriers to Protective Measures
+```{r}
+prevent_measures_reason_Pak<-new_df(prevent_measures_reason_Pak,Pakistan_raw1,"prevent_measures_reason",label,"prevent_measures_reason")
+Barriers(prevent_measures_reason_Pak,prevent_measures_reason,Percentage,Percentage,label,"The main reason keeping me from practicing protective measures is:","Percent of Respondents",prevent_measures_reason,prevent_measures_reason,Percentage)
+```
+
+
+## Barriers to Protective Measures by Sex
+```{r}
+Pak_prevent_measures_reason_sex<-category_df(Pak_prevent_measures_reason_sex,Pakistan_raw1,Gender,prevent_measures_reason,"rad_perct",label,"Gender","prevent_measures_reason","Recipients","Percentage","label")
+
+
+Barriers_Sex(Pak_prevent_measures_reason_sex,prevent_measures_reason,Percentage,Percentage,Percentage,Gender,label,Percentage,prevent_measures_reason,Percentage,Gender,"The main reason keeping me from practicing protective measures is:","Percentages of Respondents by Sex")
+```
+
+## Barriers to Protective Measures by Age
+```{r}
+Pak_prevent_measures_reason_Age<-category_df(Pak_prevent_measures_reason_Age,Pakistan_raw1,Age,prevent_measures_reason,"rad_perct",label,"Age","prevent_measures_reason","Recipients","Percentage","label")
+
+Barriers_Age(Pak_prevent_measures_reason_Age,prevent_measures_reason,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,prevent_measures_reason,Percentage,Age,NULL,"The main reason keeping me from practicing protective measures is:","Percentages of Respondents by Age")
+
+
+```
+
+
+## Barriers to Protective Measures by Setting
+```{r}
+Pak_prevent_measures_reason_Setting<-category_df(Pak_prevent_measures_reason_Setting,Pakistan_raw1,Setting,prevent_measures_reason,"rad_perct",label,"Setting","prevent_measures_reason","Recipients","Percentage","label")
+
+Barriers_Age(Pak_prevent_measures_reason_Setting,prevent_measures_reason,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,prevent_measures_reason,Percentage,Setting,NULL,"The main reason keeping me from practicing protective measures is:","Percentages of Respondents by Setting")
+
+
+```
+
+
+## Barriers to Protective Measures by Province
+```{r}
+Pak_prevent_measures_reason_Province<-category_df(Pak_prevent_measures_reason_Province,Pakistan_raw1,Province,prevent_measures_reason,"rad_perct",label,"Province","prevent_measures_reason","Recipients","Percentage","label")
+
+Barriers_Age(Pak_prevent_measures_reason_Province,prevent_measures_reason,Percentage,Percentage,Percentage,Province,~Province,2,label,Percentage,prevent_measures_reason,Percentage,Province,NULL,"The main reason keeping me from practicing protective measures is:","Percentages of Respondents by Province")
+
+
+```
+
+
+## Barriers to Protective Measures by Education
+```{r}
+Pak_prevent_measures_reason_Education<-category_df(Pak_prevent_measures_reason_Education,Pakistan_raw1,Edu1,prevent_measures_reason,"rad_perct",label,"Education","prevent_measures_reason","Recipients","Percentage","label")
+
+Barriers_Age(Pak_prevent_measures_reason_Education,prevent_measures_reason,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,prevent_measures_reason,Percentage,Education,NULL,"The main reason keeping me from practicing protective measures is:","Percentages of Respondents by Education")
+
+```
+
+
+## Barriers to Protective Measures by Sex and Setting
+```{r}
+Pak_prevent_measures_reason_rural_urban<-urban_rural(Pak_prevent_measures_reason_rural,Pakistan_raw1,Setting,Gender,prevent_measures_reason,prevent_measures_reason_perct,"Setting","Gender","prevent_measures_reason_perct","Percent_prevent_measures_reason_set")
+
+
+
+setting_gender(Pak_prevent_measures_reason_rural_urban,prevent_measures_reason_perct,Percent_prevent_measures_reason_set,"The main reason keeping me from practicing protective measures is:","Percentages of Respondents by by Sex and Setting")
+```
+
+
+
+## First Action I would do if with Covid
+```{r}
+do_covid_Pak<-new_df(do_covid_Pak,Pakistan_raw1,"do_covid",label,"do_covid")
+Barriers(do_covid_Pak,do_covid,Percentage,Percentage,label,"If I think I have COVID symptoms, the first thing I would do is to:","Percent of Respondents",do_covid,do_covid,Percentage)
+```
+
+
+## First Action I would do if with Covid by Sex
+```{r}
+Pak_do_covid_sex<-category_df(Pak_do_covid_sex,Pakistan_raw1,Gender,do_covid,"rad_perct",label,"Gender","do_covid","Recipients","Percentage","label")
+
+
+Barriers_Sex(Pak_do_covid_sex,do_covid,Percentage,Percentage,Percentage,Gender,label,Percentage,do_covid,Percentage,Gender,"If I think I have COVID symptoms, the first thing I would do is to:","Percentages of Respondents by Sex")
+```
+
+## First Action I would do if with Covid by Age
+```{r}
+Pak_do_covid_Age<-category_df(Pak_do_covid_Age,Pakistan_raw1,Age,do_covid,"rad_perct",label,"Age","do_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_do_covid_Age,do_covid,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,do_covid,Percentage,Age,NULL,"If I think I have COVID symptoms, the first thing I would do is to:","Percentages of Respondents by Age")
+
+
+```
+
+## First Action I would do if with Covid by Setting
+```{r}
+Pak_do_covid_Setting<-category_df(Pak_do_covid_Setting,Pakistan_raw1,Setting,do_covid,"rad_perct",label,"Setting","do_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_do_covid_Setting,do_covid,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,do_covid,Percentage,Setting,NULL,"If I think I have COVID symptoms, the first thing I would do is to:","Percentages of Respondents by Setting")
+
+
+```
+
+
+## First Action I would do if with Covid by Province
+```{r}
+Pak_do_covid_Province<-category_df(Pak_do_covid_Province,Pakistan_raw1,Province,do_covid,"rad_perct",label,"Province","do_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_do_covid_Province,do_covid,Percentage,Percentage,Percentage,Province,~Province,2,label,Percentage,do_covid,Percentage,Province,NULL,"If I think I have COVID symptoms, the first thing I would do is to:","Percentages of Respondents by Province")
+
+
+```
+
+## First Action I would do if with Covid by Education
+```{r}
+Pak_do_covid_Education<-category_df(Pak_do_covid_Education,Pakistan_raw1,Edu1,do_covid,"rad_perct",label,"Education","do_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_do_covid_Education,do_covid,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,do_covid,Percentage,Education,NULL,"If I think I have COVID symptoms, the first thing I would do is to:","Percentages of Respondents by Education")
+
+```
+
+
+## First Action I would do if with Covid by Sex and Setting
+```{r}
+Pak_do_covid_rural_urban<-urban_rural(Pak_do_covid_rural,Pakistan_raw1,Setting,Gender,do_covid,do_covid_perct,"Setting","Gender","do_covid_perct","Percent_do_covid_set")
+
+
+
+setting_gender(Pak_do_covid_rural_urban,do_covid_perct,Percent_do_covid_set,"If I think I have COVID symptoms, the first thing I would do is to:","Percentages of Respondents by by Sex and Setting")
+```
+
+
+## Main Barrier NOT Seek Treatment
+```{r}
+not_treatment_covid_Pak<-new_df(not_treatment_covid_Pak,Pakistan_raw1,"not_treatment_covid",label,"not_treatment_covid")
+Barriers(not_treatment_covid_Pak,not_treatment_covid,Percentage,Percentage,label,"The main reason why I would NOT seek testing or treatment for COVID19 is:","Percent of Respondents",not_treatment_covid,not_treatment_covid,Percentage)
+```
+
+
+## Main Barrier NOT Seek Treatment by Sex
+```{r}
+Pak_not_treatment_covid_sex<-category_df(Pak_not_treatment_covid_sex,Pakistan_raw1,Gender,not_treatment_covid,"rad_perct",label,"Gender","not_treatment_covid","Recipients","Percentage","label")
+
+
+Barriers_Sex(Pak_not_treatment_covid_sex,not_treatment_covid,Percentage,Percentage,Percentage,Gender,label,Percentage,not_treatment_covid,Percentage,Gender,"The main reason why I would NOT seek testing or treatment for COVID19 is:","Percentages of Respondents by Sex")
+```
+
+## Main Barrier NOT Seek Treatment by Age
+```{r}
+Pak_not_treatment_covid_Age<-category_df(Pak_not_treatment_covid_Age,Pakistan_raw1,Age,not_treatment_covid,"rad_perct",label,"Age","not_treatment_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_not_treatment_covid_Age,not_treatment_covid,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,not_treatment_covid,Percentage,Age,NULL,"The main reason why I would NOT seek testing or treatment for COVID19 is:","Percentages of Respondents by Age")
+
+
+```
+
+
+## Main Barrier NOT Seek Treatment by Setting
+```{r}
+Pak_not_treatment_covid_Setting<-category_df(Pak_not_treatment_covid_Setting,Pakistan_raw1,Setting,not_treatment_covid,"rad_perct",label,"Setting","not_treatment_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_not_treatment_covid_Setting,not_treatment_covid,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,not_treatment_covid,Percentage,Setting,NULL,"The main reason why I would NOT seek testing or treatment for COVID19 is:","Percentages of Respondents by Setting")
+
+
+```
+
+
+## Main Barrier NOT Seek Treatment by Province
+```{r}
+Pak_not_treatment_covid_Province<-category_df(Pak_not_treatment_covid_Province,Pakistan_raw1,Province,not_treatment_covid,"rad_perct",label,"Province","not_treatment_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_not_treatment_covid_Province,not_treatment_covid,Percentage,Percentage,Percentage,Province,~Province,2,label,Percentage,not_treatment_covid,Percentage,Province,NULL,"The main reason why I would NOT seek testing or treatment for COVID19 is:","Percentages of Respondents by Province")
+
+
+```
+
+
+## Main Barrier NOT Seek Treatment by Education
+```{r}
+Pak_not_treatment_covid_Education<-category_df(Pak_not_treatment_covid_Education,Pakistan_raw1,Edu1,not_treatment_covid,"rad_perct",label,"Education","not_treatment_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_not_treatment_covid_Education,not_treatment_covid,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,not_treatment_covid,Percentage,Education,NULL,"The main reason why I would NOT seek testing or treatment for COVID19 is:","Percentages of Respondents by Education")
+
+```
+
+
+## Main Barrier NOT Seek Treatment by Sex and Setting
+```{r}
+Pak_not_treatment_covid_rural_urban<-urban_rural(Pak_not_treatment_covid_rural,Pakistan_raw1,Setting,Gender,not_treatment_covid,not_treatment_covid_perct,"Setting","Gender","not_treatment_covid_perct","Percent_not_treatment_covid_set")
+
+
+
+setting_gender(Pak_not_treatment_covid_rural_urban,not_treatment_covid_perct,Percent_not_treatment_covid_set,"The main reason why I would NOT seek testing or treatment for COVID19 is:","Percentages of Respondents by by Sex and Setting")
+```
+
+
+## Stigma Concern 
+```{r}
+stigma_concern_Pak<-new_df(stigma_concern_Pak,Pakistan_raw1,"stigma_concern",label,"stigma_concern")
+Barriers(stigma_concern_Pak,stigma_concern,Percentage,Percentage,label,"What form of stigma linked to COVID 19 is the one that would concern you the most?","Percent of Respondents",stigma_concern,stigma_concern,Percentage)
+```
+
+
+## Stigma Concern by Sex
+```{r}
+Pak_stigma_concern_sex<-category_df(Pak_stigma_concern_sex,Pakistan_raw1,Gender,stigma_concern,"rad_perct",label,"Gender","stigma_concern","Recipients","Percentage","label")
+
+
+Barriers_Sex(Pak_stigma_concern_sex,stigma_concern,Percentage,Percentage,Percentage,Gender,label,Percentage,stigma_concern,Percentage,Gender,"What form of stigma linked to COVID 19 is the one that would concern you the most?","Percentages of Respondents by Sex")
+```
+
+
+
+## Stigma Concern by Age
+```{r fig.dim=c(10,8)}
+Pak_stigma_concern_Age<-category_df(Pak_stigma_concern_Age,Pakistan_raw1,Age,stigma_concern,"rad_perct",label,"Age","stigma_concern","Recipients","Percentage","label")
+
+Barriers_Age(Pak_stigma_concern_Age,stigma_concern,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,stigma_concern,Percentage,Age,NULL,"What form of stigma linked to COVID 19 is the one that would concern you the most?","Percentages of Respondents by Age")
+
+
+```
+
+## Stigma Concern by Setting
+```{r fig.dim=c(10,8)}
+Pak_stigma_concern_Setting<-category_df(Pak_stigma_concern_Setting,Pakistan_raw1,Setting,stigma_concern,"rad_perct",label,"Setting","stigma_concern","Recipients","Percentage","label")
+
+Barriers_Age(Pak_stigma_concern_Setting,stigma_concern,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,stigma_concern,Percentage,Setting,NULL,"What form of stigma linked to COVID 19 is the one that would concern you the most?","Percentages of Respondents by Setting")
+
+
+```
+
+
+## Stigma Concern by Province
+```{r fig.dim=c(10,8)}
+Pak_stigma_concern_Province<-category_df(Pak_stigma_concern_Province,Pakistan_raw1,Province,stigma_concern,"rad_perct",label,"Province","stigma_concern","Recipients","Percentage","label")
+
+Barriers_Age(Pak_stigma_concern_Province,stigma_concern,Percentage,Percentage,Percentage,Province,~Province,2,label,Percentage,stigma_concern,Percentage,Province,NULL,"What form of stigma linked to COVID 19 is the one that would concern you the most?","Percentages of Respondents by Province")
+
+
+```
+
+
+## Stigma Concern by Education
+```{r fig.dim=c(10,8)}
+Pak_stigma_concern_Education<-category_df(Pak_stigma_concern_Education,Pakistan_raw1,Edu1,stigma_concern,"rad_perct",label,"Education","stigma_concern","Recipients","Percentage","label")
+
+Barriers_Age(Pak_stigma_concern_Education,stigma_concern,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,stigma_concern,Percentage,Education,NULL,"What form of stigma linked to COVID 19 is the one that would concern you the most?","Percentages of Respondents by Education")
+
+```
+
+
+## Stigma Concern by Sex and Setting
+```{r}
+Pak_stigma_concern_rural_urban<-urban_rural(Pak_stigma_concern_rural,Pakistan_raw1,Setting,Gender,stigma_concern,stigma_concern_perct,"Setting","Gender","stigma_concern_perct","Percent_stigma_concern_set")
+
+
+
+setting_gender(Pak_stigma_concern_rural_urban,stigma_concern_perct,Percent_stigma_concern_set,"What form of stigma linked to COVID 19 is the one that would concern you the most?","Percentages of Respondents by by Sex and Setting")
+
+```
+
+
+## Confidence Providing for Family 
+```{r fig.dim=c(10,6)}
+confident_provide_pak <-plyr::count(Pakistan_raw1, 'confident_provide',  wt_var= "Wt")
+confident_provide_pak <- spread(confident_provide_pak, 'confident_provide', freq)
+confident_provide_pak$Area <-"Confidence level" 
+names(confident_provide_pak) <- c("Not Confident at all","Not Sure","Somewhat Confident","Somewhat not Confident","Very Confident","Area")
+col_order2 <- c("Area","Not Confident at all","Somewhat not Confident", "Not Sure","Somewhat Confident","Very Confident")
+confident_provide_pak <- confident_provide_pak[, col_order2]
+
+confident_provide_pak <- confident_provide_pak %>% dplyr::mutate_if(is.character,as.factor)
+confident_provide_pak <- as.data.frame(confident_provide_pak)
+
+
+confident_provide_plot <-HH::likert(Area ~ ., data = confident_provide_pak, ylab=NULL, as.percent=TRUE, main = list("How confident are you in providing what is needed for your family\n during this pandemic?",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-100,-80,-60,-40,-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ), rightAxis = FALSE)
+plot(confident_provide_plot)
+
+
+
+```
+
+
+## Confidence Providing for Family by Sex
+```{r fig.dim=c(10,6)}
+confident_provide_sex<-Pakistan_raw1%>% group_by(Gender)  %>% count(confident_provide, wt = Wt)
+confident_provide_sex<- spread(confident_provide_sex,confident_provide, n)
+confident_provide_sex$Area <- "Confidence level"
+names(confident_provide_sex) <- c("Sex","Not Confident at all","Not Sure","Somewhat Confident","Somewhat not Confident","Very Confident","Area")
+col_order3 <- c("Sex","Area", "Not Confident at all","Somewhat not Confident", "Not Sure","Somewhat Confident","Very Confident")
+confident_provide_sex<- confident_provide_sex[, col_order3]
+confident_provide_sex[is.na(confident_provide_sex)] <- 0
+
+
+
+confident_provide_sex_plot<-HH::likert(Area ~ .|Sex, data = confident_provide_sex, layout=c(1,3), ylab=NULL, as.percent=TRUE, main = list("How confident are you in providing what is needed for your family\n during this pandemic?",x=unit(.55, "npc")), sub= list("By Sex",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=1, lines=1, x = unit(.25,"npc")), cex=1, resize.height.tuning=2, rightAxis = FALSE)   
+plot(confident_provide_sex_plot)
+
+
+```
+
+
+
+
+## Confidence Providing for Family by Age
+```{r fig.dim=c(10,8)}
+confident_provide_Age<-Pakistan_raw1%>% group_by(Age)  %>% count(confident_provide, wt = Wt)
+confident_provide_Age<- spread(confident_provide_Age,confident_provide, n)
+confident_provide_Age$Area <- "Confidence level"
+names(confident_provide_Age) <- c("Age","Not Confident at all","Not Sure","Somewhat Confident","Somewhat not Confident","Very Confident","Area")
+col_order3 <- c("Age","Area", "Not Confident at all","Somewhat not Confident", "Not Sure","Somewhat Confident","Very Confident")
+confident_provide_Age<- confident_provide_Age[, col_order3]
+confident_provide_Age[is.na(confident_provide_Age)] <- 0
+
+
+
+confident_provide_Age_plot<-HH::likert(Area ~ .|Age, data = confident_provide_Age, layout=c(1,5), ylab=NULL, as.percent=TRUE, main = list("How confident are you in providing what is needed for your family\n during this pandemic?",x=unit(.55, "npc")), sub= list("By Sex",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.7, lines=3, x = unit(.25,"npc")),resize.height.tuning=2, rightAxis = FALSE)   
+plot(confident_provide_Age_plot)
+
+
+```
+
+
+## Confidence Providing for Family by Setting
+```{r fig.dim=c(10,4)}
+confident_provide_Setting<-Pakistan_raw1%>% group_by(Setting)  %>% count(confident_provide, wt = Wt)
+confident_provide_Setting<- spread(confident_provide_Setting,confident_provide, n)
+confident_provide_Setting$Area <- "Confidence level"
+names(confident_provide_Setting) <- c("Setting","Not Confident at all","Not Sure","Somewhat Confident","Somewhat not Confident","Very Confident","Area")
+col_order3 <- c("Setting","Area", "Not Confident at all","Somewhat not Confident", "Not Sure","Somewhat Confident","Very Confident")
+confident_provide_Setting<- confident_provide_Setting[, col_order3]
+confident_provide_Setting[is.na(confident_provide_Setting)] <- 0
+
+
+
+confident_provide_Setting_plot<-HH::likert(Area ~ .|Setting, data = confident_provide_Setting, layout=c(1,2), ylab=NULL, as.percent=TRUE, main = list("How confident are you in providing what is needed for your family\n during this pandemic?",x=unit(.55, "npc")), sub= list("By Sex",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=1, lines=1, x = unit(.25,"npc")), resize.height.tuning=2, rightAxis = FALSE)   
+plot(confident_provide_Setting_plot)
+
+```
+
+
+## Confidence Providing for Family by Province
+```{r fig.dim=c(10,8)}
+confident_provide_Province<-Pakistan_raw1%>% group_by(Province)  %>% count(confident_provide, wt = Wt)
+confident_provide_Province<- spread(confident_provide_Province,confident_provide, n)
+confident_provide_Province$Area <- "Confidence level"
+names(confident_provide_Province) <- c("Province","Not Confident at all","Not Sure","Somewhat Confident","Somewhat not Confident","Very Confident","Area")
+col_order3 <- c("Province","Area", "Not Confident at all","Somewhat not Confident", "Not Sure","Somewhat Confident","Very Confident")
+confident_provide_Province<- confident_provide_Province[, col_order3]
+confident_provide_Province[is.na(confident_provide_Province)] <- 0
+
+
+
+confident_provide_Province_plot<-HH::likert(Area ~ .|Province, data = confident_provide_Province, layout=c(1,4), ylab=NULL, as.percent=TRUE, main = list("How confident are you in providing what is needed for your family\n during this pandemic?",x=unit(.55, "npc")), sub= list("By Sex",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.7, lines=3, x = unit(.25,"npc")), resize.height.tuning=2, rightAxis = FALSE)   
+plot(confident_provide_Province_plot)
+
+```
+
+## Confidence Providing for Family by Education
+```{r fig.dim=c(10,8)}
+confident_provide_Education<-Pakistan_raw1%>% group_by(Edu1)  %>% count(confident_provide, wt = Wt)
+confident_provide_Education<- spread(confident_provide_Education,confident_provide, n)
+confident_provide_Education$Area <- "Confidence level"
+names(confident_provide_Education) <- c("Education","Not Confident at all","Not Sure","Somewhat Confident","Somewhat not Confident","Very Confident","Area")
+col_order3 <- c("Education","Area","Not Confident at all","Somewhat not Confident", "Not Sure","Somewhat Confident","Very Confident")
+confident_provide_Education<- confident_provide_Education[, col_order3]
+confident_provide_Education[is.na(confident_provide_Education)] <- 0
+
+
+
+confident_provide_Education_plot<-HH::likert(Area ~ .|Education, data = confident_provide_Education, layout=c(1,5), ylab=NULL, as.percent=TRUE, main = list("How confident are you in providing what is needed for your family\n during this pandemic?",x=unit(.55, "npc")), sub= list("By Sex",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.7, lines=5, x = unit(.25,"npc")), resize.height.tuning=2, rightAxis = FALSE)   
+plot(confident_provide_Education_plot)
+
+```
+
+## Confidence Providing for Family by Sex and Setting
+```{r fig.dim=c(10,8)}
+confident_provide_SexSet <- Pakistan_raw1 %>% group_by(Setting, Gender) %>% count(confident_provide, wt = Wt)
+confident_provide_SexSet <- spread(confident_provide_SexSet, confident_provide, n)
+confident_provide_SexSet$SexSet <- paste(confident_provide_SexSet$Setting," ", confident_provide_SexSet$Gender)
+confident_provide_SexSet <- confident_provide_SexSet[-c(1:2)]
+confident_provide_SexSet$Area <- "Confidence level"
+
+
+
+names(confident_provide_SexSet) <- c("Not Confident at all","Not Sure","Somewhat Confident","Somewhat not Confident","Very Confident","Profile","Area")
+col_order3 <- c("Profile","Area", "Not Confident at all","Somewhat not Confident", "Not Sure","Somewhat Confident","Very Confident")
+confident_provide_SexSet <- confident_provide_SexSet[, col_order3]
+confident_provide_SexSet[is.na(confident_provide_SexSet)] <- 0
+
+confident_provide_SexSet <-HH::likert(Area ~ .|Profile, data = confident_provide_SexSet, as.percent=TRUE, main = list("During a regular week, how often do you learn about COVID-19?",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-100,-80,-60,-40,-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C"), ylab = NULL, par.strip.text=list(cex=0.7, lines=2.5, x = unit(.05,"npc")), strip.left = TRUE, strip = FALSE, layout = c(3,2), rightAxis = FALSE)
+plot(confident_provide_SexSet)
+
+
+
+
+
+```
+
+
+## Sell Assets 
+```{r}
+sell_covid_Pak<-new_df(sell_covid_Pak,Pakistan_raw1,"sell_covid",label,"sell_covid")
+Barriers(sell_covid_Pak,sell_covid,Percentage,Percentage,label,"Over the past 30 days, did anyone in your household sell household assets (radio,\n furniture, TV, livestock, bicycle, sewing machine, etc.) due to loss of income because\n of COVID-19?","Percent of Respondents",sell_covid,sell_covid,Percentage)
+```
+
+## Sell Assets by Sex
+```{r}
+Pak_sell_covid_sex<-category_df(Pak_sell_covid_sex,Pakistan_raw1,Gender,sell_covid,"rad_perct",label,"Gender","sell_covid","Recipients","Percentage","label")
+
+
+Barriers_Sex(Pak_sell_covid_sex,sell_covid,Percentage,Percentage,Percentage,Gender,label,Percentage,sell_covid,Percentage,Gender,"Over the past 30 days, did anyone in your household sell household assets (radio,\n furniture, TV, livestock, bicycle, sewing machine, etc.) due to loss of income because\n of COVID-19?","Percentages of Respondents by Sex")
+```
+
+## Sell Assets by Age
+```{r}
+Pak_sell_covid_Age<-category_df(Pak_sell_covid_Age,Pakistan_raw1,Age,sell_covid,"rad_perct",label,"Age","sell_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_sell_covid_Age,sell_covid,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,sell_covid,Percentage,Age,NULL,"Over the past 30 days, did anyone in your household sell household assets (radio,\n furniture, TV, livestock, bicycle, sewing machine, etc.) due to loss of income because\n of COVID-19?","Percentages of Respondents by Age")
+
+
+```
+
+## Sell Assets by Setting
+```{r}
+Pak_sell_covid_Setting<-category_df(Pak_sell_covid_Setting,Pakistan_raw1,Setting,sell_covid,"rad_perct",label,"Setting","sell_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_sell_covid_Setting,sell_covid,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,sell_covid,Percentage,Setting,NULL,"Over the past 30 days, did anyone in your household sell household assets (radio,\n furniture, TV, livestock, bicycle, sewing machine, etc.) due to loss of income because\n of COVID-19?","Percentages of Respondents by Setting")
+
+
+```
+
+## Sell Assets by Province
+```{r}
+Pak_sell_covid_Province<-category_df(Pak_sell_covid_Province,Pakistan_raw1,Province,sell_covid,"rad_perct",label,"Province","sell_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_sell_covid_Province,sell_covid,Percentage,Percentage,Percentage,Province,~Province,2,label,Percentage,sell_covid,Percentage,Province,NULL,"Over the past 30 days, did anyone in your household sell household assets (radio,\n furniture, TV, livestock, bicycle, sewing machine, etc.) due to loss of income because\n of COVID-19?","Percentages of Respondents by Province")
+
+
+```
+
+## Sell Assets by Education
+```{r}
+Pak_sell_covid_Education<-category_df(Pak_sell_covid_Education,Pakistan_raw1,Edu1,sell_covid,"rad_perct",label,"Education","sell_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_sell_covid_Education,sell_covid,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,sell_covid,Percentage,Education,NULL,"Over the past 30 days, did anyone in your household sell household assets (radio,\n furniture, TV, livestock, bicycle, sewing machine, etc.) due to loss of income because\n of COVID-19?","Percentages of Respondents by Education")
+
+```
+
+## Sell Assets by Sex and Setting
+```{r}
+Pak_sell_covid_rural_urban<-urban_rural(Pak_sell_covid_rural,Pakistan_raw1,Setting,Gender,sell_covid,sell_covid_perct,"Setting","Gender","sell_covid_perct","Percent_sell_covid_set")
+
+
+
+setting_gender(Pak_sell_covid_rural_urban,sell_covid_perct,Percent_sell_covid_set,"Over the past 30 days, did anyone in your household sell household assets (radio,\n furniture, TV, livestock, bicycle, sewing machine, etc.) due to loss of income because\n of COVID-19?","Percentages of Respondents by by Sex and Setting")
+
+```
+
+
+## Children Work 
+```{r}
+children_work_Pak<-new_df(children_work_Pak,Pakistan_raw1,"children_work",label,"children_work")
+Barriers(children_work_Pak,children_work,Percentage,Percentage,label,"Over the past 30 days, did you send children in the house to work due to loss of\n income because of COVID-19?","Percent of Respondents",children_work,children_work,Percentage)
+```
+
+
+## Children Work by Sex
+```{r}
+Pak_children_work_sex<-category_df(Pak_children_work_sex,Pakistan_raw1,Gender,children_work,"rad_perct",label,"Gender","children_work","Recipients","Percentage","label")
+
+
+Barriers_Sex(Pak_children_work_sex,children_work,Percentage,Percentage,Percentage,Gender,label,Percentage,children_work,Percentage,Gender,"Over the past 30 days, did you send children in the house to work due to loss of\n income because of COVID-19?","Percentages of Respondents by Sex")
+```
+
+## Children Work by Age
+```{r}
+Pak_children_work_Age<-category_df(Pak_children_work_Age,Pakistan_raw1,Age,children_work,"rad_perct",label,"Age","children_work","Recipients","Percentage","label")
+
+Barriers_Age(Pak_children_work_Age,children_work,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,children_work,Percentage,Age,NULL,"Over the past 30 days, did you send children in the house to work due to loss of\n income because of COVID-19?","Percentages of Respondents by Age")
+
+
+```
+
+## Children Work by Setting
+```{r}
+Pak_children_work_Setting<-category_df(Pak_children_work_Setting,Pakistan_raw1,Setting,children_work,"rad_perct",label,"Setting","children_work","Recipients","Percentage","label")
+
+Barriers_Age(Pak_children_work_Setting,children_work,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,children_work,Percentage,Setting,NULL,"Over the past 30 days, did you send children in the house to work due to loss of\n income because of COVID-19?","Percentages of Respondents by Setting")
+
+
+```
+
+
+## Children Work by Province
+```{r}
+Pak_children_work_Province<-category_df(Pak_children_work_Province,Pakistan_raw1,Province,children_work,"rad_perct",label,"Province","children_work","Recipients","Percentage","label")
+
+Barriers_Age(Pak_children_work_Province,children_work,Percentage,Percentage,Percentage,Province,~Province,2,label,Percentage,children_work,Percentage,Province,NULL,"Over the past 30 days, did you send children in the house to work due to loss of\n income because of COVID-19?","Percentages of Respondents by Province")
+
+
+```
+
+## Children Work by Education
+```{r}
+Pak_children_work_Education<-category_df(Pak_children_work_Education,Pakistan_raw1,Edu1,children_work,"rad_perct",label,"Education","children_work","Recipients","Percentage","label")
+
+Barriers_Age(Pak_children_work_Education,children_work,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,children_work,Percentage,Education,NULL,"Over the past 30 days, did you send children in the house to work due to loss of\n income because of COVID-19?","Percentages of Respondents by Education")
+
+```
+
+
+## Children Work by Sex and Setting
+```{r}
+Pak_children_work_rural_urban<-urban_rural(Pak_children_work_rural,Pakistan_raw1,Setting,Gender,children_work,children_work_perct,"Setting","Gender","children_work_perct","Percent_children_work_set")
+
+
+
+setting_gender(Pak_children_work_rural_urban,children_work_perct,Percent_children_work_set,"Over the past 30 days, did you send children in the house to work due to loss of income because of COVID-19?","Percentages of Respondents by by Sex and Setting")
+
+```
+
+## Borrow Money from Family 
+```{r}
+borrow_money_covid_Pak<-new_df(borrow_money_covid_Pak,Pakistan_raw1,"borrow_money_covid",label,"borrow_money_covid")
+Barriers(borrow_money_covid_Pak,borrow_money_covid,Percentage,Percentage,label,"Over the past 30 days, did you or anyone in your family borrow money from others\n due to loss of income because of COVID-19","Percent of Respondents",borrow_money_covid,borrow_money_covid,Percentage)
+```
+
+## Borrow Money from Family by Sex
+```{r}
+Pak_borrow_money_covid_sex<-category_df(Pak_borrow_money_covid_sex,Pakistan_raw1,Gender,borrow_money_covid,"rad_perct",label,"Gender","borrow_money_covid","Recipients","Percentage","label")
+
+
+Barriers_Sex(Pak_borrow_money_covid_sex,borrow_money_covid,Percentage,Percentage,Percentage,Gender,label,Percentage,borrow_money_covid,Percentage,Gender,"Over the past 30 days, did you or anyone in your family borrow money from others\n due to loss of income because of COVID-19","Percentages of Respondents by Sex")
+```
+
+## Borrow Money from Family by Age
+```{r}
+Pak_borrow_money_covid_Age<-category_df(Pak_borrow_money_covid_Age,Pakistan_raw1,Age,borrow_money_covid,"rad_perct",label,"Age","borrow_money_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_borrow_money_covid_Age,borrow_money_covid,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,borrow_money_covid,Percentage,Age,NULL,"Over the past 30 days, did you or anyone in your family borrow money from others\n due to loss of income because of COVID-19","Percentages of Respondents by Age")
+
+
+```
+
+## Borrow Money from Family by Setting
+```{r}
+Pak_borrow_money_covid_Setting<-category_df(Pak_borrow_money_covid_Setting,Pakistan_raw1,Setting,borrow_money_covid,"rad_perct",label,"Setting","borrow_money_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_borrow_money_covid_Setting,borrow_money_covid,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,borrow_money_covid,Percentage,Setting,NULL,"Over the past 30 days, did you or anyone in your family borrow money from others\n due to loss of income because of COVID-19","Percentages of Respondents by Setting")
+
+
+```
+
+## Borrow Money from Family by Province
+```{r}
+Pak_borrow_money_covid_Province<-category_df(Pak_borrow_money_covid_Province,Pakistan_raw1,Province,borrow_money_covid,"rad_perct",label,"Province","borrow_money_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_borrow_money_covid_Province,borrow_money_covid,Percentage,Percentage,Percentage,Province,~Province,2,label,Percentage,borrow_money_covid,Percentage,Province,NULL,"Over the past 30 days, did you or anyone in your family borrow money from others\n due to loss of income because of COVID-19","Percentages of Respondents by Province")
+
+
+```
+
+## Borrow Money from Family by Education
+```{r}
+Pak_borrow_money_covid_Education<-category_df(Pak_borrow_money_covid_Education,Pakistan_raw1,Edu1,borrow_money_covid,"rad_perct",label,"Education","borrow_money_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_borrow_money_covid_Education,borrow_money_covid,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,borrow_money_covid,Percentage,Education,NULL,"Over the past 30 days, did you or anyone in your family borrow money from others\n due to loss of income because of COVID-19","Percentages of Respondents by Education")
+
+```
+
+
+## Borrow Money from Sex and Setting
+```{r}
+
+Pak_borrow_money_covid_rural_urban<-urban_rural(Pak_borrow_money_covid_rural,Pakistan_raw1,Setting,Gender,borrow_money_covid,borrow_money_covid_perct,"Setting","Gender","borrow_money_covid_perct","Percent_borrow_money_covid_set")
+
+
+
+setting_gender(Pak_borrow_money_covid_rural_urban,borrow_money_covid_perct,Percent_borrow_money_covid_set,"Over the past 30 days, did you or anyone in your family borrow money from others due to loss of income because of COVID-19?","Percentages of Respondents by by Sex and Setting")
+```
+
+## Receive Financial Asstiance from Government
+```{r}
+financial_gov_covid_Pak<-new_df(financial_gov_covid_Pak,Pakistan_raw1,"financial_gov_covid",label,"financial_gov_covid")
+Barriers(financial_gov_covid_Pak,financial_gov_covid,Percentage,Percentage,label,"Over the past 30 days, did you receive any financial assistance from the\n Government?","Percent of Respondents",financial_gov_covid,financial_gov_covid,Percentage)
+```
+
+
+## Receive Financial Asstiance from Government by Sex
+```{r}
+Pak_financial_gov_covid_sex<-category_df(Pak_financial_gov_covid_sex,Pakistan_raw1,Gender,financial_gov_covid,"rad_perct",label,"Gender","financial_gov_covid","Recipients","Percentage","label")
+
+
+Barriers_Sex(Pak_financial_gov_covid_sex,financial_gov_covid,Percentage,Percentage,Percentage,Gender,label,Percentage,financial_gov_covid,Percentage,Gender,"Over the past 30 days, did you receive any financial assistance from the\n Government?","Percentages of Respondents by Sex")
+```
+
+## Receive Financial Asstiance from Government by Age
+```{r}
+Pak_financial_gov_covid_Age<-category_df(Pak_financial_gov_covid_Age,Pakistan_raw1,Age,financial_gov_covid,"rad_perct",label,"Age","financial_gov_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_financial_gov_covid_Age,financial_gov_covid,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,financial_gov_covid,Percentage,Age,NULL,"Over the past 30 days, did you receive any financial assistance from the\n Government?","Percentages of Respondents by Age")
+
+
+```
+
+## Receive Financial Asstiance from Government by Setting
+```{r}
+Pak_financial_gov_covid_Setting<-category_df(Pak_financial_gov_covid_Setting,Pakistan_raw1,Setting,financial_gov_covid,"rad_perct",label,"Setting","financial_gov_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_financial_gov_covid_Setting,financial_gov_covid,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,financial_gov_covid,Percentage,Setting,NULL,"Over the past 30 days, did you receive any financial assistance from the\n Government?","Percentages of Respondents by Setting")
+
+
+```
+
+## Receive Financial Asstiance from Government by Province
+```{r}
+Pak_financial_gov_covid_Province<-category_df(Pak_financial_gov_covid_Province,Pakistan_raw1,Province,financial_gov_covid,"rad_perct",label,"Province","financial_gov_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_financial_gov_covid_Province,financial_gov_covid,Percentage,Percentage,Percentage,Province,~Province,2,label,Percentage,financial_gov_covid,Percentage,Province,NULL,"Over the past 30 days, did you receive any financial assistance from the\n Government?","Percentages of Respondents by Province")
+
+
+```
+
+## Receive Financial Asstiance from Government by Education
+```{r}
+Pak_financial_gov_covid_Education<-category_df(Pak_financial_gov_covid_Education,Pakistan_raw1,Edu1,financial_gov_covid,"rad_perct",label,"Education","financial_gov_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_financial_gov_covid_Education,financial_gov_covid,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,financial_gov_covid,Percentage,Education,NULL,"Over the past 30 days, did you receive any financial assistance from the\n Government?","Percentages of Respondents by Education")
+
+```
+
+## Receive Financial Asstiance from Government by Setting
+```{r}
+support_covid_Pak<-new_df(support_covid_Pak,Pakistan_raw1,"support_covid",label,"support_covid")
+Barriers(support_covid_Pak,support_covid,Percentage,Percentage,label,"Are you aware of any first aid and counselling support and services available for\n addressing your fear/stress/anxiety or mental health issues related to COVID 19?","Percent of Respondents",support_covid,support_covid,Percentage)
+```
+
+
+## Aware of Mental Health Support
+```{r}
+Pak_support_covid_sex<-category_df(Pak_support_covid_sex,Pakistan_raw1,Gender,support_covid,"rad_perct",label,"Gender","support_covid","Recipients","Percentage","label")
+
+
+Barriers_Sex(Pak_support_covid_sex,support_covid,Percentage,Percentage,Percentage,Gender,label,Percentage,support_covid,Percentage,Gender,"Are you aware of any first aid and counselling support and services available for\n  addressing your fear/stress/anxiety or mental health issues related to COVID 19?","Percentages of Respondents by Sex")
+```
+
+## Aware of Mental Health Support by Age
+```{r}
+Pak_support_covid_Age<-category_df(Pak_support_covid_Age,Pakistan_raw1,Age,support_covid,"rad_perct",label,"Age","support_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_support_covid_Age,support_covid,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,support_covid,Percentage,Age,NULL,"Are you aware of any first aid and counselling support and services available for\n  addressing your fear/stress/anxiety or mental health issues related to COVID 19?","Percentages of Respondents by Age")
+
+
+```
+
+## Aware of Mental Health Support by Setting
+```{r}
+Pak_support_covid_Setting<-category_df(Pak_support_covid_Setting,Pakistan_raw1,Setting,support_covid,"rad_perct",label,"Setting","support_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_support_covid_Setting,support_covid,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,support_covid,Percentage,Setting,NULL,"Are you aware of any first aid and counselling support and services available for\n  addressing your fear/stress/anxiety or mental health issues related to COVID 19?","Percentages of Respondents by Setting")
+
+
+```
+
+## Aware of Mental Health Support by Province
+```{r}
+Pak_support_covid_Province<-category_df(Pak_support_covid_Province,Pakistan_raw1,Province,support_covid,"rad_perct",label,"Province","support_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_support_covid_Province,support_covid,Percentage,Percentage,Percentage,Province,~Province,2,label,Percentage,support_covid,Percentage,Province,NULL,"Are you aware of any first aid and counselling support and services available for\n  addressing your fear/stress/anxiety or mental health issues related to COVID 19?","Percentages of Respondents by Province")
+
+
+```
+
+## Aware of Mental Health Support by Education
+```{r}
+Pak_support_covid_Education<-category_df(Pak_support_covid_Education,Pakistan_raw1,Edu1,support_covid,"rad_perct",label,"Education","support_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_support_covid_Education,support_covid,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,support_covid,Percentage,Education,NULL,"Are you aware of any first aid and counselling support and services available for\n  addressing your fear/stress/anxiety or mental health issues related to COVID 19?","Percentages of Respondents by Education")
+
+```
+
+## Aware of Mental Health Support by Sex and Setting
+```{r}
+Pak_support_covid_rural_urban<-urban_rural(Pak_support_covid_rural,Pakistan_raw1,Setting,Gender,support_covid,support_covid_perct,"Setting","Gender","support_covid_perct","Percent_support_covid_set")
+
+
+
+setting_gender(Pak_support_covid_rural_urban,support_covid_perct,Percent_support_covid_set,"Are you aware of any first aid and counselling support and services available for addressing your fear/stress/anxiety or mental health issues related to COVID 19?","Percentages of Respondents by by Sex and Setting")
+
+```
+
+## Receive Mental Health Services
+```{r}
+mental_health_covid_Pak<-new_df(mental_health_covid_Pak,Pakistan_raw1,"mental_health_covid",label,"mental_health_covid")
+Barriers(mental_health_covid_Pak,mental_health_covid,Percentage,Percentage,label,"Over the past 30 days, did you or any member of your family receive psychosocia\nl first aid or counselling services to alleviate fear/stress/anxiety or mental health issues etc?","Percent of Respondents",mental_health_covid,mental_health_covid,Percentage)
+```
+
+## Receive Mental Health Services by Sex
+```{r}
+Pak_mental_health_covid_sex<-category_df(Pak_mental_health_covid_sex,Pakistan_raw1,Gender,mental_health_covid,"rad_perct",label,"Gender","mental_health_covid","Recipients","Percentage","label")
+
+
+Barriers_Sex(Pak_mental_health_covid_sex,mental_health_covid,Percentage,Percentage,Percentage,Gender,label,Percentage,mental_health_covid,Percentage,Gender,"Over the past 30 days, did you or any member of your family receive psychosocia\nl first aid or counselling services to alleviate fear/stress/anxiety or mental health issues etc?","Percentages of Respondents by Sex")
+```
+
+## Receive Mental Health Services by Age
+```{r}
+Pak_mental_health_covid_Age<-category_df(Pak_mental_health_covid_Age,Pakistan_raw1,Age,mental_health_covid,"rad_perct",label,"Age","mental_health_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_mental_health_covid_Age,mental_health_covid,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,mental_health_covid,Percentage,Age,NULL,"Over the past 30 days, did you or any member of your family receive psychosocia\nl first aid or counselling services to alleviate fear/stress/anxiety or mental health issues etc?","Percentages of Respondents by Age")
+
+
+```
+
+## Receive Mental Health Services by Setting
+```{r}
+Pak_mental_health_covid_Setting<-category_df(Pak_mental_health_covid_Setting,Pakistan_raw1,Setting,mental_health_covid,"rad_perct",label,"Setting","mental_health_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_mental_health_covid_Setting,mental_health_covid,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,mental_health_covid,Percentage,Setting,NULL,"Over the past 30 days, did you or any member of your family receive psychosocia\nl first aid or counselling services to alleviate fear/stress/anxiety or mental health issues etc?","Percentages of Respondents by Setting")
+
+
+```
+
+## Receive Mental Health Services by Province
+```{r}
+Pak_mental_health_covid_Province<-category_df(Pak_mental_health_covid_Province,Pakistan_raw1,Province,mental_health_covid,"rad_perct",label,"Province","mental_health_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_mental_health_covid_Province,mental_health_covid,Percentage,Percentage,Percentage,Province,~Province,2,label,Percentage,mental_health_covid,Percentage,Province,NULL,"Over the past 30 days, did you or any member of your family receive psychosocia\nl first aid or counselling services to alleviate fear/stress/anxiety or mental health issues etc?","Percentages of Respondents by Province")
+
+
+```
+
+## Receive Mental Health Services by Education
+```{r}
+Pak_mental_health_covid_Education<-category_df(Pak_mental_health_covid_Education,Pakistan_raw1,Edu1,mental_health_covid,"rad_perct",label,"Education","mental_health_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_mental_health_covid_Education,mental_health_covid,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,mental_health_covid,Percentage,Education,NULL,"Over the past 30 days, did you or any member of your family receive psychosocia\nl first aid or counselling services to alleviate fear/stress/anxiety or mental health issues etc?","Percentages of Respondents by Education")
+
+```
+
+## Receive Mental Health Services by Sex and Setting
+```{r}
+Pak_mental_health_covid_rural_urban<-urban_rural(Pak_mental_health_covid_rural,Pakistan_raw1,Setting,Gender,mental_health_covid,mental_health_covid_perct,"Setting","Gender","mental_health_covid_perct","Percent_mental_health_covid_set")
+
+
+
+setting_gender(Pak_mental_health_covid_rural_urban,mental_health_covid_perct,Percent_mental_health_covid_set,"Over the past 30 days, did you or any member of your family receive psychosocial first aid or counselling services to alleviate fear/stress/anxiety or mental health issues etc?","Percentages of Respondents by by Sex and Setting")
+
+```
+
+
+## Why Not Receive Mental Health Services
+```{r}
+why_not_mental_health_covid_Pak<-new_df(why_not_mental_health_covid_Pak,Pakistan_raw1,"why_not_mental_health_covid",label,"why_not_mental_health_covid")
+Barriers(why_not_mental_health_covid_Pak,why_not_mental_health_covid,Percentage,Percentage,label,"If Not, why:","Percent of Respondents",why_not_mental_health_covid,why_not_mental_health_covid,Percentage)
+```
+
+## Why Not Receive Mental Health Services by Sex
+```{r}
+Pak_why_not_mental_health_covid_sex<-category_df(Pak_why_not_mental_health_covid_sex,Pakistan_raw1,Gender,why_not_mental_health_covid,"rad_perct",label,"Gender","why_not_mental_health_covid","Recipients","Percentage","label")
+
+
+Barriers_Sex(Pak_why_not_mental_health_covid_sex,why_not_mental_health_covid,Percentage,Percentage,Percentage,Gender,label,Percentage,why_not_mental_health_covid,Percentage,Gender,"If Not, why:","Percentages of Respondents by Sex")
+```
+
+## Why Not Receive Mental Health Services by Age
+```{r}
+Pak_why_not_mental_health_covid_Age<-category_df(Pak_why_not_mental_health_covid_Age,Pakistan_raw1,Age,why_not_mental_health_covid,"rad_perct",label,"Age","why_not_mental_health_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_why_not_mental_health_covid_Age,why_not_mental_health_covid,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,why_not_mental_health_covid,Percentage,Age,NULL,"If Not, why:","Percentages of Respondents by Age")
+
+
+```
+
+## Why Not Receive Mental Health Services by Setting
+```{r}
+Pak_why_not_mental_health_covid_Setting<-category_df(Pak_why_not_mental_health_covid_Setting,Pakistan_raw1,Setting,why_not_mental_health_covid,"rad_perct",label,"Setting","why_not_mental_health_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_why_not_mental_health_covid_Setting,why_not_mental_health_covid,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,why_not_mental_health_covid,Percentage,Setting,NULL,"If Not, why:","Percentages of Respondents by Setting")
+
+
+```
+
+## Why Not Receive Mental Health Services by Province
+```{r}
+Pak_why_not_mental_health_covid_Province<-category_df(Pak_why_not_mental_health_covid_Province,Pakistan_raw1,Province,why_not_mental_health_covid,"rad_perct",label,"Province","why_not_mental_health_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_why_not_mental_health_covid_Province,why_not_mental_health_covid,Percentage,Percentage,Percentage,Province,~Province,2,label,Percentage,why_not_mental_health_covid,Percentage,Province,NULL,"If Not, why:","Percentages of Respondents by Province")
+
+
+```
+
+## Why Not Receive Mental Health Services by Education
+```{r}
+Pak_why_not_mental_health_covid_Education<-category_df(Pak_why_not_mental_health_covid_Education,Pakistan_raw1,Edu1,why_not_mental_health_covid,"rad_perct",label,"Education","why_not_mental_health_covid","Recipients","Percentage","label")
+
+Barriers_Age(Pak_why_not_mental_health_covid_Education,why_not_mental_health_covid,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,why_not_mental_health_covid,Percentage,Education,NULL,"If Not, why:","Percentages of Respondents by Education")
+
+```
+ 
+## Why Not Receive Mental Health Services by Sex and Setting
+```{r}
+Pak_why_not_mental_health_covid_rural_urban<-urban_rural(Pak_why_not_mental_health_covid_rural,Pakistan_raw1,Setting,Gender,why_not_mental_health_covid,why_not_mental_health_covid_perct,"Setting","Gender","why_not_mental_health_covid_perct","Percent_why_not_mental_health_covid_set")
+
+
+
+setting_gender(Pak_why_not_mental_health_covid_rural_urban,why_not_mental_health_covid_perct,Percent_why_not_mental_health_covid_set,"If Not, why:","Percentages of Respondents by by Sex and Setting")
+```
+ 
+ 
+
+## Satisfaction Level From Mental Health Services
+```{r fig.dim=c(10,6)}
+satisfaction_mental_health_pak <-plyr::count(Pakistan_raw1, 'satisfaction_mental_health',  wt_var= "Wt")
+satisfaction_mental_health_pak <- spread(satisfaction_mental_health_pak, 'satisfaction_mental_health', freq)
+satisfaction_mental_health_pak$Area <-"Satisfied Mental Health Services" 
+names(satisfaction_mental_health_pak) <- c( "Dissatisfied","I did not access the service","Neither Satisfied nor Dissatisfied","Satisfied", "Very Dissatisfied", "Very satisfied",  "Area")
+col_order2 <- c("Area", "Very Dissatisfied", "Dissatisfied", "I did not access the service","Neither Satisfied nor Dissatisfied","Satisfied" ,"Very satisfied")
+satisfaction_mental_health_pak <- satisfaction_mental_health_pak[, col_order2]
+
+
+satisfaction_mental_health_pak <- satisfaction_mental_health_pak %>% dplyr::mutate_if(is.character,as.factor)
+satisfaction_mental_health_pak <- as.data.frame(satisfaction_mental_health_pak)
+
+
+satisfaction_mental_health_plot <-HH::likert(Area ~ ., data = satisfaction_mental_health_pak, ylab=NULL, as.percent=TRUE, main = list("How would you rate your satisfaction level \n  to the services received on the psychosocial first aid and counselling support to alleviate \n anxiety/stress etc  if you have used it?",x=unit(.55, "npc")), sub= list("Satisfaction Level",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C","Black" ), rightAxis = FALSE)
+plot(satisfaction_mental_health_plot)
+
+
+
+```
+
+
+## Satisfaction Level From Mental Health Services by Sex
+```{r fig.dim=c(10,6)}
+satisfaction_mental_health_sex<-Pakistan_raw1%>% group_by(Gender)  %>% count(satisfaction_mental_health, wt = Wt)
+satisfaction_mental_health_sex<- spread(satisfaction_mental_health_sex,satisfaction_mental_health, n)
+satisfaction_mental_health_sex$Area <- "Satisfied Mental Health"
+names(satisfaction_mental_health_sex) <- c("Sex","Dissatisfied","I did not access the service","Neither Satisfied nor Dissatisfied","Satisfied", "Very Dissatisfied", "Very satisfied","Area")
+col_order3 <- c("Sex","Area","Very Dissatisfied", "Dissatisfied", "I did not access the service","Neither Satisfied nor Dissatisfied","Satisfied" ,"Very satisfied")
+satisfaction_mental_health_sex<- satisfaction_mental_health_sex[, col_order3]
+
+satisfaction_mental_health_sex<-HH::likert(Area ~ .|Sex, data = satisfaction_mental_health_sex, layout=c(1,3), ylab=NULL, as.percent=TRUE, main = list("How would you rate your satisfaction level \n  to the services received on the psychosocial first aid and counselling support to alleviate \n anxiety/stress etc  if you have used it?",x=unit(.55, "npc")), sub= list("By Sex",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C","Black"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=1, lines=1, x = unit(.25,"npc")), cex=1, resize.height.tuning=2, rightAxis = FALSE)   
+plot(satisfaction_mental_health_sex)
+
+```
+
+
+## Satisfaction Level From Mental Health Services by Age
+```{r fig.dim=c(10,8)}
+satisfaction_mental_health_Age<-Pakistan_raw1%>% group_by(Age)  %>% count(satisfaction_mental_health, wt = Wt)
+satisfaction_mental_health_Age<- spread(satisfaction_mental_health_Age,satisfaction_mental_health, n)
+satisfaction_mental_health_Age$Area <- "Satisfied Mental Health"
+names(satisfaction_mental_health_Age) <- c("Age","Dissatisfied","I did not access the service","Neither Satisfied nor Dissatisfied","Satisfied", "Very Dissatisfied", "Very satisfied","Area")
+col_order3 <- c("Age","Area","Very Dissatisfied", "Dissatisfied", "I did not access the service","Neither Satisfied nor Dissatisfied","Satisfied" ,"Very satisfied")
+satisfaction_mental_health_Age<- satisfaction_mental_health_Age[, col_order3]
+satisfaction_mental_health_Age[is.na(satisfaction_mental_health_Age)] <- 0
+
+satisfaction_mental_health_Age<-HH::likert(Area ~ .|Age, data = satisfaction_mental_health_Age, layout=c(1,5), ylab=NULL, as.percent=TRUE, main = list("How would you rate your satisfaction level \n  to the services received on the psychosocial first aid and counselling support to alleviate \n anxiety/stress etc  if you have used it?",x=unit(.55, "npc")), sub= list("By Age",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C","Black"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.7, lines=3, x = unit(.25,"npc")), resize.height.tuning=2, rightAxis = FALSE)   
+plot(satisfaction_mental_health_Age)
+```
+
+
+## Satisfaction Level From Mental Health Services by Setting
+```{r fig.dim=c(10,4)}
+satisfaction_mental_health_Setting<-Pakistan_raw1%>% group_by(Setting)  %>% count(satisfaction_mental_health, wt = Wt)
+satisfaction_mental_health_Setting<- spread(satisfaction_mental_health_Setting,satisfaction_mental_health, n)
+satisfaction_mental_health_Setting$Area <- "Satisfied Mental Health"
+names(satisfaction_mental_health_Setting) <- c("Setting","Dissatisfied","I did not access the service","Neither Satisfied nor Dissatisfied","Satisfied", "Very Dissatisfied", "Very satisfied","Area")
+col_order3 <- c("Setting","Area","Very Dissatisfied", "Dissatisfied", "I did not access the service","Neither Satisfied nor Dissatisfied","Satisfied" ,"Very satisfied")
+satisfaction_mental_health_Setting<- satisfaction_mental_health_Setting[, col_order3]
+satisfaction_mental_health_Setting[is.na(satisfaction_mental_health_Setting)] <- 0
+
+satisfaction_mental_health_Setting<-HH::likert(Area ~ .|Setting, data = satisfaction_mental_health_Setting, layout=c(1,2), ylab=NULL, as.percent=TRUE, main = list("How would you rate your satisfaction level \n  to the services received on the psychosocial first aid and counselling support to alleviate \n anxiety/stress etc  if you have used it?",x=unit(.55, "npc")), sub= list("By Setting",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C","Black"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=1, lines=1, x = unit(.25,"npc")), cex=1, resize.height.tuning=2, rightAxis = FALSE)   
+plot(satisfaction_mental_health_Setting)
+```
+
+
+## Satisfaction Level From Mental Health Services by Province
+```{r fig.dim=c(10,8)}
+satisfaction_mental_health_Province<-Pakistan_raw1%>% group_by(Province)  %>% count(satisfaction_mental_health, wt = Wt)
+satisfaction_mental_health_Province<- spread(satisfaction_mental_health_Province,satisfaction_mental_health, n)
+satisfaction_mental_health_Province$Area <- "Satisfied Mental Health"
+names(satisfaction_mental_health_Province) <- c("Province","Dissatisfied","I did not access the service","Neither Satisfied nor Dissatisfied","Satisfied", "Very Dissatisfied", "Very satisfied","Area")
+col_order3 <- c("Province","Area","Very Dissatisfied", "Dissatisfied", "I did not access the service","Neither Satisfied nor Dissatisfied","Satisfied" ,"Very satisfied")
+satisfaction_mental_health_Province<- satisfaction_mental_health_Province[, col_order3]
+satisfaction_mental_health_Province[is.na(satisfaction_mental_health_Province)] <- 0
+
+
+satisfaction_mental_health_Province<-HH::likert(Area ~ .|Province, data = satisfaction_mental_health_Province, layout=c(1,4), ylab=NULL, as.percent=TRUE, main = list("How would you rate your satisfaction level \n  to the services received on the psychosocial first aid and counselling support to alleviate \n anxiety/stress etc  if you have used it?",x=unit(.55, "npc")), sub= list("By Province",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C","Black"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.7, lines=3, x = unit(.25,"npc")), resize.height.tuning=2, rightAxis = FALSE)   
+plot(satisfaction_mental_health_Province)
+```
+
+
+## Satisfaction Level From Mental Health Services by Education
+```{r fig.dim=c(10,8)}
+satisfaction_mental_health_Education<-Pakistan_raw1%>% group_by(Edu1)  %>% count(satisfaction_mental_health, wt = Wt)
+satisfaction_mental_health_Education<- spread(satisfaction_mental_health_Education,satisfaction_mental_health, n)
+satisfaction_mental_health_Education$Area <- "Satisfied Mental Health"
+names(satisfaction_mental_health_Education) <- c("Education","Dissatisfied","I did not access the service","Neither Satisfied nor Dissatisfied","Satisfied", "Very Dissatisfied", "Very satisfied","Area")
+col_order3 <- c("Education","Area","Very Dissatisfied", "Dissatisfied", "I did not access the service","Neither Satisfied nor Dissatisfied","Satisfied" ,"Very satisfied")
+satisfaction_mental_health_Education<- satisfaction_mental_health_Education[, col_order3]
+satisfaction_mental_health_Education[is.na(satisfaction_mental_health_Education)] <- 0
+
+satisfaction_mental_health_Education<-HH::likert(Area ~ .|Education, data = satisfaction_mental_health_Education, layout=c(1,5), ylab=NULL, as.percent=TRUE, main = list("How would you rate your satisfaction level \n  to the services received on the psychosocial first aid and counselling support to alleviate \n anxiety/stress etc  if you have used it?",x=unit(.55, "npc")), sub= list("By Education",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C","Black"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.7, lines=5, x = unit(.25,"npc")), cex=1, resize.height.tuning=2, rightAxis = FALSE)   
+plot(satisfaction_mental_health_Education)
+```
+
+
+## Satisfaction Level From Mental Health Services by Sex and Setting
+```{r fig.dim=c(10,8)}
+satisfaction_mental_health_SexSet <- Pakistan_raw1 %>% group_by(Setting, Gender) %>% count(satisfaction_mental_health, wt = Wt)
+satisfaction_mental_health_SexSet <- spread(satisfaction_mental_health_SexSet, satisfaction_mental_health, n)
+satisfaction_mental_health_SexSet$SexSet <- paste(satisfaction_mental_health_SexSet$Setting," ", satisfaction_mental_health_SexSet$Gender)
+satisfaction_mental_health_SexSet <- satisfaction_mental_health_SexSet[-c(1:2)]
+satisfaction_mental_health_SexSet$Area <- "Satisfied Mental Health"
+names(satisfaction_mental_health_SexSet) <- c("Dissatisfied","I did not access the service","Neither Satisfied nor Dissatisfied","Satisfied", "Very Dissatisfied", "Very satisfied","Profile","Area")
+col_order3 <- c("Profile","Area","Very Dissatisfied", "Dissatisfied", "I did not access the service","Neither Satisfied nor Dissatisfied","Satisfied" ,"Very satisfied")
+satisfaction_mental_health_SexSet <- satisfaction_mental_health_SexSet[, col_order3]
+
+
+satisfaction_mental_health_SexSet[is.na(satisfaction_mental_health_SexSet)] <- 0
+
+
+
+satisfaction_mental_healthPlot_SexSet <-HH::likert(Area ~ .|Profile, data = satisfaction_mental_health_SexSet, as.percent=TRUE, main = list("How would you rate your satisfaction level \n  to the services received on the psychosocial first aid and counselling support to alleviate \n anxiety/stress etc  if you have used it?",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C","Black"), ylab = NULL, par.strip.text=list(cex=0.7, lines=2.5, x = unit(.05,"npc")), strip.left = TRUE, strip = FALSE, layout = c(3,2), rightAxis = FALSE)
+plot(satisfaction_mental_healthPlot_SexSet)
+
+
+
+
+```
+
+
+## Main Concern for Children during COVID-19
+```{r}
+concern_children_Pak<-new_df(concern_children_Pak,Pakistan_raw1,"concern_children",label,"concern_children")
+Barriers(concern_children_Pak,concern_children,Percentage,Percentage,label,"The main concern that I have for my children during COVID-19 is:","Percent of Respondents",concern_children,concern_children,Percentage)
+```
+
+## Main Concern for Children during COVID-19 by Sex
+```{r}
+Pak_concern_children_sex<-category_df(Pak_concern_children_sex,Pakistan_raw1,Gender,concern_children,"rad_perct",label,"Gender","concern_children","Recipients","Percentage","label")
+
+
+Barriers_Sex(Pak_concern_children_sex,concern_children,Percentage,Percentage,Percentage,Gender,label,Percentage,concern_children,Percentage,Gender,"The main concern that I have for my children during COVID-19 is:","Percentages of Respondents by Sex")
+```
+
+## Main Concern for Children during COVID-19 by Age
+```{r}
+Pak_concern_children_Age<-category_df(Pak_concern_children_Age,Pakistan_raw1,Age,concern_children,"rad_perct",label,"Age","concern_children","Recipients","Percentage","label")
+
+Barriers_Age(Pak_concern_children_Age,concern_children,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,concern_children,Percentage,Age,NULL,"The main concern that I have for my children during COVID-19 is:","Percentages of Respondents by Age")
+
+
+```
+
+## Main Concern for Children during COVID-19 by Setting
+```{r}
+Pak_concern_children_Setting<-category_df(Pak_concern_children_Setting,Pakistan_raw1,Setting,concern_children,"rad_perct",label,"Setting","concern_children","Recipients","Percentage","label")
+
+Barriers_Age(Pak_concern_children_Setting,concern_children,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,concern_children,Percentage,Setting,NULL,"The main concern that I have for my children during COVID-19 is:","Percentages of Respondents by Setting")
+
+
+```
+
+## Main Concern for Children during COVID-19 by Province
+```{r }
+Pak_concern_children_Province<-category_df(Pak_concern_children_Province,Pakistan_raw1,Province,concern_children,"rad_perct",label,"Province","concern_children","Recipients","Percentage","label")
+
+Barriers_Age(Pak_concern_children_Province,concern_children,Percentage,Percentage,Percentage,Province,~Province,2,label,Percentage,concern_children,Percentage,Province,NULL,"The main concern that I have for my children during COVID-19 is:","Percentages of Respondents by Province")
+
+
+```
+
+## Main Concern for Children during COVID-19 by Education
+```{r }
+Pak_concern_children_Education<-category_df(Pak_concern_children_Education,Pakistan_raw1,Edu1,concern_children,"rad_perct",label,"Education","concern_children","Recipients","Percentage","label")
+
+Barriers_Age(Pak_concern_children_Education,concern_children,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,concern_children,Percentage,Education,NULL,"The main concern that I have for my children during COVID-19 is:","Percentages of Respondents by Education")
+
+```
+ 
+## Main Concern for Children during COVID-19 by Sex and Setting
+```{r } 
+Pak_concern_childrenrural_urban<-urban_rural(Pak_concern_childrenrural,Pakistan_raw1,Setting,Gender,concern_children,concern_childrenperct,"Setting","Gender","concern_childrenperct","Percent_concern_childrenset")
+
+
+
+setting_gender(Pak_concern_childrenrural_urban,concern_childrenperct,Percent_concern_childrenset,"The main concern that I have for my children during COVID-19 is:","Percentages of Respondents by by Sex and Setting")
+
+
+``` 
+ 
+
+		
+

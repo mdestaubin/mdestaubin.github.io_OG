@@ -1,0 +1,1578 @@
+---
+title: "Community Rapid Assessment - Kenya 1st Round"
+author: "Andres Ochoa Toasa - UNICEF EO ILU"
+date: "September 23, 2020"
+output: 
+  html_document: default
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+The followingo document includes all descriptive statistics related to be delivered on each round of CRA per country. Each graph is separated into separate sections or chunks to facilitate display. 
+
+```{r message=FALSE}
+#Packages Needed
+library(readxl)
+library(readr)
+library(haven)
+library(car)
+library(plyr)
+library(dplyr)
+library(foreign)
+library(rgeos)
+library(maptools)
+library(colorRamps)
+library(RColorBrewer)
+library(ggplot2)
+library(mapproj)
+library(rgdal)
+library(sf)
+library(colorspace)
+library(raster)
+library(treemap)
+library(ggplotify)
+library(ggrepel)
+library(ggalt)
+library(ggthemes)
+library(ggpubr)
+library(scales)
+library(sjPlot)
+library(likert)
+library(tidyr)
+library(formattable)
+library(data.table)
+library(HH)
+library(tidyverse)
+
+if(!require(pacman))install.packages("pacman")
+
+pacman::p_load('dplyr', 'tidyr', 'gapminder',
+               'ggplot2',  'ggalt',
+               'forcats', 'R.utils', 'png', 
+               'grid', 'ggpubr', 'scales',
+               'bbplot')
+
+
+
+customGreen0 = "#DeF7E9"
+customGreen = "#71CA97"
+customRed = "#ff7f7f"
+
+
+Kenya_Raw1 <- read_excel("C:/Users/andre/OneDrive - UNICEF/CRA - ESARO/Kenya/Data/First Round/Kenya Raw Data Results.xls")
+Kenya_Raw2 <- Kenya_Raw1
+
+#Transformations Kenya
+Kenya_Raw1$`Q1. Region (Multiple Choice Question)` [Kenya_Raw1$`Q1. Region (Multiple Choice Question)` == "1. Nairobi"] <- "Nairobi"
+Kenya_Raw1$`Q1. Region (Multiple Choice Question)` [Kenya_Raw1$`Q1. Region (Multiple Choice Question)` == "4. Rift Valley"] <- "Rift \nValley"
+Kenya_Raw1$`Q1. Region (Multiple Choice Question)` [Kenya_Raw1$`Q1. Region (Multiple Choice Question)` == "2. Nyanza"] <- "Nyanza"
+Kenya_Raw1$`Q1. Region (Multiple Choice Question)` [Kenya_Raw1$`Q1. Region (Multiple Choice Question)` == "5. Central"] <- "Central"
+Kenya_Raw1$`Q1. Region (Multiple Choice Question)` [Kenya_Raw1$`Q1. Region (Multiple Choice Question)` == "3. Western"] <- "Western"
+Kenya_Raw1$`Q1. Region (Multiple Choice Question)` [Kenya_Raw1$`Q1. Region (Multiple Choice Question)` == "8. Coastal"] <- "Coastal"
+Kenya_Raw1$`Q1. Region (Multiple Choice Question)` [Kenya_Raw1$`Q1. Region (Multiple Choice Question)` == "6. Eastern"] <- "Eastern"
+Kenya_Raw1$`Q1. Region (Multiple Choice Question)` [Kenya_Raw1$`Q1. Region (Multiple Choice Question)` == "7. North Eastern"] <- "North \nEastern"
+
+Kenya_Raw2$`Q1. Region (Multiple Choice Question)` [Kenya_Raw2$`Q1. Region (Multiple Choice Question)` == "1. Nairobi"] <- "Nairobi"
+Kenya_Raw2$`Q1. Region (Multiple Choice Question)` [Kenya_Raw2$`Q1. Region (Multiple Choice Question)` == "4. Rift Valley"] <- "Rift Valley"
+Kenya_Raw2$`Q1. Region (Multiple Choice Question)` [Kenya_Raw2$`Q1. Region (Multiple Choice Question)` == "2. Nyanza"] <- "Nyanza"
+Kenya_Raw2$`Q1. Region (Multiple Choice Question)` [Kenya_Raw2$`Q1. Region (Multiple Choice Question)` == "5. Central"] <- "Central"
+Kenya_Raw2$`Q1. Region (Multiple Choice Question)` [Kenya_Raw2$`Q1. Region (Multiple Choice Question)` == "3. Western"] <- "Western"
+Kenya_Raw2$`Q1. Region (Multiple Choice Question)` [Kenya_Raw2$`Q1. Region (Multiple Choice Question)` == "8. Coastal"] <- "Coastal"
+Kenya_Raw2$`Q1. Region (Multiple Choice Question)` [Kenya_Raw2$`Q1. Region (Multiple Choice Question)` == "6. Eastern"] <- "Eastern"
+Kenya_Raw2$`Q1. Region (Multiple Choice Question)` [Kenya_Raw2$`Q1. Region (Multiple Choice Question)` == "7. North Eastern"] <- "North Eastern"
+
+Kenya_Raw1$`Q2. Gender (Multiple Choice Question)` [Kenya_Raw1$`Q2. Gender (Multiple Choice Question)` == "2. Female"] <- "Female"
+Kenya_Raw1$`Q2. Gender (Multiple Choice Question)` [Kenya_Raw1$`Q2. Gender (Multiple Choice Question)` == "1. Male"] <- "Male"
+
+Kenya_Raw1$`Q3. Age (Multiple Choice Question)` [Kenya_Raw1$`Q3. Age (Multiple Choice Question)` == "2. 18-24"] <- "18-24 \nYrs Old"
+Kenya_Raw1$`Q3. Age (Multiple Choice Question)` [Kenya_Raw1$`Q3. Age (Multiple Choice Question)` == "3. 25-34"] <- "25-34 \nYrs Old"
+Kenya_Raw1$`Q3. Age (Multiple Choice Question)` [Kenya_Raw1$`Q3. Age (Multiple Choice Question)` == "4. 35-44"] <- "35-44 \nYrs Old"
+Kenya_Raw1$`Q3. Age (Multiple Choice Question)` [Kenya_Raw1$`Q3. Age (Multiple Choice Question)` == "5. 45+"] <- "45 Yrs \nOld & > "
+Kenya_Raw1$`Q3. Age (Multiple Choice Question)` [Kenya_Raw1$`Q3. Age (Multiple Choice Question)` == "1. <18"] <- "<18 \nYrs Old"
+
+Kenya_Raw1$`Q4. Setting (Multiple Choice Question)` [Kenya_Raw1$`Q4. Setting (Multiple Choice Question)` == "1. Urban"] <- "Urban"
+Kenya_Raw1$`Q4. Setting (Multiple Choice Question)` [Kenya_Raw1$`Q4. Setting (Multiple Choice Question)` == "2. Rural"] <- "Rural"
+
+Kenya_Raw1$`Q8. Barriers topracticing protective behaviours (Multiple Choice Question)`[Kenya_Raw1$`Q8. Barriers topracticing protective behaviours (Multiple Choice Question)` == "1. Puts job, relationship, and other important things at risk"] <- "Puts job, relationship, \nand other important things at risk"
+
+Kenya_Raw1$`Q8. Barriers topracticing protective behaviours (Multiple Choice Question)`[Kenya_Raw1$`Q8. Barriers topracticing protective behaviours (Multiple Choice Question)` == "2. Lack of infrastructure (running water, washrooms, crowded neighborhood)"] <- "Lack of infrastructure \n(running water, washrooms, \ncrowded neighborhood)"
+
+Kenya_Raw1$`Q8. Barriers topracticing protective behaviours (Multiple Choice Question)`[Kenya_Raw1$`Q8. Barriers topracticing protective behaviours (Multiple Choice Question)` == "3. Measures do not work"] <- "Measures do not work"
+
+Kenya_Raw1$`Q8. Barriers topracticing protective behaviours (Multiple Choice Question)`[Kenya_Raw1$`Q8. Barriers topracticing protective behaviours (Multiple Choice Question)` == "4. People will make fun of me"] <- "People will make fun of me"
+
+Kenya_Raw1$`Q8. Barriers topracticing protective behaviours (Multiple Choice Question)`[Kenya_Raw1$`Q8. Barriers topracticing protective behaviours (Multiple Choice Question)` == "5. Faith or religion protects me"] <- "Faith or religion protects me"
+
+Kenya_Raw1$`Q8. Barriers topracticing protective behaviours (Multiple Choice Question)`[Kenya_Raw1$`Q8. Barriers topracticing protective behaviours (Multiple Choice Question)` == "6. Other reasons/None of the above"] <- "Other reasons/None of the above"
+
+
+Kenya_Raw1 <- Kenya_Raw1 %>% dplyr::mutate_if(is.character,as.factor)
+Kenya_Raw1 <- as.data.frame(Kenya_Raw1)
+
+Kenya_Raw2 <- Kenya_Raw2 %>% dplyr::mutate_if(is.character,as.factor)
+Kenya_Raw2 <- as.data.frame(Kenya_Raw2)
+
+#Total Respondents Distribution
+t1 <-plyr::count(Kenya_Raw1$`Call Status`)
+##formattable(t1)
+
+#Subsetting
+Kenya_Round1 <-subset(Kenya_Raw1,`Intro (Multiple Choice Question)`== "1. Yes-->Participate" & `Call Status` == "Finished (complete)" & `Conclusion (Message)` == "Conclusion")
+
+Kenya_Children <-subset(Kenya_Round1, `Q10. Children of school-going age? (Multiple Choice Question)` == "1. Yes")
+
+Kenya_RoundM <-subset(Kenya_Raw2,`Intro (Multiple Choice Question)`== "1. Yes-->Participate" & `Call Status` == "Finished (complete)" & `Conclusion (Message)` == "Conclusion") #Map for correct labels untouched
+
+```
+
+# Respondents Demographics
+
+## Map of Respondents Across Provinces
+
+The map used provinces as telephone number prefixes were associated with provinces. The current county administration is maintained but overlayed by each provinces having a similar color corresponding to the density of respondents on what would had been the provinces.
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+##Prepare Map
+#Responses Map Shape File
+KEN_gadm_1 <- getData("GADM", country = 'KEN', level=1)
+KEN_gadm_19 <- fortify(KEN_gadm_1, region="NAME_1")
+Kenya_Provinces <- read_excel("Kenya Provinces.xlsx") #Provinces were added manually as no longer administrative division
+KEN_gadm_2 <- merge(KEN_gadm_19, Kenya_Provinces, by=c("id"))
+
+KEN_gadm_2$piece <- as.factor(KEN_gadm_2$piece)
+KEN_gadm_2$group <- as.factor(KEN_gadm_2$group)
+KEN_gadm_2$prov <- as.factor(KEN_gadm_2$prov)
+
+
+#Aggregate Responses by State
+KEN_Map <- plyr::count(Kenya_RoundM$`Q1. Region (Multiple Choice Question)`)
+names(KEN_Map) <- c("prov","Respondents")
+KEN_gadm_2 <- merge(KEN_Map, KEN_gadm_2, by=c("prov"))
+
+
+#Map Style Function
+theme_map1 <- function(...) {theme_minimal() + theme(text = element_text(color = "#22211d"), axis.line = element_blank(), axis.text.x = element_blank(), axis.text.y = element_blank(), axis.ticks = element_blank(), axis.title.x = element_blank(), axis.title.y = element_blank(), panel.grid.minor = element_line(color = "#ebebe5", size = 0.2), panel.grid.major = element_line(color = "#ebebe5", size = 0.2), plot.background = element_rect(fill = "#f5f5f2", color = NA), panel.background = element_rect(fill = "#f5f5f2", color = NA), legend.background = element_rect(fill = "#f5f5f2", color = NA), panel.border = element_blank(),  ... )}
+
+
+##Region Map
+ggplot() +  geom_map(data = KEN_gadm_2, aes(map_id = id, fill = `Respondents`), colour = "white", map = KEN_gadm_19, size = 0.1) +  expand_limits(x = KEN_gadm_19$long, y = KEN_gadm_19$lat) +  geom_polygon() + scale_fill_viridis_c(option = "magma", direction = -1, name = "Respondents \nDensity") + labs(x = NULL, y = NULL, fill = NULL, title = "CRA Kenya 1st Round Respondents Distribution", caption = NULL) + theme_map1() + theme(legend.key = element_rect(colour = "transparent", fill = "white")) + scale_x_discrete(breaks = NULL) + scale_y_continuous(expand = c(0,0), breaks = NULL)  + theme(legend.background = element_rect(fill = alpha('white', 0.0)), legend.text = element_text(size = 7, color = "#4e4d47"), plot.title = element_text(color = "#4e4d47", hjust = 1), legend.title = element_text(size = 8)) + coord_equal()
+```
+
+## Sex Distribution
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+#Sex
+Kenya_Sex <- plyr::count(Kenya_Round1$`Q2. Gender (Multiple Choice Question)`)
+Kenya_Sex$Sex_perct <- Kenya_Sex$freq / sum(Kenya_Sex$freq)
+Kenya_SexGroup <- Kenya_Round1 %>% count(`Q2. Gender (Multiple Choice Question)`, `Q1. Region (Multiple Choice Question)`)
+Kenya_SexGroup <- Kenya_SexGroup %>% group_by(`Q1. Region (Multiple Choice Question)`) %>% mutate(Sex_perct = round(n/sum(n),3))
+Kenya_SexGroup2 <- Kenya_Round1 %>% count(`Q1. Region (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`)
+names(Kenya_SexGroup2) <- c("Region","Sex","n")
+Kenya_SexGroup2 <- Kenya_SexGroup2 %>% group_by(Region) %>% mutate(Sex_perct = round(n/sum(n),3))
+Kenya_SexGroup2 <- Kenya_SexGroup2[-c(3)]
+Kenya_SexGroup2 <- spread(Kenya_SexGroup2, Sex, Sex_perct)
+Kenya_SexGroup3 <- Kenya_Round1 %>% count(`Q1. Region (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`, `Q4. Setting (Multiple Choice Question)`)
+Kenya_SexGroup3 <- Kenya_SexGroup3 %>% group_by(`Q1. Region (Multiple Choice Question)`) %>% mutate(Sex_perct = round(n/sum(n),3))
+Kenya_SexGroup3 <- Kenya_SexGroup3 %>% group_by(`Q1. Region (Multiple Choice Question)`,`Q2. Gender (Multiple Choice Question)`) %>% mutate(Set_perct = round(n/sum(n),3))
+names(Kenya_SexGroup3) <- c("Region","Sex","Set","n","Sex_perct","Set_perct")
+
+##Table Sex
+
+##Dumbbell Plot Sex
+Kenya_Sex$Level <- "National" #1 National
+Kenya_Sex1 <- Kenya_Sex[-c(2)]
+Kenya_Sex2 <- spread(Kenya_Sex1, x, Sex_perct)
+Kenya_Sex2$labelF <- paste("Female\n",round(100*(Kenya_Sex2$Female),2),"%")
+Kenya_Sex2$labelM <- paste("Male\n",round(100*(Kenya_Sex2$Male),2),"%")
+  
+ggplot(Kenya_Sex2, aes(x=Male, xend=Female, y=Level, group=Level)) + 
+        geom_dumbbell(color="#F7BC08", 
+                      size=2.5, 
+                      colour_x = "#395B74") +  
+        scale_x_continuous(label=percent) + 
+        labs(x=NULL, y=NULL, 
+             title="Sex Respondents Distribution", 
+             subtitle="Female and Male Respondents Proportion at National Level") +
+        theme(plot.title = element_text(hjust=0.5, face="bold"),
+              plot.background=element_rect(fill="#f7f7f7"),
+              panel.background=element_rect(fill="#f7f7f7"),
+              panel.grid.minor=element_blank(),
+              panel.grid.major.y=element_blank(),
+              panel.grid.major.x=element_line(),
+              axis.ticks=element_blank(),
+              legend.position="top",
+              panel.border=element_blank()) + coord_cartesian(xlim = c(0.25, 0.75)) + geom_text( data = filter(Kenya_Sex2, Level == "National"), aes(x = Female, y = Level), label = Kenya_Sex2$labelF, fontface = "bold", color = "#F7BC08",
+vjust = -0.75, hjust = 0.75) + geom_text( data = filter(Kenya_Sex2, Level == "National"), aes(x = Male, y = Level), label = Kenya_Sex2$labelM, fontface = "bold", color = "#395B74", vjust = -0.75, hjust = 0.75) + theme_clean() 
+
+Kenya_SexGroup <- Kenya_SexGroup[-c(3)]
+
+```
+
+## Sex Distribution by Province
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+
+ggplot(Kenya_SexGroup2, aes(x=Male, xend=Female, y= Region, group=Region)) + 
+        geom_dumbbell(color="#F7BC08", 
+                      size=2, 
+                      colour_x = "#395B74") +  
+        scale_x_continuous(label=percent) + 
+        labs(x=NULL, y=NULL, 
+             title="Sex Respondents by Province Distribution", 
+             subtitle="Female and Male Respondents") +
+        theme(plot.title = element_text(hjust=0.5, face="bold"),
+              plot.background=element_rect(fill="#f7f7f7"),
+              panel.background=element_rect(fill="#f7f7f7"),
+              panel.grid.minor=element_blank(),
+              panel.grid.major.y=element_blank(),
+              panel.grid.major.x=element_line(),
+              axis.ticks=element_blank(),
+              legend.position="top",
+              panel.border=element_blank()) + coord_cartesian(xlim = c(0.25, 0.75)) + geom_text( data = Kenya_SexGroup2, aes(x = Female, y = Region), label = scales::percent(Kenya_SexGroup2$Female), fontface = "bold", color = "#F7BC08", size = 2.75, vjust = 1.5) + geom_text( data = Kenya_SexGroup2, aes(x = Male, y = Region), label = scales::percent(Kenya_SexGroup2$Male), fontface = "bold", color = "#395B74", size = 2.75, vjust = 1.5) + theme_clean() + geom_text(data =  Kenya_SexGroup2, aes(x = Female, y = Region, label = "F"), fontface = "bold", color = "#F7BC08", size = 3, vjust = -0.75) + geom_text(data =  Kenya_SexGroup2, aes(x = Male, y = Region , label = "M"), fontface = "bold", color = "#395B74", size = 3, vjust = -0.75)
+```
+
+## Age Distribution
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+
+#Age
+Kenya_Age <- plyr::count(Kenya_Round1$`Q3. Age (Multiple Choice Question)`)
+Kenya_Age$Age_perct <- round(Kenya_Age$freq / sum(Kenya_Age$freq),4)
+Kenya_AgeGroup <- Kenya_Round1 %>% count(`Q2. Gender (Multiple Choice Question)`,`Q3. Age (Multiple Choice Question)`)
+Kenya_AgeGroup <- Kenya_AgeGroup %>% group_by(`Q3. Age (Multiple Choice Question)`) %>% mutate(Sex_perct = round(n/sum(n),3))
+
+##Table Age
+
+
+##Bar Chart Age
+
+ggplot(Kenya_Age, aes(x = x, y = Age_perct)) + geom_bar(stat = "identity", position="identity", fill="#1380A1") + geom_text(aes(label= scales::percent(Age_perct, accuracy = 0.01), y = Age_perct, x = x), vjust =  1.4, size = 4.5, color = "white") + geom_hline(yintercept = 0, size = 1, colour="#333333")+ labs(title="Age Distribution",subtitle = "Respondents Age Groups") +theme_clean() + xlab(NULL) +ylab("Percentage") + scale_y_continuous(labels = scales::percent)
+```
+
+## Age Distribution by Sex
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+ggplot(Kenya_AgeGroup, aes(x = `Q3. Age (Multiple Choice Question)`, y = Sex_perct, fill = `Q2. Gender (Multiple Choice Question)` )) + geom_bar(stat = "identity", position="dodge") + geom_text(aes(label= scales::percent(Sex_perct, accuracy = 0.1), y = Sex_perct, x = `Q3. Age (Multiple Choice Question)`), vjust =  1.4, size = 3.25, color = "white", position = position_dodge(width = 1), fontface = "bold") + geom_hline(yintercept = 0, size = 1, colour="#333333")+ labs(title="Sex Distribution by Age",subtitle = "Respondents Sex by Age Groups", fill = "Sex") +theme_clean() + xlab(NULL) +ylab("Percentage") + scale_y_continuous(labels = scales::percent) + theme(legend.position = "bottom")
+```
+
+## Education - Not Available for Kenya
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+
+#Education - Not Available for Kenya
+#Kenya_Edu <- plyr::count(Kenya_Round1$`Q4. Setting (Multiple Choice Question)`)
+#Kenya_Edu$Edu_perct <- round(Kenya_Edu$freq / sum(Kenya_Edu$freq),4)
+
+##Table Education
+
+##Bar Chart Education
+##ggplot(Kenya_Edu, aes(x = x, y = Edu_perct)) + geom_bar(stat = "identity", position="identity", fill="#1380A1") + geom_text(aes(label= scales::percent(Edu_perct, accuracy = 0.01), y = Edu_perct, x = x), vjust =  1.4, size = 4.5, color = "white") + geom_hline(yintercept = 0, size = 1, colour="#333333")+ labs(title="Education Distribution",subtitle = "Respondents Education Groups") +theme_clean() + xlab(NULL) +ylab("Percentage") + scale_y_continuous(labels = scales::percent)
+```
+
+## Urban/Rural Setting Distribution
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+
+#Setting
+Kenya_Set <- plyr::count(Kenya_Round1$`Q4. Setting (Multiple Choice Question)`)
+Kenya_Set$Set_perct <- round(Kenya_Set$freq / sum(Kenya_Set$freq),4)
+Kenya_SetGroup <- Kenya_Round1 %>% count(`Q4. Setting (Multiple Choice Question)`,`Q1. Region (Multiple Choice Question)`)
+Kenya_SetGroup <- Kenya_SetGroup %>% group_by(`Q1. Region (Multiple Choice Question)`) %>% mutate(Set_perct = round(n/sum(n),3))
+
+##Table Setting
+
+##Bar Chart Setting
+ggplot(Kenya_Set, aes(x = x, y = Set_perct)) + geom_bar(stat = "identity", position="identity", fill="#1380A1") + geom_text(aes(label= scales::percent(Set_perct, accuracy = 0.01), y = Set_perct, x = x), vjust =  1.4, size = 4.5, color = "white") + geom_hline(yintercept = 0, size = 1, colour="#333333")+ labs(title="Urban / Rural Setting Distribution",subtitle = "Respondents Urban / Rural Settings Percentages") +theme_clean() + xlab(NULL) +ylab("Percentage") + scale_y_continuous(labels = scales::percent)
+```
+
+## Urban/Rural Setting by Province
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+ggplot(Kenya_SetGroup, aes(x = `Q1. Region (Multiple Choice Question)`, y = Set_perct, fill = `Q4. Setting (Multiple Choice Question)` )) + geom_bar(stat = "identity", position="dodge") + geom_text(aes(label= scales::percent(Set_perct, accuracy = 0.1), y = Set_perct, x = `Q1. Region (Multiple Choice Question)`), vjust =  -0.25, size = 2.9, color = "black", position = position_dodge(width = 1), fontface = "bold") + geom_hline(yintercept = 0, size = 1, colour="#333333")+ labs(title="Rural / Urban Distribution by Province",subtitle = "Respondents Setting", fill = "Sex") +theme_clean() + xlab(NULL) +ylab("Percentage") + scale_y_continuous(labels = scales::percent) + theme(legend.position = "bottom")
+```
+
+## Urban/Rural Setting By Sex and Province
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+
+##Tree Chart 
+
+ggplot(Kenya_SexGroup3, aes(x = Sex, y = Sex_perct, fill = Set )) + geom_bar(stat = "identity") + geom_hline(yintercept = 0, size = 1, colour="#333333")+ labs(title="Rural/Urban Distribution by Sex and Province",subtitle = "Rural/Urban Setting on Each Province by Sex", fill = "Setting") +theme_clean() + xlab(NULL) +ylab("Percentage") + scale_y_continuous(labels = scales::percent_format(accuracy = 1)) + theme(legend.position = "bottom") + facet_wrap(Region ~ ., scales = "free_y" ,nrow = 2)
+```
+
+## COVID-19 Protective Measures Practice
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+
+#Handwashing, Mask Use, and Social Distance
+
+KEN_LikertHandwashing <- plyr::count(Kenya_Round1$`Q5. Handwashing Frequency (Multiple Choice Question)`)
+KEN_LikertHandwashing$Name <- "Handwashing" 
+KEN_LikertHandwashing <- spread(KEN_LikertHandwashing, x, freq)
+KEN_LikertMask <- plyr::count(Kenya_Round1$`Q6. Face mask wearing Frequency (Multiple Choice Question)`)
+KEN_LikertMask$Name <- "Mask Use"
+KEN_LikertMask <- spread(KEN_LikertMask, x, freq)
+KEN_LikertSocDist <- plyr::count(Kenya_Round1$`Q7. Social Distance Frequency in last month (Multiple Choice Question)`)
+KEN_LikertSocDist$Name <- "Social Distance"
+KEN_LikertSocDist <- spread(KEN_LikertSocDist, x, freq)
+KEN_Likert <- rbind(KEN_LikertHandwashing, KEN_LikertMask)
+KEN_Likert <- rbind(KEN_Likert, KEN_LikertSocDist)
+names(KEN_Likert) <-c("Practice", "All of \nthe time", "Most of \nthe time", "Sometimes", "Rarely", "Never")
+col_order <- c("Practice", "Never", "Rarely", "Sometimes","Most of \nthe time","All of \nthe time")
+KEN_Likert <- KEN_Likert[, col_order]
+
+KEN_LikertPlot <-HH::likert(Practice ~ ., data = KEN_Likert, ylab=NULL, as.percent=TRUE, main = list(" Protective Practices CRA COVID-19 \n1st Round Kenya",x=unit(.55, "npc")), sub= list("Frequency of Practice",x=unit(.57, "npc")),xlim=c(-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ), rightAxis = FALSE)
+plot(KEN_LikertPlot)
+```
+
+## Protective Practices by Sex
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+
+#Likert by Sex
+KEN_LikertHandwashingSex <- Kenya_Round1 %>% group_by(`Q2. Gender (Multiple Choice Question)`)  %>% count(`Q5. Handwashing Frequency (Multiple Choice Question)`)
+KEN_LikertHandwashingSex$Name <- "Handwashing" 
+KEN_LikertHandwashingSex <- spread(KEN_LikertHandwashingSex, `Q5. Handwashing Frequency (Multiple Choice Question)`, n)
+KEN_LikertMaskSex <- Kenya_Round1 %>% group_by(`Q2. Gender (Multiple Choice Question)`)  %>% count(`Q6. Face mask wearing Frequency (Multiple Choice Question)`)
+KEN_LikertMaskSex$Name <- "Mask Use" 
+KEN_LikertMaskSex <- spread(KEN_LikertMaskSex, `Q6. Face mask wearing Frequency (Multiple Choice Question)`, n)
+KEN_LikertSocDistSex <- Kenya_Round1 %>% group_by(`Q2. Gender (Multiple Choice Question)`)  %>% count(`Q7. Social Distance Frequency in last month (Multiple Choice Question)`)
+KEN_LikertSocDistSex$Name <- "Social Distance" 
+KEN_LikertSocDistSex <- spread(KEN_LikertSocDistSex, `Q7. Social Distance Frequency in last month (Multiple Choice Question)`, n)
+KEN_LikertSex <- rbind(KEN_LikertHandwashingSex, KEN_LikertMaskSex)
+KEN_LikertSex <- rbind(KEN_LikertSex, KEN_LikertSocDistSex)
+names(KEN_LikertSex) <-c("Sex","Practice", "All of \nthe time", "Most of \nthe time", "Sometimes", "Rarely", "Never")
+col_orderSex <- c("Sex","Practice", "Never", "Rarely", "Sometimes","Most of \nthe time","All of \nthe time")
+KEN_LikertSex <- KEN_LikertSex[, col_orderSex]
+
+KEN_LikertPlotSex <-HH::likert(Practice ~ .|Sex, data = KEN_LikertSex, layout=c(1,2), ylab=NULL, as.percent=TRUE, main = list(" Protective Practices CRA COVID-19 by Sex \n1st Round Kenya",x=unit(.55, "npc")), sub= list("Frequency of Practice",x=unit(.57, "npc")),xlim=c(-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=1, lines=1, x = unit(.25,"npc")), cex=1, resize.height.tuning=2)   
+plot(KEN_LikertPlotSex)
+```
+
+## Protective Practices by Age
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+#Likert by Age
+KEN_LikertHandwashingAge <- Kenya_Round1 %>% group_by(`Q3. Age (Multiple Choice Question)`)  %>% count(`Q5. Handwashing Frequency (Multiple Choice Question)`)
+KEN_LikertHandwashingAge$Name <- "Handwashing" 
+KEN_LikertHandwashingAge <- spread(KEN_LikertHandwashingAge, `Q5. Handwashing Frequency (Multiple Choice Question)`, n)
+KEN_LikertMaskAge <- Kenya_Round1 %>% group_by(`Q3. Age (Multiple Choice Question)`)  %>% count(`Q6. Face mask wearing Frequency (Multiple Choice Question)`)
+KEN_LikertMaskAge$Name <- "Mask Use" 
+KEN_LikertMaskAge <- spread(KEN_LikertMaskAge, `Q6. Face mask wearing Frequency (Multiple Choice Question)`, n)
+KEN_LikertSocDistAge <- Kenya_Round1 %>% group_by(`Q3. Age (Multiple Choice Question)`)  %>% count(`Q7. Social Distance Frequency in last month (Multiple Choice Question)`)
+KEN_LikertSocDistAge$Name <- "Social Distance" 
+KEN_LikertSocDistAge <- spread(KEN_LikertSocDistAge, `Q7. Social Distance Frequency in last month (Multiple Choice Question)`, n)
+KEN_LikertAge <- rbind(KEN_LikertHandwashingAge, KEN_LikertMaskAge)
+KEN_LikertAge <- rbind(KEN_LikertAge, KEN_LikertSocDistAge)
+names(KEN_LikertAge) <-c("Age","Practice", "All of \nthe time", "Most of \nthe time", "Sometimes", "Rarely", "Never")
+col_orderAge <- c("Age","Practice", "Never", "Rarely", "Sometimes","Most of \nthe time","All of \nthe time")
+KEN_LikertAge <- KEN_LikertAge[, col_orderAge]
+KEN_LikertAge[is.na(KEN_LikertAge)] <- 0
+
+KEN_LikertPlotAge <-HH::likert(Practice ~ .|Age, data = KEN_LikertAge, as.percent=TRUE, main = list(" Protective Practices CRA COVID-19 by Age \n1st Round Kenya",x=unit(.55, "npc")), sub= list("Frequency of Practice",x=unit(.57, "npc")),xlim=c(-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ), ylab = NULL, par.strip.text=list(cex=0.65, lines=2, x = unit(.05,"npc")), strip.left = TRUE, strip = FALSE, layout = c(1,5))
+plot(KEN_LikertPlotAge)
+```
+
+## Protective Practices by Urban/Rural Setting
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+#Likert by Set
+KEN_LikertHandwashingSet <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`)  %>% count(`Q5. Handwashing Frequency (Multiple Choice Question)`)
+KEN_LikertHandwashingSet$Name <- "Handwashing" 
+KEN_LikertHandwashingSet <- spread(KEN_LikertHandwashingSet, `Q5. Handwashing Frequency (Multiple Choice Question)`, n)
+KEN_LikertMaskSet <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`)  %>% count(`Q6. Face mask wearing Frequency (Multiple Choice Question)`)
+KEN_LikertMaskSet$Name <- "Mask Use" 
+KEN_LikertMaskSet <- spread(KEN_LikertMaskSet, `Q6. Face mask wearing Frequency (Multiple Choice Question)`, n)
+KEN_LikertSocDistSet <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`)  %>% count(`Q7. Social Distance Frequency in last month (Multiple Choice Question)`)
+KEN_LikertSocDistSet$Name <- "Social Distance" 
+KEN_LikertSocDistSet <- spread(KEN_LikertSocDistSet, `Q7. Social Distance Frequency in last month (Multiple Choice Question)`, n)
+KEN_LikertSet <- rbind(KEN_LikertHandwashingSet, KEN_LikertMaskSet)
+KEN_LikertSet <- rbind(KEN_LikertSet, KEN_LikertSocDistSet)
+names(KEN_LikertSet) <-c("Set","Practice", "All of \nthe time", "Most of \nthe time", "Sometimes", "Rarely", "Never")
+col_orderSet <- c("Set","Practice", "Never", "Rarely", "Sometimes","Most of \nthe time","All of \nthe time")
+KEN_LikertSet <- KEN_LikertSet[, col_orderSet]
+KEN_LikertSet[is.na(KEN_LikertSet)] <- 0
+
+KEN_LikertPlotSet <-HH::likert(Practice ~ .|Set, data = KEN_LikertSet, layout=c(1,2), ylab=NULL, as.percent=TRUE, main = list(" Protective Practices CRA COVID-19 by Setting \n1st Round Kenya",x=unit(.55, "npc")), sub= list("Frequency of Practice",x=unit(.57, "npc")),xlim=c(-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=1, lines=1, x = unit(.25,"npc")), cex=1, resize.height.tuning=2)   
+plot(KEN_LikertPlotSet)
+```
+
+## Protective Practices by Province
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+#Likert by Region
+
+KEN_LikertHandwashingRegion <- Kenya_Round1 %>% group_by(`Q1. Region (Multiple Choice Question)`)  %>% count(`Q5. Handwashing Frequency (Multiple Choice Question)`)
+KEN_LikertHandwashingRegion$Name <- "Handwashing" 
+KEN_LikertHandwashingRegion <- spread(KEN_LikertHandwashingRegion, `Q5. Handwashing Frequency (Multiple Choice Question)`, n)
+KEN_LikertMaskRegion <- Kenya_Round1 %>% group_by(`Q1. Region (Multiple Choice Question)`)  %>% count(`Q6. Face mask wearing Frequency (Multiple Choice Question)`)
+KEN_LikertMaskRegion$Name <- "Mask Use" 
+KEN_LikertMaskRegion <- spread(KEN_LikertMaskRegion, `Q6. Face mask wearing Frequency (Multiple Choice Question)`, n)
+KEN_LikertSocDistRegion <- Kenya_Round1 %>% group_by(`Q1. Region (Multiple Choice Question)`)  %>% count(`Q7. Social Distance Frequency in last month (Multiple Choice Question)`)
+KEN_LikertSocDistRegion$Name <- "Social Distance" 
+KEN_LikertSocDistRegion <- spread(KEN_LikertSocDistRegion, `Q7. Social Distance Frequency in last month (Multiple Choice Question)`, n)
+KEN_LikertRegion <- rbind(KEN_LikertHandwashingRegion, KEN_LikertMaskRegion)
+KEN_LikertRegion <- rbind(KEN_LikertRegion, KEN_LikertSocDistRegion)
+names(KEN_LikertRegion) <-c("Region","Practice", "All of \nthe time", "Most of \nthe time", "Sometimes", "Rarely", "Never")
+col_orderRegion <- c("Region","Practice", "Never", "Rarely", "Sometimes","Most of \nthe time","All of \nthe time")
+KEN_LikertRegion <- KEN_LikertRegion[, col_orderRegion]
+KEN_LikertRegion[is.na(KEN_LikertRegion)] <- 0
+
+KEN_LikertPlotRegion <-HH::likert(Practice ~ .|Region, data = KEN_LikertRegion, as.percent=TRUE, main = list(" Protective Practices CRA COVID-19 by Province\n1st Round Kenya ",x=unit(.55, "npc")), sub= list("Frequency of Practice",x=unit(.57, "npc")),xlim=c(-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ), ylab = NULL, par.strip.text=list(cex=0.65, lines=2.5, x = unit(.05,"npc")), strip.left = TRUE, strip = FALSE, layout = c(1,4))
+plot(KEN_LikertPlotRegion)
+```
+
+## Protective Practices by Sex and Urban/Rural Setting
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+##Likert Sex and Setting
+
+KEN_LikertHandwashingSexSet <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% count(`Q5. Handwashing Frequency (Multiple Choice Question)`)
+KEN_LikertHandwashingSexSet$Name <- "Handwashing" 
+KEN_LikertHandwashingSexSet <- spread(KEN_LikertHandwashingSexSet, `Q5. Handwashing Frequency (Multiple Choice Question)`, n)
+KEN_LikertMaskSexSet <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`)  %>% count(`Q6. Face mask wearing Frequency (Multiple Choice Question)`)
+KEN_LikertMaskSexSet$Name <- "Mask Use" 
+KEN_LikertMaskSexSet <- spread(KEN_LikertMaskSexSet, `Q6. Face mask wearing Frequency (Multiple Choice Question)`, n)
+KEN_LikertSocDistSexSet <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`)  %>% count(`Q7. Social Distance Frequency in last month (Multiple Choice Question)`)
+KEN_LikertSocDistSexSet$Name <- "Social Distance" 
+KEN_LikertSocDistSexSet <- spread(KEN_LikertSocDistSexSet, `Q7. Social Distance Frequency in last month (Multiple Choice Question)`, n)
+KEN_LikertSexSet <- rbind(KEN_LikertHandwashingSexSet, KEN_LikertMaskSexSet)
+KEN_LikertSexSet <- rbind(KEN_LikertSexSet, KEN_LikertSocDistSexSet)
+KEN_LikertSexSet$SexSet <- paste(KEN_LikertSexSet$`Q4. Setting (Multiple Choice Question)`," ", KEN_LikertSexSet$`Q2. Gender (Multiple Choice Question)`)
+KEN_LikertSexSet <- KEN_LikertSexSet[-c(1:2)]
+names(KEN_LikertSexSet) <-c("Practice", "All of \nthe time", "Most of \nthe time", "Sometimes", "Rarely", "Never","SexSet")
+col_orderSexSet <- c("SexSet","Practice", "Never", "Rarely", "Sometimes","Most of \nthe time","All of \nthe time")
+KEN_LikertSexSet <- KEN_LikertSexSet[, col_orderSexSet]
+KEN_LikertSexSet[is.na(KEN_LikertSexSet)] <- 0
+
+KEN_LikertPlotSexSet <-HH::likert(Practice ~ .|SexSet, data = KEN_LikertSexSet, as.percent=TRUE, main = list(" Protective Practices CRA COVID-19 by Sex and Setting\n1st Round Kenya ",x=unit(.55, "npc")), sub= list("Frequency of Practice",x=unit(.57, "npc")),xlim=c(-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ), ylab = NULL, par.strip.text=list(cex=0.65, lines=2.5, x = unit(.05,"npc")), strip.left = TRUE, strip = FALSE, layout = c(2,2))
+plot(KEN_LikertPlotSexSet)
+```
+
+## Barriers to Protective Practices
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+# Barriers
+
+KEN_Barriers <-plyr::count(Kenya_Round1$`Q8. Barriers topracticing protective behaviours (Multiple Choice Question)`)
+
+KEN_Barriers <- KEN_Barriers %>% mutate(perc = round(freq/sum(freq),3))
+KEN_Barriers$label <- paste(100 * KEN_Barriers$perc,"%")
+names(KEN_Barriers) <- c("Barriers", "Recipients","Percentage","label")
+
+ggplot(KEN_Barriers, aes(reorder (`Barriers`,`Percentage`),`Percentage`, label=`Percentage`)) + geom_point(col="black",size=2) + geom_text(aes(label=label),vjust=- 0.65, color="black", size=3) + labs(title="Barriers to Practice Protective Behaviours", subtitle="Percentages of Respondents per Annotated Barrier") + coord_flip() + geom_segment(aes(x=`Barriers`, xend=`Barriers`, y=0, yend=`Percentage`)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank()) + scale_y_continuous(labels=c("0%","10%","20%","30%","40%"))
+```
+
+## Barriers to Protective Practices by Sex
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_Barriers_Sex <- Kenya_Round1 %>% group_by(`Q2. Gender (Multiple Choice Question)`) %>% count(`Q8. Barriers topracticing protective behaviours (Multiple Choice Question)`)
+KEN_Barriers_Sex <- KEN_Barriers_Sex %>% group_by(`Q2. Gender (Multiple Choice Question)`) %>% mutate(Barriers_Perct = round(n/sum(n),3))
+KEN_Barriers_Sex$label <- paste(100*(KEN_Barriers_Sex$Barriers_Perct),"%")
+names(KEN_Barriers_Sex) <- c("Sex","Barriers", "Recipients","Percentage","label")
+
+ggplot(KEN_Barriers_Sex, aes(reorder (`Barriers`,`Percentage`),`Percentage`, label=`Percentage`, color = Sex)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`Barriers`, ymax=`Percentage`, color = Sex), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("Barriers to Practice Protective Behaviours by Sex",subtitle ="Percentages of Respondents per Annotated Barrier" )
+```
+
+## Barriers to Protective Practices by Age
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_Barriers_Age <- Kenya_Round1 %>% group_by(`Q3. Age (Multiple Choice Question)`) %>% count(`Q8. Barriers topracticing protective behaviours (Multiple Choice Question)`)
+KEN_Barriers_Age <- KEN_Barriers_Age %>% group_by(`Q3. Age (Multiple Choice Question)`) %>% mutate(Barriers_Perct = round(n/sum(n),3))
+KEN_Barriers_Age$label <- paste(100*(KEN_Barriers_Age$Barriers_Perct),"%")
+names(KEN_Barriers_Age) <- c("Age","Barriers", "Recipients","Percentage","label")
+
+ggplot(KEN_Barriers_Age, aes(reorder (`Barriers`,`Percentage`),`Percentage`, label=`Percentage`, color = Age)) +
+  facet_wrap(~Age, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`Barriers`, ymax=`Percentage`, color = Age), position = position_dodge(1)) + scale_y_continuous(expand = c(0,0.08), labels = NULL) + ggtitle("Barriers to Practice Protective Behaviours by Age",subtitle ="Percentages of Respondents per Annotated Barrier" )
+```
+
+## Barriers to Protective Practices by Urban/Rural Setting
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_Barriers_Set <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`) %>% count(`Q8. Barriers topracticing protective behaviours (Multiple Choice Question)`)
+KEN_Barriers_Set <- KEN_Barriers_Set %>% group_by(`Q4. Setting (Multiple Choice Question)`) %>% mutate(Barriers_Perct = round(n/sum(n),3))
+KEN_Barriers_Set$label <- paste(100*(KEN_Barriers_Set$Barriers_Perct),"%")
+names(KEN_Barriers_Set) <- c("Set","Barriers", "Recipients","Percentage","label")
+
+ggplot(KEN_Barriers_Set, aes(reorder (`Barriers`,`Percentage`),`Percentage`, label=`Percentage`, color = Set)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`Barriers`, ymax=`Percentage`, color = Set), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("Barriers to Practice Protective Behaviours by Setting",subtitle ="Percentages of Respondents per Annotated Barrier" )
+```
+
+## Barriers to Protective Practices by Province
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_Barriers_Region <- Kenya_Round1 %>% group_by(`Q1. Region (Multiple Choice Question)`) %>% count(`Q8. Barriers topracticing protective behaviours (Multiple Choice Question)`)
+KEN_Barriers_Region <- KEN_Barriers_Region %>% group_by(`Q1. Region (Multiple Choice Question)`) %>% mutate(Barriers_Perct = round(n/sum(n),3))
+KEN_Barriers_Region$label <- paste(100*(KEN_Barriers_Region$Barriers_Perct),"%")
+names(KEN_Barriers_Region) <- c("Region","Barriers", "Recipients","PercentRegion","label")
+
+ggplot(KEN_Barriers_Region, aes(reorder (`Barriers`,`PercentRegion`),`PercentRegion`, label=`PercentRegion`, color = Region)) + facet_wrap(~Region, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "none" ) + geom_linerange(aes(y=`PercentRegion`, ymin=0, x=`Barriers`, ymax=`PercentRegion`, color = Region), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0, 0.85)) + ggtitle("Barriers to Practice Protective Behaviours by Province",subtitle ="PercentRegions of Respondents per Annotated Barrier" ) + coord_flip()
+```
+
+## Barriers to Protective Practices by Sex and Setting
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_Barriers_AgeSet <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% count(`Q8. Barriers topracticing protective behaviours (Multiple Choice Question)`)
+KEN_Barriers_AgeSet <- KEN_Barriers_AgeSet %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% mutate(Barriers_Perct = round(n/sum(n),3))
+KEN_Barriers_AgeSet$label <- paste(100*(KEN_Barriers_AgeSet$Barriers_Perct),"%")
+names(KEN_Barriers_AgeSet) <- c("Set","Sex", "Barriers", "n", "PercentAgeSet","label")
+
+ggplot(KEN_Barriers_AgeSet, aes(reorder (`Barriers`,`PercentAgeSet`),`PercentAgeSet`, label=`PercentAgeSet`, color = Sex)) + facet_wrap(Set ~ Sex, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "bottom" ) + geom_linerange(aes(y=`PercentAgeSet`, ymin=0, x=`Barriers`, ymax=`PercentAgeSet`, color = Sex), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0, 0.85)) + ggtitle("Barriers to Practice Protective Behaviours by Sex and Setting",subtitle ="Percent of Respondents per Annotated Barrier" ) + coord_flip()
+```
+
+## First Action I would do if with COVID-19
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+#First Action COVID-19 - Q9
+KEN_FstAction <-plyr::count(Kenya_Round1$`Q9. First thing I would do if I think I have COVID symptoms (Multiple Choice Question)`)
+
+KEN_FstAction <- KEN_FstAction %>% mutate(perc = round(freq/sum(freq),3))
+KEN_FstAction$label <- paste(100 * KEN_FstAction$perc,"%")
+names(KEN_FstAction) <- c("FstAction", "Recipients","Percentage","label")
+
+ggplot(KEN_FstAction, aes(reorder (`FstAction`,`Percentage`),`Percentage`, label=`Percentage`)) + geom_point(col="black",size=2) + geom_text(aes(label=label),vjust=- 0.65, color="black", size=3) + labs(title="First Action I would do if with COVID-19", subtitle="Percentages of Respondents per 1st Action") + coord_flip() + geom_segment(aes(x=`FstAction`, xend=`FstAction`, y=0, yend=`Percentage`)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank()) + scale_y_continuous(expand = c(0,0.08), labels = percent)
+```
+
+## First Action I would do if with COVID-19 by Sex
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_FstAction_Sex <- Kenya_Round1 %>% group_by(`Q2. Gender (Multiple Choice Question)`) %>% count(`Q9. First thing I would do if I think I have COVID symptoms (Multiple Choice Question)`)
+KEN_FstAction_Sex <- KEN_FstAction_Sex %>% group_by(`Q2. Gender (Multiple Choice Question)`) %>% mutate(FstAction_Perct = round(n/sum(n),3))
+KEN_FstAction_Sex$label <- paste(100*(KEN_FstAction_Sex$FstAction_Perct),"%")
+names(KEN_FstAction_Sex) <- c("Sex","FstAction", "Recipients","Percentage","label")
+
+ggplot(KEN_FstAction_Sex, aes(reorder (`FstAction`,`Percentage`),`Percentage`, label=`Percentage`, color = Sex)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`FstAction`, ymax=`Percentage`, color = Sex), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("Percentages of Respondents per 1st Action by Sex",subtitle ="Percentages of Respondents per 1st Action" )
+```
+
+## First Action I would do if with COVID-19 by Age
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_FstAction_Age <- Kenya_Round1 %>% group_by(`Q3. Age (Multiple Choice Question)`) %>% count(`Q9. First thing I would do if I think I have COVID symptoms (Multiple Choice Question)`)
+KEN_FstAction_Age <- KEN_FstAction_Age %>% group_by(`Q3. Age (Multiple Choice Question)`) %>% mutate(FstAction_Perct = round(n/sum(n),3))
+KEN_FstAction_Age$label <- paste(100*(KEN_FstAction_Age$FstAction_Perct),"%")
+names(KEN_FstAction_Age) <- c("Age","FstAction", "Recipients","Percentage","label")
+
+ggplot(KEN_FstAction_Age, aes(reorder (`FstAction`,`Percentage`),`Percentage`, label=`Percentage`, color = Age)) +
+  facet_wrap(~Age, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`FstAction`, ymax=`Percentage`, color = Age), position = position_dodge(1)) + scale_y_continuous(expand = c(0,0.08), labels = NULL) + ggtitle("Percentages of Respondents per 1st Action by Age",subtitle ="Percentages of Respondents per 1st Action" )
+```
+
+## First Action I would do if with COVID-19 by Urban/Rural Setting
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_FstAction_Set <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`) %>% count(`Q9. First thing I would do if I think I have COVID symptoms (Multiple Choice Question)`)
+KEN_FstAction_Set <- KEN_FstAction_Set %>% group_by(`Q4. Setting (Multiple Choice Question)`) %>% mutate(FstAction_Perct = round(n/sum(n),3))
+KEN_FstAction_Set$label <- paste(100*(KEN_FstAction_Set$FstAction_Perct),"%")
+names(KEN_FstAction_Set) <- c("Set","FstAction", "Recipients","Percentage","label")
+
+ggplot(KEN_FstAction_Set, aes(reorder (`FstAction`,`Percentage`),`Percentage`, label=`Percentage`, color = Set)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`FstAction`, ymax=`Percentage`, color = Set), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("Percentages of Respondents per 1st Action by Setting",subtitle ="Percentages of Respondents per 1st Action" )
+```
+
+## First Action I would do if with COVID-19 by Province
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_FstAction_Region <- Kenya_Round1 %>% group_by(`Q1. Region (Multiple Choice Question)`) %>% count(`Q9. First thing I would do if I think I have COVID symptoms (Multiple Choice Question)`)
+KEN_FstAction_Region <- KEN_FstAction_Region %>% group_by(`Q1. Region (Multiple Choice Question)`) %>% mutate(FstAction_Perct = round(n/sum(n),3))
+KEN_FstAction_Region$label <- paste(100*(KEN_FstAction_Region$FstAction_Perct),"%")
+names(KEN_FstAction_Region) <- c("Region","FstAction", "Recipients","PercentRegion","label")
+
+ggplot(KEN_FstAction_Region, aes(reorder (`FstAction`,`PercentRegion`),`PercentRegion`, label=`PercentRegion`, color = Region)) + facet_wrap(~Region, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "none" ) + geom_linerange(aes(y=`PercentRegion`, ymin=0, x=`FstAction`, ymax=`PercentRegion`, color = Region), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0, 0.85)) + ggtitle("Percentages of Respondents per 1st Action by Province",subtitle ="PercentRegions of Respondents per 1st Action" ) + coord_flip()
+```
+
+## First Action I would do if with COVID-19 by Sex and Urba/Rural Setting
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_FstAction_AgeSet <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% count(`Q9. First thing I would do if I think I have COVID symptoms (Multiple Choice Question)`)
+KEN_FstAction_AgeSet <- KEN_FstAction_AgeSet %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% mutate(FstAction_Perct = round(n/sum(n),3))
+KEN_FstAction_AgeSet$label <- paste(100*(KEN_FstAction_AgeSet$FstAction_Perct),"%")
+names(KEN_FstAction_AgeSet) <- c("Set","Sex", "FstAction", "n", "PercentAgeSet","label")
+
+ggplot(KEN_FstAction_AgeSet, aes(reorder (`FstAction`,`PercentAgeSet`),`PercentAgeSet`, label=`PercentAgeSet`, color = Sex)) + facet_wrap(Set ~ Sex, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "bottom" ) + geom_linerange(aes(y=`PercentAgeSet`, ymin=0, x=`FstAction`, ymax=`PercentAgeSet`, color = Sex), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0, 0.85)) + ggtitle("Percentages of Respondents per 1st Action by Sex and Setting",subtitle ="Percent of Respondents per 1st Action" ) + coord_flip()
+```
+
+## HIV+ folks find it difficult to find ART drugs
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+
+#HIV Drugs Access - Q15
+KEN_HIV <-plyr::count(Kenya_Round1$`Q15. HIV+ folks finding it difficult to find ART drugs (Multiple Choice Question)`)
+
+KEN_HIV <- KEN_HIV %>% mutate(perc = round(freq/sum(freq),3))
+KEN_HIV$label <- paste(100 * KEN_HIV$perc,"%")
+names(KEN_HIV) <- c("HIV", "Recipients","Percentage","label")
+
+ggplot(KEN_HIV, aes(reorder (`HIV`,`Percentage`),`Percentage`, label=`Percentage`)) + geom_point(col="black",size=2) + geom_text(aes(label=label),vjust=- 0.65, color="black", size=3) + labs(title="HIV+ folks find it difficult to find ART drugs", subtitle="Percentages of Yes/No Respondents") + coord_flip() + geom_segment(aes(x=`HIV`, xend=`HIV`, y=0, yend=`Percentage`)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank()) + scale_y_continuous(expand = c(0,0.08), labels = percent)
+```
+
+## HIV+ folks find it difficult to find ART drugs by Sex
+
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_HIV_Sex <- Kenya_Round1 %>% group_by(`Q2. Gender (Multiple Choice Question)`) %>% count(`Q15. HIV+ folks finding it difficult to find ART drugs (Multiple Choice Question)`)
+KEN_HIV_Sex <- KEN_HIV_Sex %>% group_by(`Q2. Gender (Multiple Choice Question)`) %>% mutate(HIV_Perct = round(n/sum(n),3))
+KEN_HIV_Sex$label <- paste(100*(KEN_HIV_Sex$HIV_Perct),"%")
+names(KEN_HIV_Sex) <- c("Sex","HIV", "Recipients","Percentage","label")
+
+ggplot(KEN_HIV_Sex, aes(reorder (`HIV`,`Percentage`),`Percentage`, label=`Percentage`, color = Sex)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`HIV`, ymax=`Percentage`, color = Sex), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("HIV+ folks find it difficult to find ART drugs by Sex",subtitle ="Percentages of Yes/No Respondents" )
+```
+
+## HIV+ folks find it difficult to find ART drugs by Age
+
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_HIV_Age <- Kenya_Round1 %>% group_by(`Q3. Age (Multiple Choice Question)`) %>% count(`Q15. HIV+ folks finding it difficult to find ART drugs (Multiple Choice Question)`)
+KEN_HIV_Age <- KEN_HIV_Age %>% group_by(`Q3. Age (Multiple Choice Question)`) %>% mutate(HIV_Perct = round(n/sum(n),3))
+KEN_HIV_Age$label <- paste(100*(KEN_HIV_Age$HIV_Perct),"%")
+names(KEN_HIV_Age) <- c("Age","HIV", "Recipients","Percentage","label")
+
+ggplot(KEN_HIV_Age, aes(reorder (`HIV`,`Percentage`),`Percentage`, label=`Percentage`, color = Age)) +
+  facet_wrap(~Age, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`HIV`, ymax=`Percentage`, color = Age), position = position_dodge(1)) + scale_y_continuous(expand = c(0,0.08), labels = NULL) + ggtitle("HIV+ folks find it difficult to find ART drugs by Age",subtitle ="Percentages of Yes/No Respondents" )
+```
+
+## HIV+ folks find it difficult to find ART drugs by Urban/Rural Setting
+
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_HIV_Set <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`) %>% count(`Q15. HIV+ folks finding it difficult to find ART drugs (Multiple Choice Question)`)
+KEN_HIV_Set <- KEN_HIV_Set %>% group_by(`Q4. Setting (Multiple Choice Question)`) %>% mutate(HIV_Perct = round(n/sum(n),3))
+KEN_HIV_Set$label <- paste(100*(KEN_HIV_Set$HIV_Perct),"%")
+names(KEN_HIV_Set) <- c("Set","HIV", "Recipients","Percentage","label")
+
+ggplot(KEN_HIV_Set, aes(reorder (`HIV`,`Percentage`),`Percentage`, label=`Percentage`, color = Set)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`HIV`, ymax=`Percentage`, color = Set), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("HIV+ folks find it difficult to find ART drugs by Setting",subtitle ="Percentages of Yes/No Respondents" )
+```
+
+## HIV+ folks find it difficult to find ART drugs by Province
+
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_HIV_Region <- Kenya_Round1 %>% group_by(`Q1. Region (Multiple Choice Question)`) %>% count(`Q15. HIV+ folks finding it difficult to find ART drugs (Multiple Choice Question)`)
+KEN_HIV_Region <- KEN_HIV_Region %>% group_by(`Q1. Region (Multiple Choice Question)`) %>% mutate(HIV_Perct = round(n/sum(n),3))
+KEN_HIV_Region$label <- paste(100*(KEN_HIV_Region$HIV_Perct),"%")
+names(KEN_HIV_Region) <- c("Region","HIV", "Recipients","PercentRegion","label")
+
+ggplot(KEN_HIV_Region, aes(reorder (`HIV`,`PercentRegion`),`PercentRegion`, label=`PercentRegion`, color = Region)) + facet_wrap(~Region, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "none" ) + geom_linerange(aes(y=`PercentRegion`, ymin=0, x=`HIV`, ymax=`PercentRegion`, color = Region), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0, 1.15)) + ggtitle("HIV+ folks find it difficult to find ART drugs by Province",subtitle ="Percentages of Yes/No Respondents" ) + coord_flip()
+```
+
+## HIV+ folks find it difficult to find ART drugs by Sex and Urban/Rural Setting
+
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_HIV_AgeSet <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% count(`Q15. HIV+ folks finding it difficult to find ART drugs (Multiple Choice Question)`)
+KEN_HIV_AgeSet <- KEN_HIV_AgeSet %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% mutate(HIV_Perct = round(n/sum(n),3))
+KEN_HIV_AgeSet$label <- paste(100*(KEN_HIV_AgeSet$HIV_Perct),"%")
+names(KEN_HIV_AgeSet) <- c("Set","Sex", "HIV", "n", "PercentAgeSet","label")
+
+ggplot(KEN_HIV_AgeSet, aes(reorder (`HIV`,`PercentAgeSet`),`PercentAgeSet`, label=`PercentAgeSet`, color = Sex)) + facet_wrap(Set ~ Sex, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "bottom" ) + geom_linerange(aes(y=`PercentAgeSet`, ymin=0, x=`HIV`, ymax=`PercentAgeSet`, color = Sex), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0, 0.85)) + ggtitle("HIV+ folks find it difficult to find ART drugs by Sex and Setting",subtitle ="Percentages of Yes/No Respondents" ) + coord_flip()
+```
+
+
+## Trusted Community Groups for COVID-19 Community-Based Action
+
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+#Community Groups Trust for COVID-19 - Q16
+
+KEN_C19GroupsTrust <-plyr::count(Kenya_Round1$`Q16. Trusted community groups to support community-based action during covid-19? (Multiple Choice Question)`)
+
+KEN_C19GroupsTrust <- KEN_C19GroupsTrust %>% mutate(perc = round(freq/sum(freq),3))
+KEN_C19GroupsTrust$label <- paste(100 * KEN_C19GroupsTrust$perc,"%")
+names(KEN_C19GroupsTrust) <- c("C19GroupsTrust", "Recipients","Percentage","label")
+
+ggplot(KEN_C19GroupsTrust, aes(reorder (`C19GroupsTrust`,`Percentage`),`Percentage`, label=`Percentage`)) + geom_point(col="black",size=2) + geom_text(aes(label=label),vjust=- 0.65, color="black", size=3) + labs(title="Trusted Community Groups for COVID-19 Community-Based Action", subtitle="Percentages of Respondents per Group") + coord_flip() + geom_segment(aes(x=`C19GroupsTrust`, xend=`C19GroupsTrust`, y=0, yend=`Percentage`)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank()) + scale_y_continuous(expand = c(0,0.08), labels = percent)
+```
+
+## Trusted Community Groups for COVID-19 Community-Based Action by Sex
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_C19GroupsTrust_Sex <- Kenya_Round1 %>% group_by(`Q2. Gender (Multiple Choice Question)`) %>% count(`Q16. Trusted community groups to support community-based action during covid-19? (Multiple Choice Question)`)
+KEN_C19GroupsTrust_Sex <- KEN_C19GroupsTrust_Sex %>% group_by(`Q2. Gender (Multiple Choice Question)`) %>% mutate(C19GroupsTrust_Perct = round(n/sum(n),3))
+KEN_C19GroupsTrust_Sex$label <- paste(100*(KEN_C19GroupsTrust_Sex$C19GroupsTrust_Perct),"%")
+names(KEN_C19GroupsTrust_Sex) <- c("Sex","C19GroupsTrust", "Recipients","Percentage","label")
+
+ggplot(KEN_C19GroupsTrust_Sex, aes(reorder (`C19GroupsTrust`,`Percentage`),`Percentage`, label=`Percentage`, color = Sex)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`C19GroupsTrust`, ymax=`Percentage`, color = Sex), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("Trusted Community Groups for COVID-19 Community-Based Action by Sex",subtitle ="Percentages of Respondents per Group" )
+```
+
+## Trusted Community Groups for COVID-19 Community-Based Action by Age
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_C19GroupsTrust_Age <- Kenya_Round1 %>% group_by(`Q3. Age (Multiple Choice Question)`) %>% count(`Q16. Trusted community groups to support community-based action during covid-19? (Multiple Choice Question)`)
+KEN_C19GroupsTrust_Age <- KEN_C19GroupsTrust_Age %>% group_by(`Q3. Age (Multiple Choice Question)`) %>% mutate(C19GroupsTrust_Perct = round(n/sum(n),3))
+KEN_C19GroupsTrust_Age$label <- paste(100*(KEN_C19GroupsTrust_Age$C19GroupsTrust_Perct),"%")
+names(KEN_C19GroupsTrust_Age) <- c("Age","C19GroupsTrust", "Recipients","Percentage","label")
+
+ggplot(KEN_C19GroupsTrust_Age, aes(reorder (`C19GroupsTrust`,`Percentage`),`Percentage`, label=`Percentage`, color = Age)) +
+  facet_wrap(~Age, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`C19GroupsTrust`, ymax=`Percentage`, color = Age), position = position_dodge(1)) + scale_y_continuous(expand = c(0,0.08), labels = NULL) + ggtitle("Trusted Community Groups for COVID-19 Community-Based Action by Age",subtitle ="Percentages of Respondents per Group" )
+```
+
+## Trusted Community Groups for COVID-19 Community-Based Action by Urban/Rural Setting
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_C19GroupsTrust_Set <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`) %>% count(`Q16. Trusted community groups to support community-based action during covid-19? (Multiple Choice Question)`)
+KEN_C19GroupsTrust_Set <- KEN_C19GroupsTrust_Set %>% group_by(`Q4. Setting (Multiple Choice Question)`) %>% mutate(C19GroupsTrust_Perct = round(n/sum(n),3))
+KEN_C19GroupsTrust_Set$label <- paste(100*(KEN_C19GroupsTrust_Set$C19GroupsTrust_Perct),"%")
+names(KEN_C19GroupsTrust_Set) <- c("Set","C19GroupsTrust", "Recipients","Percentage","label")
+
+ggplot(KEN_C19GroupsTrust_Set, aes(reorder (`C19GroupsTrust`,`Percentage`),`Percentage`, label=`Percentage`, color = Set)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`C19GroupsTrust`, ymax=`Percentage`, color = Set), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("Trusted Community Groups for COVID-19 Community-Based Action by Setting",subtitle ="Percentages of Respondents per Group" )
+```
+
+## Trusted Community Groups for COVID-19 Community-Based Action by Province
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_C19GroupsTrust_Region <- Kenya_Round1 %>% group_by(`Q1. Region (Multiple Choice Question)`) %>% count(`Q16. Trusted community groups to support community-based action during covid-19? (Multiple Choice Question)`)
+KEN_C19GroupsTrust_Region <- KEN_C19GroupsTrust_Region %>% group_by(`Q1. Region (Multiple Choice Question)`) %>% mutate(C19GroupsTrust_Perct = round(n/sum(n),3))
+KEN_C19GroupsTrust_Region$label <- paste(100*(KEN_C19GroupsTrust_Region$C19GroupsTrust_Perct),"%")
+names(KEN_C19GroupsTrust_Region) <- c("Region","C19GroupsTrust", "Recipients","PercentRegion","label")
+
+ggplot(KEN_C19GroupsTrust_Region, aes(reorder (`C19GroupsTrust`,`PercentRegion`),`PercentRegion`, label=`PercentRegion`, color = Region)) + facet_wrap(~Region, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "none" ) + geom_linerange(aes(y=`PercentRegion`, ymin=0, x=`C19GroupsTrust`, ymax=`PercentRegion`, color = Region), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0, 0.85)) + ggtitle("Trusted Community Groups for COVID-19 Community-Based Action by Province",subtitle ="Percentages of Respondents per Group" ) + coord_flip()
+```
+
+## Trusted Community Groups for COVID-19 Community-Based Action by Sex and Setting 
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_C19GroupsTrust_AgeSet <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% count(`Q16. Trusted community groups to support community-based action during covid-19? (Multiple Choice Question)`)
+KEN_C19GroupsTrust_AgeSet <- KEN_C19GroupsTrust_AgeSet %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% mutate(C19GroupsTrust_Perct = round(n/sum(n),3))
+KEN_C19GroupsTrust_AgeSet$label <- paste(100*(KEN_C19GroupsTrust_AgeSet$C19GroupsTrust_Perct),"%")
+names(KEN_C19GroupsTrust_AgeSet) <- c("Set","Sex", "C19GroupsTrust", "n", "PercentAgeSet","label")
+
+ggplot(KEN_C19GroupsTrust_AgeSet, aes(reorder (`C19GroupsTrust`,`PercentAgeSet`),`PercentAgeSet`, label=`PercentAgeSet`, color = Sex)) + facet_wrap(Set ~ Sex, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "bottom" ) + geom_linerange(aes(y=`PercentAgeSet`, ymin=0, x=`C19GroupsTrust`, ymax=`PercentAgeSet`, color = Sex), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0, 0.85)) + ggtitle("Trusted Community Groups for COVID-19 Community-Based Action by Sex and Setting",subtitle ="Percentages of Respondents per Group" ) + coord_flip()
+```
+
+## Confidence about providing for family during COVID-19
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+
+#COnfidence about providing for Family - Q17 
+
+KEN_Confidence <-plyr::count(Kenya_Round1$`Q17. Confident about providing for your family during pandemic? (Multiple Choice Question)`)
+KEN_Confidence <- spread(KEN_Confidence, x, freq)
+KEN_Confidence$'Not confident \nat all' <- 0
+KEN_Confidence$'A little confident' <- 0
+KEN_Confidence$Area <- "Confidence" 
+names(KEN_Confidence) <- c("Somewhat \nconfident", "Very \nconfident", "Not sure","Not confident \nat all","A little \nconfident","Area")
+col_order2 <- c("Area", "Not confident \nat all", "A little \nconfident", "Not sure", "Somewhat \nconfident", "Very \nconfident")
+KEN_Confidence <- KEN_Confidence[, col_order2]
+
+KEN_ConfidencePlot <-HH::likert(Area ~ ., data = KEN_Confidence, ylab=NULL, as.percent=TRUE, main = list(" Confidence about providing for family during COVID-19 ",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ), rightAxis = FALSE)
+plot(KEN_ConfidencePlot)
+```
+
+## Confidence about providing for family during COVID-19 by Sex
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_LikertConfidenceSex <- Kenya_Round1 %>% group_by(`Q2. Gender (Multiple Choice Question)`)  %>% count(`Q17. Confident about providing for your family during pandemic? (Multiple Choice Question)`)
+KEN_LikertConfidenceSex <- spread(KEN_LikertConfidenceSex,`Q17. Confident about providing for your family during pandemic? (Multiple Choice Question)`, n)
+KEN_LikertConfidenceSex$'Not confident \nat all' <- 0
+KEN_LikertConfidenceSex$'A little confident' <- 0
+KEN_LikertConfidenceSex$Area <- "Confidence"
+names(KEN_LikertConfidenceSex) <- c("Sex","Somewhat \nconfident", "Very \nconfident", "Not sure","Not confident \nat all","A little \nconfident","Area")
+col_order3 <- c("Sex","Area", "Not confident \nat all", "A little \nconfident", "Not sure", "Somewhat \nconfident", "Very \nconfident")
+KEN_LikertConfidenceSex <- KEN_LikertConfidenceSex[, col_order3]
+
+KEN_LikertConfidenceSex <-HH::likert(Area ~ .|Sex, data = KEN_LikertConfidenceSex, layout=c(1,2), ylab=NULL, as.percent=TRUE, main = list("Confidence about providing for family during COVID-19 by Sex ",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=1, lines=1, x = unit(.25,"npc")), cex=1, resize.height.tuning=2)   
+plot(KEN_LikertConfidenceSex)
+```
+
+## Confidence about providing for family during COVID-19 by Age
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_LikertConfidenceAge <- Kenya_Round1 %>% group_by(`Q3. Age (Multiple Choice Question)`)  %>% count(`Q17. Confident about providing for your family during pandemic? (Multiple Choice Question)`)
+KEN_LikertConfidenceAge <- spread(KEN_LikertConfidenceAge,`Q17. Confident about providing for your family during pandemic? (Multiple Choice Question)`, n)
+KEN_LikertConfidenceAge$'Not confident \nat all' <- 0
+KEN_LikertConfidenceAge$'A little confident' <- 0
+KEN_LikertConfidenceAge$Area <- "Confidence"
+names(KEN_LikertConfidenceAge) <- c("Age","Somewhat \nconfident", "Very \nconfident", "Not sure","Not confident \nat all","A little \nconfident","Area")
+col_order3 <- c("Age","Area", "Not confident \nat all", "A little \nconfident", "Not sure", "Somewhat \nconfident", "Very \nconfident")
+KEN_LikertConfidenceAge <- KEN_LikertConfidenceAge[, col_order3]
+
+KEN_LikertConfidenceAge <-HH::likert(Area ~ .|Age, data = KEN_LikertConfidenceAge, as.percent=TRUE, main = list(" Confidence about providing for family during COVID-19 by Age ",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ),ylab = NULL, par.strip.text=list(cex=0.65, lines=2, x = unit(.05,"npc")), strip.left = TRUE, strip = FALSE, layout = c(1,5))
+
+plot(KEN_LikertConfidenceAge)
+```
+
+## Confidence about providing for family during COVID-19 by Urban/Rural Setting
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_LikertConfidenceSet <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`)  %>% count(`Q17. Confident about providing for your family during pandemic? (Multiple Choice Question)`)
+KEN_LikertConfidenceSet <- spread(KEN_LikertConfidenceSet,`Q17. Confident about providing for your family during pandemic? (Multiple Choice Question)`, n)
+KEN_LikertConfidenceSet$'Not confident \nat all' <- 0
+KEN_LikertConfidenceSet$'A little confident' <- 0
+KEN_LikertConfidenceSet$Area <- "Confidence"
+names(KEN_LikertConfidenceSet) <- c("Set","Somewhat \nconfident", "Very \nconfident", "Not sure","Not confident \nat all","A little \nconfident","Area")
+col_order3 <- c("Set","Area", "Not confident \nat all", "A little \nconfident", "Not sure", "Somewhat \nconfident", "Very \nconfident")
+KEN_LikertConfidenceSet <- KEN_LikertConfidenceSet[, col_order3]
+
+KEN_LikertConfidenceSet <-HH::likert(Area ~ .|Set, data = KEN_LikertConfidenceSet, layout=c(1,2), ylab=NULL, as.percent=TRUE, main = list(" Confidence about providing for family during COVID-19 by Set ",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=1, lines=1, x = unit(.25,"npc")), cex=1, resize.height.tuning=2)   
+plot(KEN_LikertConfidenceSet)
+```
+
+## Confidence about providing for family during COVID-19 by Province
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_LikertConfidenceRegion <- Kenya_Round1 %>% group_by(`Q1. Region (Multiple Choice Question)`)  %>% count(`Q17. Confident about providing for your family during pandemic? (Multiple Choice Question)`)
+KEN_LikertConfidenceRegion <- spread(KEN_LikertConfidenceRegion,`Q17. Confident about providing for your family during pandemic? (Multiple Choice Question)`, n)
+KEN_LikertConfidenceRegion$'Not confident \nat all' <- 0
+KEN_LikertConfidenceRegion$'A little confident' <- 0
+KEN_LikertConfidenceRegion$Area <- "Confidence"
+names(KEN_LikertConfidenceRegion) <- c("Region","Somewhat \nconfident", "Very \nconfident", "Not sure","Not confident \nat all","A little \nconfident","Area")
+col_order3 <- c("Region","Area", "Not confident \nat all", "A little \nconfident", "Not sure", "Somewhat \nconfident", "Very \nconfident")
+KEN_LikertConfidenceRegion <- KEN_LikertConfidenceRegion[, col_order3]
+
+KEN_LikertConfidenceRegion <-HH::likert(Area ~ .|Region, data = KEN_LikertConfidenceRegion, as.percent=TRUE, main = list(" Confidence about providing for family during COVID-19 by Province ",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ),ylab = NULL, par.strip.text=list(cex=0.65, lines=2, x = unit(.05,"npc")), strip.left = TRUE, strip = FALSE, layout = c(2,4))
+
+plot(KEN_LikertConfidenceRegion)
+```
+
+## Confidence about providing for family during COVID-19 by Sex and Urban/Rural Setting
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_LikertConfidenceSexSet <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% count(`Q17. Confident about providing for your family during pandemic? (Multiple Choice Question)`)
+KEN_LikertConfidenceSexSet <- spread(KEN_LikertConfidenceSexSet, `Q17. Confident about providing for your family during pandemic? (Multiple Choice Question)`, n)
+KEN_LikertConfidenceSexSet$SexSet <- paste(KEN_LikertConfidenceSexSet$`Q4. Setting (Multiple Choice Question)`," ", KEN_LikertConfidenceSexSet$`Q2. Gender (Multiple Choice Question)`)
+KEN_LikertConfidenceSexSet <- KEN_LikertConfidenceSexSet[-c(1:2)]
+KEN_LikertConfidenceSexSet$'Not confident \nat all' <- 0
+KEN_LikertConfidenceSexSet$'A little confident' <- 0
+KEN_LikertConfidenceSexSet$Area <- "Confidence"
+names(KEN_LikertConfidenceSexSet) <- c("Somewhat \nconfident", "Very \nconfident", "Not sure","Profile","Not confident \nat all","A little \nconfident","Area")
+col_order3 <- c("Profile","Area", "Not confident \nat all", "A little \nconfident", "Not sure", "Somewhat \nconfident", "Very \nconfident")
+KEN_LikertConfidenceSexSet <- KEN_LikertConfidenceSexSet[, col_order3]
+
+
+KEN_LikertPlotConfidenceSexSet <-HH::likert(Area ~ .|Profile, data = KEN_LikertConfidenceSexSet, as.percent=TRUE, main = list("Confidence about providing for family during COVID-19 by Sex and Setting ",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ), ylab = NULL, par.strip.text=list(cex=0.65, lines=2.5, x = unit(.05,"npc")), strip.left = TRUE, strip = FALSE, layout = c(2,2))
+plot(KEN_LikertPlotConfidenceSexSet)
+```
+
+## Community Groups' Trust
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+
+#Community Groups Trust - Q18
+
+KEN_GroupsTrust <-plyr::count(Kenya_Round1$`Q18. Which community groups do you trust the most? (Multiple Choice Question)`)
+
+KEN_GroupsTrust <- KEN_GroupsTrust %>% mutate(perc = round(freq/sum(freq),3))
+KEN_GroupsTrust$label <- paste(100 * KEN_GroupsTrust$perc,"%")
+names(KEN_GroupsTrust) <- c("GroupsTrust", "Recipients","Percentage","label")
+
+ggplot(KEN_GroupsTrust, aes(reorder (`GroupsTrust`,`Percentage`),`Percentage`, label=`Percentage`)) + geom_point(col="black",size=2) + geom_text(aes(label=label),vjust=- 0.65, color="black", size=3) + labs(title="Most Trusted Community Groups", subtitle="Percentages of Respondents per Group") + coord_flip() + geom_segment(aes(x=`GroupsTrust`, xend=`GroupsTrust`, y=0, yend=`Percentage`)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank()) + scale_y_continuous(expand = c(0,0.08), labels = percent)
+```
+
+## Community Groups' Trust by Sex
+
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_GroupsTrust_Sex <- Kenya_Round1 %>% group_by(`Q2. Gender (Multiple Choice Question)`) %>% count(`Q18. Which community groups do you trust the most? (Multiple Choice Question)`)
+KEN_GroupsTrust_Sex <- KEN_GroupsTrust_Sex %>% group_by(`Q2. Gender (Multiple Choice Question)`) %>% mutate(GroupsTrust_Perct = round(n/sum(n),3))
+KEN_GroupsTrust_Sex$label <- paste(100*(KEN_GroupsTrust_Sex$GroupsTrust_Perct),"%")
+names(KEN_GroupsTrust_Sex) <- c("Sex","GroupsTrust", "Recipients","Percentage","label")
+
+ggplot(KEN_GroupsTrust_Sex, aes(reorder (`GroupsTrust`,`Percentage`),`Percentage`, label=`Percentage`, color = Sex)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`GroupsTrust`, ymax=`Percentage`, color = Sex), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("Most Trusted Community Groups by Sex",subtitle ="Percentages of Respondents per Group" )
+```
+
+## Community Groups' Trust by Age
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_GroupsTrust_Age <- Kenya_Round1 %>% group_by(`Q3. Age (Multiple Choice Question)`) %>% count(`Q18. Which community groups do you trust the most? (Multiple Choice Question)`)
+KEN_GroupsTrust_Age <- KEN_GroupsTrust_Age %>% group_by(`Q3. Age (Multiple Choice Question)`) %>% mutate(GroupsTrust_Perct = round(n/sum(n),3))
+KEN_GroupsTrust_Age$label <- paste(100*(KEN_GroupsTrust_Age$GroupsTrust_Perct),"%")
+names(KEN_GroupsTrust_Age) <- c("Age","GroupsTrust", "Recipients","Percentage","label")
+
+ggplot(KEN_GroupsTrust_Age, aes(reorder (`GroupsTrust`,`Percentage`),`Percentage`, label=`Percentage`, color = Age)) +
+  facet_wrap(~Age, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`GroupsTrust`, ymax=`Percentage`, color = Age), position = position_dodge(1)) + scale_y_continuous(expand = c(0,0.08), labels = NULL) + ggtitle("Most Trusted Community Groups by Age",subtitle ="Percentages of Respondents per Group" )
+```
+
+## Community Groups' Trust by Urban/Rural Setting
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_GroupsTrust_Set <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`) %>% count(`Q18. Which community groups do you trust the most? (Multiple Choice Question)`)
+KEN_GroupsTrust_Set <- KEN_GroupsTrust_Set %>% group_by(`Q4. Setting (Multiple Choice Question)`) %>% mutate(GroupsTrust_Perct = round(n/sum(n),3))
+KEN_GroupsTrust_Set$label <- paste(100*(KEN_GroupsTrust_Set$GroupsTrust_Perct),"%")
+names(KEN_GroupsTrust_Set) <- c("Set","GroupsTrust", "Recipients","Percentage","label")
+
+ggplot(KEN_GroupsTrust_Set, aes(reorder (`GroupsTrust`,`Percentage`),`Percentage`, label=`Percentage`, color = Set)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`GroupsTrust`, ymax=`Percentage`, color = Set), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("Most Trusted Community Groups by Setting",subtitle ="Percentages of Respondents per Group" )
+```
+
+## Community Groups' Trust by Province
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_GroupsTrust_Region <- Kenya_Round1 %>% group_by(`Q1. Region (Multiple Choice Question)`) %>% count(`Q18. Which community groups do you trust the most? (Multiple Choice Question)`)
+KEN_GroupsTrust_Region <- KEN_GroupsTrust_Region %>% group_by(`Q1. Region (Multiple Choice Question)`) %>% mutate(GroupsTrust_Perct = round(n/sum(n),3))
+KEN_GroupsTrust_Region$label <- paste(100*(KEN_GroupsTrust_Region$GroupsTrust_Perct),"%")
+names(KEN_GroupsTrust_Region) <- c("Region","GroupsTrust", "Recipients","PercentRegion","label")
+
+ggplot(KEN_GroupsTrust_Region, aes(reorder (`GroupsTrust`,`PercentRegion`),`PercentRegion`, label=`PercentRegion`, color = Region)) + facet_wrap(~Region, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "none" ) + geom_linerange(aes(y=`PercentRegion`, ymin=0, x=`GroupsTrust`, ymax=`PercentRegion`, color = Region), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0, 0.85)) + ggtitle("Most Trusted Community Groups by Province",subtitle ="Percentages of Respondents per Group" ) + coord_flip()
+```
+
+## Community Groups' Trust by Sex and Urban/Rural Setting
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_GroupsTrust_AgeSet <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% count(`Q18. Which community groups do you trust the most? (Multiple Choice Question)`)
+KEN_GroupsTrust_AgeSet <- KEN_GroupsTrust_AgeSet %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% mutate(GroupsTrust_Perct = round(n/sum(n),3))
+KEN_GroupsTrust_AgeSet$label <- paste(100*(KEN_GroupsTrust_AgeSet$GroupsTrust_Perct),"%")
+names(KEN_GroupsTrust_AgeSet) <- c("Set","Sex", "GroupsTrust", "n", "PercentAgeSet","label")
+
+ggplot(KEN_GroupsTrust_AgeSet, aes(reorder (`GroupsTrust`,`PercentAgeSet`),`PercentAgeSet`, label=`PercentAgeSet`, color = Sex)) + facet_wrap(Set ~ Sex, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "bottom" ) + geom_linerange(aes(y=`PercentAgeSet`, ymin=0, x=`GroupsTrust`, ymax=`PercentAgeSet`, color = Sex), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0, 0.85)) + ggtitle("Most Trusted Community Groups by Sex and Setting",subtitle ="Percentages of Respondents per Group" ) + coord_flip()
+```
+
+## Trust Local Health Care Providers To Take Care Of My Family
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+#Trust Health Providers
+
+KEN_TrustHCP <-plyr::count(Kenya_Round1$`Q19. Trust local health care providers to take care of me and my family (Multiple Choice Question)`)
+KEN_TrustHCP <- spread(KEN_TrustHCP, x, freq)
+KEN_TrustHCP$Area <- "TrustHCP" 
+names(KEN_TrustHCP) <- c("Strongly agree", "Agree", "Not sure","Somewhat disagree","Strongly disagree","Area")
+col_order2 <- c("Area", "Strongly disagree", "Somewhat disagree", "Not sure", "Agree", "Strongly agree")
+KEN_TrustHCP <- KEN_TrustHCP[, col_order2]
+
+KEN_TrustHCPPlot <-HH::likert(Area ~ ., data = KEN_TrustHCP, ylab=NULL, as.percent=TRUE, main = list(" Trust Local Health Care Providers To Take Care Of My Family  ",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ), rightAxis = FALSE)
+plot(KEN_TrustHCPPlot)
+```
+
+## Trust Local Health Care Providers To Take Care Of My Family by Sex
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_LikertTrustHCPSex <- Kenya_Round1 %>% group_by(`Q2. Gender (Multiple Choice Question)`)  %>% count(`Q19. Trust local health care providers to take care of me and my family (Multiple Choice Question)`)
+KEN_LikertTrustHCPSex <- spread(KEN_LikertTrustHCPSex,`Q19. Trust local health care providers to take care of me and my family (Multiple Choice Question)`, n)
+KEN_LikertTrustHCPSex$Area <- "Trust"
+names(KEN_LikertTrustHCPSex) <- c("Sex","Strongly agree", "Agree", "Not sure","Somewhat disagree","Strongly disagree","Area")
+col_order3 <- c("Sex","Area", "Strongly disagree", "Somewhat disagree", "Not sure", "Agree", "Strongly agree")
+KEN_LikertTrustHCPSex <- KEN_LikertTrustHCPSex[, col_order3]
+
+KEN_LikertTrustHCPSex <-HH::likert(Area ~ .|Sex, data = KEN_LikertTrustHCPSex, layout=c(1,2), ylab=NULL, as.percent=TRUE, main = list(" Trust Local Health Care Providers To Take Care Of My Family by Sex",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=1, lines=1, x = unit(.25,"npc")), cex=1, resize.height.tuning=2)   
+plot(KEN_LikertTrustHCPSex)
+```
+
+## Trust Local Health Care Providers To Take Care Of My Family by Age
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_LikertTrustHCPAge <- Kenya_Round1 %>% group_by(`Q3. Age (Multiple Choice Question)`)  %>% count(`Q19. Trust local health care providers to take care of me and my family (Multiple Choice Question)`)
+KEN_LikertTrustHCPAge <- spread(KEN_LikertTrustHCPAge,`Q19. Trust local health care providers to take care of me and my family (Multiple Choice Question)`, n)
+KEN_LikertTrustHCPAge$Area <- "Trust"
+names(KEN_LikertTrustHCPAge) <- c("Age","Strongly agree", "Agree", "Not sure","Somewhat disagree","Strongly disagree","Area")
+col_order3 <- c("Age","Area", "Strongly disagree", "Somewhat disagree", "Not sure", "Agree", "Strongly agree")
+KEN_LikertTrustHCPAge <- KEN_LikertTrustHCPAge[, col_order3]
+KEN_LikertTrustHCPAge[is.na(KEN_LikertTrustHCPAge)] <- 0
+
+KEN_LikertTrustHCPAge <-HH::likert(Area ~ .|Age, data = KEN_LikertTrustHCPAge, as.percent=TRUE, main = list(" Trust Local Health Care Providers To Take Care Of My Family  by Age ",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ),ylab = NULL, par.strip.text=list(cex=0.65, lines=2, x = unit(.05,"npc")), strip.left = TRUE, strip = FALSE, layout = c(1,5))
+
+plot(KEN_LikertTrustHCPAge)
+```
+
+## Trust Local Health Care Providers To Take Care Of My Family by Urban/Rural Setting
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_LikertTrustHCPSet <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`)  %>% count(`Q19. Trust local health care providers to take care of me and my family (Multiple Choice Question)`)
+KEN_LikertTrustHCPSet <- spread(KEN_LikertTrustHCPSet,`Q19. Trust local health care providers to take care of me and my family (Multiple Choice Question)`, n)
+KEN_LikertTrustHCPSet$Area <- "Trust"
+names(KEN_LikertTrustHCPSet) <- c("Set","Strongly agree", "Agree", "Not sure","Somewhat disagree","Strongly disagree","Area")
+col_order3 <- c("Set","Area", "Strongly disagree", "Somewhat disagree", "Not sure", "Agree", "Strongly agree")
+KEN_LikertTrustHCPSet <- KEN_LikertTrustHCPSet[, col_order3]
+
+KEN_LikertTrustHCPSet <-HH::likert(Area ~ .|Set, data = KEN_LikertTrustHCPSet, layout=c(1,2), ylab=NULL, as.percent=TRUE, main = list(" Trust Local Health Care Providers To Take Care Of My Family  by Set ",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=1, lines=1, x = unit(.25,"npc")), cex=1, resize.height.tuning=2)   
+plot(KEN_LikertTrustHCPSet)
+```
+
+## Trust Local Health Care Providers To Take Care Of My Family by Province
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_LikertTrustHCPRegion <- Kenya_Round1 %>% group_by(`Q1. Region (Multiple Choice Question)`)  %>% count(`Q19. Trust local health care providers to take care of me and my family (Multiple Choice Question)`)
+KEN_LikertTrustHCPRegion <- spread(KEN_LikertTrustHCPRegion,`Q19. Trust local health care providers to take care of me and my family (Multiple Choice Question)`, n)
+KEN_LikertTrustHCPRegion$Area <- "Trust"
+names(KEN_LikertTrustHCPRegion) <- c("Region","Strongly agree", "Agree", "Not sure","Somewhat disagree","Strongly disagree","Area")
+col_order3 <- c("Region","Area", "Strongly disagree", "Somewhat disagree", "Not sure", "Agree", "Strongly agree")
+KEN_LikertTrustHCPRegion <- KEN_LikertTrustHCPRegion[, col_order3]
+KEN_LikertTrustHCPRegion[is.na(KEN_LikertTrustHCPRegion)] <- 0
+
+KEN_LikertTrustHCPRegion <-HH::likert(Area ~ .|Region, data = KEN_LikertTrustHCPRegion, as.percent=TRUE, main = list(" Trust Local Health Care Providers To Take Care Of My Family  by Province ",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-30,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ),ylab = NULL, par.strip.text=list(cex=0.65, lines=2, x = unit(.05,"npc")), strip.left = TRUE, strip = FALSE, layout = c(2,4))
+
+plot(KEN_LikertTrustHCPRegion)
+```
+
+## Trust Local Health Care Providers To Take Care Of My Family by Sex and Urban/Rural Setting
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_LikertTrustHCPSexSet <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% count(`Q19. Trust local health care providers to take care of me and my family (Multiple Choice Question)`)
+KEN_LikertTrustHCPSexSet <- spread(KEN_LikertTrustHCPSexSet, `Q19. Trust local health care providers to take care of me and my family (Multiple Choice Question)`, n)
+KEN_LikertTrustHCPSexSet$SexSet <- paste(KEN_LikertTrustHCPSexSet$`Q4. Setting (Multiple Choice Question)`," ", KEN_LikertTrustHCPSexSet$`Q2. Gender (Multiple Choice Question)`)
+KEN_LikertTrustHCPSexSet <- KEN_LikertTrustHCPSexSet[-c(1:2)]
+KEN_LikertTrustHCPSexSet$Area <- "Trust"
+names(KEN_LikertTrustHCPSexSet) <- c("Strongly agree", "Agree", "Not sure","Somewhat disagree","Strongly disagree","Profile","Area")
+col_order3 <- c("Profile","Area", "Strongly disagree", "Somewhat disagree", "Not sure", "Agree", "Strongly agree")
+KEN_LikertTrustHCPSexSet <- KEN_LikertTrustHCPSexSet[, col_order3]
+
+
+KEN_LikertPlotTrustHCPSexSet <-HH::likert(Area ~ .|Profile, data = KEN_LikertTrustHCPSexSet, as.percent=TRUE, main = list(" Trust Local Health Care Providers To Take Care Of My Family  by Sex and Setting ",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-30,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ), ylab = NULL, par.strip.text=list(cex=0.65, lines=2.5, x = unit(.05,"npc")), strip.left = TRUE, strip = FALSE, layout = c(2,2))
+plot(KEN_LikertPlotTrustHCPSexSet)
+```
+
+## Seeking essential health services during COVID-19, as advised by healthcare provider
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+
+#Essential Health Services During COVID-19 - Q20
+
+KEN_C19Care <-plyr::count(Kenya_Round1$`Q20. Seeking essential health care services (antenatal care, immunizations, HIV) as advised by my health care provider... (Multiple Choice Question)`)
+
+KEN_C19Care <- KEN_C19Care %>% mutate(perc = round(freq/sum(freq),3))
+KEN_C19Care$label <- paste(100 * KEN_C19Care$perc,"%")
+names(KEN_C19Care) <- c("C19Care", "Recipients","Percentage","label")
+
+ggplot(KEN_C19Care, aes(reorder (`C19Care`,`Percentage`),`Percentage`, label=`Percentage`)) + geom_point(col="black",size=2) + geom_text(aes(label=label),vjust=- 0.65, color="black", size=3) + labs(title="Seeking essential health services during COVID-19*", subtitle="Percentages of Respondents Yes/No - *as advised by health care provider") + coord_flip() + geom_segment(aes(x=`C19Care`, xend=`C19Care`, y=0, yend=`Percentage`)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank()) + scale_y_continuous(expand = c(0,0.08), labels = percent)
+```
+
+## Seeking essential health services during COVID-19, as advised by healthcare provider, by Sex
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_C19Care_Sex <- Kenya_Round1 %>% group_by(`Q2. Gender (Multiple Choice Question)`) %>% count(`Q20. Seeking essential health care services (antenatal care, immunizations, HIV) as advised by my health care provider... (Multiple Choice Question)`)
+KEN_C19Care_Sex <- KEN_C19Care_Sex %>% group_by(`Q2. Gender (Multiple Choice Question)`) %>% mutate(C19Care_Perct = round(n/sum(n),3))
+KEN_C19Care_Sex$label <- paste(100*(KEN_C19Care_Sex$C19Care_Perct),"%")
+names(KEN_C19Care_Sex) <- c("Sex","C19Care", "Recipients","Percentage","label")
+
+ggplot(KEN_C19Care_Sex, aes(reorder (`C19Care`,`Percentage`),`Percentage`, label=`Percentage`, color = Sex)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`C19Care`, ymax=`Percentage`, color = Sex), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("Seeking essential health services during COVID-19* by Sex",subtitle ="Percentages of Respondents Yes/No - *as advised by health care provider")
+```
+
+## Seeking essential health services during COVID-19, as advised by healthcare provider, by Age
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_C19Care_Age <- Kenya_Round1 %>% group_by(`Q3. Age (Multiple Choice Question)`) %>% count(`Q20. Seeking essential health care services (antenatal care, immunizations, HIV) as advised by my health care provider... (Multiple Choice Question)`)
+KEN_C19Care_Age <- KEN_C19Care_Age %>% group_by(`Q3. Age (Multiple Choice Question)`) %>% mutate(C19Care_Perct = round(n/sum(n),3))
+KEN_C19Care_Age$label <- paste(100*(KEN_C19Care_Age$C19Care_Perct),"%")
+names(KEN_C19Care_Age) <- c("Age","C19Care", "Recipients","Percentage","label")
+
+ggplot(KEN_C19Care_Age, aes(reorder (`C19Care`,`Percentage`),`Percentage`, label=`Percentage`, color = Age)) +
+  facet_wrap(~Age, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`C19Care`, ymax=`Percentage`, color = Age), position = position_dodge(1)) + scale_y_continuous(expand = c(0,0.08), labels = NULL, limits = c(0, 1.1)) + ggtitle("Seeking essential health services during COVID-19* by Age",subtitle ="Percentages of Respondents Yes/No - *as advised by health care provider" )
+```
+
+## Seeking essential health services during COVID-19, as advised by healthcare provider, by Urban/Rural Setting
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_C19Care_Set <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`) %>% count(`Q20. Seeking essential health care services (antenatal care, immunizations, HIV) as advised by my health care provider... (Multiple Choice Question)`)
+KEN_C19Care_Set <- KEN_C19Care_Set %>% group_by(`Q4. Setting (Multiple Choice Question)`) %>% mutate(C19Care_Perct = round(n/sum(n),3))
+KEN_C19Care_Set$label <- paste(100*(KEN_C19Care_Set$C19Care_Perct),"%")
+names(KEN_C19Care_Set) <- c("Set","C19Care", "Recipients","Percentage","label")
+
+ggplot(KEN_C19Care_Set, aes(reorder (`C19Care`,`Percentage`),`Percentage`, label=`Percentage`, color = Set)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`C19Care`, ymax=`Percentage`, color = Set), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("Seeking essential health services during COVID-19* by Setting",subtitle ="Percentages of Respondents Yes/No - *as advised by health care provider" )
+```
+
+## Seeking essential health services during COVID-19, as advised by healthcare provider, by Province
+
+```{r echo= FALSE, fig.dim=c(8,7)}
+KEN_C19Care_Region <- Kenya_Round1 %>% group_by(`Q1. Region (Multiple Choice Question)`) %>% count(`Q20. Seeking essential health care services (antenatal care, immunizations, HIV) as advised by my health care provider... (Multiple Choice Question)`)
+KEN_C19Care_Region <- KEN_C19Care_Region %>% group_by(`Q1. Region (Multiple Choice Question)`) %>% mutate(C19Care_Perct = round(n/sum(n),3))
+KEN_C19Care_Region$label <- paste(100*(KEN_C19Care_Region$C19Care_Perct),"%")
+names(KEN_C19Care_Region) <- c("Region","C19Care", "Recipients","PercentRegion","label")
+
+ggplot(KEN_C19Care_Region, aes(reorder (`C19Care`,`PercentRegion`),`PercentRegion`, label=`PercentRegion`, color = Region)) + facet_wrap(~Region, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "none" ) + geom_linerange(aes(y=`PercentRegion`, ymin=0, x=`C19Care`, ymax=`PercentRegion`, color = Region), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0, 1.15)) + ggtitle("Seeking essential health services during COVID-19* by Province",subtitle ="Percentages of Respondents Yes/No - *as advised by health care provider" ) + coord_flip()
+```
+
+## Seeking essential health services during COVID-19, as advised by healthcare provider, by Sex and Urban/Rural Setting
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_C19Care_AgeSet <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% count(`Q20. Seeking essential health care services (antenatal care, immunizations, HIV) as advised by my health care provider... (Multiple Choice Question)`)
+KEN_C19Care_AgeSet <- KEN_C19Care_AgeSet %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% mutate(C19Care_Perct = round(n/sum(n),3))
+KEN_C19Care_AgeSet$label <- paste(100*(KEN_C19Care_AgeSet$C19Care_Perct),"%")
+names(KEN_C19Care_AgeSet) <- c("Set","Sex", "C19Care", "n", "PercentAgeSet","label")
+
+ggplot(KEN_C19Care_AgeSet, aes(reorder (`C19Care`,`PercentAgeSet`),`PercentAgeSet`, label=`PercentAgeSet`, color = Sex)) + facet_wrap(Set ~ Sex, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "bottom" ) + geom_linerange(aes(y=`PercentAgeSet`, ymin=0, x=`C19Care`, ymax=`PercentAgeSet`, color = Sex), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0, 1.1)) + ggtitle("Seeking essential health services during COVID-19* by Sex and Setting",subtitle ="Percentages of Respondents Yes/No - *as advised by health care provider" ) + coord_flip()
+```
+
+## Main Barrier To See Healthcare Provider
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+#Main Barrier to HealthCare - Q21
+
+KEN_MainHealthB <-plyr::count(Kenya_Round1$`Q21. Main barrier to see a healthcare provider (Multiple Choice Question)`)
+
+KEN_MainHealthB <- KEN_MainHealthB %>% mutate(perc = round(freq/sum(freq),3))
+KEN_MainHealthB$label <- paste(100 * KEN_MainHealthB$perc,"%")
+names(KEN_MainHealthB) <- c("MainHealthB", "Recipients","Percentage","label")
+
+ggplot(KEN_MainHealthB, aes(reorder (`MainHealthB`,`Percentage`),`Percentage`, label=`Percentage`)) + geom_point(col="black",size=2) + geom_text(aes(label=label),vjust=- 0.65, color="black", size=3) + labs(title="Main Barrier To See Healthcare Provider", subtitle="Percentages of Respondents per Barrier") + coord_flip() + geom_segment(aes(x=`MainHealthB`, xend=`MainHealthB`, y=0, yend=`Percentage`)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank()) + scale_y_continuous(expand = c(0,0.08), labels = percent)
+```
+
+## Main Barrier To See Healthcare Provider by Sex
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_MainHealthB_Sex <- Kenya_Round1 %>% group_by(`Q2. Gender (Multiple Choice Question)`) %>% count(`Q21. Main barrier to see a healthcare provider (Multiple Choice Question)`)
+KEN_MainHealthB_Sex <- KEN_MainHealthB_Sex %>% group_by(`Q2. Gender (Multiple Choice Question)`) %>% mutate(MainHealthB_Perct = round(n/sum(n),3))
+KEN_MainHealthB_Sex$label <- paste(100*(KEN_MainHealthB_Sex$MainHealthB_Perct),"%")
+names(KEN_MainHealthB_Sex) <- c("Sex","MainHealthB", "Recipients","Percentage","label")
+
+ggplot(KEN_MainHealthB_Sex, aes(reorder (`MainHealthB`,`Percentage`),`Percentage`, label=`Percentage`, color = Sex)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`MainHealthB`, ymax=`Percentage`, color = Sex), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("Main Barrier To See Healthcare Provider by Sex",subtitle ="Percentages of Respondents per Barrier" )
+```
+
+## Main Barrier To See Healthcare Provider by Age
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_MainHealthB_Age <- Kenya_Round1 %>% group_by(`Q3. Age (Multiple Choice Question)`) %>% count(`Q21. Main barrier to see a healthcare provider (Multiple Choice Question)`)
+KEN_MainHealthB_Age <- KEN_MainHealthB_Age %>% group_by(`Q3. Age (Multiple Choice Question)`) %>% mutate(MainHealthB_Perct = round(n/sum(n),3))
+KEN_MainHealthB_Age$label <- paste(100*(KEN_MainHealthB_Age$MainHealthB_Perct),"%")
+names(KEN_MainHealthB_Age) <- c("Age","MainHealthB", "Recipients","Percentage","label")
+
+ggplot(KEN_MainHealthB_Age, aes(reorder (`MainHealthB`,`Percentage`),`Percentage`, label=`Percentage`, color = Age)) +
+  facet_wrap(~Age, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`MainHealthB`, ymax=`Percentage`, color = Age), position = position_dodge(1)) + scale_y_continuous(expand = c(0,0.08), labels = NULL) + ggtitle("Main Barrier To See Healthcare Provider by Age",subtitle ="Percentages of Respondents per Barrier" )
+```
+
+## Main Barrier To See Healthcare Provider by Urban/Rural Setting
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_MainHealthB_Set <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`) %>% count(`Q21. Main barrier to see a healthcare provider (Multiple Choice Question)`)
+KEN_MainHealthB_Set <- KEN_MainHealthB_Set %>% group_by(`Q4. Setting (Multiple Choice Question)`) %>% mutate(MainHealthB_Perct = round(n/sum(n),3))
+KEN_MainHealthB_Set$label <- paste(100*(KEN_MainHealthB_Set$MainHealthB_Perct),"%")
+names(KEN_MainHealthB_Set) <- c("Set","MainHealthB", "Recipients","Percentage","label")
+
+ggplot(KEN_MainHealthB_Set, aes(reorder (`MainHealthB`,`Percentage`),`Percentage`, label=`Percentage`, color = Set)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`MainHealthB`, ymax=`Percentage`, color = Set), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("Main Barrier To See Healthcare Provider by Setting",subtitle ="Percentages of Respondents per Barrier" )
+```
+
+## Main Barrier To See Healthcare Provider by Province
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_MainHealthB_Region <- Kenya_Round1 %>% group_by(`Q1. Region (Multiple Choice Question)`) %>% count(`Q21. Main barrier to see a healthcare provider (Multiple Choice Question)`)
+KEN_MainHealthB_Region <- KEN_MainHealthB_Region %>% group_by(`Q1. Region (Multiple Choice Question)`) %>% mutate(MainHealthB_Perct = round(n/sum(n),3))
+KEN_MainHealthB_Region$label <- paste(100*(KEN_MainHealthB_Region$MainHealthB_Perct),"%")
+names(KEN_MainHealthB_Region) <- c("Region","MainHealthB", "Recipients","PercentRegion","label")
+
+ggplot(KEN_MainHealthB_Region, aes(reorder (`MainHealthB`,`PercentRegion`),`PercentRegion`, label=`PercentRegion`, color = Region)) + facet_wrap(~Region, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "none" ) + geom_linerange(aes(y=`PercentRegion`, ymin=0, x=`MainHealthB`, ymax=`PercentRegion`, color = Region), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0, 0.85)) + ggtitle("Main Barrier To See Healthcare Provider by Province",subtitle ="Percentages of Respondents per Barrier" ) + coord_flip()
+```
+
+## Main Barrier To See Healthcare Provider by Sex and Urban/Rural Setting
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_MainHealthB_AgeSet <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% count(`Q21. Main barrier to see a healthcare provider (Multiple Choice Question)`)
+KEN_MainHealthB_AgeSet <- KEN_MainHealthB_AgeSet %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% mutate(MainHealthB_Perct = round(n/sum(n),3))
+KEN_MainHealthB_AgeSet$label <- paste(100*(KEN_MainHealthB_AgeSet$MainHealthB_Perct),"%")
+names(KEN_MainHealthB_AgeSet) <- c("Set","Sex", "MainHealthB", "n", "PercentAgeSet","label")
+
+ggplot(KEN_MainHealthB_AgeSet, aes(reorder (`MainHealthB`,`PercentAgeSet`),`PercentAgeSet`, label=`PercentAgeSet`, color = Sex)) + facet_wrap(Set ~ Sex, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "bottom" ) + geom_linerange(aes(y=`PercentAgeSet`, ymin=0, x=`MainHealthB`, ymax=`PercentAgeSet`, color = Sex), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0, 0.85)) + ggtitle("Main Barrier To See Healthcare Provider by Sex and Setting",subtitle ="Percentages of Respondents per Barrier" ) + coord_flip()
+```
+
+## COVID-19 Most Concerned Social Consequences
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+#Social Consequence Covid-19 - Q22
+
+KEN_SocConsq <-plyr::count(Kenya_Round1$`Q22. Which social consequence linked to Covid-19 are you most concerned with? (Multiple Choice Question)`)
+
+KEN_SocConsq <- KEN_SocConsq %>% mutate(perc = round(freq/sum(freq),3))
+KEN_SocConsq$label <- paste(100 * KEN_SocConsq$perc,"%")
+names(KEN_SocConsq) <- c("SocConsq", "Recipients","Percentage","label")
+
+ggplot(KEN_SocConsq, aes(reorder (`SocConsq`,`Percentage`),`Percentage`, label=`Percentage`)) + geom_point(col="black",size=2) + geom_text(aes(label=label),vjust=- 0.65, color="black", size=3) + labs(title="COVID-19 Most Concerned Social Consequences", subtitle="Percentages of Respondents per Concern") + coord_flip() + geom_segment(aes(x=`SocConsq`, xend=`SocConsq`, y=0, yend=`Percentage`)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank()) + scale_y_continuous(expand = c(0,0.08), labels = percent)
+```
+
+## COVID-19 Most Concerned Social Consequences by Sex
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_SocConsq_Sex <- Kenya_Round1 %>% group_by(`Q2. Gender (Multiple Choice Question)`) %>% count(`Q22. Which social consequence linked to Covid-19 are you most concerned with? (Multiple Choice Question)`)
+KEN_SocConsq_Sex <- KEN_SocConsq_Sex %>% group_by(`Q2. Gender (Multiple Choice Question)`) %>% mutate(SocConsq_Perct = round(n/sum(n),3))
+KEN_SocConsq_Sex$label <- paste(100*(KEN_SocConsq_Sex$SocConsq_Perct),"%")
+names(KEN_SocConsq_Sex) <- c("Sex","SocConsq", "Recipients","Percentage","label")
+
+ggplot(KEN_SocConsq_Sex, aes(reorder (`SocConsq`,`Percentage`),`Percentage`, label=`Percentage`, color = Sex)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`SocConsq`, ymax=`Percentage`, color = Sex), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("COVID-19 Most Concerned Social Consequences by Sex",subtitle ="Percentages of Respondents per Concern" )
+```
+
+## COVID-19 Most Concerned Social Consequences by Age
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_SocConsq_Age <- Kenya_Round1 %>% group_by(`Q3. Age (Multiple Choice Question)`) %>% count(`Q22. Which social consequence linked to Covid-19 are you most concerned with? (Multiple Choice Question)`)
+KEN_SocConsq_Age <- KEN_SocConsq_Age %>% group_by(`Q3. Age (Multiple Choice Question)`) %>% mutate(SocConsq_Perct = round(n/sum(n),3))
+KEN_SocConsq_Age$label <- paste(100*(KEN_SocConsq_Age$SocConsq_Perct),"%")
+names(KEN_SocConsq_Age) <- c("Age","SocConsq", "Recipients","Percentage","label")
+
+ggplot(KEN_SocConsq_Age, aes(reorder (`SocConsq`,`Percentage`),`Percentage`, label=`Percentage`, color = Age)) +
+  facet_wrap(~Age, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`SocConsq`, ymax=`Percentage`, color = Age), position = position_dodge(1)) + scale_y_continuous(expand = c(0,0.08), labels = NULL) + ggtitle("COVID-19 Most Concerned Social Consequences by Sex",subtitle ="Percentages of Respondents per Concern" )
+```
+
+## COVID-19 Most Concerned Social Consequences by Urban/Rural Setting
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_SocConsq_Set <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`) %>% count(`Q22. Which social consequence linked to Covid-19 are you most concerned with? (Multiple Choice Question)`)
+KEN_SocConsq_Set <- KEN_SocConsq_Set %>% group_by(`Q4. Setting (Multiple Choice Question)`) %>% mutate(SocConsq_Perct = round(n/sum(n),3))
+KEN_SocConsq_Set$label <- paste(100*(KEN_SocConsq_Set$SocConsq_Perct),"%")
+names(KEN_SocConsq_Set) <- c("Set","SocConsq", "Recipients","Percentage","label")
+
+ggplot(KEN_SocConsq_Set, aes(reorder (`SocConsq`,`Percentage`),`Percentage`, label=`Percentage`, color = Set)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`SocConsq`, ymax=`Percentage`, color = Set), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("COVID-19 Most Concerned Social Consequences by Setting",subtitle ="Percentages of Respondents per Concern" )
+```
+
+## COVID-19 Most Concerned Social Consequences by Province
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_SocConsq_Region <- Kenya_Round1 %>% group_by(`Q1. Region (Multiple Choice Question)`) %>% count(`Q22. Which social consequence linked to Covid-19 are you most concerned with? (Multiple Choice Question)`)
+KEN_SocConsq_Region <- KEN_SocConsq_Region %>% group_by(`Q1. Region (Multiple Choice Question)`) %>% mutate(SocConsq_Perct = round(n/sum(n),3))
+KEN_SocConsq_Region$label <- paste(100*(KEN_SocConsq_Region$SocConsq_Perct),"%")
+names(KEN_SocConsq_Region) <- c("Region","SocConsq", "Recipients","PercentRegion","label")
+
+ggplot(KEN_SocConsq_Region, aes(reorder (`SocConsq`,`PercentRegion`),`PercentRegion`, label=`PercentRegion`, color = Region)) + facet_wrap(~Region, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "none" ) + geom_linerange(aes(y=`PercentRegion`, ymin=0, x=`SocConsq`, ymax=`PercentRegion`, color = Region), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0, 0.85)) + ggtitle("COVID-19 Most Concerned Social Consequences by Province",subtitle ="Percentages of Respondents per Concern" ) + coord_flip()
+```
+
+## COVID-19 Most Concerned Social Consequences by Sex and Urban/Rural Setting
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_SocConsq_AgeSet <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% count(`Q22. Which social consequence linked to Covid-19 are you most concerned with? (Multiple Choice Question)`)
+KEN_SocConsq_AgeSet <- KEN_SocConsq_AgeSet %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% mutate(SocConsq_Perct = round(n/sum(n),3))
+KEN_SocConsq_AgeSet$label <- paste(100*(KEN_SocConsq_AgeSet$SocConsq_Perct),"%")
+names(KEN_SocConsq_AgeSet) <- c("Set","Sex", "SocConsq", "n", "PercentAgeSet","label")
+
+ggplot(KEN_SocConsq_AgeSet, aes(reorder (`SocConsq`,`PercentAgeSet`),`PercentAgeSet`, label=`PercentAgeSet`, color = Sex)) + facet_wrap(Set ~ Sex, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "bottom" ) + geom_linerange(aes(y=`PercentAgeSet`, ymin=0, x=`SocConsq`, ymax=`PercentAgeSet`, color = Sex), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0, 0.85)) + ggtitle("COVID-19 Most Concerned Social Consequences by Sex and Setting",subtitle ="Percentages of Respondents per Concern" ) + coord_flip()
+```
+
+# Children Focused Questions
+
+## Respondents with Children on Sample
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+#Children
+
+##Families with Children
+KEN_Child <-plyr::count(Kenya_Round1$`Q10. Children of school-going age? (Multiple Choice Question)`)
+
+KEN_Child <- KEN_Child %>% mutate(perc = round(freq/sum(freq),3))
+KEN_Child$label <- paste(100 * KEN_Child$perc,"%")
+names(KEN_Child) <- c("Child", "Recipients","Percentage","label")
+
+ggplot(KEN_Child, aes(reorder (`Child`,`Percentage`),`Percentage`, label=`Percentage`)) + geom_point(col="black",size=2) + geom_text(aes(label=label),vjust=- 0.65, color="black", size=3) + labs(title="Respondents with Children of School-Age", subtitle="Percentages of Respondents with a children of school age in their household - *as advised by health care provider") + coord_flip() + geom_segment(aes(x=`Child`, xend=`Child`, y=0, yend=`Percentage`)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank()) + scale_y_continuous(expand = c(0,0.08), labels = percent)
+```
+
+##Respondents with Children on Sample by Sex
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_Child_Sex <- Kenya_Round1 %>% group_by(`Q2. Gender (Multiple Choice Question)`) %>% count(`Q10. Children of school-going age? (Multiple Choice Question)`)
+KEN_Child_Sex <- KEN_Child_Sex %>% group_by(`Q2. Gender (Multiple Choice Question)`) %>% mutate(Child_Perct = round(n/sum(n),3))
+KEN_Child_Sex$label <- paste(100*(KEN_Child_Sex$Child_Perct),"%")
+names(KEN_Child_Sex) <- c("Sex","Child", "Recipients","Percentage","label")
+
+ggplot(KEN_Child_Sex, aes(reorder (`Child`,`Percentage`),`Percentage`, label=`Percentage`, color = Sex)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`Child`, ymax=`Percentage`, color = Sex), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("Respondents with Children of School-Age by Sex",subtitle ="Percentages of Respondents with a children of school age in their household")
+```
+
+## Respondents with Children on Sample by Age
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_Child_Age <- Kenya_Round1 %>% group_by(`Q3. Age (Multiple Choice Question)`) %>% count(`Q10. Children of school-going age? (Multiple Choice Question)`)
+KEN_Child_Age <- KEN_Child_Age %>% group_by(`Q3. Age (Multiple Choice Question)`) %>% mutate(Child_Perct = round(n/sum(n),3))
+KEN_Child_Age$label <- paste(100*(KEN_Child_Age$Child_Perct),"%")
+names(KEN_Child_Age) <- c("Age","Child", "Recipients","Percentage","label")
+
+ggplot(KEN_Child_Age, aes(reorder (`Child`,`Percentage`),`Percentage`, label=`Percentage`, color = Age)) +
+  facet_wrap(~Age, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`Child`, ymax=`Percentage`, color = Age), position = position_dodge(1)) + scale_y_continuous(expand = c(0,0.08), labels = NULL, limits = c(0, 1.1)) + ggtitle("Respondents with Children of School-Age by Age",subtitle ="Percentages of Respondents with a children of school age in their household" )
+```
+
+##Respondents with Children on Sample by Urban/Rural Setting
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_Child_Set <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`) %>% count(`Q10. Children of school-going age? (Multiple Choice Question)`)
+KEN_Child_Set <- KEN_Child_Set %>% group_by(`Q4. Setting (Multiple Choice Question)`) %>% mutate(Child_Perct = round(n/sum(n),3))
+KEN_Child_Set$label <- paste(100*(KEN_Child_Set$Child_Perct),"%")
+names(KEN_Child_Set) <- c("Set","Child", "Recipients","Percentage","label")
+
+ggplot(KEN_Child_Set, aes(reorder (`Child`,`Percentage`),`Percentage`, label=`Percentage`, color = Set)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`Child`, ymax=`Percentage`, color = Set), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("Respondents with Children of School-Age by Setting",subtitle ="Percentages of Respondents with a children of school age in their household" )
+```
+
+## Respondents with Children on Sample by Province
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_Child_Region <- Kenya_Round1 %>% group_by(`Q1. Region (Multiple Choice Question)`) %>% count(`Q10. Children of school-going age? (Multiple Choice Question)`)
+KEN_Child_Region <- KEN_Child_Region %>% group_by(`Q1. Region (Multiple Choice Question)`) %>% mutate(Child_Perct = round(n/sum(n),3))
+KEN_Child_Region$label <- paste(100*(KEN_Child_Region$Child_Perct),"%")
+names(KEN_Child_Region) <- c("Region","Child", "Recipients","PercentRegion","label")
+
+ggplot(KEN_Child_Region, aes(reorder (`Child`,`PercentRegion`),`PercentRegion`, label=`PercentRegion`, color = Region)) + facet_wrap(~Region, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "none" ) + geom_linerange(aes(y=`PercentRegion`, ymin=0, x=`Child`, ymax=`PercentRegion`, color = Region), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0, 1.15)) + ggtitle("Respondents with Children of School-Age by Province",subtitle ="Percentages of Respondents with a children of school age in their household" ) + coord_flip()
+```
+
+## Respondents with Children on Sample by Urban/Rural Setting
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_Child_AgeSet <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% count(`Q10. Children of school-going age? (Multiple Choice Question)`)
+KEN_Child_AgeSet <- KEN_Child_AgeSet %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% mutate(Child_Perct = round(n/sum(n),3))
+KEN_Child_AgeSet$label <- paste(100*(KEN_Child_AgeSet$Child_Perct),"%")
+names(KEN_Child_AgeSet) <- c("Set","Sex", "Child", "n", "PercentAgeSet","label")
+
+ggplot(KEN_Child_AgeSet, aes(reorder (`Child`,`PercentAgeSet`),`PercentAgeSet`, label=`PercentAgeSet`, color = Sex)) + facet_wrap(Set ~ Sex, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "bottom" ) + geom_linerange(aes(y=`PercentAgeSet`, ymin=0, x=`Child`, ymax=`PercentAgeSet`, color = Sex), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0, 1.1)) + ggtitle("Respondents with Children of School-Age by Sex and Setting",subtitle ="Percentages of Respondents with a children of school age in their household" ) + coord_flip()
+```
+
+## Children Attending Distance Learning
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+##Children Attend Distance Learning
+
+KEN_ChildDistLearn <-plyr::count(Kenya_Children$`Q11. Do children attend KICD Education Programmes (Multiple Choice Question)`)
+
+KEN_ChildDistLearn <- KEN_ChildDistLearn %>% mutate(perc = round(freq/sum(freq),3))
+KEN_ChildDistLearn$label <- paste(100 * KEN_ChildDistLearn$perc,"%")
+names(KEN_ChildDistLearn) <- c("Child", "Recipients","Percentage","label")
+
+ggplot(KEN_ChildDistLearn, aes(reorder (`Child`,`Percentage`),`Percentage`, label=`Percentage`)) + geom_point(col="black",size=2) + geom_text(aes(label=label),vjust=- 0.65, color="black", size=3) + labs(title="Respondents with Children Attending Distance Learning Classes", subtitle="Percentages of Respondents with a children in KICD Education Programme - Respondents with Children in School Age Only") + coord_flip() + geom_segment(aes(x=`Child`, xend=`Child`, y=0, yend=`Percentage`)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank()) + scale_y_continuous(expand = c(0,0.08), labels = percent)
+```
+
+## Children Attending Distance Learning by Respondents' Sex
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_ChildDistLearn_Sex <- Kenya_Children %>% group_by(`Q2. Gender (Multiple Choice Question)`) %>% count(`Q11. Do children attend KICD Education Programmes (Multiple Choice Question)`)
+KEN_ChildDistLearn_Sex <- KEN_ChildDistLearn_Sex %>% group_by(`Q2. Gender (Multiple Choice Question)`) %>% mutate(Child_Perct = round(n/sum(n),3))
+KEN_ChildDistLearn_Sex$label <- paste(100*(KEN_ChildDistLearn_Sex$Child_Perct),"%")
+names(KEN_ChildDistLearn_Sex) <- c("Sex","Child", "Recipients","Percentage","label")
+
+ggplot(KEN_ChildDistLearn_Sex, aes(reorder (`Child`,`Percentage`),`Percentage`, label=`Percentage`, color = Sex)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`Child`, ymax=`Percentage`, color = Sex), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("Respondents with Children Attending Distance Learning Classes by Sex",subtitle ="Percentages of Respondents with a children in KICD Education Programme - Respondents with Children in School Age Only")
+```
+
+## Children Attending Distance Learning by Respondents' Age
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_ChildDistLearn_Age <- Kenya_Children %>% group_by(`Q3. Age (Multiple Choice Question)`) %>% count(`Q11. Do children attend KICD Education Programmes (Multiple Choice Question)`)
+KEN_ChildDistLearn_Age <- KEN_ChildDistLearn_Age %>% group_by(`Q3. Age (Multiple Choice Question)`) %>% mutate(Child_Perct = round(n/sum(n),3))
+KEN_ChildDistLearn_Age$label <- paste(100*(KEN_ChildDistLearn_Age$Child_Perct),"%")
+names(KEN_ChildDistLearn_Age) <- c("Age","Child", "Recipients","Percentage","label")
+
+ggplot(KEN_ChildDistLearn_Age, aes(reorder (`Child`,`Percentage`),`Percentage`, label=`Percentage`, color = Age)) +
+  facet_wrap(~Age, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`Child`, ymax=`Percentage`, color = Age), position = position_dodge(1)) + scale_y_continuous(expand = c(0,0.08), labels = NULL, limits = c(0, 1.1)) + ggtitle("Respondents with Children Attending Distance Learning Classes by Age",subtitle ="Percentages of Respondents with a children in KICD Education Programme - Respondents with Children in School Age Only" )
+```
+
+## Children Attending Distance Learning by Respondents' Urban/Rural Setting
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_ChildDistLearn_Set <- Kenya_Children %>% group_by(`Q4. Setting (Multiple Choice Question)`) %>% count(`Q11. Do children attend KICD Education Programmes (Multiple Choice Question)`)
+KEN_ChildDistLearn_Set <- KEN_ChildDistLearn_Set %>% group_by(`Q4. Setting (Multiple Choice Question)`) %>% mutate(Child_Perct = round(n/sum(n),3))
+KEN_ChildDistLearn_Set$label <- paste(100*(KEN_ChildDistLearn_Set$Child_Perct),"%")
+names(KEN_ChildDistLearn_Set) <- c("Set","Child", "Recipients","Percentage","label")
+
+ggplot(KEN_ChildDistLearn_Set, aes(reorder (`Child`,`Percentage`),`Percentage`, label=`Percentage`, color = Set)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`Child`, ymax=`Percentage`, color = Set), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("Respondents with Children Attending Distance Learning Classes by Setting",subtitle ="Percentages of Respondents with a children in KICD Education Programme - Respondents with Children in School Age Only" )
+```
+
+## Children Attending Distance Learning by Respondents' Province
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_ChildDistLearn_Region <- Kenya_Children %>% group_by(`Q1. Region (Multiple Choice Question)`) %>% count(`Q11. Do children attend KICD Education Programmes (Multiple Choice Question)`)
+KEN_ChildDistLearn_Region <- KEN_ChildDistLearn_Region %>% group_by(`Q1. Region (Multiple Choice Question)`) %>% mutate(Child_Perct = round(n/sum(n),3))
+KEN_ChildDistLearn_Region$label <- paste(100*(KEN_ChildDistLearn_Region$Child_Perct),"%")
+names(KEN_ChildDistLearn_Region) <- c("Region","Child", "Recipients","PercentRegion","label")
+
+ggplot(KEN_ChildDistLearn_Region, aes(reorder (`Child`,`PercentRegion`),`PercentRegion`, label=`PercentRegion`, color = Region)) + facet_wrap(~Region, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "none" ) + geom_linerange(aes(y=`PercentRegion`, ymin=0, x=`Child`, ymax=`PercentRegion`, color = Region), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0, 1.15)) + ggtitle("Respondents with Children Attending Distance Learning Classes by Province",subtitle ="Percentages of Respondents with a children in KICD Education Programme - Respondents with Children in School Age Only" ) + coord_flip()
+```
+
+## Children Attending Distance Learning by Respondents' Sex and Urban/Rural Setting
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_ChildDistLearn_AgeSet <- Kenya_Children %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% count(`Q11. Do children attend KICD Education Programmes (Multiple Choice Question)`)
+KEN_ChildDistLearn_AgeSet <- KEN_ChildDistLearn_AgeSet %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% mutate(Child_Perct = round(n/sum(n),3))
+KEN_ChildDistLearn_AgeSet$label <- paste(100*(KEN_ChildDistLearn_AgeSet$Child_Perct),"%")
+names(KEN_ChildDistLearn_AgeSet) <- c("Set","Sex", "Child", "n", "PercentAgeSet","label")
+
+ggplot(KEN_ChildDistLearn_AgeSet, aes(reorder (`Child`,`PercentAgeSet`),`PercentAgeSet`, label=`PercentAgeSet`, color = Sex)) + facet_wrap(Set ~ Sex, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "bottom" ) + geom_linerange(aes(y=`PercentAgeSet`, ymin=0, x=`Child`, ymax=`PercentAgeSet`, color = Sex), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0, 1.1)) + ggtitle("Respondents with Children Attending Distance Learning Classes by Sex and Setting",subtitle ="Percentages of Respondents with a children in KICD Education Programme - Respondents with Children in School Age Only" ) + coord_flip()
+```
+
+## Respondents willingness to send children back to school when re-open
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+##Back to School
+
+KEN_ChildBack2School <-plyr::count(Kenya_Children$`Q12. Send children to schools when they reopen (Multiple Choice Question)`)
+
+KEN_ChildBack2School <- KEN_ChildBack2School %>% mutate(perc = round(freq/sum(freq),3))
+KEN_ChildBack2School$label <- paste(100 * KEN_ChildBack2School$perc,"%")
+names(KEN_ChildBack2School) <- c("Child", "Recipients","Percentage","label")
+
+ggplot(KEN_ChildBack2School, aes(reorder (`Child`,`Percentage`),`Percentage`, label=`Percentage`)) + geom_point(col="black",size=2) + geom_text(aes(label=label),vjust=- 0.65, color="black", size=3) + labs(title="Respondents willingness to send children back to school when re-open", subtitle="Percentages of Respondents Yes/No - Respondents with Children in School Age Only") + coord_flip() + geom_segment(aes(x=`Child`, xend=`Child`, y=0, yend=`Percentage`)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank()) + scale_y_continuous(expand = c(0,0.08), labels = percent)
+```
+
+## Respondents willingness to send children back to school when re-open by Sex
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_ChildBack2School_Sex <- Kenya_Children %>% group_by(`Q2. Gender (Multiple Choice Question)`) %>% count(`Q12. Send children to schools when they reopen (Multiple Choice Question)`)
+KEN_ChildBack2School_Sex <- KEN_ChildBack2School_Sex %>% group_by(`Q2. Gender (Multiple Choice Question)`) %>% mutate(Child_Perct = round(n/sum(n),3))
+KEN_ChildBack2School_Sex$label <- paste(100*(KEN_ChildBack2School_Sex$Child_Perct),"%")
+names(KEN_ChildBack2School_Sex) <- c("Sex","Child", "Recipients","Percentage","label")
+
+ggplot(KEN_ChildBack2School_Sex, aes(reorder (`Child`,`Percentage`),`Percentage`, label=`Percentage`, color = Sex)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`Child`, ymax=`Percentage`, color = Sex), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("Respondents willingness to send children back to school when re-open, by Sex",subtitle ="Percentages of Respondents Yes/No - Respondents with Children in School Age Only")
+```
+
+## Respondents willingness to send children back to school when re-open by Age
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_ChildBack2School_Age <- Kenya_Children %>% group_by(`Q3. Age (Multiple Choice Question)`) %>% count(`Q12. Send children to schools when they reopen (Multiple Choice Question)`)
+KEN_ChildBack2School_Age <- KEN_ChildBack2School_Age %>% group_by(`Q3. Age (Multiple Choice Question)`) %>% mutate(Child_Perct = round(n/sum(n),3))
+KEN_ChildBack2School_Age$label <- paste(100*(KEN_ChildBack2School_Age$Child_Perct),"%")
+names(KEN_ChildBack2School_Age) <- c("Age","Child", "Recipients","Percentage","label")
+
+ggplot(KEN_ChildBack2School_Age, aes(reorder (`Child`,`Percentage`),`Percentage`, label=`Percentage`, color = Age)) +
+  facet_wrap(~Age, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`Child`, ymax=`Percentage`, color = Age), position = position_dodge(1)) + scale_y_continuous(expand = c(0,0.08), labels = NULL, limits = c(0, 1.1)) + ggtitle("Respondents willingness to send children back to school when re-open, by Age",subtitle ="Percentages of Respondents Yes/No - Respondents with Children in School Age Only" )
+```
+
+## Respondents willingness to send children back to school when re-open by Urban/Rural Setting
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_ChildBack2School_Set <- Kenya_Children %>% group_by(`Q4. Setting (Multiple Choice Question)`) %>% count(`Q12. Send children to schools when they reopen (Multiple Choice Question)`)
+KEN_ChildBack2School_Set <- KEN_ChildBack2School_Set %>% group_by(`Q4. Setting (Multiple Choice Question)`) %>% mutate(Child_Perct = round(n/sum(n),3))
+KEN_ChildBack2School_Set$label <- paste(100*(KEN_ChildBack2School_Set$Child_Perct),"%")
+names(KEN_ChildBack2School_Set) <- c("Set","Child", "Recipients","Percentage","label")
+
+ggplot(KEN_ChildBack2School_Set, aes(reorder (`Child`,`Percentage`),`Percentage`, label=`Percentage`, color = Set)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`Child`, ymax=`Percentage`, color = Set), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("Respondents willingness to send children back to school when re-open, by Setting",subtitle ="Percentages of Respondents Yes/No - Respondents with Children in School Age Only" )
+```
+
+## Respondents willingness to send children back to school when re-open by Province
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_ChildBack2School_Region <- Kenya_Children %>% group_by(`Q1. Region (Multiple Choice Question)`) %>% count(`Q12. Send children to schools when they reopen (Multiple Choice Question)`)
+KEN_ChildBack2School_Region <- KEN_ChildBack2School_Region %>% group_by(`Q1. Region (Multiple Choice Question)`) %>% mutate(Child_Perct = round(n/sum(n),3))
+KEN_ChildBack2School_Region$label <- paste(100*(KEN_ChildBack2School_Region$Child_Perct),"%")
+names(KEN_ChildBack2School_Region) <- c("Region","Child", "Recipients","PercentRegion","label")
+
+ggplot(KEN_ChildBack2School_Region, aes(reorder (`Child`,`PercentRegion`),`PercentRegion`, label=`PercentRegion`, color = Region)) + facet_wrap(~Region, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "none" ) + geom_linerange(aes(y=`PercentRegion`, ymin=0, x=`Child`, ymax=`PercentRegion`, color = Region), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0, 1.15)) + ggtitle("Respondents willingness to send children back to school when re-open, by Province",subtitle ="Percentages of Respondents Yes/No - Respondents with Children in School Age Only" ) + coord_flip()
+```
+
+## Respondents willingness to send children back to school when re-open by Sex and Urban and Rural Setting
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_ChildBack2School_AgeSet <- Kenya_Children %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% count(`Q12. Send children to schools when they reopen (Multiple Choice Question)`)
+KEN_ChildBack2School_AgeSet <- KEN_ChildBack2School_AgeSet %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% mutate(Child_Perct = round(n/sum(n),3))
+KEN_ChildBack2School_AgeSet$label <- paste(100*(KEN_ChildBack2School_AgeSet$Child_Perct),"%")
+names(KEN_ChildBack2School_AgeSet) <- c("Set","Sex", "Child", "n", "PercentAgeSet","label")
+
+ggplot(KEN_ChildBack2School_AgeSet, aes(reorder (`Child`,`PercentAgeSet`),`PercentAgeSet`, label=`PercentAgeSet`, color = Sex)) + facet_wrap(Set ~ Sex, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "bottom" ) + geom_linerange(aes(y=`PercentAgeSet`, ymin=0, x=`Child`, ymax=`PercentAgeSet`, color = Sex), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0, 1.1)) + ggtitle("Respondents willingness to send children back to school when re-open, by Sex and Setting",subtitle ="Percentages of Respondents Yes/No  - Respondents with Children in School Age Only" ) + coord_flip()
+```
+
+## Main concern of respondents related to their children during COVID-19
+
+```{r echo= FALSE, fig.dim=c(8,7)}
+##Main Concern COVID-19 in relation to children
+
+KEN_ChildConcern <-plyr::count(Kenya_Children$`Q13. Main concern for my children during covid-19 (Multiple Choice Question)`)
+
+KEN_ChildConcern <- KEN_ChildConcern %>% mutate(perc = round(freq/sum(freq),3))
+KEN_ChildConcern$label <- paste(100 * KEN_ChildConcern$perc,"%")
+names(KEN_ChildConcern) <- c("Child", "Recipients","Percentage","label")
+
+ggplot(KEN_ChildConcern, aes(reorder (`Child`,`Percentage`),`Percentage`, label=`Percentage`)) + geom_point(col="black",size=2) + geom_text(aes(label=label),vjust=- 0.65, color="black", size=3) + labs(title="Main concern of Respondents on their children during COVID-19", subtitle="Percentages of Respondents by Concern - Respondents with Children in School Age Only") + coord_flip() + geom_segment(aes(x=`Child`, xend=`Child`, y=0, yend=`Percentage`)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank()) + scale_y_continuous(expand = c(0,0.08), labels = percent)
+```
+
+## Main concern of respondents related to their children during COVID-19 by Sex
+
+```{r echo= FALSE, fig.dim=c(8,7)}
+KEN_ChildConcern_Sex <- Kenya_Children %>% group_by(`Q2. Gender (Multiple Choice Question)`) %>% count(`Q13. Main concern for my children during covid-19 (Multiple Choice Question)`)
+KEN_ChildConcern_Sex <- KEN_ChildConcern_Sex %>% group_by(`Q2. Gender (Multiple Choice Question)`) %>% mutate(Child_Perct = round(n/sum(n),3))
+KEN_ChildConcern_Sex$label <- paste(100*(KEN_ChildConcern_Sex$Child_Perct),"%")
+names(KEN_ChildConcern_Sex) <- c("Sex","Child", "Recipients","Percentage","label")
+
+ggplot(KEN_ChildConcern_Sex, aes(reorder (`Child`,`Percentage`),`Percentage`, label=`Percentage`, color = Sex)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`Child`, ymax=`Percentage`, color = Sex), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("Main concern of Respondents on their children during COVID-19, by Sex",subtitle = "Percentages of Respondents by Concern - Respondents with Children in School Age Only")
+```
+
+## Main concern of respondents related to their children during COVID-19 by Age
+
+```{r echo= FALSE, fig.dim=c(8,7)}
+KEN_ChildConcern_Age <- Kenya_Children %>% group_by(`Q3. Age (Multiple Choice Question)`) %>% count(`Q13. Main concern for my children during covid-19 (Multiple Choice Question)`)
+KEN_ChildConcern_Age <- KEN_ChildConcern_Age %>% group_by(`Q3. Age (Multiple Choice Question)`) %>% mutate(Child_Perct = round(n/sum(n),3))
+KEN_ChildConcern_Age$label <- paste(100*(KEN_ChildConcern_Age$Child_Perct),"%")
+names(KEN_ChildConcern_Age) <- c("Age","Child", "Recipients","Percentage","label")
+
+ggplot(KEN_ChildConcern_Age, aes(reorder (`Child`,`Percentage`),`Percentage`, label=`Percentage`, color = Age)) +
+  facet_wrap(~Age, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`Child`, ymax=`Percentage`, color = Age), position = position_dodge(1)) + scale_y_continuous(expand = c(0,0.08), labels = NULL, limits = c(0, 1.1)) + ggtitle("Main concern of Respondents on their children during COVID-19, by Age",subtitle ="Percentages of Respondents by Concern - Respondents with Children in School Age Only" )
+```
+
+## Main concern of respondents related to their children during COVID-19 by Urban/Rural Setting
+
+```{r echo= FALSE, fig.dim=c(8,7)}
+KEN_ChildConcern_Set <- Kenya_Children %>% group_by(`Q4. Setting (Multiple Choice Question)`) %>% count(`Q13. Main concern for my children during covid-19 (Multiple Choice Question)`)
+KEN_ChildConcern_Set <- KEN_ChildConcern_Set %>% group_by(`Q4. Setting (Multiple Choice Question)`) %>% mutate(Child_Perct = round(n/sum(n),3))
+KEN_ChildConcern_Set$label <- paste(100*(KEN_ChildConcern_Set$Child_Perct),"%")
+names(KEN_ChildConcern_Set) <- c("Set","Child", "Recipients","Percentage","label")
+
+ggplot(KEN_ChildConcern_Set, aes(reorder (`Child`,`Percentage`),`Percentage`, label=`Percentage`, color = Set)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`Child`, ymax=`Percentage`, color = Set), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("Main concern of Respondents on their children during COVID-19, by Setting",subtitle ="Percentages of Respondents by Concern - Respondents with Children in School Age Only" )
+```
+
+## Main concern of respondents related to their children during COVID-19 by Province
+
+```{r echo= FALSE, fig.dim=c(8,7)}
+KEN_ChildConcern_Region <- Kenya_Children %>% group_by(`Q1. Region (Multiple Choice Question)`) %>% count(`Q13. Main concern for my children during covid-19 (Multiple Choice Question)`)
+KEN_ChildConcern_Region <- KEN_ChildConcern_Region %>% group_by(`Q1. Region (Multiple Choice Question)`) %>% mutate(Child_Perct = round(n/sum(n),3))
+KEN_ChildConcern_Region$label <- paste(100*(KEN_ChildConcern_Region$Child_Perct),"%")
+names(KEN_ChildConcern_Region) <- c("Region","Child", "Recipients","PercentRegion","label")
+
+ggplot(KEN_ChildConcern_Region, aes(reorder (`Child`,`PercentRegion`),`PercentRegion`, label=`PercentRegion`, color = Region)) + facet_wrap(~Region, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "none" ) + geom_linerange(aes(y=`PercentRegion`, ymin=0, x=`Child`, ymax=`PercentRegion`, color = Region), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0, 1.15)) + ggtitle("Main concern of Respondents on their children during COVID-19, by Province",subtitle ="Percentages of Respondents by Concern - Respondents with Children in School Age Only" ) + coord_flip()
+```
+
+## Main concern of respondents related to their children during COVID-19 by Sex and Urban/Rural Setting
+
+```{r echo= FALSE, fig.dim=c(8,7)}
+KEN_ChildConcern_AgeSet <- Kenya_Children %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% count(`Q13. Main concern for my children during covid-19 (Multiple Choice Question)`)
+KEN_ChildConcern_AgeSet <- KEN_ChildConcern_AgeSet %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% mutate(Child_Perct = round(n/sum(n),3))
+KEN_ChildConcern_AgeSet$label <- paste(100*(KEN_ChildConcern_AgeSet$Child_Perct),"%")
+names(KEN_ChildConcern_AgeSet) <- c("Set","Sex", "Child", "n", "PercentAgeSet","label")
+
+ggplot(KEN_ChildConcern_AgeSet, aes(reorder (`Child`,`PercentAgeSet`),`PercentAgeSet`, label=`PercentAgeSet`, color = Sex)) + facet_wrap(Set ~ Sex, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "bottom" ) + geom_linerange(aes(y=`PercentAgeSet`, ymin=0, x=`Child`, ymax=`PercentAgeSet`, color = Sex), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0, 1.1)) + ggtitle("Main concern of Respondents on their children during COVID-19, by Sex and Setting",subtitle ="Percentages of Respondents by Concern - Respondents with Children in School Age Only" ) + coord_flip()
+```
+
+## Heard about violence against children
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+##Violence Against Children
+KEN_ViolChd <-plyr::count(Kenya_Round1$`Q14. Heard about violence against children? (Multiple Choice Question)`)
+
+KEN_ViolChd <- KEN_ViolChd %>% mutate(perc = round(freq/sum(freq),3))
+KEN_ViolChd$label <- paste(100 * KEN_ViolChd$perc,"%")
+names(KEN_ViolChd) <- c("ViolChd", "Recipients","Percentage","label")
+
+ggplot(KEN_ViolChd, aes(reorder (`ViolChd`,`Percentage`),`Percentage`, label=`Percentage`)) + geom_point(col="black",size=2) + geom_text(aes(label=label),vjust=- 0.65, color="black", size=3) + labs(title="Heard about violence against children", subtitle="Percentages of Respondents Yes/No") + coord_flip() + geom_segment(aes(x=`ViolChd`, xend=`ViolChd`, y=0, yend=`Percentage`)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank()) + scale_y_continuous(expand = c(0,0.08), labels = percent)
+```
+
+## Heard about violence against children by Sex
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_ViolChd_Sex <- Kenya_Round1 %>% group_by(`Q2. Gender (Multiple Choice Question)`) %>% count(`Q14. Heard about violence against children? (Multiple Choice Question)`)
+KEN_ViolChd_Sex <- KEN_ViolChd_Sex %>% group_by(`Q2. Gender (Multiple Choice Question)`) %>% mutate(ViolChd_Perct = round(n/sum(n),3))
+KEN_ViolChd_Sex$label <- paste(100*(KEN_ViolChd_Sex$ViolChd_Perct),"%")
+names(KEN_ViolChd_Sex) <- c("Sex","ViolChd", "Recipients","Percentage","label")
+
+ggplot(KEN_ViolChd_Sex, aes(reorder (`ViolChd`,`Percentage`),`Percentage`, label=`Percentage`, color = Sex)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`ViolChd`, ymax=`Percentage`, color = Sex), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("Heard about violence against children, by Sex",subtitle ="Percentages of Respondents Yes/No" )
+```
+
+## Heard about violence against children by Age
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_ViolChd_Age <- Kenya_Round1 %>% group_by(`Q3. Age (Multiple Choice Question)`) %>% count(`Q14. Heard about violence against children? (Multiple Choice Question)`)
+KEN_ViolChd_Age <- KEN_ViolChd_Age %>% group_by(`Q3. Age (Multiple Choice Question)`) %>% mutate(ViolChd_Perct = round(n/sum(n),3))
+KEN_ViolChd_Age$label <- paste(100*(KEN_ViolChd_Age$ViolChd_Perct),"%")
+names(KEN_ViolChd_Age) <- c("Age","ViolChd", "Recipients","Percentage","label")
+
+ggplot(KEN_ViolChd_Age, aes(reorder (`ViolChd`,`Percentage`),`Percentage`, label=`Percentage`, color = Age)) +
+  facet_wrap(~Age, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`ViolChd`, ymax=`Percentage`, color = Age), position = position_dodge(1)) + scale_y_continuous(expand = c(0,0.08), labels = NULL) + ggtitle("Heard about violence against children, by Age",subtitle ="Percentages of Respondents Yes/No" )
+```
+
+## Heard about violence against children by Urban/Rural Setting
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_ViolChd_Set <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`) %>% count(`Q14. Heard about violence against children? (Multiple Choice Question)`)
+KEN_ViolChd_Set <- KEN_ViolChd_Set %>% group_by(`Q4. Setting (Multiple Choice Question)`) %>% mutate(ViolChd_Perct = round(n/sum(n),3))
+KEN_ViolChd_Set$label <- paste(100*(KEN_ViolChd_Set$ViolChd_Perct),"%")
+names(KEN_ViolChd_Set) <- c("Set","ViolChd", "Recipients","Percentage","label")
+
+ggplot(KEN_ViolChd_Set, aes(reorder (`ViolChd`,`Percentage`),`Percentage`, label=`Percentage`, color = Set)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`ViolChd`, ymax=`Percentage`, color = Set), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("Heard about violence against children, by Setting",subtitle ="Percentages of Respondents Yes/No" )
+```
+
+## Heard about violence against children by Province
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_ViolChd_Region <- Kenya_Round1 %>% group_by(`Q1. Region (Multiple Choice Question)`) %>% count(`Q14. Heard about violence against children? (Multiple Choice Question)`)
+KEN_ViolChd_Region <- KEN_ViolChd_Region %>% group_by(`Q1. Region (Multiple Choice Question)`) %>% mutate(ViolChd_Perct = round(n/sum(n),3))
+KEN_ViolChd_Region$label <- paste(100*(KEN_ViolChd_Region$ViolChd_Perct),"%")
+names(KEN_ViolChd_Region) <- c("Region","ViolChd", "Recipients","PercentRegion","label")
+
+ggplot(KEN_ViolChd_Region, aes(reorder (`ViolChd`,`PercentRegion`),`PercentRegion`, label=`PercentRegion`, color = Region)) + facet_wrap(~Region, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "none" ) + geom_linerange(aes(y=`PercentRegion`, ymin=0, x=`ViolChd`, ymax=`PercentRegion`, color = Region), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0, 0.85)) + ggtitle("Heard about violence against children, by Province",subtitle ="Percentages of Respondents Yes/No" ) + coord_flip()
+```
+
+## Heard about violence against children by sex and Urban/Rural Setting
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+KEN_ViolChd_AgeSet <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% count(`Q14. Heard about violence against children? (Multiple Choice Question)`)
+KEN_ViolChd_AgeSet <- KEN_ViolChd_AgeSet %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% mutate(ViolChd_Perct = round(n/sum(n),3))
+KEN_ViolChd_AgeSet$label <- paste(100*(KEN_ViolChd_AgeSet$ViolChd_Perct),"%")
+names(KEN_ViolChd_AgeSet) <- c("Set","Sex", "ViolChd", "n", "PercentAgeSet","label")
+
+ggplot(KEN_ViolChd_AgeSet, aes(reorder (`ViolChd`,`PercentAgeSet`),`PercentAgeSet`, label=`PercentAgeSet`, color = Sex)) + facet_wrap(Set ~ Sex, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "bottom" ) + geom_linerange(aes(y=`PercentAgeSet`, ymin=0, x=`ViolChd`, ymax=`PercentAgeSet`, color = Sex), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0, 0.85)) + ggtitle("Heard about violence against children, by Sex and Setting",subtitle ="Percentages of Respondents Yes/No" ) + coord_flip()
+
+
+```
+

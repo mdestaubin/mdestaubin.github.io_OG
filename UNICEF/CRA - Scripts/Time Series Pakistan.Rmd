@@ -1,0 +1,757 @@
+---
+title: "Selected Pakistan Time Series Data"
+author: "Andres Ochoa Toasa - UNICEF Evaluation Office ILU"
+date: "November 22, 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(fig.width=10, fig.height=6,echo=FALSE) 
+
+```
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+# STEP 1 READ IN PACKAGES AND SPREADSHEET
+#Packages Needed
+library(readxl)
+library(readr)
+library(haven)
+#library(car)
+library(plyr)
+library(dplyr)
+
+
+library(foreign)
+library(rgeos)
+library(maptools)
+library(colorRamps)
+library(RColorBrewer)
+library(ggplot2)
+library(mapproj)
+library(rgdal)
+library(sf)
+library(colorspace)
+library(raster)
+#library(treemap)
+library(ggplotify)
+library(ggrepel)
+library(ggalt)
+library(ggthemes)
+#library(ggpubr)
+library(scales)
+library(sjPlot)
+library(likert)
+library(tidyr)
+library(formattable)
+library(data.table)
+library(HH)
+library(tidyverse)
+library(rlang)
+library(survey)
+library(hrbrthemes)
+
+if(!require(pacman))install.packages("pacman")
+
+pacman::p_load('dplyr', 'tidyr', 'gapminder',
+               'ggplot2',  'ggalt',
+               'forcats', 'R.utils', 'png', 
+               'grid', 'ggpubr', 'scales',
+               'bbplot')
+
+
+
+customGreen0 = "#DeF7E9"
+customGreen = "#71CA97"
+customRed = "#ff7f7f"
+```
+
+Importing Data
+
+```{r}
+
+Pakistan_raw1 <- read_excel("C:/Users/andre/OneDrive - UNICEF/CRA - ROSA/Pakistan/Pakistan Round 1.xlsx")
+Pakistan_raw2 <- read_excel("C:/Users/andre/OneDrive - UNICEF/CRA - ROSA/Pakistan/Pakistan Round 2.xlsx")
+Pakistan_raw3 <- read_excel("C:/Users/andre/OneDrive - UNICEF/CRA - ROSA/Pakistan/Pakistan Round 3.xlsx")
+
+```
+
+Weights Code
+
+```{r}
+##Dialed Numbers as Reported by Vianmo
+Dial<- 350000 + 47796 + 8093 + 705000
+Dial2<- 250000 + 34188 + 6001 + 1000000
+Dial3 <- 150000 + 20270 + 600000
+
+##Mobile/Telephone Cellullar Subscriptions (Depending if country calls only cellphones or all numbers) as reported from World Bank/ITU 2019 https://data.worldbank.org/indicator/IT.CEL.SETS.P2?locations=KE
+Subs<- 165405847
+
+##Initial Base Weight
+BW1 <- Subs/Dial
+BW2 <- Subs/Dial2
+BW3 <- Subs/Dial3
+
+##Cellphone Coverage (Subscriptions per 100 habitants) Adjustment as reported by World Bank/ITU
+Cov <- 0.76377
+BW1 <- BW1 * (1/Cov)
+BW2 <- BW2 * (1/Cov)
+BW3 <- BW3 * (1/Cov)
+
+##Adding BW2 to Database
+Pakistan_raw1$BW <- BW1
+Pakistan_raw2$BW <- BW2
+Pakistan_raw3$BW <- BW3
+
+Pakistan_NHS1 <- read_dta("Pakistan_ForWeights.dta") #Full Dataset National Household Survey
+Pakistan.PS <- xtabs(~Set + Sex +  Age1, data = Pakistan_NHS1) 
+
+Pakistan.PS3 <- read_excel("C:/Users/andre/OneDrive - UNICEF/CRA - ROSA/Pakistan/Data/First Round/Education Distribution.xlsx")
+Pakistan.PS3 <- as.data.frame(Pakistan.PS3)
+Pakistan.PS3 <- xtabs(Count ~ ., data = Pakistan.PS3)
+
+###Preparing Survey Object as Numeric Factors
+
+Pakistan_raw1$Sex <- 1
+Pakistan_raw1$Sex [Pakistan_raw1$Gender == 'Female'] <- 2
+Pakistan_raw1$Sex [Pakistan_raw1$Gender == 'Transgender'] <- 3
+Pakistan_raw1$Sex <- as.numeric(Pakistan_raw1$Sex)
+
+Pakistan_raw1$Set <- 1
+Pakistan_raw1$Set [Pakistan_raw1$Setting == 'Urban'] <- 2
+
+Pakistan_raw1$Age1 <- 1
+Pakistan_raw1$Age1 [Pakistan_raw1$Age == '25-29 years'] <- 2
+Pakistan_raw1$Age1 [Pakistan_raw1$Age == '30-39 years'] <- 3
+Pakistan_raw1$Age1 [Pakistan_raw1$Age == '40-49 years'] <- 4
+Pakistan_raw1$Age1 [Pakistan_raw1$Age == '50 and above'] <- 5
+
+Pakistan_raw1$Education [Pakistan_raw1$Education == "Completed Post-secondary Schooling (e.g. vocational, technical education or university)"] <- " Completed Post-secondary \n  Schooling "
+Pakistan_raw1$Education [Pakistan_raw1$Education == "Completed Higher Secondary Schooling (Intermediate)"] <- "Completed Intermediate Schooling"
+Pakistan_raw1$Education [Pakistan_raw1$Education =="Completed Secondary Schooling (Matric)"]<-"Completed Matric \n Schooling"
+Pakistan_raw1$Education [Pakistan_raw1$Education =="Completed Primary Schooling"]<-"Completed Primary \n Schooling"
+
+Pakistan_raw2$Education [Pakistan_raw2$Education == "Completed Post-secondary Schooling (e.g. vocational, technical education or university)"] <- " Completed Post-secondary \n  Schooling "
+Pakistan_raw2$Education [Pakistan_raw2$Education == "Completed Higher Secondary Schooling (Intermediate)"] <- "Completed Intermediate Schooling"
+Pakistan_raw2$Education [Pakistan_raw2$Education =="Completed Secondary Schooling (Matric)"]<-"Completed Matric \n Schooling"
+Pakistan_raw2$Education [Pakistan_raw2$Education =="Completed Primary Schooling"]<-"Completed Primary \n Schooling"
+
+Pakistan_raw3$Education [Pakistan_raw3$Education == "Completed Post-secondary Schooling (e.g. vocational, technical education or university)"] <- " Completed Post-secondary \n  Schooling "
+Pakistan_raw3$Education [Pakistan_raw3$Education == "Completed Higher Secondary Schooling (Intermediate)"] <- "Completed Intermediate Schooling"
+Pakistan_raw3$Education [Pakistan_raw3$Education =="Completed Secondary Schooling (Matric)"]<-"Completed Matric \n Schooling"
+Pakistan_raw3$Education [Pakistan_raw3$Education =="Completed Primary Schooling"]<-"Completed Primary \n Schooling"
+
+Pakistan_raw1$Edu <- 1
+Pakistan_raw1$Edu [Pakistan_raw1$Education == 'Completed Primary \n Schooling'] <- 2
+Pakistan_raw1$Edu [Pakistan_raw1$Education == 'Completed Matric \n Schooling'] <-3
+Pakistan_raw1$Edu [Pakistan_raw1$Education == 'Completed Intermediate Schooling'] <- 4
+Pakistan_raw1$Edu [Pakistan_raw1$Education == ' Completed Post-secondary \n  Schooling '] <- 5
+
+Pakistan_raw1$Edu1 <- "1.No School"
+Pakistan_raw1$Edu1 [Pakistan_raw1$Edu == 2] <-'2.Primary'
+Pakistan_raw1$Edu1 [Pakistan_raw1$Edu == 3] <-'3.Matric'
+Pakistan_raw1$Edu1 [Pakistan_raw1$Edu == 4] <-'4.Intermediate'
+Pakistan_raw1$Edu1 [Pakistan_raw1$Edu == 5] <-'5.Post-secondary'
+
+Pakistan_raw2$Sex <- 1
+Pakistan_raw2$Sex [Pakistan_raw2$Gender == 'Female'] <- 2
+Pakistan_raw2$Sex [Pakistan_raw2$Gender == 'Transgender'] <- 3
+Pakistan_raw2$Sex <- as.numeric(Pakistan_raw2$Sex)
+
+Pakistan_raw2$Set <- 1
+Pakistan_raw2$Set [Pakistan_raw2$Setting == 'Urban'] <- 2
+
+Pakistan_raw2$Age1 <- 1
+Pakistan_raw2$Age1 [Pakistan_raw2$Age == '25-29 years'] <- 2
+Pakistan_raw2$Age1 [Pakistan_raw2$Age == '30-39 years'] <- 3
+Pakistan_raw2$Age1 [Pakistan_raw2$Age == '40-49 years'] <- 4
+Pakistan_raw2$Age1 [Pakistan_raw2$Age == '50 and above'] <- 5
+
+Pakistan_raw2$Edu <- 1
+Pakistan_raw2$Edu [Pakistan_raw2$Education == 'Completed Primary \n Schooling'] <- 2
+Pakistan_raw2$Edu [Pakistan_raw2$Education == 'Completed Matric \n Schooling'] <-3
+Pakistan_raw2$Edu [Pakistan_raw2$Education == 'Completed Intermediate Schooling'] <- 4
+Pakistan_raw2$Edu [Pakistan_raw2$Education == ' Completed Post-secondary \n  Schooling '] <- 5
+
+Pakistan_raw2$Edu1 <- "1.No School"
+Pakistan_raw2$Edu1 [Pakistan_raw2$Edu == 2] <-'2.Primary'
+Pakistan_raw2$Edu1 [Pakistan_raw2$Edu == 3] <-'3.Matric'
+Pakistan_raw2$Edu1 [Pakistan_raw2$Edu == 4] <-'4.Intermediate'
+Pakistan_raw2$Edu1 [Pakistan_raw2$Edu == 5] <-'5.Post-secondary'
+
+Pakistan_raw3$Sex <- 1
+Pakistan_raw3$Sex [Pakistan_raw3$Gender == 'Female'] <- 2
+Pakistan_raw3$Sex <- as.numeric(Pakistan_raw3$Sex)
+
+Pakistan_raw3$Set <- 1
+Pakistan_raw3$Set [Pakistan_raw3$Setting == 'Urban'] <- 2
+
+Pakistan_raw3$Age1 <- 1
+Pakistan_raw3$Age1 [Pakistan_raw3$Age == '25-29 years'] <- 2
+Pakistan_raw3$Age1 [Pakistan_raw3$Age == '30-39 years'] <- 3
+Pakistan_raw3$Age1 [Pakistan_raw3$Age == '40-49 years'] <- 4
+Pakistan_raw3$Age1 [Pakistan_raw3$Age == '50 years and above'] <- 5
+
+Pakistan_raw3$Edu <- 1
+Pakistan_raw3$Edu [Pakistan_raw3$Education == 'Completed Primary \n Schooling'] <- 2
+Pakistan_raw3$Edu [Pakistan_raw3$Education == 'Completed Matric \n Schooling'] <-3
+Pakistan_raw3$Edu [Pakistan_raw3$Education == 'Completed Intermediate Schooling'] <- 4
+Pakistan_raw3$Edu [Pakistan_raw3$Education == ' Completed Post-secondary \n  Schooling '] <- 5
+
+Pakistan_raw3$Edu1 <- "1.No School"
+Pakistan_raw3$Edu1 [Pakistan_raw3$Edu == 2] <-'2.Primary'
+Pakistan_raw3$Edu1 [Pakistan_raw3$Edu == 3] <-'3.Matric'
+Pakistan_raw3$Edu1 [Pakistan_raw3$Edu == 4] <-'4.Intermediate'
+Pakistan_raw3$Edu1 [Pakistan_raw3$Edu == 5] <-'5.Post-secondary'
+
+
+### Weights Round 1
+
+PAK_WtdR1 <- svydesign( ids = ~0, data =Pakistan_raw1, weights = ~BW ) 
+ps.dsgn <-postStratify(design = PAK_WtdR1, strata = ~Set + Sex + Age1, population = Pakistan.PS)
+ps.weight <- ps.dsgn$postStrata[[1]] %>% attributes() %>% .[["weights"]]
+Pakistan_raw1$PsW <-ps.weight
+
+PAK_WtdR2 <- svydesign( ids = ~0, data =Pakistan_raw1, weights = ~PsW) 
+ps.dsgn2 <-postStratify(design = PAK_WtdR2, strata = ~Edu, population = Pakistan.PS3)
+ps.weight2 <- ps.dsgn2$postStrata[[1]] %>% attributes() %>% .[["weights"]]
+Pakistan_raw1$PsW2 <-ps.weight2
+
+PAK_WtdR3 <- svydesign( ids = ~0, data =Pakistan_raw1, weights = ~PsW2 ) 
+ps.dsgn3 <-postStratify(design = PAK_WtdR3, strata = ~Set + Sex + Age1, population = Pakistan.PS)
+ps.weight3 <- ps.dsgn3$postStrata[[1]] %>% attributes() %>% .[["weights"]]
+Pakistan_raw1$PsW3 <-ps.weight3
+
+PAK_WtdR4 <- svydesign( ids = ~0, data =Pakistan_raw1, weights = ~PsW3 ) 
+ps.dsgn4 <-postStratify(design = PAK_WtdR4, strata = ~Edu, population = Pakistan.PS3)
+ps.weight4 <- ps.dsgn4$postStrata[[1]] %>% attributes() %>% .[["weights"]]
+Pakistan_raw1$PsW4 <-ps.weight4
+
+PAK_WtdR5 <- svydesign( ids = ~0, data =Pakistan_raw1, weights = ~PsW4 ) 
+ps.dsgn5 <-postStratify(design = PAK_WtdR5, strata = ~Set + Sex + Age1, population = Pakistan.PS)
+ps.weight5 <- ps.dsgn5$postStrata[[1]] %>% attributes() %>% .[["weights"]]
+Pakistan_raw1$Wt <-ps.weight5
+
+
+### Weights Round 2
+PAK_WtdR1 <- svydesign( ids = ~0, data =Pakistan_raw2, weights = ~BW ) 
+ps.dsgn <-postStratify(design = PAK_WtdR1, strata = ~Set + Sex + Age1, population = Pakistan.PS)
+ps.weight <- ps.dsgn$postStrata[[1]] %>% attributes() %>% .[["weights"]]
+Pakistan_raw2$PsW <-ps.weight
+
+PAK_WtdR2 <- svydesign( ids = ~0, data =Pakistan_raw2, weights = ~PsW) 
+ps.dsgn2 <-postStratify(design = PAK_WtdR2, strata = ~Edu, population = Pakistan.PS3)
+ps.weight2 <- ps.dsgn2$postStrata[[1]] %>% attributes() %>% .[["weights"]]
+Pakistan_raw2$PsW2 <-ps.weight2
+
+PAK_WtdR3 <- svydesign( ids = ~0, data =Pakistan_raw2, weights = ~PsW2 ) 
+ps.dsgn3 <-postStratify(design = PAK_WtdR3, strata = ~Set + Sex + Age1, population = Pakistan.PS)
+ps.weight3 <- ps.dsgn3$postStrata[[1]] %>% attributes() %>% .[["weights"]]
+Pakistan_raw2$PsW3 <-ps.weight3
+
+PAK_WtdR4 <- svydesign( ids = ~0, data =Pakistan_raw2, weights = ~PsW3 ) 
+ps.dsgn4 <-postStratify(design = PAK_WtdR4, strata = ~Edu, population = Pakistan.PS3)
+ps.weight4 <- ps.dsgn4$postStrata[[1]] %>% attributes() %>% .[["weights"]]
+Pakistan_raw2$PsW4 <-ps.weight4
+
+PAK_WtdR5 <- svydesign( ids = ~0, data =Pakistan_raw2, weights = ~PsW4 ) 
+ps.dsgn5 <-postStratify(design = PAK_WtdR5, strata = ~Set + Sex + Age1, population = Pakistan.PS)
+ps.weight5 <- ps.dsgn5$postStrata[[1]] %>% attributes() %>% .[["weights"]]
+Pakistan_raw2$Wt <-ps.weight5
+
+### Weights Round 3
+PAK_WtdR1 <- svydesign( ids = ~0, data =Pakistan_raw3, weights = ~BW ) 
+ps.dsgn <-postStratify(design = PAK_WtdR1, strata = ~Set + Sex + Age1, population = Pakistan.PS, partial = TRUE)
+ps.weight <- ps.dsgn$postStrata[[1]] %>% attributes() %>% .[["weights"]]
+Pakistan_raw3$PsW <-ps.weight
+
+PAK_WtdR2 <- svydesign( ids = ~0, data =Pakistan_raw3, weights = ~PsW) 
+ps.dsgn2 <-postStratify(design = PAK_WtdR2, strata = ~Edu, population = Pakistan.PS3)
+ps.weight2 <- ps.dsgn2$postStrata[[1]] %>% attributes() %>% .[["weights"]]
+Pakistan_raw3$PsW2 <-ps.weight2
+
+PAK_WtdR3 <- svydesign( ids = ~0, data =Pakistan_raw3, weights = ~PsW2 ) 
+ps.dsgn3 <-postStratify(design = PAK_WtdR3, strata = ~Set + Sex + Age1, population = Pakistan.PS, partial = TRUE)
+ps.weight3 <- ps.dsgn3$postStrata[[1]] %>% attributes() %>% .[["weights"]]
+Pakistan_raw3$PsW3 <-ps.weight3
+
+PAK_WtdR4 <- svydesign( ids = ~0, data =Pakistan_raw3, weights = ~PsW3 ) 
+ps.dsgn4 <-postStratify(design = PAK_WtdR4, strata = ~Edu, population = Pakistan.PS3)
+ps.weight4 <- ps.dsgn4$postStrata[[1]] %>% attributes() %>% .[["weights"]]
+Pakistan_raw3$PsW4 <-ps.weight4
+
+PAK_WtdR5 <- svydesign( ids = ~0, data =Pakistan_raw3, weights = ~PsW4 ) 
+ps.dsgn5 <-postStratify(design = PAK_WtdR5, strata = ~Set + Sex + Age1, population = Pakistan.PS, partial = TRUE)
+ps.weight5 <- ps.dsgn5$postStrata[[1]] %>% attributes() %>% .[["weights"]]
+Pakistan_raw3$Wt <-ps.weight5
+
+```
+
+```{r pressure, echo=FALSE}
+
+Risk1 <- plyr::count(Pakistan_raw1, "`Do you think you are at risk of being infected with Covid-19?`", wt_var= "Wt")
+names(Risk1) <- c("Risk","freq")
+Risk1 <- Risk1 %>% mutate(perc = round(freq/sum(freq),3))
+Risk1$round <- 1 
+Risk1$RoundLabel <- "1st Round"
+
+Risk2 <- plyr::count(Pakistan_raw2, "`Do you think you are at risk of being infected with Covid-19?`", wt_var= "Wt")
+names(Risk2) <- c("Risk","freq")
+Risk2 <- Risk2 %>% mutate(perc = round(freq/sum(freq),3))
+Risk2$round <- 2 
+Risk2$RoundLabel <- "2nd Round"
+
+Risk3 <- plyr::count(Pakistan_raw3, "`Do you think you are likely to be infected with COVID-19?`", wt_var= "Wt")
+names(Risk3) <- c("Risk","freq")
+Risk3 <- Risk3 %>% mutate(perc = round(freq/sum(freq),3))
+Risk3$round <- 3
+Risk3$RoundLabel <- "3rd Round"
+
+Risk.TS <-rbind(Risk1, Risk2)
+Risk.TS <- rbind(Risk.TS, Risk3)
+Risk.TS <-subset(Risk.TS, Risk == "Yes")
+Risk.TS$label <- paste(100*(Risk.TS$perc),"%")
+Risk.TS$RoundLabel <- as.factor(Risk.TS$RoundLabel)
+
+p<-ggplot(Risk.TS, aes(x=RoundLabel, y=perc, group = 1)) + geom_line(linetype = "dashed") + geom_point() + geom_text_repel(aes(label=label)) + theme_minimal() + scale_y_continuous(labels = scales::percent, limits = c(0.45, 0.6)) + labs(title="Percentage of respondents who perceived being at risk of a COVID-19 infection",subtitle = "National distribution", y = "Percentage", x = "Time of Observation")
+
+Risk1GS <- Pakistan_raw1 %>% group_by(Gender, Setting) %>% count(`Do you think you are at risk of being infected with Covid-19?`, wt = Wt)
+names(Risk1GS) <- c("Gender", "Setting", "Risk","n")
+Risk1GS <- Risk1GS %>% group_by(Gender, Setting) %>% mutate(perct = round(n/sum(n),3))
+Risk1GS$round <- 1
+Risk1GS$RoundLabel <- "1st Round"
+
+Risk2GS <- Pakistan_raw2 %>% group_by(Gender, Setting) %>% count(`Do you think you are at risk of being infected with Covid-19?`, wt = Wt)
+names(Risk2GS) <- c("Gender", "Setting", "Risk","n")
+Risk2GS <- Risk2GS %>% group_by(Gender, Setting) %>% mutate(perct = round(n/sum(n),3))
+Risk2GS$round <- 2
+Risk2GS$RoundLabel <- "2nd Round"
+
+Risk3GS <- Pakistan_raw3 %>% group_by(Gender, Setting) %>% count(`Do you think you are likely to be infected with COVID-19?`, wt = Wt)
+names(Risk3GS) <- c("Gender", "Setting", "Risk","n")
+Risk3GS <- Risk3GS %>% group_by(Gender, Setting) %>% mutate(perct = round(n/sum(n),3))
+Risk3GS$round <- 3
+Risk3GS$RoundLabel <- "3rd Round"
+
+RiskGS.TS <- rbind(Risk1GS, Risk2GS)
+RiskGS.TS <- rbind(RiskGS.TS, Risk3GS)
+RiskGS.TS <-subset(RiskGS.TS, Risk == "Yes")
+RiskGS.TS$label <- paste(100*(RiskGS.TS$perct),"%")
+RiskGS.TS$RoundLabel <- as.factor(RiskGS.TS$RoundLabel)
+RiskGS.TS$SexSet <- paste(RiskGS.TS$Setting," ", RiskGS.TS$Gender)
+RiskGS.TS$SexSet <- as.factor(RiskGS.TS$SexSet)
+
+p2<-ggplot(RiskGS.TS, aes(x=RoundLabel, y=perct, group = SexSet, shape=SexSet)) + geom_line(aes(color= SexSet)) + geom_point(aes(color=SexSet)) + geom_text_repel(aes(label=label)) + theme_minimal() + scale_y_continuous(labels = scales::percent, limits = c(0.45, 0.7)) + labs(title="Percentage of respondents who perceived being at risk of a COVID-19 infection",subtitle = "National distribution by Sex and Setting", y = "Percentage", x = "Time of Observation")
+
+Risk1EDU <- Pakistan_raw1 %>% group_by(Education) %>% count(`Do you think you are at risk of being infected with Covid-19?`, wt = Wt)
+names(Risk1EDU) <- c("Education", "Risk","n")
+Risk1EDU <- Risk1EDU %>% group_by(Education) %>% mutate(perct = round(n/sum(n),3))
+Risk1EDU$round <- 1
+Risk1EDU$RoundLabel <- "1st Round"
+
+Risk2EDU <- Pakistan_raw2 %>% group_by(Education) %>% count(`Do you think you are at risk of being infected with Covid-19?`, wt = Wt)
+names(Risk2EDU) <- c("Education", "Risk","n")
+Risk2EDU <- Risk2EDU %>% group_by(Education) %>% mutate(perct = round(n/sum(n),3))
+Risk2EDU$round <- 2
+Risk2EDU$RoundLabel <- "2nd Round"
+
+Risk3EDU <- Pakistan_raw3 %>% group_by(Education) %>% count(`Do you think you are likely to be infected with COVID-19?`, wt = Wt)
+names(Risk3EDU) <- c("Education", "Risk","n")
+Risk3EDU <- Risk3EDU %>% group_by(Education) %>% mutate(perct = round(n/sum(n),3))
+Risk3EDU$round <- 3
+Risk3EDU$RoundLabel <- "3rd Round"
+
+RiskEDU.TS <- rbind(Risk1EDU, Risk2EDU)
+RiskEDU.TS <- rbind(RiskEDU.TS, Risk3EDU)
+RiskEDU.TS <-subset(RiskEDU.TS, Risk == "Yes")
+RiskEDU.TS$label <- paste(100*(RiskEDU.TS$perct),"%")
+RiskEDU.TS$Education<- as.factor(RiskEDU.TS$Education)
+
+p3<-ggplot(RiskEDU.TS, aes(x=RoundLabel, y=perct, group = Education, shape=Education)) + geom_line(aes(color= Education)) + geom_point(aes(color=Education)) + geom_text_repel(aes(label=label)) + theme_minimal() + scale_y_continuous(labels = scales::percent, limits = c(0.35, 0.65)) + labs(title="Percentage of respondents who perceived being at risk of a COVID-19 infection",subtitle = "National distribution by Sex and Setting", y = "Percentage", x = "Time of Observation")
+
+```
+
+```{r pressure, echo=FALSE}
+
+Danger1 <- plyr::count(Pakistan_raw1, "`In your opinion, how dangerous would contracting Covid-19 be for you and your family?`", wt_var= "Wt")
+names(Danger1) <- c("Danger","freq")
+Danger1 <- Danger1 %>% mutate(perc = round(freq/sum(freq),3))
+Danger1$round <- 1 
+Danger1$RoundLabel <- "1st Round"
+
+Danger2 <- plyr::count(Pakistan_raw2, "`In your opinion, how dangerous would contracting Covid-19 be for you and your family?`", wt_var= "Wt")
+names(Danger2) <- c("Danger","freq")
+Danger2 <- Danger2 %>% mutate(perc = round(freq/sum(freq),3))
+Danger2$round <- 2 
+Danger2$RoundLabel <- "2nd Round"
+
+Danger3 <- plyr::count(Pakistan_raw3, "`In your opinion, how dangerous would contracting COVID-19 be for you and your family?`", wt_var= "Wt")
+names(Danger3) <- c("Danger","freq")
+Danger3 <- Danger3 %>% mutate(perc = round(freq/sum(freq),3))
+Danger3$round <- 3
+Danger3$RoundLabel <- "3rd Round"
+
+Danger.TS <-rbind(Danger1, Danger2)
+Danger.TS <- rbind(Danger.TS, Danger3)
+Danger.TS$Danger <- as.factor(Danger.TS$Danger)
+Danger.TS$label <- paste(100*(Danger.TS$perc),"%")
+Danger.TS$RoundLabel <- as.factor(Danger.TS$RoundLabel)
+Danger.TS$Danger <- factor(Danger.TS$Danger , levels=c("Very dangerous", "Dangerous", "Moderately dangerous", "Slightly dangerous", "Not dangerous") )
+
+
+p5 <- ggplot(Danger.TS, aes(x=round, y=perc, fill=Danger)) + geom_area(alpha=0.6 , size=.5, colour="black") + scale_fill_brewer(palette = "YlOrRd", direction = -1) + theme_minimal() + scale_y_continuous(labels = scales::percent) + scale_x_continuous(labels =c("1st Round", "", "2nd Round","","3rd Round")) + labs(title="Perceived level of danger of COVID-19 infection on self and respondent's family ",subtitle = "National distribution", y = "Percentage", x = "Time of Observation")
+
+
+Danger1GS <- Pakistan_raw1 %>% group_by(Gender, Setting) %>% count(`In your opinion, how dangerous would contracting Covid-19 be for you and your family?`, wt = Wt)
+names(Danger1GS) <- c("Gender", "Setting", "Danger","n")
+Danger1GS <- Danger1GS %>% group_by(Gender, Setting) %>% mutate(perct = round(n/sum(n),3))
+Danger1GS$round <- 1
+Danger1GS$RoundLabel <- "1st Round"
+
+Danger2GS <- Pakistan_raw2 %>% group_by(Gender, Setting) %>% count(`In your opinion, how dangerous would contracting Covid-19 be for you and your family?`, wt = Wt)
+names(Danger2GS) <- c("Gender", "Setting", "Danger","n")
+Danger2GS <- Danger2GS %>% group_by(Gender, Setting) %>% mutate(perct = round(n/sum(n),3))
+Danger2GS$round <- 2
+Danger2GS$RoundLabel <- "2nd Round"
+
+Danger3GS <- Pakistan_raw3 %>% group_by(Gender, Setting) %>% count(`In your opinion, how dangerous would contracting COVID-19 be for you and your family?`, wt = Wt)
+names(Danger3GS) <- c("Gender", "Setting", "Danger","n")
+Danger3GS <- Danger3GS %>% group_by(Gender, Setting) %>% mutate(perct = round(n/sum(n),3))
+Danger3GS$round <- 3
+Danger3GS$RoundLabel <- "3rd Round"
+
+DangerGS.TS <- rbind(Danger1GS, Danger2GS)
+DangerGS.TS <- rbind(DangerGS.TS, Danger3GS)
+DangerGS.TS$Danger <- as.factor(DangerGS.TS$Danger)
+
+DangerGS.TS$label <- paste(100*(DangerGS.TS$perct),"%")
+DangerGS.TS$RoundLabel <- as.factor(DangerGS.TS$RoundLabel)
+DangerGS.TS$SexSet <- paste(DangerGS.TS$Setting," ", DangerGS.TS$Gender)
+DangerGS.TS$SexSet <- as.factor(DangerGS.TS$SexSet)
+DangerGS.TS$Danger <- factor(DangerGS.TS$Danger , levels=c("Very dangerous", "Dangerous", "Moderately dangerous", "Slightly dangerous", "Not dangerous") )
+
+p6 <- ggplot(DangerGS.TS, aes(x=round, y=perct, fill=Danger)) + geom_area(alpha=0.6 , size=.5, colour="black") + scale_fill_brewer(palette = "YlOrRd", direction = -1) + theme_minimal() + scale_y_continuous(labels = scales::percent) + scale_x_continuous(labels =c("1st Round", "", "2nd Round","","3rd Round")) + labs(title="Perceived level of danger of COVID-19 infection on self and respondent's family ",subtitle = "National distribution by Sex and Setting", y = "Percentage", x = "Time of Observation") + facet_wrap(SexSet~.)
+
+
+```
+
+
+
+```{r pressure, echo=FALSE}
+
+Handwash1 <- plyr::count(Pakistan_raw1, "`Over the past 30 days, how often have you washed hands with water and soap for 20 seconds to prevent infection from COVID-19?`", wt_var= "Wt")
+names(Handwash1) <- c("Handwash","freq")
+Handwash1 <- Handwash1 %>% mutate(perc = round(freq/sum(freq),3))
+Handwash1$round <- 1 
+Handwash1$RoundLabel <- "1st Round"
+
+Handwash2 <- plyr::count(Pakistan_raw2, "`Over the past 30 days, how often have you washed hands with water and soap for 20 seconds to prevent infection from COVID-19?`", wt_var= "Wt")
+names(Handwash2) <- c("Handwash","freq")
+Handwash2 <- Handwash2 %>% mutate(perc = round(freq/sum(freq),3))
+Handwash2$round <- 2 
+Handwash2$RoundLabel <- "2nd Round"
+
+Handwash3 <- plyr::count(Pakistan_raw3, "`Over the past 30 days, how often have you handwashed with water and soap for 20 seconds to prevent infection from COVID-19?`", wt_var= "Wt")
+names(Handwash3) <- c("Handwash","freq")
+Handwash3 <- Handwash3 %>% mutate(perc = round(freq/sum(freq),3))
+Handwash3$round <- 3
+Handwash3$RoundLabel <- "3rd Round"
+
+Handwash.TS <-rbind(Handwash1, Handwash2)
+Handwash.TS <- rbind(Handwash.TS, Handwash3)
+Handwash.TS$Handwash <- as.factor(Handwash.TS$Handwash)
+Handwash.TS$label <- paste(100*(Handwash.TS$perc),"%")
+Handwash.TS$RoundLabel <- as.factor(Handwash.TS$RoundLabel)
+Handwash.TS$Handwash <- factor(Handwash.TS$Handwash , levels=c("All the time", "Most of the time", "Sometimes", "Rarely", "Never"))
+
+
+p7 <- ggplot(Handwash.TS, aes(x=round, y=perc, fill=Handwash)) + geom_area(alpha=0.6 , size=.5, colour="black") + scale_fill_brewer(palette = "YlOrRd", direction = -1) + theme_minimal() + scale_y_continuous(labels = scales::percent) + scale_x_continuous(labels =c("1st Round", "", "2nd Round","","3rd Round")) + labs(title="Reported practice of handwashing with soap for 20 seconds to prevent COVID-19",subtitle = "National distribution", y = "Percentage", x = "Time of Observation")
+
+
+Handwash1GS <- Pakistan_raw1 %>% group_by(Gender, Setting) %>% count(`Over the past 30 days, how often have you washed hands with water and soap for 20 seconds to prevent infection from COVID-19?`, wt = Wt)
+names(Handwash1GS) <- c("Gender", "Setting", "Handwash","n")
+Handwash1GS <- Handwash1GS %>% group_by(Gender, Setting) %>% mutate(perct = round(n/sum(n),3))
+Handwash1GS$round <- 1
+Handwash1GS$RoundLabel <- "1st Round"
+
+Handwash2GS <- Pakistan_raw2 %>% group_by(Gender, Setting) %>% count(`Over the past 30 days, how often have you washed hands with water and soap for 20 seconds to prevent infection from COVID-19?`, wt = Wt)
+names(Handwash2GS) <- c("Gender", "Setting", "Handwash","n")
+Handwash2GS <- Handwash2GS %>% group_by(Gender, Setting) %>% mutate(perct = round(n/sum(n),3))
+Handwash2GS$round <- 2
+Handwash2GS$RoundLabel <- "2nd Round"
+
+Handwash3GS <- Pakistan_raw3 %>% group_by(Gender, Setting) %>% count(`Over the past 30 days, how often have you handwashed with water and soap for 20 seconds to prevent infection from COVID-19?`, wt = Wt)
+names(Handwash3GS) <- c("Gender", "Setting", "Handwash","n")
+Handwash3GS <- Handwash3GS %>% group_by(Gender, Setting) %>% mutate(perct = round(n/sum(n),3))
+Handwash3GS$round <- 3
+Handwash3GS$RoundLabel <- "3rd Round"
+
+HandwashGS.TS <- rbind(Handwash1GS, Handwash2GS)
+HandwashGS.TS <- rbind(HandwashGS.TS, Handwash3GS)
+HandwashGS.TS$Handwash <- as.factor(HandwashGS.TS$Handwash)
+
+HandwashGS.TS$label <- paste(100*(HandwashGS.TS$perct),"%")
+HandwashGS.TS$RoundLabel <- as.factor(HandwashGS.TS$RoundLabel)
+HandwashGS.TS$SexSet <- paste(HandwashGS.TS$Setting," ", HandwashGS.TS$Gender)
+HandwashGS.TS$SexSet <- as.factor(HandwashGS.TS$SexSet)
+HandwashGS.TS$Handwash <- factor(HandwashGS.TS$Handwash , levels=c("All the time", "Most of the time", "Sometimes", "Rarely", "Never"))
+
+p8 <- ggplot(HandwashGS.TS, aes(x=round, y=perct, fill=Handwash)) + geom_area(alpha=0.6 , size=.5, colour="black") + scale_fill_brewer(palette = "YlOrRd", direction = -1) + theme_minimal() + scale_y_continuous(labels = scales::percent) + scale_x_continuous(labels =c("1st Round", "", "2nd Round","","3rd Round")) + labs(title="Reported practice of handwashing with soap for 20 seconds to prevent COVID-19",subtitle = "National distribution by Sex and Setting", y = "Percentage", x = "Time of Observation") + facet_wrap(SexSet~.)
+
+```
+
+
+```{r pressure, echo=FALSE}
+
+Mask1 <- plyr::count(Pakistan_raw1, "`Over the past 30 days, how often have you been wearing a mask to prevent infection from COVID-19?`", wt_var= "Wt")
+names(Mask1) <- c("Mask","freq")
+Mask1 <- Mask1 %>% mutate(perc = round(freq/sum(freq),3))
+Mask1$round <- 1 
+Mask1$RoundLabel <- "1st Round"
+
+Mask2 <- plyr::count(Pakistan_raw2, "`Over the past 30 days, how often have you been wearing a mask to prevent infection from COVID-19?`", wt_var= "Wt")
+names(Mask2) <- c("Mask","freq")
+Mask2 <- Mask2 %>% mutate(perc = round(freq/sum(freq),3))
+Mask2$round <- 2 
+Mask2$RoundLabel <- "2nd Round"
+
+Mask3 <- plyr::count(Pakistan_raw3, "`Over the past 30 days, how often have you been wearing a mask to prevent infection from COVID-19?`", wt_var= "Wt")
+names(Mask3) <- c("Mask","freq")
+Mask3 <- Mask3 %>% mutate(perc = round(freq/sum(freq),3))
+Mask3$round <- 3
+Mask3$RoundLabel <- "3rd Round"
+
+Mask.TS <-rbind(Mask1, Mask2)
+Mask.TS <- rbind(Mask.TS, Mask3)
+Mask.TS$Mask <- as.factor(Mask.TS$Mask)
+Mask.TS$label <- paste(100*(Mask.TS$perc),"%")
+Mask.TS$RoundLabel <- as.factor(Mask.TS$RoundLabel)
+Mask.TS$Mask <- factor(Mask.TS$Mask , levels=c("All the time", "Most of the time", "Sometimes", "Rarely", "Never"))
+
+
+p9 <- ggplot(Mask.TS, aes(x=round, y=perc, fill=Mask)) + geom_area(alpha=0.6 , size=.5, colour="black") + scale_fill_brewer(palette = "YlOrRd", direction = -1) + theme_minimal() + scale_y_continuous(labels = scales::percent) + scale_x_continuous(labels =c("1st Round", "", "2nd Round","","3rd Round")) + labs(title="Reported practice of wearing face mask to prevent COVID-19",subtitle = "National distribution", y = "Percentage", x = "Time of Observation")
+
+
+Mask1GS <- Pakistan_raw1 %>% group_by(Gender, Setting) %>% count(`Over the past 30 days, how often have you been wearing a mask to prevent infection from COVID-19?`, wt = Wt)
+names(Mask1GS) <- c("Gender", "Setting", "Mask","n")
+Mask1GS <- Mask1GS %>% group_by(Gender, Setting) %>% mutate(perct = round(n/sum(n),3))
+Mask1GS$round <- 1
+Mask1GS$RoundLabel <- "1st Round"
+
+Mask2GS <- Pakistan_raw2 %>% group_by(Gender, Setting) %>% count(`Over the past 30 days, how often have you been wearing a mask to prevent infection from COVID-19?`, wt = Wt)
+names(Mask2GS) <- c("Gender", "Setting", "Mask","n")
+Mask2GS <- Mask2GS %>% group_by(Gender, Setting) %>% mutate(perct = round(n/sum(n),3))
+Mask2GS$round <- 2
+Mask2GS$RoundLabel <- "2nd Round"
+
+Mask3GS <- Pakistan_raw3 %>% group_by(Gender, Setting) %>% count(`Over the past 30 days, how often have you been wearing a mask to prevent infection from COVID-19?`, wt = Wt)
+names(Mask3GS) <- c("Gender", "Setting", "Mask","n")
+Mask3GS <- Mask3GS %>% group_by(Gender, Setting) %>% mutate(perct = round(n/sum(n),3))
+Mask3GS$round <- 3
+Mask3GS$RoundLabel <- "3rd Round"
+
+MaskGS.TS <- rbind(Mask1GS, Mask2GS)
+MaskGS.TS <- rbind(MaskGS.TS, Mask3GS)
+MaskGS.TS$Mask <- as.factor(MaskGS.TS$Mask)
+
+MaskGS.TS$label <- paste(100*(MaskGS.TS$perct),"%")
+MaskGS.TS$RoundLabel <- as.factor(MaskGS.TS$RoundLabel)
+MaskGS.TS$SexSet <- paste(MaskGS.TS$Setting," ", MaskGS.TS$Gender)
+MaskGS.TS$SexSet <- as.factor(MaskGS.TS$SexSet)
+MaskGS.TS$Mask <- factor(MaskGS.TS$Mask , levels=c("All the time", "Most of the time", "Sometimes", "Rarely", "Never"))
+
+p10 <- ggplot(MaskGS.TS, aes(x=round, y=perct, fill=Mask)) + geom_area(alpha=0.6 , size=.5, colour="black") + scale_fill_brewer(palette = "YlOrRd", direction = -1) + theme_minimal() + scale_y_continuous(labels = scales::percent) + scale_x_continuous(labels =c("1st Round", "", "2nd Round","","3rd Round")) + labs(title="Reported practice of wearing face mask to prevent COVID",subtitle = "National distribution by Sex and Setting", y = "Percentage", x = "Time of Observation") + facet_wrap(SexSet~.)
+
+```
+
+```{r pressure, echo=FALSE}
+
+SocDist1 <- plyr::count(Pakistan_raw1, "`Over the past 30 days, in public places, how often have you kept at least 2 meters away from people to prevent infection from COVID-19?`", wt_var= "Wt")
+names(SocDist1) <- c("SocDist","freq")
+SocDist1 <- SocDist1 %>% mutate(perc = round(freq/sum(freq),3))
+SocDist1$round <- 1 
+SocDist1$RoundLabel <- "1st Round"
+
+SocDist2 <- plyr::count(Pakistan_raw2, "`Over the past 30 days, in public places, how often have you kept at least 2 meters away from people to prevent infection from COVID-19?`", wt_var= "Wt")
+names(SocDist2) <- c("SocDist","freq")
+SocDist2 <- SocDist2 %>% mutate(perc = round(freq/sum(freq),3))
+SocDist2$round <- 2 
+SocDist2$RoundLabel <- "2nd Round"
+
+SocDist3 <- plyr::count(Pakistan_raw3, "`Over the past 30 days, in public places, how often have you kept at least 2 meters away from people to prevent infection from COVID-19?`", wt_var= "Wt")
+names(SocDist3) <- c("SocDist","freq")
+SocDist3 <- SocDist3 %>% mutate(perc = round(freq/sum(freq),3))
+SocDist3$round <- 3
+SocDist3$RoundLabel <- "3rd Round"
+
+SocDist.TS <-rbind(SocDist1, SocDist2)
+SocDist.TS <- rbind(SocDist.TS, SocDist3)
+SocDist.TS$SocDist <- as.factor(SocDist.TS$SocDist)
+SocDist.TS$label <- paste(100*(SocDist.TS$perc),"%")
+SocDist.TS$RoundLabel <- as.factor(SocDist.TS$RoundLabel)
+SocDist.TS$SocDist <- factor(SocDist.TS$SocDist , levels=c("All the time", "Most of the time", "Sometimes", "Rarely", "Never"))
+
+
+p11 <- ggplot(SocDist.TS, aes(x=round, y=perc, fill=SocDist)) + geom_area(alpha=0.6 , size=.5, colour="black") + scale_fill_brewer(palette = "YlOrRd", direction = -1) + theme_minimal() + scale_y_continuous(labels = scales::percent) + scale_x_continuous(labels =c("1st Round", "", "2nd Round","","3rd Round")) + labs(title="Reported practice of keeping 2 mts. away from people in public places to prevent COVID-19",subtitle = "National distribution", y = "Percentage", x = "Time of Observation")
+
+
+SocDist1GS <- Pakistan_raw1 %>% group_by(Gender, Setting) %>% count(`Over the past 30 days, in public places, how often have you kept at least 2 meters away from people to prevent infection from COVID-19?`, wt = Wt)
+names(SocDist1GS) <- c("Gender", "Setting", "SocDist","n")
+SocDist1GS <- SocDist1GS %>% group_by(Gender, Setting) %>% mutate(perct = round(n/sum(n),3))
+SocDist1GS$round <- 1
+SocDist1GS$RoundLabel <- "1st Round"
+
+SocDist2GS <- Pakistan_raw2 %>% group_by(Gender, Setting) %>% count(`Over the past 30 days, in public places, how often have you kept at least 2 meters away from people to prevent infection from COVID-19?`, wt = Wt)
+names(SocDist2GS) <- c("Gender", "Setting", "SocDist","n")
+SocDist2GS <- SocDist2GS %>% group_by(Gender, Setting) %>% mutate(perct = round(n/sum(n),3))
+SocDist2GS$round <- 2
+SocDist2GS$RoundLabel <- "2nd Round"
+
+SocDist3GS <- Pakistan_raw3 %>% group_by(Gender, Setting) %>% count(`Over the past 30 days, in public places, how often have you kept at least 2 meters away from people to prevent infection from COVID-19?`, wt = Wt)
+names(SocDist3GS) <- c("Gender", "Setting", "SocDist","n")
+SocDist3GS <- SocDist3GS %>% group_by(Gender, Setting) %>% mutate(perct = round(n/sum(n),3))
+SocDist3GS$round <- 3
+SocDist3GS$RoundLabel <- "3rd Round"
+
+SocDistGS.TS <- rbind(SocDist1GS, SocDist2GS)
+SocDistGS.TS <- rbind(SocDistGS.TS, SocDist3GS)
+SocDistGS.TS$SocDist <- as.factor(SocDistGS.TS$SocDist)
+
+SocDistGS.TS$label <- paste(100*(SocDistGS.TS$perct),"%")
+SocDistGS.TS$RoundLabel <- as.factor(SocDistGS.TS$RoundLabel)
+SocDistGS.TS$SexSet <- paste(SocDistGS.TS$Setting," ", SocDistGS.TS$Gender)
+SocDistGS.TS$SexSet <- as.factor(SocDistGS.TS$SexSet)
+SocDistGS.TS$SocDist <- factor(SocDistGS.TS$SocDist , levels=c("All the time", "Most of the time", "Sometimes", "Rarely", "Never"))
+
+p12 <- ggplot(SocDistGS.TS, aes(x=round, y=perct, fill=SocDist)) + geom_area(alpha=0.6 , size=.5, colour="black") + scale_fill_brewer(palette = "YlOrRd", direction = -1) + theme_minimal() + scale_y_continuous(labels = scales::percent) + scale_x_continuous(labels =c("1st Round", "", "2nd Round","","3rd Round")) + labs(title="Reported practice of keeping 2 mts. away from people in public places to prevent COVID-19",subtitle = "National distribution by Sex and Setting", y = "Percentage", x = "Time of Observation") + facet_wrap(SexSet~.)
+
+```
+
+```{r pressure, echo=FALSE}
+
+TrustSchool2 <- plyr::count(Pakistan_raw2, "`Do you trust that the school of your children has the capacity and resources to implement the COVID-19 preventive measures?`", wt_var= "Wt")
+names(TrustSchool2) <- c("TrustSchool","freq")
+TrustSchool2 <-subset(TrustSchool2, TrustSchool != "NA")
+TrustSchool2 <- TrustSchool2 %>% mutate(perc = round(freq/sum(freq),3))
+TrustSchool2$round <- 2 
+TrustSchool2$RoundLabel <- "2nd Round"
+TrustSchool2$TrustSchool[TrustSchool2$TrustSchool == "Highly Trust"] <- "Highly trust"
+
+
+TrustSchool3 <- plyr::count(Pakistan_raw3, "`Do you trust that the school of your children has the capacity and resources to implement the COVID-19 preventive measures?`", wt_var= "Wt")
+names(TrustSchool3) <- c("TrustSchool","freq")
+TrustSchool3 <-subset(TrustSchool3, TrustSchool != "NA")
+TrustSchool3 <- TrustSchool3 %>% mutate(perc = round(freq/sum(freq),3))
+TrustSchool3$round <- 3
+TrustSchool3$RoundLabel <- "3rd Round"
+
+
+TrustSchool.TS <-rbind(TrustSchool2, TrustSchool3)
+TrustSchool.TS$TrustSchool <- as.factor(TrustSchool.TS$TrustSchool)
+TrustSchool.TS$label <- paste(100*(TrustSchool.TS$perc),"%")
+TrustSchool.TS$RoundLabel <- as.factor(TrustSchool.TS$RoundLabel)
+TrustSchool.TS$TrustSchool <- factor(TrustSchool.TS$TrustSchool , levels=c("Highly trust", "Trust", "Somewhat trust", "Do not trust", "Not sure"))
+
+
+p13 <- ggplot(TrustSchool.TS, aes(x=round, y=perc, fill=TrustSchool)) + geom_area(alpha=0.6 , size=.5, colour="black") + scale_fill_brewer(palette = "YlOrRd", direction = -1) + theme_minimal() + scale_y_continuous(labels = scales::percent) + scale_x_continuous(labels =c("2nd Round", "", "","","3rd Round")) + labs(title="Trust in the capacity of schools to implement \nCOVID-19 preventive measures
+",subtitle = "National distribution", y = "Percentage", x = "Time of Observation")
+
+
+TrustSchool2GS <- Pakistan_raw2 %>% group_by(Gender, Setting) %>% count(`Do you trust that the school of your children has the capacity and resources to implement the COVID-19 preventive measures?`, wt = Wt)
+names(TrustSchool2GS) <- c("Gender", "Setting", "TrustSchool","n")
+TrustSchool2GS <-subset(TrustSchool2GS, TrustSchool != "NA")
+TrustSchool2GS <- TrustSchool2GS %>% group_by(Gender, Setting) %>% mutate(perct = round(n/sum(n),3))
+TrustSchool2GS$round <- 2
+TrustSchool2GS$RoundLabel <- "2nd Round"
+TrustSchool2GS$TrustSchool[TrustSchool2GS$TrustSchool == "Highly Trust"] <- "Highly trust"
+
+TrustSchool3GS <- Pakistan_raw3 %>% group_by(Gender, Setting) %>% count(`Do you trust that the school of your children has the capacity and resources to implement the COVID-19 preventive measures?`, wt = Wt)
+names(TrustSchool3GS) <- c("Gender", "Setting", "TrustSchool","n")
+TrustSchool3GS <-subset(TrustSchool3GS, TrustSchool != "NA")
+TrustSchool3GS <- TrustSchool3GS %>% group_by(Gender, Setting) %>% mutate(perct = round(n/sum(n),3))
+TrustSchool3GS$round <- 3
+TrustSchool3GS$RoundLabel <- "3rd Round"
+
+TrustSchoolGS.TS <- rbind(TrustSchool2GS, TrustSchool3GS)
+TrustSchoolGS.TS$TrustSchool <- as.factor(TrustSchoolGS.TS$TrustSchool)
+TrustSchoolGS.TS$label <- paste(100*(TrustSchoolGS.TS$perct),"%")
+TrustSchoolGS.TS$RoundLabel <- as.factor(TrustSchoolGS.TS$RoundLabel)
+TrustSchoolGS.TS$SexSet <- paste(TrustSchoolGS.TS$Setting," ", TrustSchoolGS.TS$Gender)
+TrustSchoolGS.TS$SexSet <- as.factor(TrustSchoolGS.TS$SexSet)
+TrustSchoolGS.TS$TrustSchool <- factor(TrustSchoolGS.TS$TrustSchool , levels=c("Highly trust", "Trust", "Somewhat trust", "Do not trust", "Not sure"))
+
+p14 <- ggplot(TrustSchoolGS.TS, aes(x=round, y=perct, fill=TrustSchool)) + geom_area(alpha=0.6 , size=.5, colour="black") + scale_fill_brewer(palette = "YlOrRd", direction = -1) + theme_minimal() + scale_y_continuous(labels = scales::percent) + scale_x_continuous(labels =c("2nd Round", "", "","","3rd Round")) + labs(title="Trust in the capacity of schools to implement \nCOVID-19 preventive measures
+",subtitle = "National distribution by Sex and Setting", y = "Percentage", x = "Time of Observation") + facet_wrap(SexSet~.)
+
+```
+
+
+```{r pressure, echo=FALSE}
+
+Pakistan_raw1$`The main concern that I have for my children during COVID-19 is`[Pakistan_raw1$`The main concern that I have for my children during COVID-19 is` == "My child/ren getting sick with COVID"] <- "My child/ren getting sick with COVID-19"
+Concern1 <- plyr::count(Pakistan_raw1, "`The main concern that I have for my children during COVID-19 is`", wt_var= "Wt")
+names(Concern1) <- c("Concern","freq")
+Concern1 <-subset(Concern1, Concern != "I have no children")
+Concern1 <- Concern1 %>% mutate(perc = round(freq/sum(freq),3))
+Concern1$round <- 1 
+Concern1$RoundLabel <- "1st Round"
+
+Pakistan_raw2$`The main concern that I have for my children during COVID-19 is`[Pakistan_raw2$`The main concern that I have for my children during COVID-19 is` == "My child/ren getting sick with COVID"] <- "My child/ren getting sick with COVID-19"
+Pakistan_raw2$`The main concern that I have for my children during COVID-19 is`[Pakistan_raw2$`The main concern that I have for my children during COVID-19 is` == "Other Reason"] <- "Other reason"
+Concern2 <- plyr::count(Pakistan_raw2, "`The main concern that I have for my children during COVID-19 is`", wt_var= "Wt")
+names(Concern2) <- c("Concern","freq")
+Concern2 <-subset(Concern2, Concern != "I have no children")
+Concern2 <- Concern2 %>% mutate(perc = round(freq/sum(freq),3))
+Concern2$round <- 2 
+Concern2$RoundLabel <- "2nd Round"
+
+Pakistan_raw3$`The main concern that I have for my children during COVID-19 is`[Pakistan_raw3$`The main concern that I have for my children during COVID-19 is` == "Other Reason"] <- "Other reason"
+Concern3 <- plyr::count(Pakistan_raw3, "`The main concern that I have for my children during COVID-19 is`", wt_var= "Wt")
+names(Concern3) <- c("Concern","freq")
+Concern3 <-subset(Concern3, Concern != "I have no children")
+Concern3 <- Concern3 %>% mutate(perc = round(freq/sum(freq),3))
+Concern3$round <- 3
+Concern3$RoundLabel <- "3rd Round"
+
+Concern.TS <-rbind(Concern1, Concern2)
+Concern.TS <- rbind(Concern.TS, Concern3)
+Concern.TS$label <- paste(100*(Concern.TS$perc),"%")
+Concern.TS$RoundLabel <- as.factor(Concern.TS$RoundLabel)
+
+p15<-ggplot(Concern.TS, aes(x=RoundLabel, y=perc, group = Concern, shape=Concern)) + geom_line(aes(color= Concern)) + geom_point(aes(color=Concern)) + geom_text_repel(aes(label=label)) + theme_minimal() + scale_y_continuous(labels = scales::percent) + labs(title="COVID-19 related concerns of parents for their children",subtitle = "National distribution by Sex and Setting", y = "Percentage", x = "Time of Observation")
+
+Concern1GS <- Pakistan_raw1 %>% group_by(Gender, Setting) %>% count(`The main concern that I have for my children during COVID-19 is`, wt = Wt)
+names(Concern1GS) <- c("Gender", "Setting", "Concern","n")
+Concern1GS <-subset(Concern1GS, Concern != "I have no children")
+Concern1GS <- Concern1GS %>% group_by(Gender, Setting) %>% mutate(perct = round(n/sum(n),3))
+Concern1GS$round <- 1
+Concern1GS$RoundLabel <- "1st Round"
+
+Concern2GS <- Pakistan_raw2 %>% group_by(Gender, Setting) %>% count(`The main concern that I have for my children during COVID-19 is`, wt = Wt)
+names(Concern2GS) <- c("Gender", "Setting", "Concern","n")
+Concern2GS <-subset(Concern2GS, Concern != "I have no children")
+Concern2GS <- Concern2GS %>% group_by(Gender, Setting) %>% mutate(perct = round(n/sum(n),3))
+Concern2GS$round <- 2
+Concern2GS$RoundLabel <- "2nd Round"
+
+Concern3GS <- Pakistan_raw3 %>% group_by(Gender, Setting) %>% count(`The main concern that I have for my children during COVID-19 is`, wt = Wt)
+names(Concern3GS) <- c("Gender", "Setting", "Concern","n")
+Concern3GS <-subset(Concern3GS, Concern != "I have no children")
+Concern3GS <- Concern3GS %>% group_by(Gender, Setting) %>% mutate(perct = round(n/sum(n),3))
+Concern3GS$round <- 3
+Concern3GS$RoundLabel <- "3rd Round"
+
+ConcernGS.TS <- rbind(Concern1GS, Concern2GS)
+ConcernGS.TS <- rbind(ConcernGS.TS, Concern3GS)
+ConcernGS.TS$label <- paste(100*(ConcernGS.TS$perct),"%")
+ConcernGS.TS$RoundLabel <- as.factor(ConcernGS.TS$RoundLabel)
+ConcernGS.TS$SexSet <- paste(ConcernGS.TS$Setting," ", ConcernGS.TS$Gender)
+ConcernGS.TS$SexSet <- as.factor(ConcernGS.TS$SexSet)
+
+p16<-ggplot(ConcernGS.TS, aes(x=RoundLabel, y=perct, group = Concern, shape=Concern)) + geom_line(aes(color= Concern)) + geom_point(aes(color=Concern))  + theme_minimal() + scale_y_continuous(labels = scales::percent) + labs(title="COVID-19 related concerns of parents for their children",subtitle = "National distribution by Sex and Setting", y = "Percentage", x = "Time of Observation") + facet_wrap(SexSet~.)
+
+```
+
+

@@ -1,0 +1,519 @@
+---
+title: "ESARO Graphs"
+author: "Andres Ochoa Toasa"
+date: "October 3, 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+library(readxl)
+library(readr)
+library(haven)
+library(car)
+library(plyr)
+library(dplyr)
+library(foreign)
+library(rgeos)
+library(maptools)
+library(colorRamps)
+library(RColorBrewer)
+library(ggplot2)
+library(mapproj)
+library(rgdal)
+library(sf)
+library(colorspace)
+library(raster)
+library(treemapify)
+library(ggplotify)
+library(ggrepel)
+library(ggalt)
+library(ggthemes)
+library(ggpubr)
+library(scales)
+library(sjPlot)
+library(likert)
+library(tidyr)
+library(formattable)
+library(data.table)
+library(reshape2)
+
+customGreen0 = "#DeF7E9"
+customGreen = "#71CA97"
+customRed = "#ff7f7f"
+
+Madagascar_Raw1 <- read_dta("C:/Users/andre/OneDrive - UNICEF/CRA - ESARO/Madagascar/Data/First Round/DATA_VF.dta")
+Madagascar_Raw1$x17 <- as.character(Madagascar_Raw1$x17)
+Madagascar_Raw1$x17 [Madagascar_Raw1$x17 == 1] <- "Male"
+Madagascar_Raw1$x17 [Madagascar_Raw1$x17 == 2] <- "Female"
+Madagascar_Raw1$x15 <- as.character(Madagascar_Raw1$x15)
+Madagascar_Raw1$x15 [Madagascar_Raw1$x15 == 1] <- "Urban"
+Madagascar_Raw1$x15 [Madagascar_Raw1$x15 == 2] <- "Rural"
+Madagascar_Raw1$Age <- as.character(Madagascar_Raw1$x19c)
+Madagascar_Raw1$Age [Madagascar_Raw1$Age == 1] <- "<18 \nYrs Old"
+Madagascar_Raw1$Age [Madagascar_Raw1$Age == 2 | Madagascar_Raw1$Age == 3] <- "18-24 \nYrs Old"
+Madagascar_Raw1$Age [Madagascar_Raw1$Age == 4 | Madagascar_Raw1$Age == 5] <- "25-34 \nYrs Old"
+Madagascar_Raw1$Age [Madagascar_Raw1$Age ==6 | Madagascar_Raw1$Age == 7 ] <- "35-44 \nYrs Old"
+Madagascar_Raw1$Age [Madagascar_Raw1$Age == 8| Madagascar_Raw1$Age == 9 | Madagascar_Raw1$Age == 10 | Madagascar_Raw1$Age == 11 ] <- "45 Yrs \nOld & > "
+
+Madagascar_Raw1$Age2 <- as.numeric(Madagascar_Raw1$x19b)
+Madagascar_Raw1$Age2 [Madagascar_Raw1$Age2 < 18] <- "<18 \nYrs Old"
+Madagascar_Raw1$Age2 [Madagascar_Raw1$Age2 > 17 & Madagascar_Raw1$Age2 < 31] <- "18-30 \nYrs Old"
+Madagascar_Raw1$Age2 [Madagascar_Raw1$Age2 > 30 & Madagascar_Raw1$Age2 < 41] <- "31-40 \nYrs Old"
+Madagascar_Raw1$Age2 [Madagascar_Raw1$Age2 > 40 & Madagascar_Raw1$Age2 < 51] <- "41-50 \nYrs Old"
+Madagascar_Raw1$Age2 [Madagascar_Raw1$Age2 > 50 & Madagascar_Raw1$Age2 < 61] <- "51-60 \nYrs Old"
+Madagascar_Raw1$Age2 [Madagascar_Raw1$Age2 > 60] <- "61 \nYrs & >"
+Madagascar_Raw1 <- Madagascar_Raw1 %>% dplyr::mutate_if(is.character,as.factor)
+Madagascar_Round1 <- as.data.frame(Madagascar_Raw1)
+
+SouthSudan_Raw1 <- read_excel("C:/Users/andre/OneDrive - UNICEF/CRA - ESARO/South Sudan/Data/First Round/KAP South Sudan Dataset.xlsx")
+SouthSudan_Raw1$Age <- as.character(SouthSudan_Raw1$Age)
+SouthSudan_Raw1$Age [SouthSudan_Raw1$Age == "18_30_year"] <- "18-30 \nYrs Old"
+SouthSudan_Raw1$Age [SouthSudan_Raw1$Age == "31_40_years"] <- "31-40 \nYrs Old"
+SouthSudan_Raw1$Age [SouthSudan_Raw1$Age == "41_50_years"] <- "41-50 \nYrs Old"
+SouthSudan_Raw1$Age [SouthSudan_Raw1$Age == "51_60_years"] <- "51-60 \nYrs Old"
+SouthSudan_Raw1$Age [SouthSudan_Raw1$Age == "61_and_over_years"] <- "61 \nYrs & >"
+SouthSudan_Raw1$Rfg <- as.character(SouthSudan_Raw1$Rfg)
+SouthSudan_Raw1$Rfg [SouthSudan_Raw1$Rfg == "refugee"] <- "Refugee"
+SouthSudan_Raw1$Rfg [SouthSudan_Raw1$Rfg == "not_refugee_but_from_another_country"] <- "Other \nForeign Resident"
+SouthSudan_Raw1$Rfg [SouthSudan_Raw1$Rfg == "internally_displaced_person_IDP"] <- " IDP"
+SouthSudan_Raw1$Rfg [SouthSudan_Raw1$Rfg == "host_community"] <- "Host \nCommunity Resident"
+SouthSudan_Raw1$Edu.Rad <- as.character(SouthSudan_Raw1$Edu.Rad)
+SouthSudan_Raw1$Edu.Rad [SouthSudan_Raw1$Edu.Rad == "no"] <- "Not Attending"
+SouthSudan_Raw1$Edu.Rad [SouthSudan_Raw1$Edu.Rad == "yes"] <- "Attending"
+SouthSudan_Raw1 <- SouthSudan_Raw1 %>% dplyr::mutate_if(is.character,as.factor)
+SouthSudan_Round1 <- as.data.frame(SouthSudan_Raw1)
+
+Kenya_Raw1 <- read_excel("C:/Users/andre/OneDrive - UNICEF/CRA - ESARO/Kenya/Data/First Round/Kenya Raw Data Results.xls")
+Kenya_Raw1$`Q2. Gender (Multiple Choice Question)` [Kenya_Raw1$`Q2. Gender (Multiple Choice Question)` == "2. Female"] <- "Female"
+Kenya_Raw1$`Q2. Gender (Multiple Choice Question)` [Kenya_Raw1$`Q2. Gender (Multiple Choice Question)` == "1. Male"] <- "Male"
+Kenya_Raw1$`Q3. Age (Multiple Choice Question)` [Kenya_Raw1$`Q3. Age (Multiple Choice Question)` == "2. 18-24"] <- "18-24 \nYrs Old"
+Kenya_Raw1$`Q3. Age (Multiple Choice Question)` [Kenya_Raw1$`Q3. Age (Multiple Choice Question)` == "3. 25-34"] <- "25-34 \nYrs Old"
+Kenya_Raw1$`Q3. Age (Multiple Choice Question)` [Kenya_Raw1$`Q3. Age (Multiple Choice Question)` == "4. 35-44"] <- "35-44 \nYrs Old"
+Kenya_Raw1$`Q3. Age (Multiple Choice Question)` [Kenya_Raw1$`Q3. Age (Multiple Choice Question)` == "5. 45+"] <- "45 Yrs \nOld & > "
+Kenya_Raw1$`Q3. Age (Multiple Choice Question)` [Kenya_Raw1$`Q3. Age (Multiple Choice Question)` == "1. <18"] <- "<18 \nYrs Old"
+Kenya_Raw1$`Q4. Setting (Multiple Choice Question)` [Kenya_Raw1$`Q4. Setting (Multiple Choice Question)` == "1. Urban"] <- "Urban"
+Kenya_Raw1$`Q4. Setting (Multiple Choice Question)` [Kenya_Raw1$`Q4. Setting (Multiple Choice Question)` == "2. Rural"] <- "Rural"
+Kenya_Raw1 <- Kenya_Raw1 %>% dplyr::mutate_if(is.character,as.factor)
+Kenya_Raw1 <- as.data.frame(Kenya_Raw1)
+Kenya_Round1 <-subset(Kenya_Raw1,`Intro (Multiple Choice Question)`== "1. Yes-->Participate" & `Call Status` == "Finished (complete)" & `Conclusion (Message)` == "Conclusion")
+
+
+
+##Sex
+Kenya_Sex <- plyr::count(Kenya_Round1$`Q2. Gender (Multiple Choice Question)`)
+Kenya_Sex$Sex_perct <- Kenya_Sex$freq / sum(Kenya_Sex$freq)
+Kenya_Sex$Country <- "Kenya"
+Madagascar_Sex <- plyr::count(Madagascar_Round1$x17)
+Madagascar_Sex$Sex_perct <- Madagascar_Sex$freq / sum(Madagascar_Sex$freq)
+Madagascar_Sex$Country <- "Madagascar"
+SouthSudan_Sex <- plyr::count(SouthSudan_Round1$Sex)
+SouthSudan_Sex$Sex_perct <- SouthSudan_Sex$freq / sum(SouthSudan_Sex$freq)
+SouthSudan_Sex$Country <- "South Sudan"
+ESARO_SexGroup <- rbind(SouthSudan_Sex, Kenya_Sex)
+ESARO_SexGroup <- rbind(ESARO_SexGroup, Madagascar_Sex)
+ESARO_SexGroup <- ESARO_SexGroup[-c(2)]
+ESARO_SexGroup2 <- spread(ESARO_SexGroup, x, Sex_perct)
+
+ESARO1<- ggplot(ESARO_SexGroup2, aes(x=Male, xend=Female, y= Country, group=Country)) + 
+        geom_dumbbell(color="#F7BC08", 
+                      size=2, 
+                      colour_x = "#395B74") +  
+        scale_x_continuous(label=percent) + 
+        labs(x=NULL, y=NULL, 
+             title="Sex Respondents by Country", 
+             subtitle="Female and Male Respondents") +
+        theme(plot.title = element_text(hjust=0.5, face="bold"),
+              plot.background=element_rect(fill="#f7f7f7"),
+              panel.background=element_rect(fill="#f7f7f7"),
+              panel.grid.minor=element_blank(),
+              panel.grid.major.y=element_blank(),
+              panel.grid.major.x=element_line(),
+              axis.ticks=element_blank(),
+              legend.position="top",
+              panel.border=element_blank()) + coord_cartesian(xlim = c(0.25, 0.75)) + geom_text( data = ESARO_SexGroup2, aes(x = Female, y = Country), label = scales::percent(ESARO_SexGroup2$Female), fontface = "bold", color = "#F7BC08", size = 2.75, vjust = 1.5) + geom_text( data = ESARO_SexGroup2, aes(x = Male, y = Country), label = scales::percent(ESARO_SexGroup2$Male), fontface = "bold", color = "#395B74", size = 2.75, vjust = 1.5) + theme_clean() + geom_text(data =  ESARO_SexGroup2, aes(x = Female, y = Country, label = "F"), fontface = "bold", color = "#F7BC08", size = 3, vjust = -0.75) + geom_text(data =  ESARO_SexGroup2, aes(x = Male, y = Country , label = "M"), fontface = "bold", color = "#395B74", size = 3, vjust = -0.75)
+
+##Setting
+
+Kenya_Set <- Kenya_Round1 %>% count(`Q2. Gender (Multiple Choice Question)`, `Q4. Setting (Multiple Choice Question)`)
+Kenya_Set$Country <- "Kenya"
+names(Kenya_Set) <- c("Sex", "Setting", "n", "Country")
+Madagascar_Set <- Madagascar_Raw1 %>% count(x17, x15)
+Madagascar_Set$Country <- "Madagascar"
+names(Madagascar_Set) <- c("Sex", "Setting", "n", "Country")
+ESARO_SetGroup <- rbind(Madagascar_Set, Kenya_Set)
+ESARO_SetGroup <- ESARO_SetGroup %>% group_by(Country) %>% mutate(Sex_perct = round(n/sum(n),3))
+ESARO_SetGroup <- ESARO_SetGroup %>% group_by(Country,Sex) %>% mutate(Set_perct = round(n/sum(n),3))
+names(ESARO_SetGroup) <- c("Sex","Set","n","Country", "Sex_perct","Set_perct")
+
+ESARO2 <- ggplot(ESARO_SetGroup, aes(x = Sex, y = Sex_perct, fill = Set )) + geom_bar(stat = "identity") + geom_hline(yintercept = 0, size = 1, colour="#333333")+ labs(title="Rural/Urban Distribution by Sex per Country Survey",subtitle = "Rural/Urban Setting per available survey", fill = "Setting") +theme_clean() + xlab(NULL) +ylab("Percentage") + scale_y_continuous(labels = scales::percent_format(accuracy = 1)) + theme(legend.position = "bottom") + facet_wrap(Country ~ ., scales = "free_y")
+
+##Age
+
+Kenya_Age <- plyr::count(Kenya_Round1$`Q3. Age (Multiple Choice Question)`)
+Kenya_Age$Age_perct <- Kenya_Age$freq / sum(Kenya_Age$freq)
+Kenya_Age$Country <- "Kenya"
+Madagascar_Age <- plyr::count(Madagascar_Round1$Age)
+Madagascar_Age$Age_perct <- Madagascar_Age$freq / sum(Madagascar_Age$freq)
+Madagascar_Age$Country <- "Madagascar"
+ESARO_AgeGroup <- rbind(Kenya_Age,Madagascar_Age)
+
+SouthSudan_Age <- plyr::count(SouthSudan_Raw1$Age)
+SouthSudan_Age$Age_perct <- SouthSudan_Age$freq / sum(SouthSudan_Age$freq)
+SouthSudan_Age$Country <- "SouthSudan"
+Madagascar_Age2 <- plyr::count(Madagascar_Round1$Age2)
+Madagascar_Age2$Age_perct <- Madagascar_Age2$freq / sum(Madagascar_Age2$freq)
+Madagascar_Age2$Country <- "Madagascar"
+ESARO_AgeGroup2 <- rbind(SouthSudan_Age,Madagascar_Age2)
+
+ESARO3 <- ggplot(ESARO_AgeGroup, aes(x = x, y = Age_perct, fill = Country )) + geom_bar(stat = "identity", position="dodge") + geom_text(aes(label= scales::percent(Age_perct, accuracy = 0.1), y = Age_perct, x = x), vjust =  1.4, size = 3.25, color = "white", position = position_dodge(width = 1), fontface = "bold") + geom_hline(yintercept = 0, size = 1, colour="#333333")+ labs(title="Age Distribution by Country - Kenya and Madagascar",subtitle = "Respondents Age Groups", fill = "Country") +theme_clean() + xlab(NULL) +ylab("Percentage") + scale_y_continuous(labels = scales::percent) + theme(legend.position = "bottom")
+
+ESARO4 <- ggplot(ESARO_AgeGroup2, aes(x = x, y = Age_perct, fill = Country )) + geom_bar(stat = "identity", position="dodge") + geom_text(aes(label= scales::percent(Age_perct, accuracy = 0.1), y = Age_perct, x = x), vjust =  1.4, size = 3.25, color = "white", position = position_dodge(width = 1), fontface = "bold") + geom_hline(yintercept = 0, size = 1, colour="#333333")+ labs(title="Age Distribution by Country - South Sudan and Madagascar",subtitle = "Respondents Age Groups", fill = "Country") +theme_clean() + xlab(NULL) +ylab("Percentage") + scale_y_continuous(labels = scales::percent) + theme(legend.position = "bottom")
+
+##Handwashing
+
+KEN_LikertHandwashing <- plyr::count(Kenya_Round1$`Q5. Handwashing Frequency (Multiple Choice Question)`)
+KEN_LikertHandwashing$Name <- "Handwashing" 
+KEN_LikertHandwashing <- spread(KEN_LikertHandwashing, x, freq)
+KEN_LikertMask <- plyr::count(Kenya_Round1$`Q6. Face mask wearing Frequency (Multiple Choice Question)`)
+KEN_LikertMask$Name <- "Mask Use"
+KEN_LikertMask <- spread(KEN_LikertMask, x, freq)
+KEN_LikertSocDist <- plyr::count(Kenya_Round1$`Q7. Social Distance Frequency in last month (Multiple Choice Question)`)
+KEN_LikertSocDist$Name <- "Social Distance"
+KEN_LikertSocDist <- spread(KEN_LikertSocDist, x, freq)
+KEN_Likert <- rbind(KEN_LikertHandwashing, KEN_LikertMask)
+KEN_Likert <- rbind(KEN_Likert, KEN_LikertSocDist)
+names(KEN_Likert) <-c("Practice", "All of \nthe time", "Most of \nthe time", "Sometimes", "Rarely", "Never")
+col_order <- c("Practice", "Never", "Rarely", "Sometimes","Most of \nthe time","All of \nthe time")
+KEN_Likert <- KEN_Likert[, col_order]
+
+ESARO5 <-HH::likert(Practice ~ ., data = KEN_Likert, ylab=NULL, as.percent=TRUE, main = list(" Protective Practices CRA COVID-19 \n Kenya - Monthly",x=unit(.55, "npc")), sub= list("Frequency of Practice",x=unit(.57, "npc")),xlim=c(-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ), rightAxis = FALSE)
+
+
+Madagascar_LikertHandwashing <- plyr::count(Madagascar_Round1$q17)
+Madagascar_LikertHandwashing$Name <- "Handwashing"
+Madagascar_LikertHandwashing <- spread(Madagascar_LikertHandwashing, x, freq)
+names(Madagascar_LikertHandwashing) <-c("Practice", "Never or \nAlmost Never", "Less than \n3 times a day", "3 times \n a day", "More than \n3 times a day", "All of \nthe time")
+ESARO6 <-HH::likert(Practice ~ ., data = Madagascar_LikertHandwashing, ylab=NULL, as.percent=TRUE, main = list(" Handwashing \nMadagascar - Daily",x=unit(.55, "npc")), sub= list("Frequency of Practice",x=unit(.57, "npc")),xlim=c(-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ), rightAxis = FALSE)
+
+
+
+
+Madagascar_LikertMaskUse <- plyr::count(Madagascar_Round1$q18a_0)
+Madagascar_LikertMaskUse$Name <- "Mask Use"
+Madagascar_LikertMaskUse <- spread(Madagascar_LikertMaskUse, x, freq)
+names(Madagascar_LikertMaskUse) <-c("Practice", "All of \nthe time", "Most of \nthe time", "Sometimes", "Never", "Doesn't \napply")
+col_order <- c("Practice", "Doesn't \napply", "Never", "Sometimes","Most of \nthe time","All of \nthe time")
+Madagascar_LikertMaskUse <- Madagascar_LikertMaskUse[, col_order]
+ESARO7 <-HH::likert(Practice ~ ., data = Madagascar_LikertMaskUse, ylab=NULL, as.percent=TRUE, main = list("Mask Use \nMadagascar - Daily",x=unit(.55, "npc")), sub= list("Frequency of Practice",x=unit(.57, "npc")),xlim=c(-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ), rightAxis = FALSE)
+
+South_Sudan_Practices <- read_excel("C:/Users/andre/OneDrive - UNICEF/CRA - ESARO/South Sudan/Data/First Round/South Sudan Practices.xlsx")
+South_Sudan_Practices$Perct_Pract <- round(South_Sudan_Practices$Perct_Pract,3)
+South_Sudan_Practices$label <- paste(100 *South_Sudan_Practices$Perct_Pract,"%")
+names(South_Sudan_Practices) <- c("Practice","Percentage","label")
+ESARO8 <- ggplot(South_Sudan_Practices, aes(reorder (`Practice`,`Percentage`),`Percentage`, label=`Percentage`)) + geom_point(col="#00508C",size=2) + geom_text(aes(label=label),vjust=- 0.65, color="black", size=3) + labs(title=" Protective Practices South Sudan", subtitle="Percentages of Respondents Top 5 Protective Practices") + coord_flip() + geom_segment(aes(x=`Practice`, xend=`Practice`, y=0, yend=`Percentage`), color = "#00508C") + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank()) + scale_y_continuous(labels=c("0%","25%","50%","75%","100%"))
+
+## Radio
+
+Kenya_Children <-subset(Kenya_Round1, `Q10. Children of school-going age? (Multiple Choice Question)` == "1. Yes")
+
+KEN_ChildDistLearn_Set <- Kenya_Children %>% group_by(`Q4. Setting (Multiple Choice Question)`) %>% count(`Q11. Do children attend KICD Education Programmes (Multiple Choice Question)`)
+KEN_ChildDistLearn_Set <- KEN_ChildDistLearn_Set %>% group_by(`Q4. Setting (Multiple Choice Question)`) %>% mutate(Child_Perct = round(n/sum(n),3))
+KEN_ChildDistLearn_Set$label <- paste(100*(KEN_ChildDistLearn_Set$Child_Perct),"%")
+names(KEN_ChildDistLearn_Set) <- c("Set","Child", "Recipients","Percentage","label")
+
+ESARO9 <- ggplot(KEN_ChildDistLearn_Set, aes(reorder (`Child`,`Percentage`),`Percentage`, label=`Percentage`, color = Set)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`Child`, ymax=`Percentage`, color = Set), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("Respondents' Children Attending Distance Learning Classes by Setting",subtitle ="Kenya Respondents with a children in KICD Education Programme \nRespondents with Children in School Age Only" )
+
+SouthSudan_DistLearn <- SouthSudan_Round1 %>% group_by(Rfg) %>% count(Edu.Rad)
+SouthSudan_DistLearn <- SouthSudan_DistLearn %>% group_by(Rfg) %>% mutate(Edu_Perct = round(n/sum(n),3))
+SouthSudan_DistLearn$label <- paste(100*(SouthSudan_DistLearn$Edu_Perct),"%")
+names(SouthSudan_DistLearn) <- c("Rfg","Edu.Dist", "Recipients","Percentage","label")
+
+ESARO10 <- ggplot(SouthSudan_DistLearn, aes(reorder (`Rfg`,`Percentage`),`Percentage`, label=`Percentage`, color = Edu.Dist)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom") + geom_linerange(aes(y=`Percentage`, ymin=0, x=`Rfg`, ymax=`Percentage`, color = Edu.Dist), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("Respondents's Children on Radio Distance Learning Classes",subtitle ="South Sudan Respondents by Resident Type" )
+
+##Main Concerns
+
+Mad_VirusKilling <- plyr::count(Madagascar_Round1$q8_0)
+t1<- as.data.frame(t(Mad_VirusKilling))
+Loss_Income <- plyr::count(Madagascar_Round1$q8_3)
+t2<- as.data.frame(t(Loss_Income))
+Catching_Virus <- plyr::count(Madagascar_Round1$q8_13)
+t3 <- as.data.frame(t(Catching_Virus))
+Food_Shortage <- plyr::count(Madagascar_Round1$q8_4)
+t4 <- as.data.frame(t(Food_Shortage))
+Crime <- plyr::count(Madagascar_Round1$q8_2)
+t5 <- as.data.frame(t(Crime))
+Madagascar_MainConcerns <- rbind(t1,t2)
+Madagascar_MainConcerns <- rbind(Madagascar_MainConcerns, t3)
+Madagascar_MainConcerns <- rbind(Madagascar_MainConcerns, t4)
+Madagascar_MainConcerns <- rbind(Madagascar_MainConcerns, t5)
+Madagascar_MainConcerns$Perct <- round(Madagascar_MainConcerns$V2/(Madagascar_MainConcerns$V1+Madagascar_MainConcerns$V2),3)
+Madagascar_MainConcerns <- Madagascar_MainConcerns [which(Madagascar_MainConcerns$V1 != 0),]
+Madagascar_MainConcerns$Concern <- c("Virus kills people","Economic Loss","Catching COVID-19","Food Loss","Crime in \nthe Community") 
+names(Madagascar_MainConcerns) <- c("No", "Yes", "Perct", "Concern")
+Madagascar_MainConcerns$label <- paste(100 * (Madagascar_MainConcerns$Perct),"%")
+
+ESARO11 <- ggplot(Madagascar_MainConcerns, aes(reorder (`Concern`,`Perct`),`Perct`, label=`Perct`)) + geom_point(col="#00508C",size=2) + geom_text(aes(label=label),vjust=- 0.65, color="black", size=3) + labs(title=" Top 5 Concerns regarding COVID-19 - Madagascar", subtitle="Percentages of Respondents Top 5 Concerns or Fears") + coord_flip() + geom_segment(aes(x=`Concern`, xend=`Concern`, y=0, yend=`Perct`), color = "#00508C") + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank()) + scale_y_continuous(labels=c("0%","25%","50%","75%","100%"))
+
+KEN_ChildConcern <-plyr::count(Kenya_Children$`Q13. Main concern for my children during covid-19 (Multiple Choice Question)`)
+KEN_ChildConcern <- KEN_ChildConcern %>% mutate(perc = round(freq/sum(freq),3))
+KEN_ChildConcern$label <- paste(100 * KEN_ChildConcern$perc,"%")
+names(KEN_ChildConcern) <- c("Child", "Recipients","Percentage","label")
+KEN_ChildConcern$Concern <- c("Getting sick \nwith COVID-19", "Child getting \ninvolved in dangerous\n activity", "Schools remaining \nclosed", "Being able to \nfeed or take care\nof my children", "Other reason")
+
+ESARO12 <- ggplot(KEN_ChildConcern, aes(reorder (`Concern`,`Percentage`),`Percentage`, label=`Percentage`)) + geom_point(col="#00508C",size=2) + geom_text(aes(label=label),vjust=- 0.65, color="black", size=3) + labs(title="Main concern of Kenya's Respondents on their children", subtitle="Percentages of Respondents by Concern During Covid-19") + coord_flip() + geom_segment(aes(x=`Concern`, xend=`Concern`, y=0, yend=`Percentage`), color = "#00508C") + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank()) + scale_y_continuous(expand = c(0,0.08), labels = percent)
+
+##Risk
+
+Madagascar_LikertRisk <- plyr::count(Madagascar_Round1$q11)
+Madagascar_LikertRisk$Name <- "Risk Perception"
+Madagascar_LikertRisk <- spread(Madagascar_LikertRisk, x, freq)
+names(Madagascar_LikertRisk) <-c("Risk", "High Risk", "Medium Risk", "Low Risk","No Risk")
+col_order <- c("Risk", "No Risk", "Low Risk", "Medium Risk", "High Risk")
+Madagascar_LikertRisk <- Madagascar_LikertRisk[, col_order]
+
+ESARO13 <-HH::likert(Risk ~ ., data = Madagascar_LikertRisk, ylab=NULL, as.percent=TRUE, main = list(" Perception of Risk of Catching COVID-19 \nMadagascar",x=unit(.55, "npc")), sub= list("Level Risk Distribution",x=unit(.57, "npc")), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#00508C" ), rightAxis = FALSE)
+
+SouthSudan_LikertRisk <- plyr::count(SouthSudan_Round1$Attds.RiskCOV)
+SouthSudan_LikertRisk$Name <- "Risk Perception"
+SouthSudan_LikertRisk <- spread(SouthSudan_LikertRisk, x, freq)
+names(SouthSudan_LikertRisk) <-c("Risk", "High Risk", "Low Risk", "No Risk")
+col_order <- c("Risk", "No Risk", "Low Risk", "High Risk")
+SouthSudan_LikertRisk <- SouthSudan_LikertRisk[, col_order]
+
+ESARO14 <-HH::likert(Risk ~ ., data = SouthSudan_LikertRisk, ylab=NULL, as.percent=TRUE, main = list(" Perception of Risk of Catching COVID-19 \nSouthSudan",x=unit(.55, "npc")), sub= list("Level Risk Distribution",x=unit(.57, "npc")), col=c("#E94E1B", "#F7AA4E","#00508C" ), rightAxis = FALSE)
+
+##Access Care
+
+Madagascar_AccessCare <- Madagascar_Round1 %>% group_by(x17) %>% count(q23_4)
+Madagascar_AccessCare <- Madagascar_AccessCare %>% group_by(x17) %>% mutate(perc = round(n/sum(n),3))
+Madagascar_AccessCare$Access <- c("Stopped","Not Stopped","Stopped, but not \nespecially because \n COVID-19","Don't Know/\nNot my Concern", "Stopped","Not Stopped","Stopped, but not \nespecially because \n COVID-19","Don't Know/\nNot my Concern")
+Madagascar_AccessCare$label <- paste(100 * Madagascar_AccessCare$perc,"%")
+
+ESARO15 <- ggplot(Madagascar_AccessCare, aes(reorder (`Access`,`perc`),`perc`, label=`perc`, color = x17)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom", legend.title = element_blank()) + geom_linerange(aes(y=`perc`, ymin=0, x=`Access`, ymax=`perc`, color = x17), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("Stopped Going to Health Centers by Sex - Madagascar",subtitle ="Percentages of Respondents by current access state" )
+
+SouthSudan_AccessCare <- SouthSudan_Round1 %>% group_by(Sex) %>% count(CrwdPl2wks.HCHosps)
+SouthSudan_AccessCare <- SouthSudan_AccessCare %>% group_by(Sex) %>% mutate(perc = round(n/sum(n),3))
+SouthSudan_AccessCare$label <- paste(100 * SouthSudan_AccessCare$perc,"%")
+SouthSudan_AccessCare$Access <- c("Not Visited", "Visited", "Not Visited", "Visited")
+
+
+ESARO16 <- ggplot(SouthSudan_AccessCare, aes(reorder (`Access`,`perc`),`perc`, label=`perc`)) + geom_point(col="#00508C",size=2) + geom_text(aes(label=label),vjust=- 0.65, color="black", size=3) + labs(title="Visited to Health Centers Last 2 Weeks- South Sudan", subtitle="Percentages of Respondents by Visit Status") + coord_flip() + geom_segment(aes(x=`Access`, xend=`Access`, y=0, yend=`perc`), color = "#00508C") + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank()) + scale_y_continuous(expand = c(0,0.08), labels = percent)
+
+KEN_C19Care_AgeSet <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% count(`Q20. Seeking essential health care services (antenatal care, immunizations, HIV) as advised by my health care provider... (Multiple Choice Question)`)
+KEN_C19Care_AgeSet <- KEN_C19Care_AgeSet %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% mutate(C19Care_Perct = round(n/sum(n),3))
+KEN_C19Care_AgeSet$label <- paste(100*(KEN_C19Care_AgeSet$C19Care_Perct),"%")
+names(KEN_C19Care_AgeSet) <- c("Set","Sex", "C19Care", "n", "PercentAgeSet","label")
+
+ESARO17 <- ggplot(KEN_C19Care_AgeSet, aes(reorder (`C19Care`,`PercentAgeSet`),`PercentAgeSet`, label=`PercentAgeSet`, color = Sex)) + facet_wrap(Set ~ Sex, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "bottom" ) + geom_linerange(aes(y=`PercentAgeSet`, ymin=0, x=`C19Care`, ymax=`PercentAgeSet`, color = Sex), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0, 1.1)) + ggtitle("Seeking essential health services during COVID-19* by Sex and Setting- Kenya",subtitle ="Percentages of Respondents Yes/No - *as advised by health care provider" ) + coord_flip()
+
+## Barriers to Healthcare
+
+t6 <- Madagascar_Round1 %>% group_by(x15, x17) %>% count (q28_0)
+t6 <- t6 %>% group_by(x15, x17) %>% mutate (Perct = round (n/sum(n),3))
+t6$Barrier <- "Have Drinking Water\n at Home"
+t6 <- as.data.frame(t6)
+t6 <- t6 [which(t6$q28_0 == 1),]
+t6 <- t6[-c(3)]
+t7 <- Madagascar_Round1 %>% group_by(x15, x17) %>% count (q28_1)
+t7 <- t7 %>% group_by(x15, x17) %>% mutate (Perct = round (n/sum(n),3))
+t7$Barrier <- "Have Drinking Water\n in the Community"
+t7 <- as.data.frame(t7)
+t7 <- t7 [which(t7$q28_1 == 1),]
+t7 <- t7[-c(3)]
+t8 <- Madagascar_Round1 %>% group_by(x15, x17) %>% count (q28_3)
+t8 <- t8 %>% group_by(x15, x17) %>% mutate (Perct = round (n/sum(n),3))
+t8$Barrier <- "Have Soap"
+t8 <- as.data.frame(t8)
+t8 <- t8 [which(t8$q28_3 == 1),]
+t8 <- t8[-c(3)]
+Madagascar_Barriers <- rbind(t6, t7)
+Madagascar_Barriers <- rbind(Madagascar_Barriers, t8)
+names(Madagascar_Barriers) <- c("Set", "Sex", "n", "Perct","Barrier")
+Madagascar_Barriers$label <- paste(100 * Madagascar_Barriers$Perct,"%")
+
+ESARO18 <- ggplot(Madagascar_Barriers, aes(reorder (`Barrier`,`Perct`),`Perct`, label=`Perct`, color = Sex)) + facet_wrap(Set ~ Sex, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "bottom" ) + geom_linerange(aes(y=`Perct`, ymin=0, x=`Barrier`, ymax=`Perct`, color = Sex), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0, 0.85)) + ggtitle("Water and Sanitation Barriers by Sex and Setting - Madagascar",subtitle ="Percentages of Respondents per Access to Protective Resource" ) + coord_flip()
+
+KEN_MainHealthB_AgeSet <- Kenya_Round1 %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% count(`Q21. Main barrier to see a healthcare provider (Multiple Choice Question)`)
+KEN_MainHealthB_AgeSet <- KEN_MainHealthB_AgeSet %>% group_by(`Q4. Setting (Multiple Choice Question)`, `Q2. Gender (Multiple Choice Question)`) %>% mutate(MainHealthB_Perct = round(n/sum(n),3))
+KEN_MainHealthB_AgeSet$label <- paste(100*(KEN_MainHealthB_AgeSet$MainHealthB_Perct),"%")
+names(KEN_MainHealthB_AgeSet) <- c("Set","Sex", "MainHealthB", "n", "PercentAgeSet","label")
+
+ESARO19 <- ggplot(KEN_MainHealthB_AgeSet, aes(reorder (`MainHealthB`,`PercentAgeSet`),`PercentAgeSet`, label=`PercentAgeSet`, color = Sex)) + facet_wrap(Set ~ Sex, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "bottom" ) + geom_linerange(aes(y=`PercentAgeSet`, ymin=0, x=`MainHealthB`, ymax=`PercentAgeSet`, color = Sex), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0, 0.85)) + ggtitle("Main Barrier To See Healthcare Provider by Sex and Setting - Kenya",subtitle ="Percentages of Respondents per Barrier" ) + coord_flip()
+
+##Emerging Needs
+
+t9 <- plyr::count(Madagascar_Round1$q23_0)
+t9 <- t9 %>% mutate(Perct = round (freq/sum(freq),3))
+t9$EmNeed <- "Reduced Number \nof Meals"
+t10 <- plyr::count(Madagascar_Round1$q23_1)
+t10 <- t10 %>% mutate(Perct = round (freq/sum(freq),3))
+t10$EmNeed <- "Reduced Consumption \nof Some Products"
+t11 <- plyr::count(Madagascar_Round1$q23_2)
+t11 <- t11 %>% mutate(Perct = round (freq/sum(freq),3))
+t11$EmNeed <- "Stopped Breastfeading \nChild"
+t12 <- plyr::count(Madagascar_Round1$q23_6)
+t12 <- t12 %>% mutate(Perct = round (freq/sum(freq),3))
+t12$EmNeed <- "Stopped \nVaccinations"
+Madagascar_EM <- rbind(t9,t10)
+Madagascar_EM <- rbind(Madagascar_EM,t11)
+Madagascar_EM <- rbind(Madagascar_EM,t12)
+Madagascar_EM <- Madagascar_EM[which(Madagascar_EM$x == 1),]
+Madagascar_EM$label <- paste(100 *(Madagascar_EM$Perct),"%")
+ESARO20 <- ggplot(Madagascar_EM, aes(reorder (`EmNeed`,`Perct`),`Perct`, label=`Perct`)) + geom_point(col="#00508C",size=2) + geom_text(aes(label=label),vjust=- 0.65, color="black", size=3) + labs(title=" Emerging Needs from COVID-19 Impact - Madagascar", subtitle="Respondents reporting as affected with impact from COVID-19") + coord_flip() + geom_segment(aes(x=`EmNeed`, xend=`EmNeed`, y=0, yend=`Perct`), color = "#00508C") + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank()) + scale_y_continuous(labels=c("0%","25%","50%","75%","100%"))
+
+KEN_LikertConfidenceAge <- Kenya_Round1 %>% group_by(`Q3. Age (Multiple Choice Question)`)  %>% count(`Q17. Confident about providing for your family during pandemic? (Multiple Choice Question)`)
+KEN_LikertConfidenceAge <- spread(KEN_LikertConfidenceAge,`Q17. Confident about providing for your family during pandemic? (Multiple Choice Question)`, n)
+KEN_LikertConfidenceAge$'Not confident \nat all' <- 0
+KEN_LikertConfidenceAge$'A little confident' <- 0
+KEN_LikertConfidenceAge$Area <- "Confidence"
+names(KEN_LikertConfidenceAge) <- c("Age","Somewhat \nconfident", "Very \nconfident", "Not sure","Not confident \nat all","A little \nconfident","Area")
+col_order3 <- c("Age","Area", "Not confident \nat all", "A little \nconfident", "Not sure", "Somewhat \nconfident", "Very \nconfident")
+KEN_LikertConfidenceAge <- KEN_LikertConfidenceAge[, col_order3]
+
+ESARO21 <-HH::likert(Area ~ .|Age, data = KEN_LikertConfidenceAge, as.percent=TRUE, main = list(" Confidence about providing for family during COVID-19 by Age - Kenya ",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ),ylab = NULL, par.strip.text=list(cex=0.65, lines=2, x = unit(.05,"npc")), strip.left = TRUE, strip = FALSE, layout = c(1,5))
+
+t13 <- plyr::count(SouthSudan_Raw1$Attds.ConfMeasrs)
+SouthSudan_LikertConfMeasures <- spread(t13, x, freq)
+SouthSudan_LikertConfMeasures$Measure <- "Confidence on \nAdapting Measures"
+names(SouthSudan_LikertConfMeasures) <- c("Not at All \nConfident","Not that \nConfident","Somewhat \nConfident","Unsure","Very \nConfident", "Measure")
+col_order <- c("Measure", "Not at All \nConfident","Not that \nConfident","Unsure", "Somewhat \nConfident","Very \nConfident")
+SouthSudan_LikertConfMeasures <- SouthSudan_LikertConfMeasures[, col_order]
+
+ESARO22 <-HH::likert(Measure ~ ., data = SouthSudan_LikertConfMeasures, as.percent=TRUE, main = list(" Confidence on Adapting COVID-19 Measures \nSouth Sudan ",x=unit(.55, "npc")), sub= list("Confidence on Measures even if close people dissaprove",x=unit(.57, "npc")),xlim=c(-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ),rightAxis = FALSE, ylab = NULL)
+
+t14 <- SouthSudan_Round1 %>% group_by(Sex) %>% count(l2wks.FamFrie)
+t14 <- t14 %>% group_by(Sex) %>% mutate(Perct = round (n/sum(n),3))
+t14$Channel <- "Family and Friends"
+names(t14) <- c("Sex", "x", "n", "Perct", "Channel")
+t15 <- SouthSudan_Round1 %>% group_by(Sex) %>% count(l2wks.GovComInfRelLed)
+t15 <- t15 %>% group_by(Sex) %>% mutate(Perct = round (n/sum(n),3))
+t15$Channel <- "Government / \nCommunity influencers / \nReligious Leaders"
+names(t15) <- c("Sex", "x", "n", "Perct", "Channel")
+t16 <- SouthSudan_Round1 %>% group_by(Sex) %>% count(l2wks.2t2CampCommMob)
+t16 <- t16 %>% group_by(Sex) %>% mutate(Perct = round (n/sum(n),3))
+t16$Channel <- "Door to Door Campaign / \nCommunity Mobilizers"
+names(t16) <- c("Sex", "x", "n", "Perct", "Channel")
+t17 <- SouthSudan_Round1 %>% group_by(Sex) %>% count(l2wks.MegAnn)
+t17 <- t17 %>% group_by(Sex) %>% mutate(Perct = round (n/sum(n),3))
+t17$Channel <- "Megaphone \nAnnouncements"
+names(t17) <- c("Sex", "x", "n",  "Perct", "Channel")
+t18 <- SouthSudan_Round1 %>% group_by(Sex) %>% count(l2wks.RadTVNws)
+t18 <- t18 %>% group_by(Sex) %>% mutate(Perct = round (n/sum(n),3))
+t18$Channel <- "Radio / TV / \nNewspapers"
+names(t18) <- c("Sex", "x", "n",  "Perct", "Channel")
+t19 <- SouthSudan_Round1 %>% group_by(Sex) %>% count(l2wks.PostBillb)
+t19 <- t19 %>% group_by(Sex) %>% mutate(Perct = round (n/sum(n),3))
+t19$Channel <- "Posters / \nBillboards"
+names(t19) <- c("Sex", "x", "n",  "Perct", "Channel")
+t20 <- SouthSudan_Round1 %>% group_by(Sex) %>% count(l2wks.CallbSMS)
+t20 <- t20 %>% group_by(Sex) %>% mutate(Perct = round (n/sum(n),3))
+t20$Channel <- "Call Back Tone \non Mobile Phones / SMS"
+names(t20) <- c("Sex", "x", "n",  "Perct", "Channel")
+t21 <- SouthSudan_Round1 %>% group_by(Sex) %>% count(l2wks.SocMed)
+t21 <- t21 %>% group_by(Sex) %>% mutate(Perct = round (n/sum(n),3))
+t21$Channel <- "Social Media \n(WhatsApp, Facebook, Twitter, etc."
+names(t21) <- c("Sex", "x", "n",  "Perct", "Channel")
+t22 <- SouthSudan_Round1 %>% group_by(Sex) %>% count(l2wks.DNCR)
+t22 <- t22 %>% group_by(Sex) %>% mutate(Perct = round (n/sum(n),3))
+t22$Channel <- "Don't Know / \nCan't Remember"
+names(t22) <- c("Sex", "x", "n",  "Perct", "Channel")
+South_Sudan_Info <- rbind(t14, t15)
+South_Sudan_Info <- rbind(South_Sudan_Info, t16)
+South_Sudan_Info <- rbind(South_Sudan_Info, t17)
+South_Sudan_Info <- rbind(South_Sudan_Info, t18)
+South_Sudan_Info <- rbind(South_Sudan_Info, t19)
+South_Sudan_Info <- rbind(South_Sudan_Info, t20)
+South_Sudan_Info <- rbind(South_Sudan_Info, t21)
+South_Sudan_Info <- rbind(South_Sudan_Info, t22)
+South_Sudan_Info <- South_Sudan_Info[which(South_Sudan_Info$x == TRUE),]
+South_Sudan_Info$label <- paste(100*(South_Sudan_Info$Perct), "%")
+
+ESARO23 <- ggplot(South_Sudan_Info, aes(reorder (`Channel`,`Perct`),`Perct`, label=`Perct`, color = Sex)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom", legend.title = element_blank()) + geom_linerange(aes(y=`Perct`, ymin=0, x=`Channel`, ymax=`Perct`, color = Sex), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("Information Source for COVID-19 by Sex- South Sudan",subtitle ="% of Respondents that received COVID-19 information by Source" )
+
+Information_Trust_Madagascar <- read_excel("Information Trust Madagascar.xlsx")
+Information_Trust_Madagascar <- as.data.frame(Information_Trust_Madagascar)
+Information_Trust_Madagascar$`Information Source` <- as.factor(Information_Trust_Madagascar$`Information Source`)
+Info_Madagascar <- melt(Information_Trust_Madagascar, id.vars=c("Information Source"))
+Info_Madagascar$label <- paste(100*(Info_Madagascar$value),"%")
+
+ESARO24 <- ggplot(Info_Madagascar, aes(reorder (`Information Source`,`value`),`value`, label=`value`, color = variable)) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom", legend.title = element_blank()) + geom_linerange(aes(y=`value`, ymin=0, x=`Information Source`, ymax=`value`, color = variable), position = position_dodge(0.7)) + scale_y_continuous(expand = c(0,0.08), labels = percent) + ggtitle("Information Source for COVID-19 by Setting - Madagascar",subtitle ="% of Respondents that received COVID-19 information by Source" )
+
+##Trust Health Care Workers
+Madagascar_TrustHCP<- plyr::count(Madagascar_Round1$q30)
+Madagascar_TrustHCP <- spread(Madagascar_TrustHCP, x, freq)
+Madagascar_TrustHCP$Area <- "Trust Health \nCare Providers" 
+names(Madagascar_TrustHCP) <- c("Having \nfull confidence", "Having \nconfidence", "Having a \nlittle confidence","Having \ndoubts","Having \nplenty of doubts", "NS","Area")
+col_order2 <- c("Area", "Having \nplenty of doubts", "Having \ndoubts", "Having a \nlittle confidence", "Having \nconfidence", "Having \nfull confidence", "NS")
+Madagascar_TrustHCP <- Madagascar_TrustHCP[, col_order2]
+Madagascar_TrustHCP <- Madagascar_TrustHCP[-c(7)]
+
+ESARO25 <-HH::likert(Area ~ ., data = Madagascar_TrustHCP, ylab=NULL, as.percent=TRUE, main = list(" Trust Local Health Care Providers To Take Care Of My Family \nMadagascar",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ), rightAxis = FALSE)
+
+
+KEN_TrustHCP <-plyr::count(Kenya_Round1$`Q19. Trust local health care providers to take care of me and my family (Multiple Choice Question)`)
+KEN_TrustHCP <- spread(KEN_TrustHCP, x, freq)
+KEN_TrustHCP$Area <- "TrustHCP" 
+names(KEN_TrustHCP) <- c("Strongly agree", "Agree", "Not sure","Somewhat disagree","Strongly disagree","Area")
+col_order2 <- c("Area", "Strongly disagree", "Somewhat disagree", "Not sure", "Agree", "Strongly agree")
+KEN_TrustHCP <- KEN_TrustHCP[, col_order2]
+
+ESARO26 <-HH::likert(Area ~ ., data = KEN_TrustHCP, ylab=NULL, as.percent=TRUE, main = list(" Trust Local Health Care Providers To Take Care Of My Family \nKenya ",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ), rightAxis = FALSE)
+
+KEN_ChildBack2School <-plyr::count(Kenya_Children$`Q12. Send children to schools when they reopen (Multiple Choice Question)`)
+
+KEN_ChildBack2School <- KEN_ChildBack2School %>% mutate(perc = round(freq/sum(freq),3))
+KEN_ChildBack2School$label <- paste(100 * KEN_ChildBack2School$perc,"%")
+names(KEN_ChildBack2School) <- c("Child", "Recipients","Percentage","label")
+
+ESARO27 <- ggplot(KEN_ChildBack2School, aes(reorder (`Child`,`Percentage`),`Percentage`, label=`Percentage`)) + geom_point(col="#00508C",size=2) + geom_text(aes(label=label),vjust=- 0.65, color="black", size=3) + labs(title="Respondents willingness to send children back to school when re-open \nKenya", subtitle="Percentages of Respondents Yes/No - Respondents with Children in School Age Only") + coord_flip() + geom_segment(aes(x=`Child`, xend=`Child`, y=0, yend=`Percentage`), color = "#00508C") + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank()) + scale_y_continuous(expand = c(0,0.08), labels = percent)
+
+
+
+require(maps)
+
+map(database = "world", regions =  c('kenya', 'tanzania', 'uganda'))
+
+library(spData)
+
+africa = world %>% 
+  filter(continent == "Africa", !is.na(iso_a2)) %>% 
+  left_join(worldbank_df, by = "iso_a2") %>% 
+  dplyr::select(name, subregion, gdpPercap, HDI, pop_growth) %>% 
+  st_transform("+proj=aea +lat_1=20 +lat_2=-23 +lat_0=0 +lon_0=25")
+
+CRA_Status_Map <- read_excel("C:/Users/andre/Dropbox/Data Cameroon/CRA Status Map.xlsx")
+CRA_Status_Map <- as.data.frame(CRA_Status_Map)
+CRA_Status_Map$name <- as.factor(CRA_Status_Map$name)
+CRA_Status_Map$CRA <- as.factor(CRA_Status_Map$CRA)
+africa <- merge(africa, CRA_Status_Map, by = "name")
+col_order <- c("geometry","name","subregion","gdpPercap", "HDI", "pop_growth", "CRA", "Incidence Rate COVID-19")
+africa <- africa[, col_order]
+
+
+theme_map1 <- function(...) {theme_minimal() + theme(text = element_text(color = "#22211d"), axis.line = element_blank(), axis.text.x = element_blank(), axis.text.y = element_blank(), axis.ticks = element_blank(), axis.title.x = element_blank(), axis.title.y = element_blank(), panel.grid.minor = element_line(color = "#ebebe5", size = 0.2), panel.grid.major = element_line(color = "#ebebe5", size = 0.2), plot.background = element_rect(fill = "#f5f5f2", color = NA), panel.background = element_rect(fill = "#f5f5f2", color = NA), legend.background = element_rect(fill = "#f5f5f2", color = NA), panel.border = element_blank(),  ... )}
+
+ESARO_Map <- ggplot(africa) + geom_sf(aes(geometry = geometry, fill = CRA)) + geom_point(aes(size = `Incidence Rate COVID-19`, geometry = geometry), stat = "sf_coordinates", color = "#66CC99") + scale_fill_manual( values = c("#d199d0","#E94E1B", "#F7AA4E", "#00508C","#6193CE", "#BEBEBE" )) + theme_map1() + labs( color= "COVID 19 Rate", fill = "CRA Implementation\nStage", title = "CRA in East and Southern Africa - UNICEF", subtitle = "CRA Stage of Implementation and COVID-19 Incidence Rate", caption = "Source COVID-19 Rate \nhttps://coronavirus.jhu.edu/map.html")
+
+
+
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

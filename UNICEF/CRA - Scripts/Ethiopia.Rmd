@@ -1,0 +1,1929 @@
+---
+title: "CRA-EThiopia 1st. Round"
+author: "Andres Ochoa and Annika Squires - UNICEF EO ILU"
+date: "December 2, 2020"
+output: powerpoint_presentation
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.width=10, fig.height=6,echo=FALSE) 
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+#Packages Needed
+library(readxl)
+library(readr)
+library(haven)
+#library(car)
+library(plyr)
+library(dplyr)
+library(foreign)
+library(rgeos)
+library(maptools)
+library(colorRamps)
+library(RColorBrewer)
+library(ggplot2)
+library(mapproj)
+library(rgdal)
+library(sf)
+library(colorspace)
+library(raster)
+#library(treemap)
+library(ggplotify)
+library(ggrepel)
+library(ggalt)
+library(ggthemes)
+#library(ggpubr)
+library(scales)
+library(sjPlot)
+library(likert)
+library(tidyr)
+library(formattable)
+#library(data.table)
+#library(HH)
+library(tidyverse)
+
+if(!require(pacman))install.packages("pacman")
+
+pacman::p_load('dplyr', 'tidyr', 'gapminder',
+               'ggplot2',  'ggalt',
+               'forcats', 'R.utils', 'png', 
+               'grid', 'ggpubr', 'scales',
+               'bbplot')
+
+
+
+customGreen0 = "#DeF7E9"
+customGreen = "#71CA97"
+customRed = "#ff7f7f"
+
+#changed f
+ethiopia_Raw1 <- read_excel("C:/Users/andre/OneDrive - UNICEF/CRA - ESARO/Ethiopia/Data/First Round/Ethiopia Data Results_ALL(1074 responses).xlsx")
+ethiopia_Raw2 <- ethiopia_Raw1
+
+
+
+```
+
+
+
+
+```{r  echo=FALSE}
+#Transformations ethiopia
+
+#REGION
+names(ethiopia_Raw1)[names(ethiopia_Raw1) == "Q1a. Which region do you currently live in? (Multiple Choice Question)"]<-"region"
+ethiopia_Raw1$region [ethiopia_Raw1$region == "1. Oromia"] <- "Oromia"
+ethiopia_Raw1$region [ethiopia_Raw1$region == "2. Amharic"] <- "Amharic"
+ethiopia_Raw1$region [ethiopia_Raw1$region == "3. Tigray"] <- "Tigray"
+ethiopia_Raw1$region [ethiopia_Raw1$region == "4. Somali"] <- "Somali"
+ethiopia_Raw1$region [ethiopia_Raw1$region == "5. SNNP"] <- "SNNP"
+ethiopia_Raw1$region [ethiopia_Raw1$region == "6. Addis Ababa"] <- "Addis Ababa"
+ethiopia_Raw1$region [ethiopia_Raw1$region == "7. Other"] <- "Other"
+
+
+#GENDER
+names(ethiopia_Raw1)[names(ethiopia_Raw1) == "Q2. Gender (Multiple Choice Question)"]<-"Sex"
+ethiopia_Raw1$Sex [ethiopia_Raw1$Sex == "2. Female"] <- "Female"
+ethiopia_Raw1$Sex [ethiopia_Raw1$Sex == "1. Male"] <- "Male"
+
+
+#AGE
+names(ethiopia_Raw1)[names(ethiopia_Raw1) == 'Q3. What is your age? (Multiple Choice Question)']<-'Age'
+ethiopia_Raw1$Age [ethiopia_Raw1$Age == "2. 18-24 years"] <- "18-24 \nYrs Old"
+ethiopia_Raw1$Age [ethiopia_Raw1$Age == "3. 25-34 years"] <- "25-34 \nYrs Old"
+ethiopia_Raw1$Age [ethiopia_Raw1$Age == "4. 35-44 years"] <- "35-44 \nYrs Old"
+ethiopia_Raw1$Age [ethiopia_Raw1$Age == "5. above 55"] <- "55 Yrs \nOld & > "
+ethiopia_Raw1$Age [ethiopia_Raw1$Age == "1. below 18 years"] <- "<18 \nYrs Old"
+
+#REGION
+names(ethiopia_Raw1)[names(ethiopia_Raw1) == "Q4. Do you live in an urban or rural area? (Multiple Choice Question)"]<-'Setting'
+ethiopia_Raw1$Setting [ethiopia_Raw1$Setting == "1. urban"] <- "Urban"
+ethiopia_Raw1$Setting [ethiopia_Raw1$Setting == "2. rural"] <- "Rural"
+
+
+```
+
+
+```{r}
+names(ethiopia_Raw1)[names(ethiopia_Raw1) == 'Q5. Which of the following is NOT true, if any, about COVID-19? (Multiple Choice Question)']<- 'not_true_covid'
+
+
+names(ethiopia_Raw1)[names(ethiopia_Raw1)=='Q6. Do you think you are at risk of being infected with COVID-19? (Multiple Choice Question)']<-'risk_covid'
+
+names(ethiopia_Raw1)[names(ethiopia_Raw1)=='Q7. In the past week, how often have you washed your hands with water and soap for 20 seconds or applied sanitizer... (Multiple Choice Question)']<-'wash_hands_covid'
+
+names(ethiopia_Raw1)[names(ethiopia_Raw1)=='Q8. In the past month, while outside, how often have you kept at least 2 meters away from people to prevent infection... (Multiple Choice Question)']<-'distance_covid'
+
+names(ethiopia_Raw1)[names(ethiopia_Raw1)=='Q9. In the past month, while outside home, how often have you been wearing a mask when in public to prevent infection... (Multiple Choice Question)']<-'mask_covid'
+
+names(ethiopia_Raw1)[names(ethiopia_Raw1)=='Q10. Has there been any reason why you have not been able to practice the protective measures put in place for... (Multiple Choice Question)']<-'protective_measures_bariers'
+
+
+
+names(ethiopia_Raw1)[names(ethiopia_Raw1)=='Q11. What will be the first thing to do if you think you have Covid-19 symptoms? (Multiple Choice Question)']<-'first_action_covid'
+names(ethiopia_Raw1)[names(ethiopia_Raw1)=='Q13. Will you seek essential health care services such as  antenatal care, immunizations, HIV testing or general... (Multiple Choice Question)']<-'health_service_essential'
+names(ethiopia_Raw1)[names(ethiopia_Raw1)=='Q12. Is there any reason why you will not seek testing or treatment for COVID-19? (Multiple Choice Question)']<-'not_treatment_covid'
+names(ethiopia_Raw1)[names(ethiopia_Raw1)=='Q15. Do you have children who are of school-going age? (Multiple Choice Question)']<-'school_age_kids'
+names(ethiopia_Raw1)[names(ethiopia_Raw1)=='Q14. What is the main barrier for you for not seeing a healthcare provider for other non-covid19 related medical... (Multiple Choice Question)']<-'not_doctor_covid'
+names(ethiopia_Raw1)[names(ethiopia_Raw1)=='Q16. Will you send your children back to school when they re-open? (Multiple Choice Question)']<-'school_reopen_send'
+
+
+names(ethiopia_Raw1)[names(ethiopia_Raw1)=='Q17. What is the MAIN concern that you have for your children during COVID-19? (Multiple Choice Question)']<-'main_concern_children'
+names(ethiopia_Raw1)[names(ethiopia_Raw1)=='Q18. Which form of gender-based violence do you believe has MOST increased in your community during this time (of... (Multiple Choice Question)']<-'gender_violence_increase'
+names(ethiopia_Raw1)[names(ethiopia_Raw1)=='Q19. If tested positive for COVID-19, which is the most likely behavior you will receive from people? (Multiple Choice Question)']<-'behavior_test_positive_community'
+names(ethiopia_Raw1)[names(ethiopia_Raw1)=='Q20. How will you protect the mental health of you or your family during COVID-19 time? (Multiple Choice Question)']<-'protect_mental_health'
+names(ethiopia_Raw1)[names(ethiopia_Raw1)=='Q21. What do you think a lactating mother with coronavirus symptoms should do? (Multiple Choice Question)']<-'lactate_covid'
+names(ethiopia_Raw1)[names(ethiopia_Raw1)=='Q22. In the past month, how confident are you in providing what is needed for your family during the pandemic? (Multiple Choice Question)']<-'provide_family_covid'
+
+
+names(ethiopia_Raw1)[names(ethiopia_Raw1)=='Q23. Which one is the most trusted source of information you rely on about COVID-19? (Multiple Choice Question)']<-'trusted_source_covid'
+names(ethiopia_Raw1)[names(ethiopia_Raw1)=='Q24. Which community groups do you trust the MOST to support the community-based actions during COVID-19? (Multiple Choice Question)']<-'trust_community_group'
+names(ethiopia_Raw1)[names(ethiopia_Raw1)=='Q25. Which of the following social consequences related to COVID-19 concerns you the MOST? (Multiple Choice Question)']<-'social_consequence_concern'
+
+```
+
+## Cleaning Functions 
+```{r}
+
+
+
+new_df_demographics<- function(name,clean_df,column_df_1,new_name){
+
+name<- plyr::count(clean_df,column_df_1)
+name$new_name <- round(name$freq /sum(name$freq),4)
+colnames(name)[3]<-new_name
+
+return(name)
+}
+
+first_df_demographics<-function(name_group,column1){
+name_group <- plyr::count({{column1}})
+#column_2 <- name_group$Sex_perct
+name_group$Sex_perct <- name_group$freq /sum(name_group$freq)
+return(name_group)}
+
+
+
+group_2<-function(name,clean_df,column_df_1,name_perct,name_group,column_df_2,name_perct_2){
+name_group <- clean_df %>% dplyr::count({{column_df_2}},{{column_df_1}})
+name_group <- name_group %>% group_by({{column_df_2}}) %>% mutate(name_perct_2= round(n/sum(n),3))
+colnames(name_group)[4]<-name_perct_2
+return (name_group)}
+
+
+
+Sex_group_2 <- function(name,df,count_df_1,count_df_2,count1,count2,name_perct){
+
+name<- df %>% dplyr::count({{count_df_1}}, {{count_df_2}})
+names(name)<- c(count1,count2,"n")
+name <- name %>% group_by({{count_df_1}})%>% mutate(name_perct = round(n/sum(n),3))
+name <- name [-c(3)]
+name <- spread(name,Sex,name_perct)
+
+return(name)
+}
+
+
+
+
+demographics_group_3 <- function(name,clean_df,count_df_1,count_df_2,count_df_3,name_perct,name_perct_2,name_1,name_2,name_3,name_4,name_5,name_6){
+name <- clean_df  %>% dplyr::count({{count_df_1}}, {{count_df_2}},{{count_df_3}})
+name <- name %>% group_by({{count_df_1}}) %>% mutate(name_perct = round(n/sum(n),3))
+name <- name %>% group_by({{count_df_1}},{{count_df_2}}) %>% mutate(name_perct_2 = round(n/sum(n),3))
+names(name) <- c(name_1,name_2,name_3,name_4,name_5,name_6)
+return(name)
+}
+  
+
+
+new_df<- function(name,clean_df,column_df_1,label_enter,category){
+name<- plyr::count(clean_df,column_df_1)#) #)#, wt_var= "Wt")
+name <- name %>% mutate(perc= round(freq/sum(freq),3))
+name$label_enter <- paste(100 * name$perc,"%")
+names(name) <- c(category, "Recipients","Percentage","label")
+
+
+return(name)
+}
+
+category_df<- function(name,clean_df,column_df_1,column_df_2,cat_perct,label,col_1,col_2,col_3,col_4,col_5){
+
+name <- clean_df %>% group_by({{column_df_1}}) %>% dplyr::count({{column_df_2}})#E)#, wt = Wt)
+name <- name %>% group_by({{column_df_1}}) %>% mutate(cat_perct = round(n/sum(n),3))
+name$label_enter <- paste(100*(name$cat_perct),"%")
+names(name) <- c(col_1,col_2, col_3,col_4,col_5)
+
+return(name)
+}
+
+
+urban_rural<- function(name,df,column_1,column_2,topic_1,perct_type,c1,c2,t1,t2){
+name<- df %>% group_by({{column_1}},{{column_2}})  %>% dplyr::count({{topic_1}})#)#, wt = Wt)
+name<- name %>% group_by({{column_1}},{{column_2}}) %>% dplyr::mutate(perct_type=round(n/sum(n),3))
+name$label <- paste(100*(name$perct_type),"%")
+names(name)<-c(c1,c2,t1,"n",t2,"label")
+return(name)}
+
+
+```
+
+## Plotting Functions 
+```{r}
+
+gender_distribution <- function(mydf, myxcol ,myxend, myy, mygroup, mytitle, mysubtitle,mylevel){
+  ggplot2::ggplot(data=mydf,aes(x={{myxcol}},xend={{myxend}},y={{myy}},group={{mygroup}}))+
+   geom_dumbbell(color="#F7BC08", 
+                      size=2.5, 
+                      colour_x = "#395B74") +  
+        scale_x_continuous(label=percent) + 
+    labs(x=NULL, y=NULL, 
+             title=mytitle, 
+             subtitle=mysubtitle)+
+    theme(plot.title = element_text(hjust=0.5, face="bold"),
+              plot.background=element_rect(fill="#f7f7f7"),
+              panel.background=element_rect(fill="#f7f7f7"),
+              panel.grid.minor=element_blank(),
+              panel.grid.major.y=element_blank(),
+              panel.grid.major.x=element_line(),
+              axis.ticks=element_blank(),
+              legend.position="top",
+              panel.border=element_blank()) +
+    ggplot2::geom_text( data = filter(mydf, Level == "National"), aes(x = Female, y = Level), label = mydf$labelF, fontface = "bold", color = "#F7BC08",
+vjust = -0.75, hjust = .45,position = position_nudge(y = -0.1)) + ggplot2::geom_text( data = filter(mydf, Level == "National"), aes(x = Male, y = Level), label = mydf$labelM, fontface = "bold", color = "#395B74", vjust = -0.75, hjust = 0.75) +  
+    
+    coord_cartesian(xlim = c(0.15, 0.95))+theme_clean()
+    
+   
+}
+
+
+Sex_by_province <-function(mydf,myxcol,myxend,myregiongroup){
+ggplot(mydf, aes(x={{myxcol}}, xend={{myxend}}, y= {{myregiongroup}}, group={{myregiongroup}})) + 
+        geom_dumbbell(color="#F7BC08", 
+                      size=2, 
+                      colour_x = "#395B74") +  
+        scale_x_continuous(label=percent) + 
+        labs(x=NULL, y=NULL, 
+             title="Sex Respondents by Province Distribution", 
+             subtitle="Female and Male Respondents") +
+        theme(plot.title = element_text(hjust=0.5, face="bold"),
+              plot.background=element_rect(fill="#f7f7f7"),
+              panel.background=element_rect(fill="#f7f7f7"),
+              panel.grid.minor=element_blank(),
+              panel.grid.major.y=element_blank(),
+              panel.grid.major.x=element_line(),
+              axis.ticks=element_blank(),
+              legend.position="top",
+              panel.border=element_blank()) + coord_cartesian(xlim = c(0.15, 0.95)) + geom_text( data = mydf, aes(x = {{myxend}}, y = {{myregiongroup}}), label = scales::percent(mydf$Female), fontface = "bold", color = "#F7BC08", size = 2.75, vjust = 1.5) + geom_text( data = mydf, aes(x = {{myxcol}}, y = {{myregiongroup}}), label = scales::percent(mydf$Male), fontface = "bold", color = "#395B74", size = 2.75, vjust = 1.5) + theme_clean() + geom_text(data =  mydf, aes(x ={{ myxend}}, y ={{ myregiongroup}}, label = "F"), fontface = "bold", color = "#F7BC08", size = 3, vjust = -0.75) + geom_text(data =  mydf, aes(x ={{ myxcol}}, y = {{myregiongroup}} , label = "M"), fontface = "bold", color = "#395B74", size = 3, vjust = -0.75)}
+
+
+
+Age_distribution<- function (my_df,myxcol,my_ycol,my_title,my_subtitle,my_ylab){
+
+ggplot(my_df, aes(x = {{myxcol}}, y = {{my_ycol}})) + geom_bar(stat = "identity", position="identity", fill="#1380A1") + geom_text(aes(label= scales::percent({{my_ycol}}, accuracy = 0.01), y = {{my_ycol}}, x = {{myxcol}}), vjust =  3.4, size = 3.5, color = "white") + geom_hline(yintercept = 0, size = 1, colour="#333333")+ labs(title=my_title,subtitle = my_subtitle) +theme_clean() + xlab(NULL) +ylab({{my_ylab}}) + scale_y_continuous(labels = scales::percent)
+
+}
+
+Age_distribution_sex<- function (my_df,myxcol,my_ycol,my_fill,my_title,my_subtitle,my_fill_title,my_ylab){
+ggplot(my_df, aes(x = {{myxcol}}, y = {{my_ycol}}, fill = {{my_fill}} )) + geom_bar(stat = "identity", position="dodge") + geom_text(aes(label= scales::percent({{my_ycol}}, accuracy = 0.1), y = {{my_ycol}}, x ={{myxcol}}), vjust = 2.5, size = 2.7, color = "white", position = position_dodge(width = 1), fontface = "bold") + geom_hline(yintercept = 0, size = 1, colour="#333333")+ labs(title=my_title,subtitle = my_subtitle, fill = my_fill_title) +theme_clean() + xlab(NULL) +ylab(my_ylab) + scale_y_continuous(labels = scales::percent) + theme(legend.position = "bottom")
+  
+}
+
+Barriers <- function(my_df,reorder1,reorder2,mylabel,mylabel2,my_title,my_subtitle,my_x,my_xend,my_yend){
+  ggplot(my_df, aes(reorder ({{reorder1}},{{reorder2}}),{{mylabel}}, label={{mylabel}})) + geom_point(col="black",size=2) + geom_text(aes(label={{mylabel2}}),vjust=.2,hjust=-.2, color="black", size=3)  + labs(title=my_title, subtitle=my_subtitle) +coord_flip() + geom_segment(aes(x={{my_x}}, xend={{my_xend}}, y=0, yend={{my_yend}})) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank())+ theme(plot.title = element_text(vjust = .6))+ scale_y_continuous(expand = c(0,0.08), labels = percent) }
+
+Barriers_Sex <- function(my_df,reorder1,reorder2,mylabel,mylabel2,my_color,my_label3,my_y,my_x,my_ymax,my_color_2,my_title,my_subtitle){
+   wrap <- function(x) stringr::str_wrap(x, 10)
+ggplot(my_df, aes(reorder ({{reorder1}},{{reorder2}}),{{mylabel}}, label={{mylabel2}}, color = {{my_color}})) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label={{my_label3}}),size=3,,hjust=- .2, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6,margin = margin(t = 0, r = 20, b = 0, l = 0)), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom")+ geom_linerange(aes(y={{my_y}}, ymin=-0, x={{my_x}}, ymax={{my_ymax}}, color = {{my_color_2}}), position = position_dodge(0.7))+ scale_y_continuous(expand = c(-.1,0.15), labels = percent) + ggtitle(my_title,subtitle =my_subtitle)}#+ scale_x_discrete(labels = wrap)}
+
+Barriers_Age <- function(my_df,reorder1,reorder2,mylabel,mylabel2,my_color,my_facet_wrap,facetrows,my_label3,my_y,my_x,my_ymax,my_color_2,my_label4,my_title,my_subtitle){
+  wrap <- function(x) stringr::str_wrap(x, 10)
+ggplot(my_df, aes(reorder ({{reorder1}},{{reorder2}}),{{mylabel}}, label={{mylabel2}}, color = {{my_color}})) + facet_wrap({{my_facet_wrap}}, nrow = facetrows)+geom_point(size= 2,position = position_dodge(.7)) + geom_text(aes(label={{my_label3}}),size=3 ,,hjust=- 0.27, position = position_dodge(1)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6,margin = margin(t = 0, r = 0, b = 0, l =40)), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank())+ geom_linerange(aes(y={{my_y}}, ymin=0, x={{my_x}}, ymax={{my_ymax}}, color = {{my_color_2}}), position = position_dodge(0.7))+ theme( legend.position="none", legend.box="vertical", legend.text = element_text(size=5),legend.margin=margin(6,6,6,10))+scale_y_continuous(expand = c(0,0.08), labels = {{my_label4}},limits = c(0, 1.1)) + ggtitle(my_title,subtitle =my_subtitle)+theme(plot.title = element_text(size =12))}#+ scale_x_discrete(labels = wrap)}
+
+
+setting_Sex<-function(df,column_1,column_2,title,subtitle){
+ggplot(df, aes(reorder ({{column_1}},{{column_2}}),{{column_2}}, label={{column_2}}, color = Sex)) + facet_wrap(Setting ~ Sex, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "none" ) + geom_linerange(aes(y={{column_2}}, ymin=0, x={{column_1}}, ymax={{column_2}}, color = Sex), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0,1.1)) + ggtitle(title,subtitle =subtitle ) + coord_flip()}
+
+
+
+
+```
+
+# Transforming for Demographics
+```{r}
+#Settting Function Group
+ethiopia_Set<-new_df_demographics(ethiopia_Set,ethiopia_Raw1,"Setting","set_perct")
+ethiopia_SetGroup<- group_2(ethiopia_Set,ethiopia_Raw1,Setting,"Set_perct",ethiopia_SetGroup,region,"set_perct")
+
+#Age Function Group
+ethiopia_Age <-new_df_demographics(ethiopia_Age,ethiopia_Raw1,"Age","Age_perct")
+ethiopia_AgeGroup<- group_2(ethiopia_Age,ethiopia_Raw1,Age,"Age_perct",ethiopia_AgeGroup,Sex,"sex_perct")
+```
+
+```{r}
+#Sex Function Group
+ethiopia_Sex<-   first_df_demographics(ethiopia_Sex_trial,ethiopia_Raw1$Sex)
+ethiopia_SexGroup<-group_2(ethiopia_Sex,ethiopia_Raw1,region,ethiopia_Sex_Group,Sex,Sex,"sex_perct")
+ethiopia_SexGroup2<-Sex_group_2(ethiopia_sex_group2,ethiopia_Raw1,region,Sex,"region","Sex",Sex_perct )
+ethiopia_SexGroup3<-demographics_group_3(ethiopia_SexGroup3,ethiopia_Raw1,region,Sex,Setting,Sex_perct,Set_perct,"Region","Sex","Set","n","Sex_perct","Set_perct")
+
+
+#Sex Function Level
+ethiopia_Sex$Level <- "National" #1 National
+ethiopia_Sex1 <- ethiopia_Sex[-c(2)]
+ethiopia_Sex2 <- spread(ethiopia_Sex1, x, Sex_perct)
+ethiopia_Sex2$labelF <- paste("Female",round(100*(ethiopia_Sex2$Female),2),"%")
+ethiopia_Sex2$labelM <- paste("Male",round(100*(ethiopia_Sex2$Male),2),"%")
+
+```
+
+## Sex Distribution
+```{r}
+gender_distribution (ethiopia_Sex2, Male ,Female, Level,Level,'Sex Respondents',"Female and Male Respondents Proportion at National Level",National )
+```
+
+
+## Sex Distribution by Region
+```{r}
+Sex_by_province(ethiopia_SexGroup2,Male,Female,region)
+```
+
+
+## Age Distribution
+```{r}
+Age_distribution(ethiopia_Age,Age,Age_perct,"Age Distribution","Respondents Age Groups","Percentage")
+```
+
+
+## Age Distribution by Sex
+```{r}
+Age_distribution_sex(ethiopia_AgeGroup,Age,sex_perct,Sex,"Age Distribution by Sex","Respondents Sex by Age Groups","Sex","Percentage")
+```
+
+##  Setting Distribution
+```{r}
+Age_distribution(ethiopia_Set,Setting,set_perct,"Setting Distribution","Respondents Settings","Percentages")
+```
+
+## Setting by Region 
+```{r echo= FALSE, fig.dim=c(8,6)}
+ggplot(ethiopia_SetGroup, aes(x = region, y = set_perct, fill = Setting )) + geom_bar(stat = "identity", position="dodge") + geom_text(aes(label= scales::percent(set_perct, accuracy = 0.1), y = set_perct, x = region), vjust =  -0.25, size = 2.9, color = "black", position = position_dodge(width = 1), fontface = "bold") + geom_hline(yintercept = 0, size = 1, colour="#333333")+ labs(title="Setting Distribution by Region",subtitle = "Respondents Setting", fill = "Setting") +theme_clean() + xlab(NULL) +ylab("Percentage") + scale_y_continuous(labels = scales::percent) + theme(legend.position = "bottom")
+```
+
+## Setting By Sex and Region
+
+```{r echo= FALSE, fig.dim=c(10,6)}
+ggplot(ethiopia_SexGroup3, aes(x = Sex, y = Sex_perct, fill = Set )) + geom_bar(stat = "identity") + geom_hline(yintercept = 0, size = 1, colour="#333333")+ labs(title="Setting Distribution by Sex and Region",subtitle = "Setting on Each Region by Sex", fill = "Setting") +theme_clean() + xlab(NULL) +ylab("Percentage") + scale_y_continuous(labels = scales::percent_format(accuracy = 1)) + theme(legend.position = "bottom") + facet_wrap(Region ~ ., scales = "free_y" ,nrow = 2)
+```
+
+
+
+```{r}
+
+ethiopia_Raw1$not_true_covid [ethiopia_Raw1$not_true_covid == "1. caused by coronavirus"] <- "caused by coronavirus"
+ethiopia_Raw1$not_true_covid [ethiopia_Raw1$not_true_covid == "2. close contact with infected person"] <- "close contact with infected person"
+ethiopia_Raw1$not_true_covid [ethiopia_Raw1$not_true_covid == "3. physical distance, face masks,etc reduce transmission"] <- "physical distance, face masks,etc reduce transmission"
+ethiopia_Raw1$not_true_covid [ethiopia_Raw1$not_true_covid == "4. transmiteed by mosquitoes"] <- "transmited by mosquitoes"
+ethiopia_Raw1$not_true_covid [ethiopia_Raw1$not_true_covid == "5. all are true"] <- "all are true"
+
+
+
+
+
+not_true_covid<-new_df(not_true_covid,ethiopia_Raw1,"not_true_covid",label,"not_true_covid")
+
+ethiopia_not_true_covid_sex<-category_df(not_true_covid_sex,ethiopia_Raw1,Sex,not_true_covid,"rad_perct",label,"Sex","not_true_covid","Recipients","Percentage","label")
+ethiopia_not_true_covid_Age<-category_df(not_true_covid_Age,ethiopia_Raw1,Age,not_true_covid,"rad_perct",label,"Age","not_true_covid","Recipients","Percentage","label")
+ethiopia_not_true_covid_Setting<-category_df(not_true_covid_Setting,ethiopia_Raw1,Setting,not_true_covid,"rad_perct",label,"Setting","not_true_covid","Recipients","Percentage","label")
+ethiopia_not_true_covid_region<-category_df(not_true_covid_region,ethiopia_Raw1,region,not_true_covid,"rad_perct",label,"region","not_true_covid","Recipients","Percentage","label")
+ethiopia_not_true_covidrural_urban<-urban_rural(ethiopia_not_true_covid,ethiopia_Raw1,Setting,Sex,not_true_covid,not_true_covidperct,"Setting","Sex","not_true_covidperct","Percent_not_true_covidset")
+
+```
+
+                                           
+## Not True COVID
+```{r}
+
+Barriers(not_true_covid,not_true_covid,Percentage,Percentage,label,"Which of the following is NOT true, if any, about COVID-19? ","Percent of Respondents",not_true_covid,not_true_covid,Percentage)
+```
+
+## Not True COVID by Sex
+```{r}
+
+Barriers_Sex(ethiopia_not_true_covid_sex,not_true_covid,Percentage,Percentage,Percentage,Sex,label,Percentage,not_true_covid,Percentage,Sex,"Which of the following is NOT true, if any, about COVID-19? ","Percentages of Respondents by Sex")
+```
+
+## Not True COVID by Age
+```{r}
+
+
+Barriers_Age(ethiopia_not_true_covid_Age,not_true_covid,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,not_true_covid,Percentage,Age,NULL,"Which of the following is NOT true, if any, about COVID-19? ","Percentages of Respondents by Age")
+
+
+```
+
+## Not True COVID by Setting
+```{r}
+
+
+Barriers_Age(ethiopia_not_true_covid_Setting,not_true_covid,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,not_true_covid,Percentage,Setting,NULL,"Which of the following is NOT true, if any, about COVID-19? ","Percentages of Respondents by Setting")
+
+
+```
+
+## Not True COVID by Region
+```{r }
+
+
+Barriers_Age(ethiopia_not_true_covid_region,not_true_covid,Percentage,Percentage,Percentage,region,~region,3,label,Percentage,not_true_covid,Percentage,region,NULL,"Which of the following is NOT true, if any, about COVID-19? ","Percentages of Respondents by Region")
+
+
+```
+
+
+## Not True COVID by Sex and Setting
+```{r } 
+
+
+setting_Sex(ethiopia_not_true_covidrural_urban,not_true_covidperct,Percent_not_true_covidset,"Which of the following is NOT true, if any, about COVID-19? ","Percentages of Respondents by Sex and Setting")
+
+
+``` 
+
+
+```{r}
+
+ethiopia_Raw1$risk_covid [ethiopia_Raw1$risk_covid == "1. yes"] <- "yes"
+ethiopia_Raw1$risk_covid [ethiopia_Raw1$risk_covid == "2. no"] <- "no"
+ethiopia_Raw1$risk_covid [ethiopia_Raw1$risk_covid == "3. not sure"] <- "not sure"
+
+
+risk_covid<-new_df(risk_covid,ethiopia_Raw1,"risk_covid",label,"risk_covid")
+
+ethiopia_risk_covid_sex<-category_df(risk_covid_sex,ethiopia_Raw1,Sex,risk_covid,"rad_perct",label,"Sex","risk_covid","Recipients","Percentage","label")
+ethiopia_risk_covid_Age<-category_df(risk_covid_Age,ethiopia_Raw1,Age,risk_covid,"rad_perct",label,"Age","risk_covid","Recipients","Percentage","label")
+ethiopia_risk_covid_Setting<-category_df(risk_covid_Setting,ethiopia_Raw1,Setting,risk_covid,"rad_perct",label,"Setting","risk_covid","Recipients","Percentage","label")
+ethiopia_risk_covid_region<-category_df(risk_covid_region,ethiopia_Raw1,region,risk_covid,"rad_perct",label,"region","risk_covid","Recipients","Percentage","label")
+ethiopia_risk_covidrural_urban<-urban_rural(ethiopia_risk_covid,ethiopia_Raw1,Setting,Sex,risk_covid,risk_covidperct,"Setting","Sex","risk_covidperct","Percent_risk_covidset")
+
+```
+
+
+## Risk of Infection with COVID-19
+```{r}
+
+Barriers(risk_covid,risk_covid,Percentage,Percentage,label,"Do you think you are at risk of being infected with COVID-19? ","Percent of Respondents",risk_covid,risk_covid,Percentage)
+```
+
+## Risk of Infection with COVID-19 by Sex
+```{r}
+
+Barriers_Sex(ethiopia_risk_covid_sex,risk_covid,Percentage,Percentage,Percentage,Sex,label,Percentage,risk_covid,Percentage,Sex,"Do you think you are at risk of being infected with COVID-19? ","Percentages of Respondents by Sex")
+```
+
+## Risk of Infection with COVID-19 by Age
+```{r}
+
+
+Barriers_Age(ethiopia_risk_covid_Age,risk_covid,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,risk_covid,Percentage,Age,NULL,"Do you think you are at risk of being infected with COVID-19? ","Percentages of Respondents by Age")
+
+
+```
+
+## Risk of Infection with COVID-19 by Setting
+```{r}
+
+
+Barriers_Age(ethiopia_risk_covid_Setting,risk_covid,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,risk_covid,Percentage,Setting,NULL,"Do you think you are at risk of being infected with COVID-19? ","Percentages of Respondents by Setting")
+
+
+```
+
+## Risk of Infection with COVID-19 by Region
+```{r }
+
+
+Barriers_Age(ethiopia_risk_covid_region,risk_covid,Percentage,Percentage,Percentage,region,~region,3,label,Percentage,risk_covid,Percentage,region,NULL,"Do you think you are at risk of being infected with COVID-19? ","Percentages of Respondents by Region")
+
+
+```
+
+
+## Risk of Infection with COVID-19 by Sex and Setting
+```{r } 
+
+
+setting_Sex(ethiopia_risk_covidrural_urban,risk_covidperct,Percent_risk_covidset,"Do you think you are at risk of being infected with COVID-19? ","Percentages of Respondents by Sex and Setting")
+
+
+``` 
+
+## Protective Practices
+
+```{r fig.dim=c(10,6)}
+
+
+ethiopia_Raw1$wash_hands_covid [ethiopia_Raw1$wash_hands_covid == '1. all of the time']<-"all of the time"
+ethiopia_Raw1$wash_hands_covid [ethiopia_Raw1$wash_hands_covid == '2. most of the time']<-"most of the time"
+ethiopia_Raw1$wash_hands_covid [ethiopia_Raw1$wash_hands_covid == '3. sometimes']<-"sometimes"
+ethiopia_Raw1$wash_hands_covid [ethiopia_Raw1$wash_hands_covid == '4. rarely']<-"rarely"
+ethiopia_Raw1$wash_hands_covid [ethiopia_Raw1$wash_hands_covid == '5. never']<-"never"
+
+
+ethiopia_Raw1$mask_covid [ethiopia_Raw1$mask_covid == '1. all of the time']<-"all of the time"
+ethiopia_Raw1$mask_covid [ethiopia_Raw1$mask_covid == '2. most of the time']<-"most of the time"
+ethiopia_Raw1$mask_covid [ethiopia_Raw1$mask_covid == '3. sometimes']<-"sometimes"
+ethiopia_Raw1$mask_covid [ethiopia_Raw1$mask_covid == '4. rarely']<-"rarely"
+ethiopia_Raw1$mask_covid [ethiopia_Raw1$mask_covid == '5. never']<-"never"
+
+ethiopia_Raw1$distance_covid [ethiopia_Raw1$distance_covid == '1. all of the time']<-"all of the time"
+ethiopia_Raw1$distance_covid [ethiopia_Raw1$distance_covid == '2. most of the time']<-"most of the time"
+ethiopia_Raw1$distance_covid [ethiopia_Raw1$distance_covid == '3. sometimes']<-"sometimes"
+ethiopia_Raw1$distance_covid [ethiopia_Raw1$distance_covid == '4. rarely']<-"rarely"
+ethiopia_Raw1$distance_covid [ethiopia_Raw1$distance_covid == '5. never']<-"never"
+
+
+ethiopia_wash_hands_covid<- plyr::count(ethiopia_Raw1, 'wash_hands_covid')#, wt_var= "Wt")
+ethiopia_wash_hands_covid$Name <- "Washed hands with soap and water for 20 seconds "
+ethiopia_wash_hands_covid<- spread(ethiopia_wash_hands_covid, 'wash_hands_covid', freq)
+
+ethiopia_mask_covid <- plyr::count(ethiopia_Raw1, 'mask_covid')#, wt_var= "Wt")
+ethiopia_mask_covid$Name <- "Worn a mask"
+ethiopia_mask_covid <- spread(ethiopia_mask_covid, 'mask_covid', freq)
+
+
+ethiopia_distance_covid<- plyr::count(ethiopia_Raw1,'distance_covid')#, wt_var= "Wt")
+ethiopia_distance_covid$Name <- "Social distanced 2 meters in public?"
+ethiopia_distance_covid<- spread(ethiopia_distance_covid, 'distance_covid', freq)
+
+
+
+ethiopia_Likert <- rbind(ethiopia_wash_hands_covid, ethiopia_mask_covid)
+ethiopia_Likert <- rbind(ethiopia_Likert,ethiopia_distance_covid)
+
+names(ethiopia_Likert) <-c("Practice","All the time","Most of the time","Never","Rarely","Sometimes")
+
+col_order <- c("Practice","Never","Rarely","Sometimes","Most of the time","All the time")
+
+ethiopia_Likert <- ethiopia_Likert[, col_order]
+
+ethiopia_LikertPlot <-HH::likert(Practice ~ ., data = ethiopia_Likert, ylab=NULL, as.percent=TRUE, main = list("Over the past 30 days,how often have you:",x=unit(.55, "npc")), sub= list("Frequency",x=unit(.57, "npc")),xlim=c(-100,-40,-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ), rightAxis = FALSE)
+plot(ethiopia_LikertPlot)
+```
+
+
+## Protective Practices by Sex
+```{r fig.dim=c(10,6)}
+ethiopia_wash_hands_covidSex <- ethiopia_Raw1 %>% group_by(Sex)  %>% count(wash_hands_covid)#, wt = Wt)
+ethiopia_wash_hands_covidSex$Name <-  "Washed hands with soap and water for 20 seconds"
+ethiopia_wash_hands_covidSex <- spread(ethiopia_wash_hands_covidSex, wash_hands_covid, n)
+
+ethiopia_mask_covidSex <- ethiopia_Raw1 %>% group_by(Sex)  %>% count(mask_covid)#, wt = Wt)
+ethiopia_mask_covidSex$Name <-  "Worn a mask"
+ethiopia_mask_covidSex <- spread(ethiopia_mask_covidSex, mask_covid, n)
+
+ethiopia_distance_covid <- ethiopia_Raw1 %>% group_by(Sex)  %>% count(distance_covid)#, wt = Wt)
+ethiopia_distance_covid$Name <-"Social distanced 2 meters in public?"
+ethiopia_distance_covid <- spread(ethiopia_distance_covid, distance_covid, n)
+
+
+ethiopia_LikertSex <- rbind(ethiopia_wash_hands_covidSex, ethiopia_mask_covidSex)
+ethiopia_LikertSex <- rbind(ethiopia_LikertSex, ethiopia_distance_covid)
+
+names(ethiopia_LikertSex) <-c("Sex","Practice","All the time","Most of the time","Never","Rarely","Sometimes")
+col_orderSex <- c("Sex","Practice","Never","Rarely","Sometimes","Most of the time","All the time")
+ethiopia_LikertSex <- ethiopia_LikertSex[, col_orderSex]
+
+
+
+
+ethiopia_LikertPlotSex <-HH::likert(Practice ~ .|Sex, data = ethiopia_LikertSex, layout=c(1,3), ylab=NULL, as.percent=TRUE, main = list("Over the past 30 days, how often have you:",x=unit(.55, "npc")), sub= list("Frequency",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=1, lines=1, x = unit(.25,"npc")), cex=1, resize.height.tuning=2, rightAxis = FALSE)   
+plot(ethiopia_LikertPlotSex)
+
+
+```
+
+## Protective Practices by Age
+```{r fig.dim=c(10,8)}
+ethiopia_wash_hands_covidAge <- ethiopia_Raw1 %>% group_by(Age)  %>% count(wash_hands_covid)#, wt = Wt)
+ethiopia_wash_hands_covidAge$Name <- "Washed hands with soap and water for 20 seconds"
+ethiopia_wash_hands_covidAge <- spread(ethiopia_wash_hands_covidAge, wash_hands_covid, n)
+ethiopia_mask_covidAge <- ethiopia_Raw1 %>% group_by(Age)  %>% count(mask_covid)#, wt = Wt)
+ethiopia_mask_covidAge$Name <-  "Worn a mask"
+ethiopia_mask_covidAge <- spread(ethiopia_mask_covidAge, mask_covid, n)
+ethiopia_distance_covid <- ethiopia_Raw1 %>% group_by(Age)  %>% count(distance_covid)#, wt = Wt)
+ethiopia_distance_covid$Name <-"Social distanced 2 meters in public?"
+ethiopia_distance_covid <- spread(ethiopia_distance_covid, distance_covid, n)
+
+
+ethiopia_LikertAge <- rbind(ethiopia_wash_hands_covidAge, ethiopia_mask_covidAge)
+ethiopia_LikertAge <- rbind(ethiopia_LikertAge, ethiopia_distance_covid)
+
+names(ethiopia_LikertAge) <-c("Age","Practice","All the time","Most of the time","Never","Rarely","Sometimes")
+col_orderAge <- c("Age","Practice","Never","Rarely","Sometimes","Most of the time","All the time")
+
+ethiopia_LikertAge <- ethiopia_LikertAge[, col_orderAge]
+ethiopia_LikertAge[is.na(ethiopia_LikertAge)] <- 0
+
+
+
+
+
+ethiopia_LikertPlotAge <-HH::likert(Practice ~ .|Age, data = ethiopia_LikertAge, layout=c(1,5), ylab=NULL, as.percent=TRUE, main = list("Over the past 30 days, how often have you:",x=unit(.55, "npc")), sub= list("Frequency",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.7, lines=3, x = unit(.25,"npc")), resize.height.tuning=2, rightAxis = FALSE)   
+plot(ethiopia_LikertPlotAge)
+
+
+```
+
+
+## Protective Practices by Setting
+```{r fig.dim=c(10,4)}
+ethiopia_wash_hands_covidSetting <- ethiopia_Raw1 %>% group_by(Setting)  %>% count(wash_hands_covid)#, wt = Wt)
+ethiopia_wash_hands_covidSetting$Name <- "Washed hands with soap and water for 20 seconds"
+ethiopia_wash_hands_covidSetting <- spread(ethiopia_wash_hands_covidSetting, wash_hands_covid, n)
+ethiopia_mask_covidSetting <- ethiopia_Raw1 %>% group_by(Setting)  %>% count(mask_covid)#, wt = Wt)
+ethiopia_mask_covidSetting$Name <-  "Worn a mask"
+ethiopia_mask_covidSetting <- spread(ethiopia_mask_covidSetting, mask_covid, n)
+
+ethiopia_distance_covid <- ethiopia_Raw1 %>% group_by(Setting)  %>% count(distance_covid)#, wt = Wt)
+ethiopia_distance_covid$Name <-"Social distanced 2 meters in public?"
+ethiopia_distance_covid <- spread(ethiopia_distance_covid, distance_covid, n)
+
+
+ethiopia_LikertSetting <- rbind(ethiopia_wash_hands_covidSetting, ethiopia_mask_covidSetting)
+
+ethiopia_LikertSetting <- rbind(ethiopia_LikertSetting, ethiopia_distance_covid)
+
+names(ethiopia_LikertSetting) <-c("Setting","Practice","All the time","Most of the time","Never","Rarely","Sometimes")
+col_orderSetting <- c("Setting","Practice","Never","Rarely","Sometimes","Most of the time","All the time")
+ethiopia_LikertSetting <- ethiopia_LikertSetting[, col_orderSetting]
+ethiopia_LikertSetting[is.na(ethiopia_LikertSetting)] <- 0
+
+
+
+
+
+ethiopia_LikertPlotSetting <-HH::likert(Practice ~ .|Setting, data = ethiopia_LikertSetting, layout=c(1,2), ylab=NULL, as.percent=TRUE, main = list("Over the past 30 days, how often have you:",x=unit(.55, "npc")), sub= list("Frequency",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=1, lines=1, x = unit(.25,"npc")), cex=1, resize.height.tuning=2, rightAxis = FALSE)   
+plot(ethiopia_LikertPlotSetting)
+
+
+```
+
+
+## Protective Practices by Region
+```{r fig.dim=c(10,8)}
+ethiopia_wash_hands_covidregion <- ethiopia_Raw1 %>% group_by(region)  %>% count(wash_hands_covid)#, wt = Wt)
+ethiopia_wash_hands_covidregion$Name <- "Washed hands with soap and water for 20 seconds"
+ethiopia_wash_hands_covidregion <- spread(ethiopia_wash_hands_covidregion, wash_hands_covid, n)
+ethiopia_mask_covidregion <- ethiopia_Raw1 %>% group_by(region)  %>% count(mask_covid)#, wt = Wt)
+ethiopia_mask_covidregion$Name <-  "Worn a mask"
+ethiopia_mask_covidregion <- spread(ethiopia_mask_covidregion, mask_covid, n)
+
+ethiopia_distance_covid <- ethiopia_Raw1 %>% group_by(region)  %>% count(distance_covid)#, wt = Wt)
+ethiopia_distance_covid$Name <-"Social distanced 2 meters in public?"
+ethiopia_distance_covid <- spread(ethiopia_distance_covid, distance_covid, n)
+
+
+
+ethiopia_Likertregion <- rbind(ethiopia_wash_hands_covidregion, ethiopia_mask_covidregion)
+
+ethiopia_Likertregion <- rbind(ethiopia_Likertregion, ethiopia_distance_covid)
+
+names(ethiopia_Likertregion) <-c("region","Practice","All the time","Most of the time","Never","Rarely","Sometimes")
+col_orderregion <- c("region","Practice","Never","Rarely","Sometimes","Most of the time","All the time")
+ethiopia_Likertregion <- ethiopia_Likertregion[, col_orderregion]
+ethiopia_Likertregion[is.na(ethiopia_Likertregion)] <- 0
+
+
+
+
+ethiopia_LikertPlotregion <-HH::likert(Practice ~ .|region, data = ethiopia_Likertregion, layout=c(1,4), ylab=NULL, as.percent=TRUE, main = list("Over the past 30 days, how often have you:",x=unit(.55, "npc")), sub= list("Frequency",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.7, lines=3, x = unit(.25,"npc")), cex=1, resize.height.tuning=2, rightAxis = FALSE)   
+plot(ethiopia_LikertPlotregion)
+
+
+```
+
+
+
+
+
+## Protective Practices By Sex and Setting
+```{r echo= FALSE, fig.dim=c(10,11)}
+
+
+ethiopia_wash_hands_covidSex_Set <- ethiopia_Raw1 %>% group_by(Setting,Sex)  %>% count(wash_hands_covid)#, wt = Wt)
+ethiopia_wash_hands_covidSex_Set$Name <-  "Washed hands with soap and water for 20 seconds"
+ethiopia_wash_hands_covidSex_Set <- spread(ethiopia_wash_hands_covidSex_Set, wash_hands_covid, n)
+ethiopia_mask_covidSex_Set <- ethiopia_Raw1 %>% group_by(Setting,Sex)  %>% count(mask_covid)#, wt = Wt)
+ethiopia_mask_covidSex_Set$Name <-  "Worn a mask"
+ethiopia_mask_covidSex_Set <- spread(ethiopia_mask_covidSex_Set, mask_covid, n)
+
+ethiopia_distance_covidSex_Set <- ethiopia_Raw1 %>% group_by(Setting,Sex)  %>% count(distance_covid)#, wt = Wt)
+ethiopia_distance_covidSex_Set$Name <- "Social distanced 2 meters in public?"
+ethiopia_distance_covidSex_Set <- spread(ethiopia_distance_covidSex_Set, distance_covid, n)
+
+
+
+ethiopia_Likert_Practice_Sex_Set <- rbind(ethiopia_wash_hands_covidSex_Set, ethiopia_mask_covidSex_Set)
+ethiopia_Likert_Practice_Sex_Set <- rbind(ethiopia_Likert_Practice_Sex_Set, ethiopia_distance_covidSex_Set)
+
+
+ethiopia_Likert_Practice_Sex_Set$SexSet <- paste(ethiopia_Likert_Practice_Sex_Set$Setting," ", ethiopia_Likert_Practice_Sex_Set$Sex)
+ethiopia_Likert_Practice_Sex_Set <- ethiopia_Likert_Practice_Sex_Set[-c(1:2)]
+
+
+
+
+names(ethiopia_Likert_Practice_Sex_Set) <-c("Practice","All the time","Most of the time","Never","Rarely","Sometimes","SexSet")
+col_orderSex_Set <- c("SexSet","Practice","Never","Rarely","Sometimes","Most of the time","All the time")
+ethiopia_Likert_Practice_Sex_Set <- ethiopia_Likert_Practice_Sex_Set[, col_orderSex_Set]
+ethiopia_Likert_Practice_Sex_Set[is.na(ethiopia_Likert_Practice_Sex_Set)] <- 0
+
+
+
+
+
+ethiopia_Likert_Practice_Sex_Set <-HH::likert(Practice ~ .|SexSet, data =ethiopia_Likert_Practice_Sex_Set , as.percent=TRUE, main = list(" Protective Practices CRA COVID-19 by Sex and Setting",x=unit(.55, "npc")), sub= list("Frequency of Practice",x=unit(.57, "npc")),xlim=c(-100,-80,-60,-40,-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ), ylab = NULL, par.strip.text=list(cex=0.7, lines=2.5, x = unit(.05,"npc")), strip.left = TRUE, strip = FALSE, layout = c(2,2), rightAxis = FALSE)
+plot(ethiopia_Likert_Practice_Sex_Set)
+
+
+```
+
+
+
+```{r}
+
+ethiopia_Raw1$protective_measures_bariers [ethiopia_Raw1$protective_measures_bariers == "1. puts you/job/relationship at risk"] <- "puts you/job/relationship at risk"
+ethiopia_Raw1$protective_measures_bariers [ethiopia_Raw1$protective_measures_bariers == "2. lack supplies/no access to infrastructure"] <- "lack supplies/no access to infrastructure"
+ethiopia_Raw1$protective_measures_bariers [ethiopia_Raw1$protective_measures_bariers == "3. do not like how you look"] <- "do not like how you look"
+ethiopia_Raw1$protective_measures_bariers [ethiopia_Raw1$protective_measures_bariers == "4. religion protects you against the disease"] <- "religion protects you against the disease"
+ethiopia_Raw1$protective_measures_bariers [ethiopia_Raw1$protective_measures_bariers == "5. the virus is not real"] <- "the virus is not real"
+ethiopia_Raw1$protective_measures_bariers [ethiopia_Raw1$protective_measures_bariers == "6. other reasons"] <- "other reasons"
+ethiopia_Raw1$protective_measures_bariers [ethiopia_Raw1$protective_measures_bariers == "7. none, you practise safety measure"] <- "none, you practise safety measure"
+
+
+
+protective_measures_bariers<-new_df(protective_measures_bariers,ethiopia_Raw1,"protective_measures_bariers",label,"protective_measures_bariers")
+protective_measures_bariers[is.na(protective_measures_bariers)] <- 0
+ethiopia_protective_measures_bariers_sex<-category_df(protective_measures_bariers_sex,ethiopia_Raw1,Sex,protective_measures_bariers,"rad_perct",label,"Sex","protective_measures_bariers","Recipients","Percentage","label")
+ethiopia_protective_measures_bariers_sex[is.na(ethiopia_protective_measures_bariers_sex)] <- 0
+ethiopia_protective_measures_bariers_Age<-category_df(protective_measures_bariers_Age,ethiopia_Raw1,Age,protective_measures_bariers,"rad_perct",label,"Age","protective_measures_bariers","Recipients","Percentage","label")
+ethiopia_protective_measures_bariers_Age[is.na(ethiopia_protective_measures_bariers_Age)] <- 0
+ethiopia_protective_measures_bariers_Setting<-category_df(protective_measures_bariers_Setting,ethiopia_Raw1,Setting,protective_measures_bariers,"rad_perct",label,"Setting","protective_measures_bariers","Recipients","Percentage","label")
+ethiopia_protective_measures_bariers_Setting[is.na(ethiopia_protective_measures_bariers_Setting)] <- 0
+ethiopia_protective_measures_bariers_region<-category_df(protective_measures_bariers_region,ethiopia_Raw1,region,protective_measures_bariers,"rad_perct",label,"region","protective_measures_bariers","Recipients","Percentage","label")
+
+ethiopia_protective_measures_bariers_region[is.na(ethiopia_protective_measures_bariers_region)] <- 0
+ethiopia_protective_measures_bariersrural_urban<-urban_rural(ethiopia_protective_measures_bariers,ethiopia_Raw1,Setting,Sex,protective_measures_bariers,protective_measures_bariersperct,"Setting","Sex","protective_measures_bariersperct","Percent_protective_measures_bariersset")
+ethiopia_protective_measures_bariersrural_urban[is.na(ethiopia_protective_measures_bariersrural_urban)] <- 0
+
+```
+
+
+## Barriers to Protective Practices
+```{r}
+
+Barriers(protective_measures_bariers,protective_measures_bariers,Percentage,Percentage,label,"Has there been any reason why you have not been able to practice\n the protective measures?","Percent of Respondents",protective_measures_bariers,protective_measures_bariers,Percentage)
+```
+
+## Barriers to Protective Practices by Sex
+```{r}
+
+Barriers_Sex(ethiopia_protective_measures_bariers_sex,protective_measures_bariers,Percentage,Percentage,Percentage,Sex,label,Percentage,protective_measures_bariers,Percentage,Sex,"Has there been any reason why you have not been able to practice\n the protective measures?","Percentages of Respondents by Sex")
+```
+
+## Barriers to Protective Practices by Age
+```{r}
+
+
+Barriers_Age(ethiopia_protective_measures_bariers_Age,protective_measures_bariers,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,protective_measures_bariers,Percentage,Age,NULL,"Has there been any reason why you have not been able to practice\n the protective measures?","Percentages of Respondents by Age")
+
+
+```
+
+## Barriers to Protective Practices by Setting
+```{r}
+
+
+Barriers_Age(ethiopia_protective_measures_bariers_Setting,protective_measures_bariers,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,protective_measures_bariers,Percentage,Setting,NULL,"Has there been any reason why you have not been able to practice\n the protective measures?","Percentages of Respondents by Setting")
+
+
+```
+
+## Barriers to Protective Practices by Region
+```{r }
+
+
+Barriers_Age(ethiopia_protective_measures_bariers_region,protective_measures_bariers,Percentage,Percentage,Percentage,region,~region,3,label,Percentage,protective_measures_bariers,Percentage,region,NULL,"Has there been any reason why you have not been able to practice\n the protective measures?","Percentages of Respondents by Region")
+
+
+```
+
+
+## Barriers to Protective Practices by Sex and Setting
+```{r } 
+
+
+setting_Sex(ethiopia_protective_measures_bariersrural_urban,protective_measures_bariersperct,Percent_protective_measures_bariersset,"Has there been any reason why you have not been able to practice\n the protective measures?","Percentages of Respondents by Sex and Setting")
+
+
+```
+
+```{r}
+ethiopia_Raw1$first_action_covid [ethiopia_Raw1$first_action_covid == "1. call COVID helpline"] <- "call COVID helpline"
+ethiopia_Raw1$first_action_covid [ethiopia_Raw1$first_action_covid == "2. visit clinic or hospital"] <- "visit clinic or hospital"
+ethiopia_Raw1$first_action_covid [ethiopia_Raw1$first_action_covid == "3. treat with home remedies"] <- "treat with home remedies"
+ethiopia_Raw1$first_action_covid [ethiopia_Raw1$first_action_covid == "4. visit religious or traditional healer"] <- "visit religious or traditional healer"
+ethiopia_Raw1$first_action_covid [ethiopia_Raw1$first_action_covid == "5. self isolate at home"] <- "self isolate at home"
+ethiopia_Raw1$first_action_covid [ethiopia_Raw1$first_action_covid == "6. ignore or do nothing"] <- "ignore or do nothing"
+ethiopia_Raw1$first_action_covid [ethiopia_Raw1$first_action_covid == "7. none, you practise safety measure"] <- "none, you practise safety measure"
+
+
+
+first_action_covid<-new_df(first_action_covid,ethiopia_Raw1,"first_action_covid",label,"first_action_covid")
+first_action_covid[is.na(first_action_covid)] <- 0
+ethiopia_first_action_covid_sex<-category_df(first_action_covid_sex,ethiopia_Raw1,Sex,first_action_covid,"rad_perct",label,"Sex","first_action_covid","Recipients","Percentage","label")
+ethiopia_first_action_covid_sex[is.na(ethiopia_first_action_covid_sex)] <- 0
+ethiopia_first_action_covid_Age<-category_df(first_action_covid_Age,ethiopia_Raw1,Age,first_action_covid,"rad_perct",label,"Age","first_action_covid","Recipients","Percentage","label")
+ethiopia_first_action_covid_Age[is.na(ethiopia_first_action_covid_Age)] <- 0
+ethiopia_first_action_covid_Setting<-category_df(first_action_covid_Setting,ethiopia_Raw1,Setting,first_action_covid,"rad_perct",label,"Setting","first_action_covid","Recipients","Percentage","label")
+ethiopia_first_action_covid_Setting[is.na(ethiopia_first_action_covid_Setting)] <- 0
+ethiopia_first_action_covid_region<-category_df(first_action_covid_region,ethiopia_Raw1,region,first_action_covid,"rad_perct",label,"region","first_action_covid","Recipients","Percentage","label")
+
+ethiopia_first_action_covid_region[is.na(ethiopia_first_action_covid_region)] <- 0
+ethiopia_first_action_covidrural_urban<-urban_rural(ethiopia_first_action_covid,ethiopia_Raw1,Setting,Sex,first_action_covid,first_action_covidperct,"Setting","Sex","first_action_covidperct","Percent_first_action_covidset")
+ethiopia_first_action_covidrural_urban[is.na(ethiopia_first_action_covidrural_urban)] <- 0
+
+```
+
+
+## First Action I would do if with COVID-19 Symptoms
+```{r}
+
+Barriers(first_action_covid,first_action_covid,Percentage,Percentage,label,"What will be the first thing to do if you think you have Covid-19 symptoms? ","Percent of Respondents",first_action_covid,first_action_covid,Percentage)
+```
+
+## First Action I would do if with COVID-19 Symptoms by Sex
+```{r}
+
+Barriers_Sex(ethiopia_first_action_covid_sex,first_action_covid,Percentage,Percentage,Percentage,Sex,label,Percentage,first_action_covid,Percentage,Sex,"What will be the first thing to do if you think you have Covid-19 symptoms? ","Percentages of Respondents by Sex")
+```
+
+## First Action I would do if with COVID-19 Symptoms by Age
+```{r}
+
+
+Barriers_Age(ethiopia_first_action_covid_Age,first_action_covid,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,first_action_covid,Percentage,Age,NULL,"What will be the first thing to do if you think you have Covid-19 symptoms? ","Percentages of Respondents by Age")
+
+
+```
+
+## First Action I would do if with COVID-19 Symptoms by Setting
+```{r}
+
+
+Barriers_Age(ethiopia_first_action_covid_Setting,first_action_covid,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,first_action_covid,Percentage,Setting,NULL,"What will be the first thing to do if you think you have Covid-19 symptoms? ","Percentages of Respondents by Setting")
+
+
+```
+
+## First Action I would do if with COVID-19 Symptoms by Region
+```{r }
+
+
+Barriers_Age(ethiopia_first_action_covid_region,first_action_covid,Percentage,Percentage,Percentage,region,~region,3,label,Percentage,first_action_covid,Percentage,region,NULL,"What will be the first thing to do if you think you have Covid-19 symptoms? ","Percentages of Respondents by Region")
+
+
+```
+
+
+## First Action I would do if with COVID-19 Symptoms by Sex and Setting
+```{r } 
+
+
+setting_Sex(ethiopia_first_action_covidrural_urban,first_action_covidperct,Percent_first_action_covidset,"What will be the first thing to do if you think you have Covid-19 symptoms? ","Percentages of Respondents by Sex and Setting")
+
+
+``` 
+
+
+```{r}
+ethiopia_Raw1$health_service_essential [ethiopia_Raw1$health_service_essential == "1. yes"] <- "yes"
+ethiopia_Raw1$health_service_essential [ethiopia_Raw1$health_service_essential == "2. no"] <- "no"
+ethiopia_Raw1$health_service_essential [ethiopia_Raw1$health_service_essential == "3. not sure"] <- "not sure"
+
+
+
+health_service_essential<-new_df(health_service_essential,ethiopia_Raw1,"health_service_essential",label,"health_service_essential")
+health_service_essential[is.na(health_service_essential)] <- 0
+ethiopia_health_service_essential_sex<-category_df(health_service_essential_sex,ethiopia_Raw1,Sex,health_service_essential,"rad_perct",label,"Sex","health_service_essential","Recipients","Percentage","label")
+ethiopia_health_service_essential_sex[is.na(ethiopia_health_service_essential_sex)] <- 0
+ethiopia_health_service_essential_Age<-category_df(health_service_essential_Age,ethiopia_Raw1,Age,health_service_essential,"rad_perct",label,"Age","health_service_essential","Recipients","Percentage","label")
+ethiopia_health_service_essential_Age[is.na(ethiopia_health_service_essential_Age)] <- 0
+ethiopia_health_service_essential_Setting<-category_df(health_service_essential_Setting,ethiopia_Raw1,Setting,health_service_essential,"rad_perct",label,"Setting","health_service_essential","Recipients","Percentage","label")
+ethiopia_health_service_essential_Setting[is.na(ethiopia_health_service_essential_Setting)] <- 0
+ethiopia_health_service_essential_region<-category_df(health_service_essential_region,ethiopia_Raw1,region,health_service_essential,"rad_perct",label,"region","health_service_essential","Recipients","Percentage","label")
+
+ethiopia_health_service_essential_region[is.na(ethiopia_health_service_essential_region)] <- 0
+ethiopia_health_service_essentialrural_urban<-urban_rural(ethiopia_health_service_essential,ethiopia_Raw1,Setting,Sex,health_service_essential,health_service_essentialperct,"Setting","Sex","health_service_essentialperct","Percent_health_service_essentialset")
+ethiopia_health_service_essentialrural_urban[is.na(ethiopia_health_service_essentialrural_urban)] <- 0
+
+```
+
+
+## Still Seek Essential Health Care Services
+```{r}
+
+Barriers(health_service_essential,health_service_essential,Percentage,Percentage,label," Will you seek essential health care services such as  antenatal care, immunizations, HIV testing or  general ","Percent of Respondents",health_service_essential,health_service_essential,Percentage)
+```
+
+## Still Seek Essential Health Care Services by Sex
+```{r}
+
+Barriers_Sex(ethiopia_health_service_essential_sex,health_service_essential,Percentage,Percentage,Percentage,Sex,label,Percentage,health_service_essential,Percentage,Sex," Will you seek essential health care services such as  antenatal care, immunizations, HIV testing or  general ","Percentages of Respondents by Sex")
+```
+
+## Still Seek Essential Health Care Services by Age
+```{r}
+
+
+Barriers_Age(ethiopia_health_service_essential_Age,health_service_essential,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,health_service_essential,Percentage,Age,NULL," Will you seek essential health care services such as  antenatal care, immunizations, HIV testing or  general ","Percentages of Respondents by Age")
+
+
+```
+
+## Still Seek Essential Health Care Services by Setting
+```{r}
+
+
+Barriers_Age(ethiopia_health_service_essential_Setting,health_service_essential,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,health_service_essential,Percentage,Setting,NULL," Will you seek essential health care services such as  antenatal care, immunizations, HIV testing or  general ","Percentages of Respondents by Setting")
+
+
+```
+
+## Still Seek Essential Health Care Services by Region
+```{r }
+
+
+Barriers_Age(ethiopia_health_service_essential_region,health_service_essential,Percentage,Percentage,Percentage,region,~region,3,label,Percentage,health_service_essential,Percentage,region,NULL," Will you seek essential health care services such as  antenatal care, immunizations, HIV testing or  general ","Percentages of Respondents by Region")
+
+
+```
+
+
+## Still Seek Essential Health Care Services by Sex and Setting
+```{r } 
+
+
+setting_Sex(ethiopia_health_service_essentialrural_urban,health_service_essentialperct,Percent_health_service_essentialset," Will you seek essential health care services such as  antenatal care, immunizations, HIV testing or  general ","Percentages of Respondents by Sex and Setting")
+
+
+``` 
+
+
+
+```{r}
+ethiopia_Raw1$not_doctor_covid [ethiopia_Raw1$not_doctor_covid == "1. too expensive"] <- "too expensive"
+ethiopia_Raw1$not_doctor_covid [ethiopia_Raw1$not_doctor_covid == "2. too far to travel"] <- "too far to travel"
+ethiopia_Raw1$not_doctor_covid [ethiopia_Raw1$not_doctor_covid == "3. not satisfied"] <- "not satisfied"
+ethiopia_Raw1$not_doctor_covid [ethiopia_Raw1$not_doctor_covid == "4. may contract virsu from health care"] <- "may contract virus from health care"
+ethiopia_Raw1$not_doctor_covid [ethiopia_Raw1$not_doctor_covid == "5. do not know when and where to access"] <- "do not know when and where to access"
+ethiopia_Raw1$not_doctor_covid [ethiopia_Raw1$not_doctor_covid == "6. other reasons"] <- "other reasons"
+
+ethiopia_Raw12 <- ethiopia_Raw1[!is.na(ethiopia_Raw1$not_doctor_covid), ] 
+
+not_doctor_covid<-new_df(not_doctor_covid,ethiopia_Raw12,"not_doctor_covid",label,"not_doctor_covid")
+#not_doctor_covid[is.na(not_doctor_covid)] <- 0
+ethiopia_not_doctor_covid_sex<-category_df(not_doctor_covid_sex,ethiopia_Raw12,Sex,not_doctor_covid,"rad_perct",label,"Sex","not_doctor_covid","Recipients","Percentage","label")
+#ethiopia_not_doctor_covid_sex[is.na(ethiopia_not_doctor_covid_sex)] <- 0
+ethiopia_not_doctor_covid_Age<-category_df(not_doctor_covid_Age,ethiopia_Raw12,Age,not_doctor_covid,"rad_perct",label,"Age","not_doctor_covid","Recipients","Percentage","label")
+#ethiopia_not_doctor_covid_Age[is.na(ethiopia_not_doctor_covid_Age)] <- 0
+ethiopia_not_doctor_covid_Setting<-category_df(not_doctor_covid_Setting,ethiopia_Raw12,Setting,not_doctor_covid,"rad_perct",label,"Setting","not_doctor_covid","Recipients","Percentage","label")
+#ethiopia_not_doctor_covid_Setting[is.na(ethiopia_not_doctor_covid_Setting)] <- 0
+ethiopia_not_doctor_covid_region<-category_df(not_doctor_covid_region,ethiopia_Raw12,region,not_doctor_covid,"rad_perct",label,"region","not_doctor_covid","Recipients","Percentage","label")
+
+#ethiopia_not_doctor_covid_region[is.na(ethiopia_not_doctor_covid_region)] <- 0
+ethiopia_not_doctor_covidrural_urban<-urban_rural(ethiopia_not_doctor_covid,ethiopia_Raw12,Setting,Sex,not_doctor_covid,not_doctor_covidperct,"Setting","Sex","not_doctor_covidperct","Percent_not_doctor_covidset")
+#ethiopia_not_doctor_covidrural_urban[is.na(ethiopia_not_doctor_covidrural_urban)] <- 0
+
+```
+
+
+## Barriers Non-COVID Medical
+```{r}
+
+Barriers(not_doctor_covid,not_doctor_covid,Percentage,Percentage,label," What is the main barrier for you for not seeing a healthcare provider for other non-COVID-19\n related medical issues ","Percent of Respondents who couldn't access services",not_doctor_covid,not_doctor_covid,Percentage)
+```
+
+## Barriers Non-COVID Medical by Sex
+```{r}
+
+Barriers_Sex(ethiopia_not_doctor_covid_sex,not_doctor_covid,Percentage,Percentage,Percentage,Sex,label,Percentage,not_doctor_covid,Percentage,Sex,"What is the main barrier for you for not seeing a healthcare provider for other non-COVID-19\n related medical issues ","Percent of Respondents who couldn't access services by Sex")
+```
+
+## Barriers Non-COVID Medical by Age
+```{r}
+
+
+Barriers_Age(ethiopia_not_doctor_covid_Age,not_doctor_covid,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,not_doctor_covid,Percentage,Age,NULL,"What is the main barrier for you for not seeing a healthcare provider for other non-COVID-19\n related medical issues ","Percent of Respondents who couldn't access services by Age")
+
+
+```
+
+## Barriers Non-COVID Medical by Setting
+```{r}
+
+
+Barriers_Age(ethiopia_not_doctor_covid_Setting,not_doctor_covid,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,not_doctor_covid,Percentage,Setting,NULL,"What is the main barrier for you for not seeing a healthcare provider for other non-COVID-19\n related medical issues ","Percent of Respondents who couldn't access services by Setting")
+
+
+```
+
+## Barriers Non-COVID Medical by Region
+```{r }
+
+
+Barriers_Age(ethiopia_not_doctor_covid_region,not_doctor_covid,Percentage,Percentage,Percentage,region,~region,3,label,Percentage,not_doctor_covid,Percentage,region,NULL,"What is the main barrier for you for not seeing a healthcare provider for other non-COVID-19\n related medical issues ","Percent of Respondents who couldn't access services by Region")
+
+
+```
+
+
+## Barriers Non-COVID Medical by Sex and Setting
+```{r } 
+
+
+setting_Sex(ethiopia_not_doctor_covidrural_urban,not_doctor_covidperct,Percent_not_doctor_covidset,"What is the main barrier for you for not seeing a healthcare provider for other non-COVID-19\n related medical issues ","Percent of Respondents who couldn't access services by Sex and Setting")
+
+
+``` 
+
+```{r}
+ethiopia_Raw1$school_age_kids [ethiopia_Raw1$school_age_kids == "1. yes"] <- "yes"
+ethiopia_Raw1$school_age_kids [ethiopia_Raw1$school_age_kids == "2. no"] <- "no"
+
+
+
+school_age_kids<-new_df(school_age_kids,ethiopia_Raw1,"school_age_kids",label,"school_age_kids")
+school_age_kids[is.na(school_age_kids)] <- 0
+ethiopia_school_age_kids_sex<-category_df(school_age_kids_sex,ethiopia_Raw1,Sex,school_age_kids,"rad_perct",label,"Sex","school_age_kids","Recipients","Percentage","label")
+ethiopia_school_age_kids_sex[is.na(ethiopia_school_age_kids_sex)] <- 0
+ethiopia_school_age_kids_Age<-category_df(school_age_kids_Age,ethiopia_Raw1,Age,school_age_kids,"rad_perct",label,"Age","school_age_kids","Recipients","Percentage","label")
+ethiopia_school_age_kids_Age[is.na(ethiopia_school_age_kids_Age)] <- 0
+ethiopia_school_age_kids_Setting<-category_df(school_age_kids_Setting,ethiopia_Raw1,Setting,school_age_kids,"rad_perct",label,"Setting","school_age_kids","Recipients","Percentage","label")
+ethiopia_school_age_kids_Setting[is.na(ethiopia_school_age_kids_Setting)] <- 0
+ethiopia_school_age_kids_region<-category_df(school_age_kids_region,ethiopia_Raw1,region,school_age_kids,"rad_perct",label,"region","school_age_kids","Recipients","Percentage","label")
+
+ethiopia_school_age_kids_region[is.na(ethiopia_school_age_kids_region)] <- 0
+ethiopia_school_age_kidsrural_urban<-urban_rural(ethiopia_school_age_kids,ethiopia_Raw1,Setting,Sex,school_age_kids,school_age_kidsperct,"Setting","Sex","school_age_kidsperct","Percent_school_age_kidsset")
+ethiopia_school_age_kidsrural_urban[is.na(ethiopia_school_age_kidsrural_urban)] <- 0
+
+```
+
+
+## Respondents with Children on Sample
+```{r}
+
+Barriers(school_age_kids,school_age_kids,Percentage,Percentage,label," Do you have children who are of school-going age?","Percent of Respondents",school_age_kids,school_age_kids,Percentage)
+```
+
+## Respondents with Children on Sample by Sex
+```{r}
+
+Barriers_Sex(ethiopia_school_age_kids_sex,school_age_kids,Percentage,Percentage,Percentage,Sex,label,Percentage,school_age_kids,Percentage,Sex," Do you have children who are of school-going age?","Percentages of Respondents by Sex")
+```
+
+## Respondents with Children on Sample by Age
+```{r}
+
+
+Barriers_Age(ethiopia_school_age_kids_Age,school_age_kids,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,school_age_kids,Percentage,Age,NULL," Do you have children who are of school-going age?","Percentages of Respondents by Age")
+
+
+```
+
+## Respondents with Children on Sample by Setting
+```{r}
+
+
+Barriers_Age(ethiopia_school_age_kids_Setting,school_age_kids,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,school_age_kids,Percentage,Setting,NULL," Do you have children who are of school-going age?","Percentages of Respondents by Setting")
+
+
+```
+
+## Respondents with Children on Sample by Region
+```{r }
+
+
+Barriers_Age(ethiopia_school_age_kids_region,school_age_kids,Percentage,Percentage,Percentage,region,~region,3,label,Percentage,school_age_kids,Percentage,region,NULL," Do you have children who are of school-going age?","Percentages of Respondents by Region")
+
+
+```
+
+
+## Respondents with Children on Sample by Sex and Setting
+```{r } 
+
+
+setting_Sex(ethiopia_school_age_kidsrural_urban,school_age_kidsperct,Percent_school_age_kidsset," Do you have children who are of school-going age?","Percentages of Respondents by Sex and Setting")
+
+
+``` 
+
+```{r}
+ethiopia_Raw1$school_reopen_send [ethiopia_Raw1$school_reopen_send == "1. yes"] <- "yes"
+ethiopia_Raw1$school_reopen_send [ethiopia_Raw1$school_reopen_send == "2. no"] <- "no"
+ethiopia_Raw1$school_reopen_send [ethiopia_Raw1$school_reopen_send == "3. not sure"] <- "not sure"
+
+ethiopia_Raw13 <- ethiopia_Raw1[!is.na(ethiopia_Raw1$school_reopen_send), ] 
+
+
+school_reopen_send<-new_df(school_reopen_send,ethiopia_Raw13,"school_reopen_send",label,"school_reopen_send")
+#school_reopen_send[is.na(school_reopen_send)] <- 0
+ethiopia_school_reopen_send_sex<-category_df(school_reopen_send_sex,ethiopia_Raw13,Sex,school_reopen_send,"rad_perct",label,"Sex","school_reopen_send","Recipients","Percentage","label")
+#ethiopia_school_reopen_send_sex[is.na(ethiopia_school_reopen_send_sex)] <- 0
+ethiopia_school_reopen_send_Age<-category_df(school_reopen_send_Age,ethiopia_Raw13,Age,school_reopen_send,"rad_perct",label,"Age","school_reopen_send","Recipients","Percentage","label")
+#ethiopia_school_reopen_send_Age[is.na(ethiopia_school_reopen_send_Age)] <- 0
+ethiopia_school_reopen_send_Setting<-category_df(school_reopen_send_Setting,ethiopia_Raw13,Setting,school_reopen_send,"rad_perct",label,"Setting","school_reopen_send","Recipients","Percentage","label")
+#ethiopia_school_reopen_send_Setting[is.na(ethiopia_school_reopen_send_Setting)] <- 0
+ethiopia_school_reopen_send_region<-category_df(school_reopen_send_region,ethiopia_Raw13,region,school_reopen_send,"rad_perct",label,"region","school_reopen_send","Recipients","Percentage","label")
+
+#ethiopia_school_reopen_send_region[is.na(ethiopia_school_reopen_send_region)] <- 0
+ethiopia_school_reopen_sendrural_urban<-urban_rural(ethiopia_school_reopen_send,ethiopia_Raw13,Setting,Sex,school_reopen_send,school_reopen_sendperct,"Setting","Sex","school_reopen_sendperct","Percent_school_reopen_sendset")
+#ethiopia_school_reopen_sendrural_urban[is.na(ethiopia_school_reopen_sendrural_urban)] <- 0
+
+```
+
+
+## Send Children Back to School
+```{r}
+
+Barriers(school_reopen_send,school_reopen_send,Percentage,Percentage,label,"Will you send your children back to school when they re-open? ","Percent of Respondents with children",school_reopen_send,school_reopen_send,Percentage)
+```
+
+## Send Children Back to School by Sex
+```{r}
+
+Barriers_Sex(ethiopia_school_reopen_send_sex,school_reopen_send,Percentage,Percentage,Percentage,Sex,label,Percentage,school_reopen_send,Percentage,Sex,"Will you send your children back to school when they re-open? ","Percentages of Respondents with children by Sex")
+```
+
+## Send Children Back to School by Age
+```{r}
+
+
+Barriers_Age(ethiopia_school_reopen_send_Age,school_reopen_send,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,school_reopen_send,Percentage,Age,NULL,"Will you send your children back to school when they re-open? ","Percentages of Respondents with children by Age")
+
+
+```
+
+## Send Children Back to School by Setting
+```{r}
+
+
+Barriers_Age(ethiopia_school_reopen_send_Setting,school_reopen_send,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,school_reopen_send,Percentage,Setting,NULL,"Will you send your children back to school when they re-open? ","Percentages of Respondents with children by Setting")
+
+
+```
+
+## Send Children Back to School by Region
+```{r }
+
+
+Barriers_Age(ethiopia_school_reopen_send_region,school_reopen_send,Percentage,Percentage,Percentage,region,~region,3,label,Percentage,school_reopen_send,Percentage,region,NULL,"Will you send your children back to school when they re-open? ","Percentages of Respondents with children by Region")
+
+
+```
+
+
+## Send Children Back to School by Sex and Setting
+```{r } 
+
+
+setting_Sex(ethiopia_school_reopen_sendrural_urban,school_reopen_sendperct,Percent_school_reopen_sendset,"Will you send your children back to school when they re-open? ","Percentages of Respondents with children by Sex and Setting")
+
+
+``` 
+
+
+```{r}
+ethiopia_Raw13$main_concern_children [ethiopia_Raw13$main_concern_children == "1. children getting infected"] <- "children getting infected"
+ethiopia_Raw13$main_concern_children [ethiopia_Raw13$main_concern_children == "2. children getting involved in dangerous activities"] <- "children getting involved in dangerous activities"
+ethiopia_Raw13$main_concern_children [ethiopia_Raw13$main_concern_children == "3. schools remaining closed"] <- "schools remaining closed"
+ethiopia_Raw13$main_concern_children [ethiopia_Raw13$main_concern_children == "4. not being able to feed or take care of them"] <- "not being able to feed or take care of them"
+ethiopia_Raw13$main_concern_children [ethiopia_Raw13$main_concern_children == "5. other reasons"] <- "other reasons"
+ethiopia_Raw13$main_concern_children [ethiopia_Raw13$main_concern_children == "6. no concerns"] <- "no concerns"
+
+
+main_concern_children<-new_df(main_concern_children,ethiopia_Raw13,"main_concern_children",label,"main_concern_children")
+#main_concern_children[is.na(main_concern_children)] <- 0
+ethiopia_main_concern_children_sex<-category_df(main_concern_children_sex,ethiopia_Raw13,Sex,main_concern_children,"rad_perct",label,"Sex","main_concern_children","Recipients","Percentage","label")
+#ethiopia_main_concern_children_sex[is.na(ethiopia_main_concern_children_sex)] <- 0
+ethiopia_main_concern_children_Age<-category_df(main_concern_children_Age,ethiopia_Raw13,Age,main_concern_children,"rad_perct",label,"Age","main_concern_children","Recipients","Percentage","label")
+#ethiopia_main_concern_children_Age[is.na(ethiopia_main_concern_children_Age)] <- 0
+ethiopia_main_concern_children_Setting<-category_df(main_concern_children_Setting,ethiopia_Raw13,Setting,main_concern_children,"rad_perct",label,"Setting","main_concern_children","Recipients","Percentage","label")
+#ethiopia_main_concern_children_Setting[is.na(ethiopia_main_concern_children_Setting)] <- 0
+ethiopia_main_concern_children_region<-category_df(main_concern_children_region,ethiopia_Raw13,region,main_concern_children,"rad_perct",label,"region","main_concern_children","Recipients","Percentage","label")
+
+#ethiopia_main_concern_children_region[is.na(ethiopia_main_concern_children_region)] <- 0
+ethiopia_main_concern_childrenrural_urban<-urban_rural(ethiopia_main_concern_children,ethiopia_Raw13,Setting,Sex,main_concern_children,main_concern_childrenperct,"Setting","Sex","main_concern_childrenperct","Percent_main_concern_childrenset")
+#ethiopia_main_concern_childrenrural_urban[is.na(ethiopia_main_concern_childrenrural_urban)] <- 0
+
+```
+
+
+## Participants Main Concern for Children
+```{r}
+
+Barriers(main_concern_children,main_concern_children,Percentage,Percentage,label,"What is the MAIN concern that you have for your children during COVID-19?","Percent of Respondents",main_concern_children,main_concern_children,Percentage)
+```
+
+## Participants Main Concern for Children by Sex
+```{r}
+
+Barriers_Sex(ethiopia_main_concern_children_sex,main_concern_children,Percentage,Percentage,Percentage,Sex,label,Percentage,main_concern_children,Percentage,Sex,"What is the MAIN concern that you have for your children during COVID-19?","Percentages of Respondents by Sex")
+```
+
+## Participants Main Concern for Children by Age
+```{r}
+
+
+Barriers_Age(ethiopia_main_concern_children_Age,main_concern_children,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,main_concern_children,Percentage,Age,NULL,"What is the MAIN concern that you have for your children during COVID-19?","Percentages of Respondents by Age")
+
+
+```
+
+## Participants Main Concern for Children by Setting
+```{r}
+
+
+Barriers_Age(ethiopia_main_concern_children_Setting,main_concern_children,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,main_concern_children,Percentage,Setting,NULL,"What is the MAIN concern that you have for your children during COVID-19?","Percentages of Respondents by Setting")
+
+
+```
+
+## Participants Main Concern for Children by Region
+```{r }
+
+
+Barriers_Age(ethiopia_main_concern_children_region,main_concern_children,Percentage,Percentage,Percentage,region,~region,3,label,Percentage,main_concern_children,Percentage,region,NULL,"What is the MAIN concern that you have for your children during COVID-19?","Percentages of Respondents by Region")
+
+
+```
+
+
+## Participants Main Concern for Children by Sex and Setting
+```{r } 
+
+
+setting_Sex(ethiopia_main_concern_childrenrural_urban,main_concern_childrenperct,Percent_main_concern_childrenset,"What is the MAIN concern that you have for your children during COVID-19?","Percentages of Respondents by Sex and Setting")
+
+
+``` 
+
+
+```{r}
+ethiopia_Raw1$gender_violence_increase [ethiopia_Raw1$gender_violence_increase == "1. domestic"] <- "domestic"
+ethiopia_Raw1$gender_violence_increase [ethiopia_Raw1$gender_violence_increase == "2. sexual"] <- "sexual"
+ethiopia_Raw1$gender_violence_increase [ethiopia_Raw1$gender_violence_increase == "3. psychological"] <- "psychological"
+ethiopia_Raw1$gender_violence_increase [ethiopia_Raw1$gender_violence_increase == "4. physical"] <- "physical"
+ethiopia_Raw1$gender_violence_increase [ethiopia_Raw1$gender_violence_increase == "5. other"] <-"other"
+
+
+gender_violence_increase<-new_df(gender_violence_increase,ethiopia_Raw1,"gender_violence_increase",label,"gender_violence_increase")
+#gender_violence_increase[is.na(gender_violence_increase)] <- 0
+ethiopia_gender_violence_increase_sex<-category_df(gender_violence_increase_sex,ethiopia_Raw1,Sex,gender_violence_increase,"rad_perct",label,"Sex","gender_violence_increase","Recipients","Percentage","label")
+#ethiopia_gender_violence_increase_sex[is.na(ethiopia_gender_violence_increase_sex)] <- 0
+ethiopia_gender_violence_increase_Age<-category_df(gender_violence_increase_Age,ethiopia_Raw1,Age,gender_violence_increase,"rad_perct",label,"Age","gender_violence_increase","Recipients","Percentage","label")
+#ethiopia_gender_violence_increase_Age[is.na(ethiopia_gender_violence_increase_Age)] <- 0
+ethiopia_gender_violence_increase_Setting<-category_df(gender_violence_increase_Setting,ethiopia_Raw1,Setting,gender_violence_increase,"rad_perct",label,"Setting","gender_violence_increase","Recipients","Percentage","label")
+#ethiopia_gender_violence_increase_Setting[is.na(ethiopia_gender_violence_increase_Setting)] <- 0
+ethiopia_gender_violence_increase_region<-category_df(gender_violence_increase_region,ethiopia_Raw1,region,gender_violence_increase,"rad_perct",label,"region","gender_violence_increase","Recipients","Percentage","label")
+
+#ethiopia_gender_violence_increase_region[is.na(ethiopia_gender_violence_increase_region)] <- 0
+ethiopia_gender_violence_increaserural_urban<-urban_rural(ethiopia_gender_violence_increase,ethiopia_Raw1,Setting,Sex,gender_violence_increase,gender_violence_increaseperct,"Setting","Sex","gender_violence_increaseperct","Percent_gender_violence_increaseset")
+#ethiopia_gender_violence_increaserural_urban[is.na(ethiopia_gender_violence_increaserural_urban)] <- 0
+
+```
+
+
+## Gender Violence MOST Increased
+```{r}
+
+Barriers(gender_violence_increase,gender_violence_increase,Percentage,Percentage,label,"Which form of gender-based violence do you believe has MOST increased in your community during this time","Percent of Respondents",gender_violence_increase,gender_violence_increase,Percentage)
+```
+
+## Gender Violence MOST Increased by Sex
+```{r}
+
+Barriers_Sex(ethiopia_gender_violence_increase_sex,gender_violence_increase,Percentage,Percentage,Percentage,Sex,label,Percentage,gender_violence_increase,Percentage,Sex,"Which form of gender-based violence do you believe has MOST increased in your community during this time","Percentages of Respondents by Sex")
+```
+
+## Gender Violence MOST Increased by Age
+```{r}
+
+
+Barriers_Age(ethiopia_gender_violence_increase_Age,gender_violence_increase,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,gender_violence_increase,Percentage,Age,NULL,"Which form of gender-based violence do you believe has MOST increased in your community during this time","Percentages of Respondents by Age")
+
+
+```
+
+## Gender Violence MOST Increased by Setting
+```{r}
+
+
+Barriers_Age(ethiopia_gender_violence_increase_Setting,gender_violence_increase,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,gender_violence_increase,Percentage,Setting,NULL,"Which form of gender-based violence do you believe has MOST increased in your community during this time","Percentages of Respondents by Setting")
+
+
+```
+
+## Gender Violence MOST Increased by Region
+```{r }
+
+
+Barriers_Age(ethiopia_gender_violence_increase_region,gender_violence_increase,Percentage,Percentage,Percentage,region,~region,3,label,Percentage,gender_violence_increase,Percentage,region,NULL,"Which form of gender-based violence do you believe has MOST increased in your community during this time","Percentages of Respondents by Region")
+
+
+```
+
+
+## Gender Violence MOST Increased by Sex and Setting
+```{r } 
+
+
+setting_Sex(ethiopia_gender_violence_increaserural_urban,gender_violence_increaseperct,Percent_gender_violence_increaseset,"Which form of gender-based violence do you believe has MOST increased in your community during this time","Percentages of Respondents by Sex and Setting")
+
+
+``` 
+
+
+
+```{r}
+ethiopia_Raw1$behavior_test_positive_community [ethiopia_Raw1$behavior_test_positive_community == "1. stop talking to you"] <- "stop talking to you"
+ethiopia_Raw1$behavior_test_positive_community [ethiopia_Raw1$behavior_test_positive_community == "2. gossip about you"] <- "gossip about you"
+ethiopia_Raw1$behavior_test_positive_community [ethiopia_Raw1$behavior_test_positive_community == "3. provide needed food"] <- "provide needed food"
+ethiopia_Raw1$behavior_test_positive_community [ethiopia_Raw1$behavior_test_positive_community == "4. treat family badly"] <- "treat family badly"
+ethiopia_Raw1$behavior_test_positive_community [ethiopia_Raw1$behavior_test_positive_community == "5. do not know"] <-"do not knowr"
+
+
+behavior_test_positive_community<-new_df(behavior_test_positive_community,ethiopia_Raw1,"behavior_test_positive_community",label,"behavior_test_positive_community")
+#behavior_test_positive_community[is.na(behavior_test_positive_community)] <- 0
+ethiopia_behavior_test_positive_community_sex<-category_df(behavior_test_positive_community_sex,ethiopia_Raw1,Sex,behavior_test_positive_community,"rad_perct",label,"Sex","behavior_test_positive_community","Recipients","Percentage","label")
+#ethiopia_behavior_test_positive_community_sex[is.na(ethiopia_behavior_test_positive_community_sex)] <- 0
+ethiopia_behavior_test_positive_community_Age<-category_df(behavior_test_positive_community_Age,ethiopia_Raw1,Age,behavior_test_positive_community,"rad_perct",label,"Age","behavior_test_positive_community","Recipients","Percentage","label")
+#ethiopia_behavior_test_positive_community_Age[is.na(ethiopia_behavior_test_positive_community_Age)] <- 0
+ethiopia_behavior_test_positive_community_Setting<-category_df(behavior_test_positive_community_Setting,ethiopia_Raw1,Setting,behavior_test_positive_community,"rad_perct",label,"Setting","behavior_test_positive_community","Recipients","Percentage","label")
+#ethiopia_behavior_test_positive_community_Setting[is.na(ethiopia_behavior_test_positive_community_Setting)] <- 0
+ethiopia_behavior_test_positive_community_region<-category_df(behavior_test_positive_community_region,ethiopia_Raw1,region,behavior_test_positive_community,"rad_perct",label,"region","behavior_test_positive_community","Recipients","Percentage","label")
+
+#ethiopia_behavior_test_positive_community_region[is.na(ethiopia_behavior_test_positive_community_region)] <- 0
+ethiopia_behavior_test_positive_communityrural_urban<-urban_rural(ethiopia_behavior_test_positive_community,ethiopia_Raw1,Setting,Sex,behavior_test_positive_community,behavior_test_positive_communityperct,"Setting","Sex","behavior_test_positive_communityperct","Percent_behavior_test_positive_communityset")
+#ethiopia_behavior_test_positive_communityrural_urban[is.na(ethiopia_behavior_test_positive_communityrural_urban)] <- 0
+
+```
+
+
+## Community Behavior if Test Positive
+```{r}
+
+Barriers(behavior_test_positive_community,behavior_test_positive_community,Percentage,Percentage,label,"If tested positive for COVID-19, which is the most likely behavior you will receive from people?","Percent of Respondents",behavior_test_positive_community,behavior_test_positive_community,Percentage)
+```
+
+## Community Behavior if Test Positive by Sex
+```{r}
+
+Barriers_Sex(ethiopia_behavior_test_positive_community_sex,behavior_test_positive_community,Percentage,Percentage,Percentage,Sex,label,Percentage,behavior_test_positive_community,Percentage,Sex,"If tested positive for COVID-19, which is the most likely behavior you will receive from people?","Percentages of Respondents by Sex")
+```
+
+## Community Behavior if Test Positive by Age
+```{r}
+
+
+Barriers_Age(ethiopia_behavior_test_positive_community_Age,behavior_test_positive_community,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,behavior_test_positive_community,Percentage,Age,NULL,"If tested positive for COVID-19, which is the most likely behavior you will receive from people?","Percentages of Respondents by Age")
+
+
+```
+
+## Community Behavior if Test Positive by Setting
+```{r}
+
+
+Barriers_Age(ethiopia_behavior_test_positive_community_Setting,behavior_test_positive_community,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,behavior_test_positive_community,Percentage,Setting,NULL,"If tested positive for COVID-19, which is the most likely behavior you will receive from people?","Percentages of Respondents by Setting")
+
+
+```
+
+## Community Behavior if Test Positive by Region
+```{r }
+
+
+Barriers_Age(ethiopia_behavior_test_positive_community_region,behavior_test_positive_community,Percentage,Percentage,Percentage,region,~region,3,label,Percentage,behavior_test_positive_community,Percentage,region,NULL,"If tested positive for COVID-19, which is the most likely behavior you will receive from people?","Percentages of Respondents by Region")
+
+
+```
+
+
+## Community Behavior if Test Positive by Sex and Setting
+```{r } 
+
+
+setting_Sex(ethiopia_behavior_test_positive_communityrural_urban,behavior_test_positive_communityperct,Percent_behavior_test_positive_communityset,"If tested positive for COVID-19, which is the most likely behavior you will receive from people?","Percentages of Respondents by Sex and Setting")
+
+
+``` 
+
+
+
+```{r}
+ethiopia_Raw1$protect_mental_health [ethiopia_Raw1$protect_mental_health == "1. talk to trusted people"] <- "alk to trusted people"
+ethiopia_Raw1$protect_mental_health [ethiopia_Raw1$protect_mental_health == "2. tobacco/alcohol to ease stress"] <- "tobacco/alcohol to ease stress"
+ethiopia_Raw1$protect_mental_health [ethiopia_Raw1$protect_mental_health == "3. eat healthily"] <- "eat healthily"
+ethiopia_Raw1$protect_mental_health [ethiopia_Raw1$protect_mental_health == "4. regular exercise"] <- "regular exercise"
+ethiopia_Raw1$protect_mental_health [ethiopia_Raw1$protect_mental_health == "5. visit psychologist/social worker"] <-"visit psychologist/social worker"
+ethiopia_Raw1$protect_mental_health [ethiopia_Raw1$protect_mental_health == "6. do nothing"] <-"do nothing"
+
+protect_mental_health<-new_df(protect_mental_health,ethiopia_Raw1,"protect_mental_health",label,"protect_mental_health")
+#protect_mental_health[is.na(protect_mental_health)] <- 0
+ethiopia_protect_mental_health_sex<-category_df(protect_mental_health_sex,ethiopia_Raw1,Sex,protect_mental_health,"rad_perct",label,"Sex","protect_mental_health","Recipients","Percentage","label")
+#ethiopia_protect_mental_health_sex[is.na(ethiopia_protect_mental_health_sex)] <- 0
+ethiopia_protect_mental_health_Age<-category_df(protect_mental_health_Age,ethiopia_Raw1,Age,protect_mental_health,"rad_perct",label,"Age","protect_mental_health","Recipients","Percentage","label")
+#ethiopia_protect_mental_health_Age[is.na(ethiopia_protect_mental_health_Age)] <- 0
+ethiopia_protect_mental_health_Setting<-category_df(protect_mental_health_Setting,ethiopia_Raw1,Setting,protect_mental_health,"rad_perct",label,"Setting","protect_mental_health","Recipients","Percentage","label")
+#ethiopia_protect_mental_health_Setting[is.na(ethiopia_protect_mental_health_Setting)] <- 0
+ethiopia_protect_mental_health_region<-category_df(protect_mental_health_region,ethiopia_Raw1,region,protect_mental_health,"rad_perct",label,"region","protect_mental_health","Recipients","Percentage","label")
+
+#ethiopia_protect_mental_health_region[is.na(ethiopia_protect_mental_health_region)] <- 0
+ethiopia_protect_mental_healthrural_urban<-urban_rural(ethiopia_protect_mental_health,ethiopia_Raw1,Setting,Sex,protect_mental_health,protect_mental_healthperct,"Setting","Sex","protect_mental_healthperct","Percent_protect_mental_healthset")
+#ethiopia_protect_mental_healthrural_urban[is.na(ethiopia_protect_mental_healthrural_urban)] <- 0
+
+```
+
+
+## Practices to Protect Mental Health
+```{r}
+
+Barriers(protect_mental_health,protect_mental_health,Percentage,Percentage,label,"How will you protect the mental health of you or your family during COVID-19 time?","Percent of Respondents",protect_mental_health,protect_mental_health,Percentage)
+```
+
+## Practices to Protect Mental Health by Sex
+```{r}
+
+Barriers_Sex(ethiopia_protect_mental_health_sex,protect_mental_health,Percentage,Percentage,Percentage,Sex,label,Percentage,protect_mental_health,Percentage,Sex,"How will you protect the mental health of you or your family during COVID-19 time?","Percentages of Respondents by Sex")
+```
+
+## Practices to Protect Mental Health by Age
+```{r}
+
+
+Barriers_Age(ethiopia_protect_mental_health_Age,protect_mental_health,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,protect_mental_health,Percentage,Age,NULL,"How will you protect the mental health of you or your family during COVID-19 time?","Percentages of Respondents by Age")
+
+
+```
+
+## Practices to Protect Mental Health by Setting
+```{r}
+
+
+Barriers_Age(ethiopia_protect_mental_health_Setting,protect_mental_health,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,protect_mental_health,Percentage,Setting,NULL,"How will you protect the mental health of you or your family during COVID-19 time?","Percentages of Respondents by Setting")
+
+
+```
+
+## Practices to Protect Mental Health by Region
+```{r }
+
+
+Barriers_Age(ethiopia_protect_mental_health_region,protect_mental_health,Percentage,Percentage,Percentage,region,~region,3,label,Percentage,protect_mental_health,Percentage,region,NULL,"How will you protect the mental health of you or your family during COVID-19 time?","Percentages of Respondents by Region")
+
+
+```
+
+
+## Practices to Protect Mental Health by Sex and Setting
+```{r } 
+
+
+setting_Sex(ethiopia_protect_mental_healthrural_urban,protect_mental_healthperct,Percent_protect_mental_healthset,"How will you protect the mental health of you or your family during COVID-19 time?","Percentages of Respondents by Sex and Setting")
+
+
+``` 
+
+
+
+```{r}
+ethiopia_Raw1$lactate_covid [ethiopia_Raw1$lactate_covid == "1. breastfeed with precaution"] <- "breastfeed with precaution"
+ethiopia_Raw1$lactate_covid [ethiopia_Raw1$lactate_covid == "2. separate mother and child immediately"] <- "separate mother and child immediately"
+ethiopia_Raw1$lactate_covid [ethiopia_Raw1$lactate_covid == "3. substitute milk and stop breastfeeding"] <- "substitute milk and stop breastfeeding"
+ethiopia_Raw1$lactate_covid [ethiopia_Raw1$lactate_covid == "4. do not know"] <- "do not know"
+
+lactate_covid<-new_df(lactate_covid,ethiopia_Raw1,"lactate_covid",label,"lactate_covid")
+#lactate_covid[is.na(lactate_covid)] <- 0
+ethiopia_lactate_covid_sex<-category_df(lactate_covid_sex,ethiopia_Raw1,Sex,lactate_covid,"rad_perct",label,"Sex","lactate_covid","Recipients","Percentage","label")
+#ethiopia_lactate_covid_sex[is.na(ethiopia_lactate_covid_sex)] <- 0
+ethiopia_lactate_covid_Age<-category_df(lactate_covid_Age,ethiopia_Raw1,Age,lactate_covid,"rad_perct",label,"Age","lactate_covid","Recipients","Percentage","label")
+#ethiopia_lactate_covid_Age[is.na(ethiopia_lactate_covid_Age)] <- 0
+ethiopia_lactate_covid_Setting<-category_df(lactate_covid_Setting,ethiopia_Raw1,Setting,lactate_covid,"rad_perct",label,"Setting","lactate_covid","Recipients","Percentage","label")
+#ethiopia_lactate_covid_Setting[is.na(ethiopia_lactate_covid_Setting)] <- 0
+ethiopia_lactate_covid_region<-category_df(lactate_covid_region,ethiopia_Raw1,region,lactate_covid,"rad_perct",label,"region","lactate_covid","Recipients","Percentage","label")
+
+#ethiopia_lactate_covid_region[is.na(ethiopia_lactate_covid_region)] <- 0
+ethiopia_lactate_covidrural_urban<-urban_rural(ethiopia_lactate_covid,ethiopia_Raw1,Setting,Sex,lactate_covid,lactate_covidperct,"Setting","Sex","lactate_covidperct","Percent_lactate_covidset")
+#ethiopia_lactate_covidrural_urban[is.na(ethiopia_lactate_covidrural_urban)] <- 0
+
+```
+
+
+## Lactating Mother COVID-19
+```{r}
+
+Barriers(lactate_covid,lactate_covid,Percentage,Percentage,label,"What do you think a lactating mother with coronavirus symptoms should do?","Percent of Respondents",lactate_covid,lactate_covid,Percentage)
+```
+
+## Lactating Mother COVID-19 by Sex
+```{r}
+
+Barriers_Sex(ethiopia_lactate_covid_sex,lactate_covid,Percentage,Percentage,Percentage,Sex,label,Percentage,lactate_covid,Percentage,Sex,"What do you think a lactating mother with coronavirus symptoms should do?","Percentages of Respondents by Sex")
+```
+
+## Lactating Mother COVID-19 by Age
+```{r}
+
+
+Barriers_Age(ethiopia_lactate_covid_Age,lactate_covid,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,lactate_covid,Percentage,Age,NULL,"What do you think a lactating mother with coronavirus symptoms should do?","Percentages of Respondents by Age")
+
+
+```
+
+## Lactating Mother COVID-19 by Setting
+```{r}
+
+
+Barriers_Age(ethiopia_lactate_covid_Setting,lactate_covid,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,lactate_covid,Percentage,Setting,NULL,"What do you think a lactating mother with coronavirus symptoms should do?","Percentages of Respondents by Setting")
+
+
+```
+
+## Lactating Mother COVID-19 by Region
+```{r }
+
+
+Barriers_Age(ethiopia_lactate_covid_region,lactate_covid,Percentage,Percentage,Percentage,region,~region,3,label,Percentage,lactate_covid,Percentage,region,NULL,"What do you think a lactating mother with coronavirus symptoms should do?","Percentages of Respondents by Region")
+
+
+```
+
+
+## Lactating Mother COVID-19 by Sex and Setting
+```{r } 
+
+
+setting_Sex(ethiopia_lactate_covidrural_urban,lactate_covidperct,Percent_lactate_covidset,"What do you think a lactating mother with coronavirus symptoms should do?","Percentages of Respondents by Sex and Setting")
+
+
+``` 
+
+
+
+## Confidence Provide for Family  
+```{r fig.dim=c(10,6)}
+
+ethiopia_Raw1$provide_family_covid [ethiopia_Raw1$provide_family_covid == '1. very confident']<-"very confident"
+ethiopia_Raw1$provide_family_covid [ethiopia_Raw1$provide_family_covid == '2. somewhat confident']<-"somewhat confident"
+ethiopia_Raw1$provide_family_covid [ethiopia_Raw1$provide_family_covid == '3. not sure']<-"not sure"
+ethiopia_Raw1$provide_family_covid [ethiopia_Raw1$provide_family_covid == '4. not very confident']<-"not very confident"
+ethiopia_Raw1$provide_family_covid [ethiopia_Raw1$provide_family_covid == '5. not confident at all']<-"not confident at all"
+
+provide_family_covid_ethiopia <-plyr::count(ethiopia_Raw1,'provide_family_covid')#,  wt_var= "Wt")
+provide_family_covid_ethiopia <- spread(provide_family_covid_ethiopia, 'provide_family_covid', freq)
+provide_family_covid_ethiopia$Area <- "Provide for Family" 
+names(provide_family_covid_ethiopia) <- c("not confident at all",'not sure ',"not very confident","somewhat confident","Very confident", "Area")
+col_order2 <- c( "Area","not confident at all","not very confident",'not sure ',"somewhat confident","Very confident")
+provide_family_covid_ethiopia[is.na(provide_family_covid_ethiopia)] <- 0
+
+provide_family_covid_ethiopia <- provide_family_covid_ethiopia[, col_order2]
+
+
+
+provide_family_covid_ethiopia <- provide_family_covid_ethiopia %>% dplyr::mutate_if(is.character,as.factor)
+provide_family_covid_ethiopia <- as.data.frame(provide_family_covid_ethiopia)
+
+
+provide_family_covid_plot <-HH::likert(Area ~ ., data = provide_family_covid_ethiopia, ylab=NULL, as.percent=TRUE, main = list("In the past month, how confident are you in providing what is needed for your family during the pandemic?",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C"  ), rightAxis = FALSE)
+plot(provide_family_covid_plot)
+
+
+```
+
+
+## Confidence Provide for Family by Sex
+```{r fig.dim=c(10,6)}
+provide_family_covid_sex<-ethiopia_Raw1%>% group_by(Sex)  %>% count(provide_family_covid)#,  wt_var= "Wt")
+provide_family_covid_sex<- spread(provide_family_covid_sex,provide_family_covid, n)
+provide_family_covid_sex$Area <- "Provide for Family" 
+names(provide_family_covid_sex) <- c("Sex","not confident at all",'not sure ',"not very confident","somewhat confident","Very confident", "Area")
+col_order3 <- c("Sex","Area",  "Area","not confident at all","not very confident",'not sure ',"somewhat confident","Very confident")
+provide_family_covid_sex[is.na(provide_family_covid_sex)] <- 0
+
+provide_family_covid_sex<- provide_family_covid_sex[, col_order3]
+
+
+provide_family_covid_sex<-HH::likert(Area ~ .|Sex, data = provide_family_covid_sex, layout=c(1,3), ylab=NULL, as.percent=TRUE, main = list("In the past month, how confident are you in providing what is needed for your family during the pandemic?",x=unit(.55, "npc")), sub= list("By Sex",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.7, lines=3, x = unit(.25,"npc")), resize.height.tuning=2, rightAxis = FALSE)   
+plot(provide_family_covid_sex)
+
+```
+
+
+## Confidence Provide for Family by Age
+```{r fig.dim=c(10,8)}
+provide_family_covid_Age<-ethiopia_Raw1%>% group_by(Age)  %>% count(provide_family_covid)#,  wt_var= "Wt")
+provide_family_covid_Age<- spread(provide_family_covid_Age,provide_family_covid, n)
+provide_family_covid_Age$Area <- "Provide for Family"
+names(provide_family_covid_Age) <- c("Age","not confident at all",'not sure ',"not very confident","somewhat confident","Very confident", "Area")
+col_order3 <- c("Age","Area",  "Area","not confident at all","not very confident",'not sure ',"somewhat confident","Very confident")
+provide_family_covid_Age[is.na(provide_family_covid_Age)] <- 0
+provide_family_covid_Age<- provide_family_covid_Age[, col_order3]
+
+provide_family_covid_Age<-HH::likert(Area ~ .|Age, data = provide_family_covid_Age, layout=c(1,5), ylab=NULL, as.percent=TRUE, main = list("In the past month, how confident are you in providing what is needed for your family during the pandemic?",x=unit(.55, "npc")), sub= list("By Age",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.7, lines=3, x = unit(.25,"npc")), resize.height.tuning=2, rightAxis = FALSE)   
+plot(provide_family_covid_Age)
+```
+
+## Confidence Provide for Family by Setting
+```{r fig.dim=c(10,4)}
+provide_family_covid_Setting<-ethiopia_Raw1%>% group_by(Setting)  %>% count(provide_family_covid)#,  wt_var= "Wt")
+provide_family_covid_Setting<- spread(provide_family_covid_Setting,provide_family_covid, n)
+provide_family_covid_Setting$Area <- "Provide for Family"
+names(provide_family_covid_Setting) <- c("Setting","not confident at all",'not sure ',"not very confident","somewhat confident","Very confident", "Area")
+col_order3 <- c("Setting","Area",  "Area","not confident at all","not very confident",'not sure ',"somewhat confident","Very confident")
+provide_family_covid_Setting[is.na(provide_family_covid_Setting)] <- 0
+provide_family_covid_Setting<- provide_family_covid_Setting[, col_order3]
+
+provide_family_covid_Setting<-HH::likert(Area ~ .|Setting, data = provide_family_covid_Setting, layout=c(1,2), ylab=NULL, as.percent=TRUE, main = list("In the past month, how confident are you in providing what is needed for your family during the pandemic?",x=unit(.55, "npc")), sub= list("By Setting",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=1, lines=2, x = unit(.25,"npc")), cex=1, resize.height.tuning=2, rightAxis = FALSE)   
+plot(provide_family_covid_Setting)
+```
+
+
+## Confidence Provide for Family by Region
+```{r}
+provide_family_covid_region<-ethiopia_Raw1%>% group_by(region)  %>% count(provide_family_covid)#,  wt_var= "Wt")
+provide_family_covid_region<- spread(provide_family_covid_region,provide_family_covid, n)
+provide_family_covid_region$Area <- "Provide for Family"
+names(provide_family_covid_region) <- c("region","not confident at all",'not sure ',"not very confident","somewhat confident","Very confident", "Area")
+col_order3 <- c("region", "Area","not confident at all","not very confident",'not sure ',"somewhat confident","Very confident")
+provide_family_covid_region[is.na(provide_family_covid_region)] <- 0
+provide_family_covid_region<- provide_family_covid_region[, col_order3]
+
+
+
+provide_family_covid_region<-HH::likert(Area ~ .|region, data = provide_family_covid_region, ylab=NULL, as.percent=TRUE, main = list("In the past month, how confident are you in providing what is needed for your family during the pandemic?",x=unit(.55, "npc")), sub= list("By Region",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=3, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.7, lines=3, x = unit(.25,"npc")), resize.height.tuning=2, rightAxis = FALSE, layout = c(1,4))   
+plot(provide_family_covid_region)
+```
+
+
+
+## Confidence Provide for Family by Sex and Setting
+```{r}
+provide_family_covid_SexSet <- ethiopia_Raw1 %>% group_by(Setting,Sex) %>% count(provide_family_covid)#,  wt_var= "Wt")
+provide_family_covid_SexSet <- spread(provide_family_covid_SexSet, provide_family_covid, n)
+provide_family_covid_SexSet$SexSet <- paste(provide_family_covid_SexSet$Setting," ", provide_family_covid_SexSet$Sex)
+provide_family_covid_SexSet <- provide_family_covid_SexSet[-c(1:2)]
+provide_family_covid_SexSet$Area <- "Provide for Family"
+
+names(provide_family_covid_SexSet) <- c("not confident at all",'not sure ',"not very confident","somewhat confident","Very confident","Profile","Area")
+
+col_order3 <- c("Profile", "Area","not confident at all","not very confident",'not sure ',"somewhat confident","Very confident")
+
+provide_family_covid_SexSet [is.na(provide_family_covid_SexSet)] <- 0
+provide_family_covid_SexSet <- provide_family_covid_SexSet[, col_order3]
+
+provide_family_covid_SexSet <-HH::likert(Area ~ .|Profile, data = provide_family_covid_SexSet, as.percent=TRUE, main = list("In the past month, how confident are you in providing what is needed for your family during the pandemic?",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-100,-20,0,40,60,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C"), ylab = NULL, par.strip.text=list(cex=0.65, lines=2.5, x = unit(.05,"npc")), strip.left = TRUE, strip = FALSE, layout = c(2,2), rightAxis = FALSE)
+plot(provide_family_covid_SexSet)
+```
+
+```{r}
+ethiopia_Raw1$trusted_source_covid [ethiopia_Raw1$trusted_source_covid == "1. electronic media"] <- "electronic media"
+ethiopia_Raw1$trusted_source_covid [ethiopia_Raw1$trusted_source_covid == "2. print media"] <- "print media"
+ethiopia_Raw1$trusted_source_covid [ethiopia_Raw1$trusted_source_covid == "3. family and friends"] <- "family and friends"
+ethiopia_Raw1$trusted_source_covid [ethiopia_Raw1$trusted_source_covid == "4. health workers and health facilities"] <- "health workers and health facilities"
+ethiopia_Raw1$trusted_source_covid [ethiopia_Raw1$trusted_source_covid == "5. religious and community leaders"] <- "religious and community leaders"
+ethiopia_Raw1$trusted_source_covid [ethiopia_Raw1$trusted_source_covid == "6. non-governmental and community-based orgs"] <- "non-governmental and community-based orgs"
+ethiopia_Raw1$trusted_source_covid [ethiopia_Raw1$trusted_source_covid == "7. government"] <- "government"
+
+
+trusted_source_covid<-new_df(trusted_source_covid,ethiopia_Raw1,"trusted_source_covid",label,"trusted_source_covid")
+#trusted_source_covid[is.na(trusted_source_covid)] <- 0
+ethiopia_trusted_source_covid_sex<-category_df(trusted_source_covid_sex,ethiopia_Raw1,Sex,trusted_source_covid,"rad_perct",label,"Sex","trusted_source_covid","Recipients","Percentage","label")
+#ethiopia_trusted_source_covid_sex[is.na(ethiopia_trusted_source_covid_sex)] <- 0
+ethiopia_trusted_source_covid_Age<-category_df(trusted_source_covid_Age,ethiopia_Raw1,Age,trusted_source_covid,"rad_perct",label,"Age","trusted_source_covid","Recipients","Percentage","label")
+#ethiopia_trusted_source_covid_Age[is.na(ethiopia_trusted_source_covid_Age)] <- 0
+ethiopia_trusted_source_covid_Setting<-category_df(trusted_source_covid_Setting,ethiopia_Raw1,Setting,trusted_source_covid,"rad_perct",label,"Setting","trusted_source_covid","Recipients","Percentage","label")
+#ethiopia_trusted_source_covid_Setting[is.na(ethiopia_trusted_source_covid_Setting)] <- 0
+ethiopia_trusted_source_covid_region<-category_df(trusted_source_covid_region,ethiopia_Raw1,region,trusted_source_covid,"rad_perct",label,"region","trusted_source_covid","Recipients","Percentage","label")
+
+#ethiopia_trusted_source_covid_region[is.na(ethiopia_trusted_source_covid_region)] <- 0
+ethiopia_trusted_source_covidrural_urban<-urban_rural(ethiopia_trusted_source_covid,ethiopia_Raw1,Setting,Sex,trusted_source_covid,trusted_source_covidperct,"Setting","Sex","trusted_source_covidperct","Percent_trusted_source_covidset")
+#ethiopia_trusted_source_covidrural_urban[is.na(ethiopia_trusted_source_covidrural_urban)] <- 0
+
+```
+
+
+## Most Trusted Source for Information
+```{r}
+
+Barriers(trusted_source_covid,trusted_source_covid,Percentage,Percentage,label,"Which one is the most trusted source of information you rely on about COVID-19?","Percent of Respondents",trusted_source_covid,trusted_source_covid,Percentage)
+```
+
+## Most Trusted Source for Information by Sex
+```{r}
+
+Barriers_Sex(ethiopia_trusted_source_covid_sex,trusted_source_covid,Percentage,Percentage,Percentage,Sex,label,Percentage,trusted_source_covid,Percentage,Sex,"Which one is the most trusted source of information you rely on about COVID-19?","Percentages of Respondents by Sex")
+```
+
+## Most Trusted Source for Information by Age
+```{r}
+
+
+Barriers_Age(ethiopia_trusted_source_covid_Age,trusted_source_covid,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,trusted_source_covid,Percentage,Age,NULL,"Which one is the most trusted source of information you rely on about COVID-19?","Percentages of Respondents by Age")
+
+
+```
+
+## Most Trusted Source for Information by Setting
+```{r}
+
+
+Barriers_Age(ethiopia_trusted_source_covid_Setting,trusted_source_covid,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,trusted_source_covid,Percentage,Setting,NULL,"Which one is the most trusted source of information you rely on about COVID-19?","Percentages of Respondents by Setting")
+
+
+```
+
+## Most Trusted Source for Information by Region
+```{r }
+
+
+Barriers_Age(ethiopia_trusted_source_covid_region,trusted_source_covid,Percentage,Percentage,Percentage,region,~region,3,label,Percentage,trusted_source_covid,Percentage,region,NULL,"Which one is the most trusted source of information you rely on about COVID-19?","Percentages of Respondents by Region")
+
+
+```
+
+
+## Most Trusted Source for Information by Sex and Setting
+```{r } 
+
+
+setting_Sex(ethiopia_trusted_source_covidrural_urban,trusted_source_covidperct,Percent_trusted_source_covidset,"Which one is the most trusted source of information you rely on about COVID-19?","Percentages of Respondents by Sex and Setting")
+
+
+``` 
+
+```{r}
+ethiopia_Raw1$trust_community_group [ethiopia_Raw1$trust_community_group == "1. youth"] <- "youth"
+ethiopia_Raw1$trust_community_group [ethiopia_Raw1$trust_community_group == "2. women"] <- "women"
+ethiopia_Raw1$trust_community_group [ethiopia_Raw1$trust_community_group == "3. religious"] <- "religious"
+ethiopia_Raw1$trust_community_group [ethiopia_Raw1$trust_community_group == "4. local governments"] <- "local governments"
+ethiopia_Raw1$trust_community_group [ethiopia_Raw1$trust_community_group == "5. other"] <- "other"
+
+trust_community_group<-new_df(trust_community_group,ethiopia_Raw1,"trust_community_group",label,"trust_community_group")
+#trust_community_group[is.na(trust_community_group)] <- 0
+ethiopia_trust_community_group_sex<-category_df(trust_community_group_sex,ethiopia_Raw1,Sex,trust_community_group,"rad_perct",label,"Sex","trust_community_group","Recipients","Percentage","label")
+#ethiopia_trust_community_group_sex[is.na(ethiopia_trust_community_group_sex)] <- 0
+ethiopia_trust_community_group_Age<-category_df(trust_community_group_Age,ethiopia_Raw1,Age,trust_community_group,"rad_perct",label,"Age","trust_community_group","Recipients","Percentage","label")
+#ethiopia_trust_community_group_Age[is.na(ethiopia_trust_community_group_Age)] <- 0
+ethiopia_trust_community_group_Setting<-category_df(trust_community_group_Setting,ethiopia_Raw1,Setting,trust_community_group,"rad_perct",label,"Setting","trust_community_group","Recipients","Percentage","label")
+#ethiopia_trust_community_group_Setting[is.na(ethiopia_trust_community_group_Setting)] <- 0
+ethiopia_trust_community_group_region<-category_df(trust_community_group_region,ethiopia_Raw1,region,trust_community_group,"rad_perct",label,"region","trust_community_group","Recipients","Percentage","label")
+
+#ethiopia_trust_community_group_region[is.na(ethiopia_trust_community_group_region)] <- 0
+ethiopia_trust_community_grouprural_urban<-urban_rural(ethiopia_trust_community_group,ethiopia_Raw1,Setting,Sex,trust_community_group,trust_community_groupperct,"Setting","Sex","trust_community_groupperct","Percent_trust_community_groupset")
+#ethiopia_trust_community_grouprural_urban[is.na(ethiopia_trust_community_grouprural_urban)] <- 0
+
+```
+
+
+## Most Trusted Community Group
+```{r}
+
+Barriers(trust_community_group,trust_community_group,Percentage,Percentage,label," Which community groups do you trust the MOST to support the community-based actions during COVID-19?","Percent of Respondents",trust_community_group,trust_community_group,Percentage)
+```
+
+## Most Trusted Community Group by Sex
+```{r}
+
+Barriers_Sex(ethiopia_trust_community_group_sex,trust_community_group,Percentage,Percentage,Percentage,Sex,label,Percentage,trust_community_group,Percentage,Sex," Which community groups do you trust the MOST to support the community-based actions during COVID-19?","Percentages of Respondents by Sex")
+```
+
+## Most Trusted Community Group by Age
+```{r}
+
+
+Barriers_Age(ethiopia_trust_community_group_Age,trust_community_group,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,trust_community_group,Percentage,Age,NULL," Which community groups do you trust the MOST to support the community-based actions during COVID-19?","Percentages of Respondents by Age")
+
+
+```
+
+## Most Trusted Community Group by Setting
+```{r}
+
+
+Barriers_Age(ethiopia_trust_community_group_Setting,trust_community_group,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,trust_community_group,Percentage,Setting,NULL," Which community groups do you trust the MOST to support the community-based actions during COVID-19?","Percentages of Respondents by Setting")
+
+
+```
+
+## Most Trusted Community Group by Region
+```{r }
+
+
+Barriers_Age(ethiopia_trust_community_group_region,trust_community_group,Percentage,Percentage,Percentage,region,~region,3,label,Percentage,trust_community_group,Percentage,region,NULL," Which community groups do you trust the MOST to support the community-based actions during COVID-19?","Percentages of Respondents by Region")
+
+
+```
+
+
+## Most Trusted Community Group by Sex and Setting
+```{r } 
+
+
+setting_Sex(ethiopia_trust_community_grouprural_urban,trust_community_groupperct,Percent_trust_community_groupset," Which community groups do you trust the MOST to support the community-based actions during COVID-19?","Percentages of Respondents by Sex and Setting")
+
+
+``` 
+
+```{r}
+ethiopia_Raw1$social_consequence_concern [ethiopia_Raw1$social_consequence_concern == "1. feeling socially isolated"] <- "feeling socially isolated"
+ethiopia_Raw1$social_consequence_concern [ethiopia_Raw1$social_consequence_concern == "2. losing house/job"] <- "losing house/job"
+ethiopia_Raw1$social_consequence_concern [ethiopia_Raw1$social_consequence_concern == "3. being discriminated against"] <- "being discriminated against"
+ethiopia_Raw1$social_consequence_concern [ethiopia_Raw1$social_consequence_concern == "4. depressed or anxious"] <- "depressed or anxious"
+ethiopia_Raw1$social_consequence_concern [ethiopia_Raw1$social_consequence_concern == "5. other"] <- "other"
+
+social_consequence_concern<-new_df(social_consequence_concern,ethiopia_Raw1,"social_consequence_concern",label,"social_consequence_concern")
+#social_consequence_concern[is.na(social_consequence_concern)] <- 0
+ethiopia_social_consequence_concern_sex<-category_df(social_consequence_concern_sex,ethiopia_Raw1,Sex,social_consequence_concern,"rad_perct",label,"Sex","social_consequence_concern","Recipients","Percentage","label")
+#ethiopia_social_consequence_concern_sex[is.na(ethiopia_social_consequence_concern_sex)] <- 0
+ethiopia_social_consequence_concern_Age<-category_df(social_consequence_concern_Age,ethiopia_Raw1,Age,social_consequence_concern,"rad_perct",label,"Age","social_consequence_concern","Recipients","Percentage","label")
+#ethiopia_social_consequence_concern_Age[is.na(ethiopia_social_consequence_concern_Age)] <- 0
+ethiopia_social_consequence_concern_Setting<-category_df(social_consequence_concern_Setting,ethiopia_Raw1,Setting,social_consequence_concern,"rad_perct",label,"Setting","social_consequence_concern","Recipients","Percentage","label")
+#ethiopia_social_consequence_concern_Setting[is.na(ethiopia_social_consequence_concern_Setting)] <- 0
+ethiopia_social_consequence_concern_region<-category_df(social_consequence_concern_region,ethiopia_Raw1,region,social_consequence_concern,"rad_perct",label,"region","social_consequence_concern","Recipients","Percentage","label")
+
+#ethiopia_social_consequence_concern_region[is.na(ethiopia_social_consequence_concern_region)] <- 0
+ethiopia_social_consequence_concernrural_urban<-urban_rural(ethiopia_social_consequence_concern,ethiopia_Raw1,Setting,Sex,social_consequence_concern,social_consequence_concernperct,"Setting","Sex","social_consequence_concernperct","Percent_social_consequence_concernset")
+#ethiopia_social_consequence_concernrural_urban[is.na(ethiopia_social_consequence_concernrural_urban)] <- 0
+
+```
+
+
+## Social Consequences Concern
+```{r}
+
+Barriers(social_consequence_concern,social_consequence_concern,Percentage,Percentage,label," Which of the following social consequences related to COVID-19 concerns you the MOST? ","Percent of Respondents",social_consequence_concern,social_consequence_concern,Percentage)
+```
+
+## Social Consequences Concern by Sex
+```{r}
+
+Barriers_Sex(ethiopia_social_consequence_concern_sex,social_consequence_concern,Percentage,Percentage,Percentage,Sex,label,Percentage,social_consequence_concern,Percentage,Sex," Which of the following social consequences related to COVID-19 concerns you the MOST? ","Percentages of Respondents by Sex")
+```
+
+## Social Consequences Concern by Age
+```{r}
+
+
+Barriers_Age(ethiopia_social_consequence_concern_Age,social_consequence_concern,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,social_consequence_concern,Percentage,Age,NULL," Which of the following social consequences related to COVID-19 concerns you the MOST? ","Percentages of Respondents by Age")
+
+
+```
+
+## Social Consequences Concern by Setting
+```{r}
+
+
+Barriers_Age(ethiopia_social_consequence_concern_Setting,social_consequence_concern,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,social_consequence_concern,Percentage,Setting,NULL," Which of the following social consequences related to COVID-19 concerns you the MOST? ","Percentages of Respondents by Setting")
+
+
+```
+
+## Social Consequences Concern by Region
+```{r }
+
+
+Barriers_Age(ethiopia_social_consequence_concern_region,social_consequence_concern,Percentage,Percentage,Percentage,region,~region,3,label,Percentage,social_consequence_concern,Percentage,region,NULL," Which of the following social consequences related to COVID-19 concerns you the MOST? ","Percentages of Respondents by Region")
+
+
+```
+
+
+## Social Consequences Concern by Sex and Setting
+```{r } 
+
+
+setting_Sex(ethiopia_social_consequence_concernrural_urban,social_consequence_concernperct,Percent_social_consequence_concernset," Which of the following social consequences related to COVID-19 concerns you the MOST? ","Percentages of Respondents by Sex and Setting")
+
+
+``` 

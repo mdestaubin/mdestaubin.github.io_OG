@@ -1,0 +1,1862 @@
+---
+title: "Community Rapid Assessment - Uganda 1st Round"
+author: "Andres Ochoa and Annika Squires - UNICEF EO ILU"
+output: powerpoint_presentation
+---
+
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(fig.width=10, fig.height=6,echo=FALSE) 
+
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+## Including Plots
+
+You can also embed plots, for example:
+
+
+```{r echo=FALSE}
+# STEP 1 READ IN PACKAGES AND SPREADSHEET
+#Packages Needed
+library(readxl)
+library(readr)
+library(haven)
+#library(car)
+library(plyr)
+library(dplyr)
+
+
+library(foreign)
+library(rgeos)
+library(maptools)
+library(colorRamps)
+library(RColorBrewer)
+library(ggplot2)
+library(mapproj)
+library(rgdal)
+library(sf)
+library(colorspace)
+library(raster)
+#library(treemap)
+library(ggplotify)
+library(ggrepel)
+library(ggalt)
+library(ggthemes)
+#library(ggpubr)
+library(scales)
+library(sjPlot)
+library(likert)
+library(tidyr)
+library(formattable)
+library(data.table)
+library(HH)
+library(tidyverse)
+library(rlang)
+
+if(!require(pacman))install.packages("pacman")
+
+pacman::p_load('dplyr', 'tidyr', 'gapminder',
+               'ggplot2',  'ggalt',
+               'forcats', 'R.utils', 'png', 
+               'grid', 'ggpubr', 'scales',
+               'bbplot')
+
+
+
+customGreen0 = "#DeF7E9"
+customGreen = "#71CA97"
+customRed = "#ff7f7f"
+
+```
+
+```{r}
+Uganda_raw1=read_excel("Uganda CRA Prepared.xlsx")
+Uganda_raw1 <- subset(Uganda_raw1,Complete == 1)
+Uganda_raw1Parents <- subset(Uganda_raw1, schools_reopen != "no school-age children")
+
+```
+
+```{r}
+
+Uganda_raw1$Education [Uganda_raw1$Education == "1. any formal education"] <- "No School"
+
+Uganda_raw1$Education [Uganda_raw1$Education == "2. primary"] <- "Primary"
+
+Uganda_raw1$Education [Uganda_raw1$Education =="3. secondary"]<- "Secondary"
+
+Uganda_raw1$Education [Uganda_raw1$Education =="4. college or higher"]<- "College"
+
+Uganda_raw1$Setting[Uganda_raw1$Setting=="1. urban area"]<- "Urban Area"
+Uganda_raw1$Setting[Uganda_raw1$Setting=="2. rural area"]<- "Rural Area"
+
+
+Uganda_raw1$Age [Uganda_raw1$Age == "under_18"] <- "<18 \nYrs Old"
+Uganda_raw1$Age [Uganda_raw1$Age == "18_24"] <- "18-24 \nYrs Old"
+Uganda_raw1$Age [Uganda_raw1$Age == "25_34"] <- "25-34 \nYrs Old"
+Uganda_raw1$Age [Uganda_raw1$Age == "35_44"] <- "35-44 \nYrs Old"
+Uganda_raw1$Age [Uganda_raw1$Age == "over_44"] <- "Over 45\nYrs Old"
+
+names(Uganda_raw1)[names(Uganda_raw1) == "What is the most trusted source of information you rely on about COVID19?"]<-"Most_trust_source"
+
+names(Uganda_raw1)[names(Uganda_raw1) == "What is the main reason you trust this source?"]<-"reason_trust"
+
+names(Uganda_raw1)[names(Uganda_raw1) == "I trust my local health care providers to take care of me and my family"]<-"trust_healthcare_w"
+
+names(Uganda_raw1)[names(Uganda_raw1) == "Which of the following is true about COVID-19?"]<-"false_covid"
+
+
+Uganda_raw1$false_covid[Uganda_raw1$false_covid == "1. COVID-19 is caused by a coronavirus"] <- "Coronavirus causes COVID-19"
+
+Uganda_raw1$false_covid[Uganda_raw1$false_covid == "2. COVID-19 can be spread from close contacts between an infected person and others"] <- "Close contact between infected \nperson and others spread COVID-19"
+
+Uganda_raw1$false_covid[Uganda_raw1$false_covid == "3. Physical distancing, handwashing with soap and using a face mask reduces, COVD-19 transmission"] <- "Physical distancing, handwashing with soap \nand using a face mask reduces COVID-19 transmission"
+
+Uganda_raw1$false_covid[Uganda_raw1$false_covid == "4. none of the above"] <- "None of the above"
+
+Uganda_raw1$false_covid[Uganda_raw1$false_covid == "5. COVID-19 is not real"] <- "COVID-19 is not real"
+                          
+names(Uganda_raw1)[names(Uganda_raw1) == "Do you think you are at risk of being infected with Covid-19?"]<-"risk_covid"
+
+names(Uganda_raw1)[names(Uganda_raw1) == "Over the past 30 days, how often have you washed hands with water and soap for 20 seconds to prevent infection from COVID-19?"]<-"wash_covid"
+
+names(Uganda_raw1)[names(Uganda_raw1) == "Over the past 30 days, how often have you been wearing a mask to prevent infection from COVID-19?"]<-"mask_covid"
+
+names(Uganda_raw1)[names(Uganda_raw1) == "Over the past 30 days, in public places, how often have you kept at least 2 meters away from people to prevent infection from COVID-19?"]<-"distance_covid"
+
+names(Uganda_raw1)[names(Uganda_raw1) == "The main reason keeping me from practicing protective measures is:"]<-"prevent_measures_reason"
+
+names(Uganda_raw1)[names(Uganda_raw1) == "If I think I have COVID symptoms, the first thing I would do is to:"]<-"do_covid"
+
+names(Uganda_raw1)[names(Uganda_raw1) == "The main reason why I would NOT seek testing or treatment for COVID19 is:"]<-"not_treatment_covid"
+
+names(Uganda_raw1)[names(Uganda_raw1) == "What form of stigma linked to COVID 19 is the one that would concern you the most?"]<-"stigma_concern"
+
+Uganda_raw1$stigma[Uganda_raw1$stigma == "1. Feeling socially isolated"] <- "Feeling socially isolated"
+
+Uganda_raw1$stigma[Uganda_raw1$stigma == "2. Lost your income and/or your job"] <- "Lost your income \nand/or your job"
+
+Uganda_raw1$stigma[Uganda_raw1$stigma == "3. discriminated against"] <- "Discriminated against"
+
+Uganda_raw1$stigma[Uganda_raw1$stigma == "4. experienced domestic violence"] <- "Experienced domestic violence"
+
+Uganda_raw1$stigma[Uganda_raw1$stigma == "5. depressed or anxious"] <- "Depressed or anxious"
+
+Uganda_raw1$stigma[Uganda_raw1$stigma == "6. none"] <- "None"
+
+names(Uganda_raw1)[names(Uganda_raw1) == "How confident are you in providing what is needed for your family during this pandemic?"]<-"confident_provide"
+
+Uganda_raw1$confident_provide[Uganda_raw1$confident_provide == "3.not sure"] <- "Not Sure"
+Uganda_raw1$confident_provide[Uganda_raw1$confident_provide == "1.very confident"] <- "Very Confident"
+Uganda_raw1$confident_provide[Uganda_raw1$confident_provide == "2.somewhat confident"] <- "Somewhat Confident"
+Uganda_raw1$confident_provide[Uganda_raw1$confident_provide == "4.not very confident"] <- "Not Very Confident"
+Uganda_raw1$confident_provide[Uganda_raw1$confident_provide == "5.not Confident at all"] <- "Not Confident \nAt All"
+
+names(Uganda_raw1)[names(Uganda_raw1) == "The main concern that I have for my children during COVID-19 is:"]<-"concern_children"
+
+Uganda_raw1$concern_children[Uganda_raw1$concern_children == "1. children getting sick with COVID-19"] <- "Children getting \n sick with COVID-19"
+
+Uganda_raw1$concern_children[Uganda_raw1$concern_children == "2. children getting involved in dangerous activities,"] <- "Children getting involved \nin dangerous activities,"
+
+Uganda_raw1$concern_children[Uganda_raw1$concern_children == "3. If it is schools remaining closed, press 3"] <- "Schools remaining closed"
+
+Uganda_raw1$concern_children[Uganda_raw1$concern_children == "4. If it is not being able to feed or take care of my children, press 4"] <- "Not being able to feed \nor take care of my children"
+
+Uganda_raw1$concern_children[Uganda_raw1$concern_children == "5. If it is other reasons/concerns, press 5"] <- "Other reasons/concerns"
+
+Uganda_raw1$concern_children[Uganda_raw1$concern_children == "6. If you have no concerns, press 6"] <- "No Concerns"
+
+Uganda_raw1$Most_trust_source[Uganda_raw1$Most_trust_source== "1. electronic media"]<- "Electronic Media"
+Uganda_raw1$Most_trust_source[Uganda_raw1$Most_trust_source== "2. print media"]<- "Print Media"
+Uganda_raw1$Most_trust_source[Uganda_raw1$Most_trust_source== "3. family and friends"]<- "Family and Friends"
+Uganda_raw1$Most_trust_source[Uganda_raw1$Most_trust_source== "4. health workers and health facilities"]<- "Health Workers and Health Facilities"
+Uganda_raw1$Most_trust_source[Uganda_raw1$Most_trust_source== "5. religious and community leaders"]<- "Religious and Community Leaders"
+Uganda_raw1$Most_trust_source[Uganda_raw1$Most_trust_source== "6. non-governmental and community-based organizations"]<- "Non-Governmental and Community-based Organizations"
+Uganda_raw1$Most_trust_source[Uganda_raw1$Most_trust_source== "7. the government"]<- "Government"
+
+Uganda_raw1$reason_trust[Uganda_raw1$reason_trust=="1. clear and based on facts"] <- "Clear and based on facts"
+Uganda_raw1$reason_trust[Uganda_raw1$reason_trust=="2. always trusted this source"] <- "Always trusted this source"
+Uganda_raw1$reason_trust[Uganda_raw1$reason_trust=="3. family and friends trust this source"] <- "Family and friends trust this source"
+Uganda_raw1$reason_trust[Uganda_raw1$reason_trust=="4. local leaders trust this source"] <- "Local leaders trust this source"
+Uganda_raw1$reason_trust[Uganda_raw1$reason_trust=="5. another reason"] <- "Another reason"
+Uganda_raw1$reason_trust[Uganda_raw1$reason_trust=="6. don't have a reason"] <- "Don't have a reason"
+
+Uganda_raw1$risk_covid[Uganda_raw1$risk_covid=="1. yes"] <- "Yes"
+Uganda_raw1$risk_covid[Uganda_raw1$risk_covid=="2. no"] <- "No"
+Uganda_raw1$risk_covid[Uganda_raw1$risk_covid=="3. not sure"] <- "Not Sure"
+
+Uganda_raw1$wash_covid[Uganda_raw1$wash_covid=="1. all of the time"] <- "All of the time"
+Uganda_raw1$wash_covid[Uganda_raw1$wash_covid=="2. Most of time"] <- "Most of the time"
+Uganda_raw1$wash_covid[Uganda_raw1$wash_covid=="3. Sometimes"] <- "Sometimes"
+Uganda_raw1$wash_covid[Uganda_raw1$wash_covid=="4. Rarely"] <- "Rarely"
+Uganda_raw1$wash_covid[Uganda_raw1$wash_covid=="5. Never"] <- "Never"
+
+Uganda_raw1$mask_covid[Uganda_raw1$mask_covid=="1. all of the time"] <- "All of the time"
+Uganda_raw1$mask_covid[Uganda_raw1$mask_covid=="2. most of time"] <- "Most of the time"
+Uganda_raw1$mask_covid[Uganda_raw1$mask_covid=="3. sometimes"] <- "Sometimes"
+Uganda_raw1$mask_covid[Uganda_raw1$mask_covid=="4. rarely"] <- "Rarely"
+Uganda_raw1$mask_covid[Uganda_raw1$mask_covid=="5. never"] <- "Never"
+
+Uganda_raw1$social_distance_covid[Uganda_raw1$social_distance_covid=="1. all of the time"] <- "All of the time"
+Uganda_raw1$social_distance_covid[Uganda_raw1$social_distance_covid=="2. Most of time"] <- "Most of the time"
+Uganda_raw1$social_distance_covid[Uganda_raw1$social_distance_covid=="3. Sometimes"] <- "Sometimes"
+Uganda_raw1$social_distance_covid[Uganda_raw1$social_distance_covid=="4. Rarely"] <- "Rarely"
+Uganda_raw1$social_distance_covid[Uganda_raw1$social_distance_covid=="5. Never"] <- "Never"
+
+names(Uganda_raw1)[names(Uganda_raw1) == "The main concern that I have for my children during COVID-19 is:"]<-"concern_children"
+
+
+
+```
+
+```{r}
+new_df_demographics<- function(name,clean_df,column_df_1,new_name){
+
+name<- plyr::count(clean_df,column_df_1)
+name$new_name <- round(name$freq /sum(name$freq),4)
+colnames(name)[3]<-new_name
+
+return(name)
+}
+```
+
+
+
+```{r}
+
+
+Sex_group_2 <- function(name,df,count_df_1,count_df_2,count1,count2,name_perct){
+
+name<- df %>% dplyr::count({{count_df_1}}, {{count_df_2}})
+names(name)<- c(count1,count2,"n")
+name <- name %>% group_by({{count_df_1}})%>% mutate(name_perct = round(n/sum(n),3))
+name <- name [-c(3)]
+name <- spread(name,Sex,name_perct)
+
+return(name)
+}
+
+
+
+
+```
+
+
+```{r}
+
+
+
+setting_gender<-function(df,column_1,column_2,title,subtitle){
+ggplot(df, aes(reorder ({{column_1}},{{column_2}}),{{column_2}}, label={{column_2}}, color = Gender)) + facet_wrap(Setting ~ Gender, nrow = 2)+ geom_point(size= 2,position = position_dodge(1)) + geom_text(aes(label=label), size=3,,hjust=- 0.25, position = position_dodge(1)) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.text.x = element_text(size = 6, angle = 90, hjust = 1), legend.position = "none" ) + geom_linerange(aes(y={{column_2}}, ymin=0, x={{column_1}}, ymax={{column_2}}, color = Gender), position = position_dodge(1)) + scale_y_continuous(labels = NULL, limits = c(0, 0.85)) + ggtitle(title,subtitle =subtitle ) + coord_flip()}
+
+
+
+
+#setting_urban_other(Uga_Where_hear_rural_urban,where_hear_perct,Percent_where_hear_set,"COVID-19 Most Concerned Social Consequences by Sex and #Setting","Percentages of Respondents per Concern")
+
+
+```
+
+```{r}
+
+demographics_group_3 <- function(name,clean_df,count_df_1,count_df_2,count_df_3,name_perct,name_perct_2,name_1,name_2,name_3,name_4,name_5,name_6){
+name <- clean_df %>% count({{count_df_1}}, {{count_df_2}},{{count_df_3}})
+name <- name %>% group_by({{count_df_1}}) %>% mutate(name_perct = round(n/sum(n),3))
+name <- name %>% group_by({{count_df_1}},{{count_df_2}}) %>% mutate(name_perct_2 = round(n/sum(n),3))
+names(name) <- c(name_1,name_2,name_3,name_4,name_5,name_6)
+return(name)
+}
+```
+
+
+```{r }
+group_2<-function(name,clean_df,column_df_1,name_perct,name_group,column_df_2,name_perct_2){
+name_group <- clean_df %>% dplyr::count({{column_df_2}},{{column_df_1}})
+name_group <- name_group %>% group_by({{column_df_2}}) %>% mutate(name_perct_2= round(n/sum(n),3))
+colnames(name_group)[4]<-name_perct_2
+return (name_group)
+}
+
+```
+
+
+```{r}
+
+new_df<- function(name,clean_df,column_df_1,label_enter,category){
+name<- plyr::count(clean_df,column_df_1)
+name <- name %>% mutate(perc= round(freq/sum(freq),3))
+name$label_enter <- paste(100 * name$perc,"%")
+names(name) <- c(category, "Recipients","Percentage","label")
+
+
+return(name)
+}
+
+
+```
+
+
+```{r}
+
+
+first_df_demographics<-function(name_group,column1){
+name_group <- plyr::count({{column1}})
+#column_2 <- name_group$Sex_perct
+name_group$Sex_perct <- name_group$freq /sum(name_group$freq)
+return(name_group)}
+  
+
+
+```
+
+```
+```
+
+```{r}
+new_df_demographics_2<- function(name,clean_df,column_df_1,new_name,count_df_1,name_group,name_perct){
+name <- plyr::count(clean_df,{{column_df_1}})
+name$new_name <- name$freq / sum(name$freq)
+name_group <- clean_df %>% count({{column_df_1}}, count_df_1)
+name_group <- name_group %>% group_by({{count_df_1}}) %>% mutate(name_perct = round(n/sum(n),3))
+#NEXT MOVE IS GO THROUGH KENYA_SEXGROUP2
+return(name_group)
+}
+
+```
+
+
+```{r}
+group_2<-function(name,clean_df,column_df_1,name_perct,name_group,column_df_2,name_perct_2){
+name_group <- clean_df %>% dplyr::count({{column_df_2}},{{column_df_1}})
+name_group <- name_group %>% group_by({{column_df_2}}) %>% mutate(name_perct_2= round(n/sum(n),3))
+colnames(name_group)[4]<-name_perct_2
+return (name_group)}
+
+```
+
+
+```{r}
+urban_rural<- function(name,df,column_1,column_2,topic_1,perct_type,c1,c2,t1,t2){
+name<- df %>% group_by({{column_1}},{{column_2}}) %>% count({{topic_1}})
+name<- name %>% group_by({{column_1}},{{column_2}}) %>% mutate(perct_type=round(n/sum(n),3))
+name$label <- paste(100*(name$perct_type),"%")
+names(name)<-c(c1,c2,t1,"n",t2,"label")
+return(name)}
+
+
+```
+
+
+```{r}
+category_df<- function(name,clean_df,column_df_1,column_df_2,cat_perct,label,col_1,col_2,col_3,col_4,col_5){
+
+name <- clean_df %>% group_by({{column_df_1}}) %>% dplyr::count({{column_df_2}})
+name <- name %>% group_by({{column_df_1}}) %>% mutate(cat_perct = round(n/sum(n),3))
+name$label_enter <- paste(100*(name$cat_perct),"%")
+names(name) <- c(col_1,col_2, col_3,col_4,col_5)
+
+return(name)
+}
+```
+
+
+
+
+```{r}
+
+category_df_2<- function(name,clean_df,column_df_1,column_df_2,count_df_1,cat_perct,label,col_1,col_2,col_3,col_4,col_5,col_6){
+
+name <- clean_df %>% group_by({{column_df_1}},{{column_df_2}}) %>% count({{count_df_1}})
+name <- name %>% group_by({{column_df_1}},{{column_df_2}}) %>% mutate(cat_perct = round(n/sum(n),3))
+name$label_enter <- paste(100*(name$cat_perct),"%")
+names(name) <- c(col_1,col_2, col_3,col_4,col_5,col_6)
+
+return(name)
+
+}
+
+```
+
+
+```{r}
+Uga_Set<-new_df_demographics(Uga_Set,Uganda_raw1,"Setting","set_perct")
+Uga_Age <-new_df_demographics(Uga_Age,Uganda_raw1,"Age","Age_perct")
+
+Uga_SetGroup<- group_2(Uga_Set,Uganda_raw1,Setting,"Set_perct",Uga_SetGroup,Language,"set_perct")
+Uga_AgeGroup<- group_2(Uga_Age,Uganda_raw1,Age,"Age_perct",Uga_AgeGroup,Setting,"sex_perct")
+```
+
+
+```{r}
+#Uga_Sex<-   first_df_demographics(Uga_Sex_trial,Uganda_raw1$Gender)
+#Uga_SexGroup<-group_2(Uga_Sex,Uganda_raw1,Language,Uga_Sex_Group,Gender,Gender,"sex_perct")
+#Uga_SexGroup2<-Sex_group_2(Uga_sex_group2,Uganda_raw1,Language,Gender,"Language","Sex",Sex_perct )
+#Uga_SexGroup3<-demographics_group_3(Uga_SexGroup3,Uganda_raw1,Language,Gender,Setting,Sex_perct,Set_perct,"Region","Sex","Set","n","Sex_perct","Set_perct")
+
+#Uga_Sex$Level <- "National" #1 National
+#Uga_Sex1 <- Uga_Sex[-c(2)]
+#Uga_Sex2 <- spread(Uga_Sex1, x, Sex_perct)
+#Uga_Sex2$labelF <- paste("Female",round(100*(Uga_Sex2$Female),2),"%")
+#Uga_Sex2$labelM <- paste("Male",round(100*(Uga_Sex2$Male),2),"%")
+
+```
+
+
+
+```{r echo=FALSE}
+
+#gender_distribution <- function(mydf, myxcol ,myxend, myy, mygroup, mytitle, mysubtitle,mylevel){
+  #ggplot2::ggplot(data=mydf,aes(x={{myxcol}},xend={{myxend}},y={{myy}},group={{mygroup}}))+
+   #geom_dumbbell(color="#F7BC08", 
+                      #size=2.5, 
+                      #colour_x = "#395B74") +  
+        #scale_x_continuous(label=percent) + 
+    #labs(x=NULL, y=NULL, 
+             #title=mytitle, 
+             #subtitle=mysubtitle)+
+    #theme(plot.title = element_text(hjust=0.5, face="bold"),
+              #plot.background=element_rect(fill="#f7f7f7"),
+              #panel.background=element_rect(fill="#f7f7f7"),
+              #panel.grid.minor=element_blank(),
+              #panel.grid.major.y=element_blank(),
+              #panel.grid.major.x=element_line(),
+              #axis.ticks=element_blank(),
+              #legend.position="top",
+              #panel.border=element_blank()) +
+    #ggplot2::geom_text( data = filter(mydf, Level == "National"), aes(x = Female, y = Level), label = mydf$labelF, fontface = "bold", color = "#F7BC08",
+#vjust = -0.75, hjust = .45,position = position_nudge(y = -0.1)) + ggplot2::geom_text( data = filter(mydf, Level == "National"), aes(x = Male, y = Level), label = mydf$labelM, fontface = "bold", color = "#395B74", vjust = -0.75, hjust = 0.75) +  
+    
+    #coord_cartesian(xlim = c(0.15, 0.95))+theme_clean()
+    
+   
+#}
+
+```
+
+```{r}
+#Sex_by_Language <-function(mydf,myxcol,myxend,myregiongroup){
+#ggplot(mydf, aes(x={{myxcol}}, xend={{myxend}}, y= {{myregiongroup}}, group={{myregiongroup}})) + 
+        #geom_dumbbell(color="#F7BC08", 
+                      #size=2, 
+                      #colour_x = "#395B74") +  
+        #scale_x_continuous(label=percent) + 
+        #labs(x=NULL, y=NULL, 
+             #title="Sex Respondents by Language Distribution", 
+             #subtitle="Female and Male Respondents") +
+        #theme(plot.title = element_text(hjust=0.5, face="bold"),
+              #plot.background=element_rect(fill="#f7f7f7"),
+              #panel.background=element_rect(fill="#f7f7f7"),
+              #panel.grid.minor=element_blank(),
+              #panel.grid.major.y=element_blank(),
+              #panel.grid.major.x=element_line(),
+              #axis.ticks=element_blank(),
+              #legend.position="top",
+              #panel.border=element_blank()) + coord_cartesian(xlim = c(0.15, 0.95)) + geom_text( data = mydf, aes(x = {{myxend}}, y = {{myregiongroup}}), label = scales::percent(mydf$Female), fontface = "bold", color = "#F7BC08", size = 2.75, vjust = 1.5) + geom_text( data = mydf, aes(x = {{myxcol}}, y = {{myregiongroup}}), label = scales::percent(mydf$Male), fontface = "bold", color = "#395B74", size = 2.75, vjust = 1.5) + theme_clean() + geom_text(data =  mydf, aes(x ={{ myxend}}, y ={{ myregiongroup}}, label = "F"), fontface = "bold", color = "#F7BC08", size = 3, vjust = -0.75) + geom_text(data =  mydf, aes(x ={{ myxcol}}, y = {{myregiongroup}} , label = "M"), fontface = "bold", color = "#395B74", size = 3, vjust = -0.75)}
+
+```
+
+
+```{r}
+Age_distribution<- function (my_df,myxcol,my_ycol,my_title,my_subtitle,my_ylab){
+
+ggplot(my_df, aes(x = {{myxcol}}, y = {{my_ycol}})) + geom_bar(stat = "identity", position="identity", fill="#1380A1") + geom_text(aes(label= scales::percent({{my_ycol}}, accuracy = 0.01), y = {{my_ycol}}, x = {{myxcol}}), vjust =  3.4, size = 3.5, color = "white") + geom_hline(yintercept = 0, size = 1, colour="#333333")+ labs(title=my_title,subtitle = my_subtitle) +theme_clean() + xlab(NULL) +ylab({{my_ylab}}) + scale_y_continuous(labels = scales::percent)
+
+}
+
+
+```
+
+
+
+
+```{r}
+#Age_distribution_sex<- function (my_df,myxcol,my_ycol,my_fill,my_title,my_subtitle,my_fill_title,my_ylab){
+#ggplot(my_df, aes(x = {{myxcol}}, y = {{my_ycol}}, fill = {{my_fill}} )) + geom_bar(stat = "identity", position="dodge") + geom_text(aes(label= scales::percent({{my_ycol}}, accuracy = 0.1), y = {{my_ycol}}, x ={{myxcol}}), vjust = 2.5, size = 2.7, color = "white", position = position_dodge(width = 1), fontface = "bold") + geom_hline(yintercept = 0, size = 1, colour="#333333")+ labs(title=my_title,subtitle = my_subtitle, fill = my_fill_title) +theme_clean() + xlab(NULL) +ylab(my_ylab) + scale_y_continuous(labels = scales::percent) + theme(legend.position = "bottom")
+  
+#}
+
+
+```
+
+
+
+```{r}
+
+Barriers <- function(my_df,reorder1,reorder2,mylabel,mylabel2,my_title,my_subtitle,my_x,my_xend,my_yend){
+  ggplot(my_df, aes(reorder ({{reorder1}},{{reorder2}}),{{mylabel}}, label={{mylabel}})) + geom_point(col="black",size=2) + geom_text(aes(label={{mylabel2}}),vjust=.2,hjust=-.2, color="black", size=3)  + labs(title=my_title, subtitle=my_subtitle) +coord_flip() + geom_segment(aes(x={{my_x}}, xend={{my_xend}}, y=0, yend={{my_yend}})) + theme(axis.text.y = element_text(vjust=0.6), axis.title = element_blank())+ theme(plot.title = element_text(vjust = .6))+ scale_y_continuous(expand = c(0,0.08), labels = percent) }
+                                                                          
+ 
+
+```
+
+```{r}
+#Barriers_Sex <- function(my_df,reorder1,reorder2,mylabel,mylabel2,my_color,my_label3,my_y,my_x,my_ymax,my_color_2,my_title,my_subtitle){
+   #wrap <- function(x) stringr::str_wrap(x, 10)
+#ggplot(my_df, aes(reorder ({{reorder1}},{{reorder2}}),{{mylabel}}, label={{mylabel2}}, color = {{my_color}})) + geom_point(size= 2,position = position_dodge(0.7)) + geom_text(aes(label={{my_label3}}),size=3,,hjust=- .2, position = position_dodge(0.7)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6,margin = margin(t = 0, r = 20, b = 0, l = 0)), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), legend.position="bottom")+ geom_linerange(aes(y={{my_y}}, ymin=-0, x={{my_x}}, ymax={{my_ymax}}, color = {{my_color_2}}), position = position_dodge(0.7))+ scale_y_continuous(expand = c(-.08,0.08), labels = percent) + ggtitle(my_title,subtitle =my_subtitle)}#+ scale_x_discrete(labels = wrap)}
+```
+
+
+```{r}
+Barriers_Age <- function(my_df,reorder1,reorder2,mylabel,mylabel2,my_color,my_facet_wrap,facetrows,my_label3,my_y,my_x,my_ymax,my_color_2,my_label4,my_title,my_subtitle){
+  wrap <- function(x) stringr::str_wrap(x, 10)
+ggplot(my_df, aes(reorder ({{reorder1}},{{reorder2}}),{{mylabel}}, label={{mylabel2}}, color = {{my_color}})) + facet_wrap({{my_facet_wrap}}, nrow = facetrows)+geom_point(size= 2,position = position_dodge(.7)) + geom_text(aes(label={{my_label3}}),size=3 ,,hjust=- 0.27, position = position_dodge(1)) + coord_flip() + theme(axis.text.y = element_text(vjust=0.6,margin = margin(t = 0, r = 0, b = 0, l =40)), axis.title = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank())+ geom_linerange(aes(y={{my_y}}, ymin=0, x={{my_x}}, ymax={{my_ymax}}, color = {{my_color_2}}), position = position_dodge(0.7))+ theme( legend.position="none", legend.box="vertical", legend.text = element_text(size=5),legend.margin=margin(6,6,6,10))+scale_y_continuous(expand = c(0,0.08), labels = {{my_label4}},limits = c(0, 1.1)) + ggtitle(my_title,subtitle =my_subtitle)+theme(plot.title = element_text(size =12))}#+ scale_x_discrete(labels = wrap)}
+
+
+```
+
+## Sex Distribution
+```{r}
+#gender_distribution (Uga_Sex2, Male ,Female, Level,Level,'Sex Respondents',"Female and Male Respondents Proportion at National Level",National )
+```
+
+## Sex Distribution by Language
+```{r}
+#Sex_by_Language(Uga_SexGroup2,Male,Female,Language)
+```
+
+## Age Distribution
+```{r}
+Age_distribution(Uga_Age,Age,Age_perct,"Age Distribution","Respondents Age Groups","Percentage")
+```
+
+
+## Age Distribution by Sex
+```{r}
+#Age_distribution_sex(Uga_AgeGroup,Age,sex_perct,Gender,"Age Distribution by Sex","Respondents Sex by Age Groups","Sex","Percentage")
+```
+
+
+## Education by Rural/Urban
+```{r}
+Uga_Edu <- plyr::count(Uganda_raw1$Education)
+Uga_Edu$Edu_perct <- round(Uga_Edu$freq / sum(Uga_Edu$freq),4)
+Uga_EduGroup <- Uganda_raw1 %>% count(Education,Setting)
+Uga_EduGroup <- Uga_EduGroup%>% group_by(Education) %>% mutate(Edu_perct=round(n/sum(n),3))
+
+
+ggplot(Uga_Edu, aes(x = x, y = Edu_perct)) + geom_bar(stat = "identity", position="identity", fill="#1380A1") + geom_text(aes(label= scales::percent(Edu_perct, accuracy = 0.01), y = Edu_perct, x = x), vjust =  1.4, size = 4.5, color = "white") + geom_hline(yintercept = 0, size = 1, colour="#333333")+ labs(title="Education Distribution",subtitle = "Respondents Education Groups") +theme_clean() + xlab(NULL) +ylab("Percentage") + scale_y_continuous(labels = scales::percent)
+```
+
+## Urban/Rural Setting Distribution
+```{r}
+Age_distribution(Uga_Set,Setting,set_perct,"Urban / Rural Setting Distribution","Respondents Urban / Rural Settings","Percentages")
+```
+## Urban/Rural Setting by Language 
+
+```{r echo= FALSE, fig.dim=c(8,6)}
+ggplot(Uga_SetGroup, aes(x = Language, y = set_perct, fill = Setting )) + geom_bar(stat = "identity", position="dodge") + geom_text(aes(label= scales::percent(set_perct, accuracy = 0.1), y = set_perct, x = Language), vjust =  -0.25, size = 2.9, color = "black", position = position_dodge(width = 1), fontface = "bold") + geom_hline(yintercept = 0, size = 1, colour="#333333")+ labs(title="Rural / Urban Distribution by Language",subtitle = "Respondents Setting", fill = "Setting") +theme_clean() + xlab(NULL) +ylab("Percentage") + scale_y_continuous(labels = scales::percent) + theme(legend.position = "bottom")
+```
+
+
+
+
+
+## Urban/Rural Setting By Sex and Language
+
+```{r echo= FALSE, fig.dim=c(10,6)}
+#ggplot(Uga_SexGroup3, aes(x = Sex, y = Sex_perct, fill = Set )) + geom_bar(stat = "identity") + geom_hline(yintercept = 0, size = 1, colour="#333333")+ labs(title="Rural/Urban Distribution by Sex and Language",subtitle = "Rural/Urban Setting on Each Language by Sex", fill = "Setting") +theme_clean() + xlab(NULL) +ylab("Percentage") + scale_y_continuous(labels = scales::percent_format(accuracy = 1)) + theme(legend.position = "bottom") + facet_wrap(Region ~ ., scales = "free_y" ,nrow = 2)
+```
+
+
+
+ 
+# Q1 Which of the following is true about COVID-19
+```{r}
+false_covid_Pak<-new_df(false_covid_Pak,Uganda_raw1,"false_covid",label,"false_covid")
+Barriers(false_covid_Pak,false_covid,Percentage,Percentage,label,"Which of the following is true about COVID-19?","Percent of Respondents",false_covid,false_covid,Percentage)
+```
+
+
+# Q1 Which of the following is true about COVID-19 by Sex
+```{r}
+#Uga_false_covid_sex<-category_df(Uga_false_covid_sex,Uganda_raw1,Gender,false_covid,"rad_perct",label,"Gender","false_covid","Recipients","Percentage","label")
+
+
+#Barriers_Sex(Uga_false_covid_sex,false_covid,Percentage,Percentage,Percentage,Gender,label,Percentage,false_covid,Percentage,Gender,"Which of the following is true about COVID-19?","Percentages of Respondents by Sex")
+```
+
+# Q1 Which of the following is true about COVID-19 by Age
+```{r}
+Uga_false_covid_Age<-category_df(Uga_false_covid_Age,Uganda_raw1,Age,false_covid,"rad_perct",label,"Age","false_covid","Recipients","Percentage","label")
+
+Barriers_Age(Uga_false_covid_Age,false_covid,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,false_covid,Percentage,Age,NULL,"Which of the following is true about COVID-19?","Percentages of Respondents by Age")
+
+
+```
+
+
+# Q1 Which of the following is true about COVID-19 by Setting
+```{r}
+Uga_false_covid_Setting<-category_df(Uga_false_covid_Setting,Uganda_raw1,Setting,false_covid,"rad_perct",label,"Setting","false_covid","Recipients","Percentage","label")
+
+Barriers_Age(Uga_false_covid_Setting,false_covid,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,false_covid,Percentage,Setting,NULL,"Which of the following is true about COVID-19?","Percentages of Respondents by Setting")
+
+
+```
+
+
+# Q1 Which of the following is true about COVID-19 by Language
+```{r fig.dim=c(10,9)}
+Uga_false_covid_Language<-category_df(Uga_false_covid_Language,Uganda_raw1,Language,false_covid,"rad_perct",label,"Language","false_covid","Recipients","Percentage","label")
+
+Barriers_Age(Uga_false_covid_Language,false_covid,Percentage,Percentage,Percentage,Language,~Language,2,label,Percentage,false_covid,Percentage,Language,NULL,"Which of the following is true about COVID-19?","Percentages of Respondents by Language")
+
+
+```
+
+
+# Q1 Which of the following is true about COVID-19 by Education
+```{r fig.dim=c(10,9)}
+Uga_false_covid_Education<-category_df(Uga_false_covid_Education,Uganda_raw1,Education,false_covid,"rad_perct",label,"Education","false_covid","Recipients","Percentage","label")
+
+Barriers_Age(Uga_false_covid_Education,false_covid,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,false_covid,Percentage,Education,NULL,"Which of the following is true about COVID-19?","Percentages of Respondents by Education")
+
+```
+
+
+# Q1 Which of the following is true about COVID-19 by Sex and Setting
+```{r }
+#Uga_false_covid_rural_urban<-urban_rural(Uga_false_covid_rural,Uganda_raw1,Setting,Gender,false_covid,false_covid_perct,"Setting","Gender","false_covid_perct","Percent_false_covid_set")
+
+
+
+#setting_gender(Uga_false_covid_rural_urban,false_covid_perct,Percent_false_covid_set,"Which of the following is true about COVID-19?","Percentages of Respondents by by Sex and Setting")
+```
+
+## Q2 Do you think you are at risk of being infected with COVID-19?
+
+```{r}
+risk_covid_Pak<-new_df(risk_covid_Pak,Uganda_raw1,"risk_covid",label,"risk_covid")
+Barriers(risk_covid_Pak,risk_covid,Percentage,Percentage,label,"Do you think you are at risk of being infected with Covid-19?","Percent of Respondents",risk_covid,risk_covid,Percentage)
+```
+
+## Q2 Do you think you are at risk of being infected with COVID-19? by Sex
+```{r}
+#Uga_risk_covid_sex<-category_df(Uga_risk_covid_sex,Uganda_raw1,Gender,risk_covid,"rad_perct",label,"Gender","risk_covid","Recipients","Percentage","label")
+
+
+#Barriers_Sex(Uga_risk_covid_sex,risk_covid,Percentage,Percentage,Percentage,Gender,label,Percentage,risk_covid,Percentage,Gender,"Do you think you are at risk of being infected with Covid-19?","Percentages of Respondents by Sex")
+```
+
+## Q2 Do you think you are at risk of being infected with COVID-19? by Age
+```{r}
+Uga_risk_covid_Age<-category_df(Uga_risk_covid_Age,Uganda_raw1,Age,risk_covid,"rad_perct",label,"Age","risk_covid","Recipients","Percentage","label")
+
+Barriers_Age(Uga_risk_covid_Age,risk_covid,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,risk_covid,Percentage,Age,NULL,"Do you think you are at risk of being infected with Covid-19?","Percentages of Respondents by Age")
+
+
+```
+
+## Q2 Do you think you are at risk of being infected with COVID-19? by Setting
+```{r}
+Uga_risk_covid_Setting<-category_df(Uga_risk_covid_Setting,Uganda_raw1,Setting,risk_covid,"rad_perct",label,"Setting","risk_covid","Recipients","Percentage","label")
+
+Barriers_Age(Uga_risk_covid_Setting,risk_covid,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,risk_covid,Percentage,Setting,NULL,"Do you think you are at risk of being infected with Covid-19?","Percentages of Respondents by Setting")
+
+
+```
+
+## Q2 Do you think you are at risk of being infected with COVID-19? by Language
+```{r}
+Uga_risk_covid_Language<-category_df(Uga_risk_covid_Language,Uganda_raw1,Language,risk_covid,"rad_perct",label,"Language","risk_covid","Recipients","Percentage","label")
+
+Barriers_Age(Uga_risk_covid_Language,risk_covid,Percentage,Percentage,Percentage,Language,~Language,2,label,Percentage,risk_covid,Percentage,Language,NULL,"Do you think you are at risk of being infected with Covid-19?","Percentages of Respondents by Language")
+
+
+```
+
+
+## Q2 Do you think you are at risk of being infected with COVID-19? by Education
+```{r}
+Uga_risk_covid_Education<-category_df(Uga_risk_covid_Education,Uganda_raw1,Education,risk_covid,"rad_perct",label,"Education","risk_covid","Recipients","Percentage","label")
+
+Barriers_Age(Uga_risk_covid_Education,risk_covid,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,risk_covid,Percentage,Education,NULL,"Do you think you are at risk of being infected with Covid-19?","Percentages of Respondents by Education")
+
+```
+
+
+## Q2 Do you think you are at risk of being infected with COVID-19? by Sex and Setting
+```{r}
+#Uga_risk_covid_rural_urban<-urban_rural(Uga_risk_covid_rural,Uganda_raw1,Setting,Gender,risk_covid,risk_covid_perct,"Setting","Gender","risk_covid_perct","Percent_risk_covid_set")
+
+
+
+#setting_gender(Uga_risk_covid_rural_urban,risk_covid_perct,Percent_risk_covid_set,"Do you think you are at risk of being infected with Covid-19?","Percentages of Respondents by by Sex and Setting")
+```
+
+
+# Q3-Q5 Protective Practices: Handwashing, Mask Use, and Social Distancing
+```{r fig.dim=c(10,6)}
+Uga_wash_covid<- plyr::count(Uganda_raw1$wash_covid)
+Uga_wash_covid$Name <- "Handwashed with soap \nand water for 20 seconds"
+Uga_wash_covid<- spread(Uga_wash_covid, x, freq)
+Uga_mask_covid <- plyr::count(Uganda_raw1$mask_covid)
+Uga_mask_covid$Name <- "Worn a mask"
+Uga_mask_covid <- spread(Uga_mask_covid, x, freq)
+Uga_social_distance_covid <- plyr::count(Uganda_raw1$social_distance_covid)
+Uga_social_distance_covid$Name <- "Maintained Social Distance"
+Uga_social_distance_covid <- spread(Uga_social_distance_covid, x, freq)
+
+Uga_Likert <- rbind(Uga_wash_covid, Uga_mask_covid)
+Uga_Likert <- rbind(Uga_Likert, Uga_social_distance_covid)
+
+names(Uga_Likert) <-c("Practice","All the time","Most of the time", "Never", "Rarely", "Sometimes", "NA")
+col_order <- c("Practice", "NA","Never","Rarely","Sometimes","Most of the time", "All the time")
+Uga_Likert <- Uga_Likert[, col_order]
+
+
+
+Uga_LikertPlot <-HH::likert(Practice ~ ., data = Uga_Likert, ylab=NULL, as.percent=TRUE, main = list("Over the past 30 days,how often have you:",x=unit(.55, "npc")), sub= list("Frequency",x=unit(.57, "npc")),xlim=c(-100,-40,-20,0,20,40,60,80,100), col=c("#a6a6a6" ,"#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C"), rightAxis = FALSE, ReferenceZero=4)
+plot(Uga_LikertPlot)
+```
+
+# Q3-Q5 Protective Practices: Handwashing, Mask Use, and Social Distancing by Age
+```{r fig.dim=c(10,8)}
+Uga_wash_covidAge <- Uganda_raw1 %>% group_by(Age)  %>% count(wash_covid)
+Uga_wash_covidAge$Name <- "Handwashed with soap \nand water for 20 seconds"
+Uga_wash_covidAge <- spread(Uga_wash_covidAge, wash_covid, n)
+Uga_mask_covidAge <- Uganda_raw1 %>% group_by(Age)  %>% count(mask_covid)
+Uga_mask_covidAge$Name <-  "Worn a mask"
+Uga_mask_covidAge <- spread(Uga_mask_covidAge, mask_covid, n)
+Uga_social_distance_covidAge <- Uganda_raw1 %>% group_by(Age)  %>% count(social_distance_covid)
+Uga_social_distance_covidAge$Name <- "Maintained Social Distance"
+Uga_social_distance_covidAge <- spread(Uga_social_distance_covidAge,social_distance_covid, n)
+
+
+Uga_LikertAge <- rbind(Uga_wash_covidAge, Uga_mask_covidAge)
+Uga_LikertAge <- rbind(Uga_LikertAge,Uga_social_distance_covidAge)
+
+names(Uga_LikertAge) <-c("Age","Practice","All the time","Most of the time", "Never", "Rarely", "Sometimes", "NA")
+col_order <- c("Age","Practice", "NA","Never","Rarely","Sometimes","Most of the time", "All the time")
+Uga_LikertAge <- Uga_LikertAge[, col_order]
+
+Uga_LikertAge$'NA'[is.na(Uga_LikertAge$'NA')] <- 0
+Uga_LikertAge$Never[is.na(Uga_LikertAge$Never)] <- 0
+
+
+Uga_LikertPlotAge <-HH::likert(Practice ~ .|Age, data = Uga_LikertAge, layout=c(1,5), ylab=NULL, as.percent=TRUE, main = list("Over the past 30 days, how often have you:",x=unit(.55, "npc")), sub= list("Frequency",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#a6a6a6" ,"#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=4, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.7, lines=3, x = unit(.25,"npc")), cex=1, resize.height.tuning=2)   
+plot(Uga_LikertPlotAge)
+
+
+```
+
+
+# Q3-Q5 Protective Practices: Handwashing, Mask Use, and Social Distancing by Setting
+```{r fig.dim=c(10,4)}
+Uga_wash_covidSetting <- Uganda_raw1 %>% group_by(Setting)  %>% count(wash_covid)
+Uga_wash_covidSetting$Name <- "Handwashed with soap \nand water for 20 seconds"
+Uga_wash_covidSetting <- spread(Uga_wash_covidSetting, wash_covid, n)
+Uga_mask_covidSetting <- Uganda_raw1 %>% group_by(Setting)  %>% count(mask_covid)
+Uga_mask_covidSetting$Name <-  "Worn a mask"
+Uga_mask_covidSetting <- spread(Uga_mask_covidSetting, mask_covid, n)
+Uga_social_distance_covidSetting <- Uganda_raw1 %>% group_by(Setting)  %>% count(social_distance_covid)
+Uga_social_distance_covidSetting$Name <- "Maintained Social Distance"
+Uga_social_distance_covidSetting <- spread(Uga_social_distance_covidSetting,social_distance_covid, n)
+
+
+Uga_LikertSetting <- rbind(Uga_wash_covidSetting, Uga_mask_covidSetting)
+Uga_LikertSetting <- rbind(Uga_LikertSetting,Uga_social_distance_covidSetting)
+
+names(Uga_LikertSetting) <-c("Setting","Practice","All the time","Most of the time", "Never", "Rarely", "Sometimes", "NA")
+col_order <- c("Setting","Practice", "NA","Never","Rarely","Sometimes","Most of the time", "All the time")
+Uga_LikertSetting <- Uga_LikertSetting[, col_order]
+
+Uga_LikertSetting$'NA'[is.na(Uga_LikertSetting$'NA')] <- 0
+
+
+Uga_LikertPlotSetting <-HH::likert(Practice ~ .|Setting, data = Uga_LikertSetting, layout=c(1,2), ylab=NULL, as.percent=TRUE, main = list("Over the past 30 days, how often have you:",x=unit(.55, "npc")), sub= list("Frequency",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#a6a6a6" ,"#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=4, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=1, lines=1, x = unit(.25,"npc")), cex=1, resize.height.tuning=2)   
+plot(Uga_LikertPlotSetting)
+
+
+```
+
+
+# Q3-Q5 Protective Practices: Handwashing, Mask Use, and Social Distancing by Language
+```{r fig.dim=c(10,8)}
+Uga_wash_covidLanguage <- Uganda_raw1 %>% group_by(Language)  %>% count(wash_covid)
+Uga_wash_covidLanguage$Name <- "Handwashed with soap and water for 20 seconds"
+Uga_wash_covidLanguage <- spread(Uga_wash_covidLanguage, wash_covid, n)
+Uga_mask_covidLanguage <- Uganda_raw1 %>% group_by(Language)  %>% count(mask_covid)
+Uga_mask_covidLanguage$Name <-  "Worn a mask"
+Uga_mask_covidLanguage <- spread(Uga_mask_covidLanguage, mask_covid, n)
+Uga_social_distance_covidLanguage <- Uganda_raw1 %>% group_by(Language)  %>% count(social_distance_covid)
+Uga_social_distance_covidLanguage$Name <- "Maintained Social Distance"
+Uga_social_distance_covidLanguage <- spread(Uga_social_distance_covidLanguage,social_distance_covid, n)
+
+Uga_LikertLanguage <- rbind(Uga_wash_covidLanguage, Uga_mask_covidLanguage)
+Uga_LikertLanguage <- rbind(Uga_LikertLanguage,Uga_social_distance_covidLanguage)
+names(Uga_LikertLanguage) <-c("Language","Practice","All the time","Most of the time","Never","Rarely","Sometimes", "NA")
+col_orderLanguage <- c("Language","Practice", "NA","Never","Rarely","Sometimes","Most of the time", "All the time")
+Uga_LikertLanguage <- Uga_LikertLanguage[, col_orderLanguage]
+Uga_LikertLanguage$'NA'[is.na(Uga_LikertLanguage$'NA')] <- 0
+Uga_LikertLanguage$Never[is.na(Uga_LikertLanguage$Never)] <- 0
+Uga_LikertLanguage$Rarely[is.na(Uga_LikertLanguage$Rarely)] <- 0
+Uga_LikertLanguage$Sometimes[is.na(Uga_LikertLanguage$Sometimes)] <- 0
+Uga_LikertLanguage$`Most of the time`[is.na(Uga_LikertLanguage$`Most of the time`)] <- 0
+
+
+Uga_LikertPlotLanguage <-HH::likert(Practice ~ .|Language, data = Uga_LikertLanguage, layout=c(1,7), ylab=NULL, as.percent=TRUE, main = list("Over the past 30 days, how often have you:",x=unit(.55, "npc")), sub= list("Frequency",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#a6a6a6" ,"#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=4, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.7, lines=3, x = unit(.25,"npc")), cex=1, resize.height.tuning=2)   
+plot(Uga_LikertPlotLanguage)
+
+
+```
+
+
+# Q3-Q5 Protective Practices: Handwashing, Mask Use, and Social Distancing by Education
+```{r fig.dim=c(10,10)}
+Uga_wash_covidEducation <- Uganda_raw1 %>% group_by(Education)  %>% count(wash_covid)
+Uga_wash_covidEducation$Name <-  "Handwashed with soap \nand water for 20 seconds"
+Uga_wash_covidEducation <- spread(Uga_wash_covidEducation, wash_covid, n)
+Uga_mask_covidEducation <- Uganda_raw1 %>% group_by(Education)  %>% count(mask_covid)
+Uga_mask_covidEducation$Name <-  "Worn a mask"
+Uga_mask_covidEducation <- spread(Uga_mask_covidEducation, mask_covid, n)
+Uga_social_distance_covidEducation <- Uganda_raw1 %>% group_by(Education)  %>% count(social_distance_covid)
+Uga_social_distance_covidEducation$Name <- "Maintained Social Distance"
+Uga_social_distance_covidEducation <- spread(Uga_social_distance_covidEducation,social_distance_covid, n)
+
+
+Uga_LikertEducation <- rbind(Uga_wash_covidEducation, Uga_mask_covidEducation)
+Uga_LikertEducation <- rbind(Uga_LikertEducation,Uga_social_distance_covidEducation)
+
+
+names(Uga_LikertEducation) <-c("Education","Practice","All the time","Most of the time","Never","Rarely","Sometimes", "NA")
+col_orderEducation <- c("Education","Practice", "NA","Never","Rarely","Sometimes","Most of the time", "All the time")
+Uga_LikertEducation <- Uga_LikertEducation[, col_orderEducation]
+Uga_LikertEducation$'NA'[is.na(Uga_LikertEducation$'NA')] <- 0
+
+
+Uga_LikertPlotEducation <-HH::likert(Practice ~ .|Education, data = Uga_LikertEducation, layout=c(1,4), ylab=NULL, as.percent=TRUE, main = list("Over the past 30 days, how often have you:",x=unit(.55, "npc")), sub= list("Frequency",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#a6a6a6" ,"#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE","#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=4, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.7, lines=3, x = unit(.25,"npc")), cex=1, resize.height.tuning=2)   
+plot(Uga_LikertPlotEducation)
+
+
+
+
+```
+
+# Q6 What stigma about COVID-19 is the one that would concern you the most? 
+```{r}
+stigma_Pak<-new_df(stigma_Pak,Uganda_raw1,"stigma",label,"stigma")
+Barriers(stigma_Pak,stigma,Percentage,Percentage,label,"What stigma about COVID-19 is the one that would concern you the most?","Percent of Respondents",stigma,stigma,Percentage)
+```
+
+
+# Q6 What stigma about COVID-19 is the one that would concern you the most? by Sex
+```{r}
+#Uga_stigma_sex<-category_df(Uga_stigma_sex,Uganda_raw1,Gender,stigma,"rad_perct",label,"Gender","stigma","Recipients","Percentage","label")
+
+
+#Barriers_Sex(Uga_stigma_sex,stigma,Percentage,Percentage,Percentage,Gender,label,Percentage,stigma,Percentage,Gender,"What stigma about COVID-19 is the one that would concern you the most? ","Percentages of Respondents by Sex")
+```
+
+
+# Q6 What stigma about COVID-19 is the one that would concern you the most? by Age
+```{r}
+Uga_stigma_Age<-category_df(Uga_stigma_Age,Uganda_raw1,Age,stigma,"rad_perct",label,"Age","stigma","Recipients","Percentage","label")
+
+Barriers_Age(Uga_stigma_Age,stigma,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,stigma,Percentage,Age,NULL,"What stigma about COVID-19 is the one that would concern you the most? ","Percentages of Respondents by Age")
+
+
+```
+
+
+# Q6 What stigma about COVID-19 is the one that would concern you the most? by Setting
+```{r}
+Uga_stigma_Setting<-category_df(Uga_stigma_Setting,Uganda_raw1,Setting,stigma,"rad_perct",label,"Setting","stigma","Recipients","Percentage","label")
+
+Barriers_Age(Uga_stigma_Setting,stigma,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,stigma,Percentage,Setting,NULL,"What stigma about COVID-19 is the one that would concern you the most? ","Percentages of Respondents by Setting")
+
+
+```
+
+
+# Q6 What stigma about COVID-19 is the one that would concern you the most? by Language
+```{r}
+Uga_stigma_Language<-category_df(Uga_stigma_Language,Uganda_raw1,Language,stigma,"rad_perct",label,"Language","stigma","Recipients","Percentage","label")
+
+Barriers_Age(Uga_stigma_Language,stigma,Percentage,Percentage,Percentage,Language,~Language,2,label,Percentage,stigma,Percentage,Language,NULL,"What stigma about COVID-19 is the one that would concern you the most? ","Percentages of Respondents by Language")
+
+
+```
+
+
+# Q6 What stigma about COVID-19 is the one that would concern you the most? by Education
+```{r}
+Uga_stigma_Education<-category_df(Uga_stigma_Education,Uganda_raw1,Education,stigma,"rad_perct",label,"Education","stigma","Recipients","Percentage","label")
+
+Barriers_Age(Uga_stigma_Education,stigma,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,stigma,Percentage,Education,NULL,"What stigma about COVID-19 is the one that would concern you the most? ","Percentages of Respondents by Education")
+
+```
+
+
+# Q6 What stigma about COVID-19 is the one that would concern you the most? by Sex and Setting
+```{r}
+#Uga_stigma_rural_urban<-urban_rural(Uga_stigma_rural,Uganda_raw1,Setting,Gender,stigma,stigma_perct,"Setting","Gender","stigma_perct","Percent_stigma_set")
+
+
+
+#setting_gender(Uga_stigma_rural_urban,stigma_perct,Percent_stigma_set,"What stigma about COVID-19 is the one that would concern you the most?","Percentages of Respondents by by Sex and Setting")
+```
+
+
+# Q7 Has there been any reason why you have not been able to practice the protective measures put in place for COVID-19 in the last month? 
+```{r}
+prevent_measures_reason_Pak<-new_df(prevent_measures_reason_Pak,Uganda_raw1,"prevent_measures_reason",label,"prevent_measures_reason")
+Barriers(prevent_measures_reason_Pak,prevent_measures_reason,Percentage,Percentage,label,"The main reason keeping me from practicing protective measures is:","Percent of Respondents",prevent_measures_reason,prevent_measures_reason,Percentage)
+```
+
+
+# Q7 Has there been any reason why you have not been able to practice the protective measures put in place for COVID-19 in the last month? by Sex
+```{r}
+#Uga_prevent_measures_reason_sex<-category_df(Uga_prevent_measures_reason_sex,Uganda_raw1,Gender,prevent_measures_reason,"rad_perct",label,"Gender","prevent_measures_reason","Recipients","Percentage","label")
+
+
+#Barriers_Sex(Uga_prevent_measures_reason_sex,prevent_measures_reason,Percentage,Percentage,Percentage,Gender,label,Percentage,prevent_measures_reason,Percentage,Gender,"The main reason keeping me from practicing protective measures is:","Percentages of Respondents by Sex")
+```
+
+# Q7 Has there been any reason why you have not been able to practice the protective measures put in place for COVID-19 in the last month? by Age
+```{r}
+Uga_prevent_measures_reason_Age<-category_df(Uga_prevent_measures_reason_Age,Uganda_raw1,Age,prevent_measures_reason,"rad_perct",label,"Age","prevent_measures_reason","Recipients","Percentage","label")
+
+Barriers_Age(Uga_prevent_measures_reason_Age,prevent_measures_reason,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,prevent_measures_reason,Percentage,Age,NULL,"The main reason keeping me from practicing protective measures is:","Percentages of Respondents by Age")
+
+
+```
+
+
+# Q7 Has there been any reason why you have not been able to practice the protective measures put in place for COVID-19 in the last month? by Setting
+```{r}
+Uga_prevent_measures_reason_Setting<-category_df(Uga_prevent_measures_reason_Setting,Uganda_raw1,Setting,prevent_measures_reason,"rad_perct",label,"Setting","prevent_measures_reason","Recipients","Percentage","label")
+
+Barriers_Age(Uga_prevent_measures_reason_Setting,prevent_measures_reason,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,prevent_measures_reason,Percentage,Setting,NULL,"The main reason keeping me from practicing protective measures is:","Percentages of Respondents by Setting")
+
+
+```
+
+
+# Q7 Has there been any reason why you have not been able to practice the protective measures put in place for COVID-19 in the last month? by Language
+```{r}
+Uga_prevent_measures_reason_Language<-category_df(Uga_prevent_measures_reason_Language,Uganda_raw1,Language,prevent_measures_reason,"rad_perct",label,"Language","prevent_measures_reason","Recipients","Percentage","label")
+
+Barriers_Age(Uga_prevent_measures_reason_Language,prevent_measures_reason,Percentage,Percentage,Percentage,Language,~Language,2,label,Percentage,prevent_measures_reason,Percentage,Language,NULL,"The main reason keeping me from practicing protective measures is:","Percentages of Respondents by Language")
+
+
+```
+
+
+# Q7 Has there been any reason why you have not been able to practice the protective measures put in place for COVID-19 in the last month? by Education
+```{r}
+Uga_prevent_measures_reason_Education<-category_df(Uga_prevent_measures_reason_Education,Uganda_raw1,Education,prevent_measures_reason,"rad_perct",label,"Education","prevent_measures_reason","Recipients","Percentage","label")
+
+Barriers_Age(Uga_prevent_measures_reason_Education,prevent_measures_reason,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,prevent_measures_reason,Percentage,Education,NULL,"The main reason keeping me from practicing protective measures is:","Percentages of Respondents by Education")
+
+```
+
+
+# Q7 Has there been any reason why you have not been able to practice the protective measures put in place for COVID-19 in the last month? by Sex and Setting
+```{r}
+#Uga_prevent_measures_reason_rural_urban<-urban_rural(Uga_prevent_measures_reason_rural,Uganda_raw1,Setting,Gender,prevent_measures_reason,prevent_measures_reason_perct,"Setting","Gender","prevent_measures_reason_perct","Percent_prevent_measures_reason_set")
+
+
+
+#setting_gender(Uga_prevent_measures_reason_rural_urban,prevent_measures_reason_perct,Percent_prevent_measures_reason_set,"The main reason keeping me from practicing protective measures is:","Percentages of Respondents by by Sex and Setting")
+```
+
+# Q8 What will be the first thing to do if you think you have Covid-19 symptoms? 
+```{r}
+do_covid_Pak<-new_df(do_covid_Pak,Uganda_raw1,"do_covid",label,"do_covid")
+Barriers(do_covid_Pak,do_covid,Percentage,Percentage,label,"If I think I have COVID symptoms, the first thing I would do is to:","Percent of Respondents",do_covid,do_covid,Percentage)
+```
+
+
+# Q8 What will be the first thing to do if you think you have Covid-19 symptoms?  by Sex
+```{r}
+#Uga_do_covid_sex<-category_df(Uga_do_covid_sex,Uganda_raw1,Gender,do_covid,"rad_perct",label,"Gender","do_covid","Recipients","Percentage","label")
+
+
+#Barriers_Sex(Uga_do_covid_sex,do_covid,Percentage,Percentage,Percentage,Gender,label,Percentage,do_covid,Percentage,Gender,"If I think I have COVID symptoms, the first thing I would do is to:","Percentages of Respondents by Sex")
+```
+
+# Q8 What will be the first thing to do if you think you have Covid-19 symptoms?  by Age
+```{r}
+Uga_do_covid_Age<-category_df(Uga_do_covid_Age,Uganda_raw1,Age,do_covid,"rad_perct",label,"Age","do_covid","Recipients","Percentage","label")
+
+Barriers_Age(Uga_do_covid_Age,do_covid,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,do_covid,Percentage,Age,NULL,"If I think I have COVID symptoms, the first thing I would do is to:","Percentages of Respondents by Age")
+
+
+```
+
+# Q8 What will be the first thing to do if you think you have Covid-19 symptoms? by Setting
+```{r}
+Uga_do_covid_Setting<-category_df(Uga_do_covid_Setting,Uganda_raw1,Setting,do_covid,"rad_perct",label,"Setting","do_covid","Recipients","Percentage","label")
+
+Barriers_Age(Uga_do_covid_Setting,do_covid,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,do_covid,Percentage,Setting,NULL,"If I think I have COVID symptoms, the first thing I would do is to:","Percentages of Respondents by Setting")
+
+
+```
+
+
+# Q8 What will be the first thing to do if you think you have Covid-19 symptoms?  by Language
+```{r}
+Uga_do_covid_Language<-category_df(Uga_do_covid_Language,Uganda_raw1,Language,do_covid,"rad_perct",label,"Language","do_covid","Recipients","Percentage","label")
+
+Barriers_Age(Uga_do_covid_Language,do_covid,Percentage,Percentage,Percentage,Language,~Language,2,label,Percentage,do_covid,Percentage,Language,NULL,"If I think I have COVID symptoms, the first thing I would do is to:","Percentages of Respondents by Language")
+
+
+```
+
+# Q8 What will be the first thing to do if you think you have Covid-19 symptoms?  by Education
+```{r}
+Uga_do_covid_Education<-category_df(Uga_do_covid_Education,Uganda_raw1,Education,do_covid,"rad_perct",label,"Education","do_covid","Recipients","Percentage","label")
+
+Barriers_Age(Uga_do_covid_Education,do_covid,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,do_covid,Percentage,Education,NULL,"If I think I have COVID symptoms, the first thing I would do is to:","Percentages of Respondents by Education")
+
+```
+
+
+# Q8 What will be the first thing to do if you think you have Covid-19 symptoms? by Sex and Setting
+```{r}
+#Uga_do_covid_rural_urban<-urban_rural(Uga_do_covid_rural,Uganda_raw1,Setting,Gender,do_covid,do_covid_perct,"Setting","Gender","do_covid_perct","Percent_do_covid_set")
+
+
+
+#setting_gender(Uga_do_covid_rural_urban,do_covid_perct,Percent_do_covid_set,"If I think I have COVID symptoms, the first thing I would do is to:","Percentages of Respondents by by Sex and Setting")
+```
+
+
+# Q9 Is there any reason why you will not seek testing or treatment for COVID-19? 
+```{r}
+not_treatment_covid_Pak<-new_df(not_treatment_covid_Pak,Uganda_raw1,"not_treatment_covid",label,"not_treatment_covid")
+Barriers(not_treatment_covid_Pak,not_treatment_covid,Percentage,Percentage,label,"The main reason why I would NOT seek testing or treatment for COVID19 is:","Percent of Respondents",not_treatment_covid,not_treatment_covid,Percentage)
+```
+
+
+# Q9 Is there any reason why you will not seek testing or treatment for COVID-19?  by Sex
+```{r}
+#Uga_not_treatment_covid_sex<-category_df(Uga_not_treatment_covid_sex,Uganda_raw1,Gender,not_treatment_covid,"rad_perct",label,"Gender","not_treatment_covid","Recipients","Percentage","label")
+
+
+#Barriers_Sex(Uga_not_treatment_covid_sex,not_treatment_covid,Percentage,Percentage,Percentage,Gender,label,Percentage,not_treatment_covid,Percentage,Gender,"The main reason why I would NOT seek testing or treatment for COVID19 is:","Percentages of Respondents by Sex")
+```
+
+# Q9 Is there any reason why you will not seek testing or treatment for COVID-19?  by Age
+```{r}
+Uga_not_treatment_covid_Age<-category_df(Uga_not_treatment_covid_Age,Uganda_raw1,Age,not_treatment_covid,"rad_perct",label,"Age","not_treatment_covid","Recipients","Percentage","label")
+
+Barriers_Age(Uga_not_treatment_covid_Age,not_treatment_covid,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,not_treatment_covid,Percentage,Age,NULL,"The main reason why I would NOT seek testing or treatment for COVID19 is:","Percentages of Respondents by Age")
+
+
+```
+
+
+# Q9 Is there any reason why you will not seek testing or treatment for COVID-19?  by Setting
+```{r}
+Uga_not_treatment_covid_Setting<-category_df(Uga_not_treatment_covid_Setting,Uganda_raw1,Setting,not_treatment_covid,"rad_perct",label,"Setting","not_treatment_covid","Recipients","Percentage","label")
+
+Barriers_Age(Uga_not_treatment_covid_Setting,not_treatment_covid,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,not_treatment_covid,Percentage,Setting,NULL,"The main reason why I would NOT seek testing or treatment for COVID19 is:","Percentages of Respondents by Setting")
+
+
+```
+
+
+# Q9 Is there any reason why you will not seek testing or treatment for COVID-19? by Language
+```{r}
+Uga_not_treatment_covid_Language<-category_df(Uga_not_treatment_covid_Language,Uganda_raw1,Language,not_treatment_covid,"rad_perct",label,"Language","not_treatment_covid","Recipients","Percentage","label")
+
+Barriers_Age(Uga_not_treatment_covid_Language,not_treatment_covid,Percentage,Percentage,Percentage,Language,~Language,2,label,Percentage,not_treatment_covid,Percentage,Language,NULL,"The main reason why I would NOT seek testing or treatment for COVID19 is:","Percentages of Respondents by Language")
+
+
+```
+
+
+# Q9 Is there any reason why you will not seek testing or treatment for COVID-19? by Education
+```{r}
+Uga_not_treatment_covid_Education<-category_df(Uga_not_treatment_covid_Education,Uganda_raw1,Education,not_treatment_covid,"rad_perct",label,"Education","not_treatment_covid","Recipients","Percentage","label")
+
+Barriers_Age(Uga_not_treatment_covid_Education,not_treatment_covid,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,not_treatment_covid,Percentage,Education,NULL,"The main reason why I would NOT seek testing or treatment for COVID19 is:","Percentages of Respondents by Education")
+
+```
+
+
+# Q9 Is there any reason why you will not seek testing or treatment for COVID-19? by Sex and Setting
+```{r}
+#Uga_not_treatment_covid_rural_urban<-urban_rural(Uga_not_treatment_covid_rural,Uganda_raw1,Setting,Gender,not_treatment_covid,not_treatment_covid_perct,"Setting","Gender","not_treatment_covid_perct","Percent_not_treatment_covid_set")
+
+
+
+#setting_gender(Uga_not_treatment_covid_rural_urban,not_treatment_covid_perct,Percent_not_treatment_covid_set,"The main reason why I would NOT seek testing or treatment for COVID19 is:","Percentages of Respondents by by Sex and Setting")
+```
+
+
+
+## Q10 Please tell us how much you agree with the following statement. "I trust my local health care providers to take care of me and my family."
+```{r echo= FALSE, fig.dim=c(10,6)}
+Uga_trust_healthcare_workers<- plyr::count(Uganda_raw1$trust_healthcare_w)
+Uga_trust_healthcare_workers$Name <- "Trust healthcare workers" 
+Uga_Likert<- spread(Uga_trust_healthcare_workers, x, freq)
+names(Uga_Likert) <-c("Practice", "Agree","Not sure","Somewhat disagree","Strongly agree","Strongly disagree", "NA")
+col_order <- c("Practice","Strongly disagree", "Somewhat disagree", "NA", "Not sure", "Agree", "Strongly agree")
+Uga_Likert <- Uga_Likert[, col_order]
+
+Uga_LikertPlot <-HH::likert(Practice ~ ., data = Uga_Likert, ylab=NULL, as.percent=TRUE, main = list("I trust my local health care providers to take care of me and my family",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-100,-40,-20,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#a6a6a6", "#6193CE", "#00508C"), rightAxis = FALSE, ReferenceZero = 4)
+plot(Uga_LikertPlot)
+```
+
+## Q10 Please tell us how much you agree with the following statement. "I trust my local health care providers to take care of me and my family." by Age
+```{r echo= FALSE, fig.dim=c(10,8)}
+Uga_trust_workersAge <- Uganda_raw1 %>% group_by(Age)  %>% count(trust_healthcare_w)
+Uga_trust_workersAge$Name <- "Trust healthcare workers" 
+Uga_LikertAge  <- spread(Uga_trust_workersAge, trust_healthcare_w, n)
+names(Uga_LikertAge) <-c("Age","Practice", "Agree","Not sure","Somewhat disagree","Strongly agree","Strongly disagree", "NA")
+col_orderAge <- c("Age","Practice","Strongly disagree", "Somewhat disagree", "NA", "Not sure", "Agree", "Strongly agree")
+Uga_LikertAge <- Uga_LikertAge[, col_orderAge]
+Uga_LikertAge$'NA'[is.na(Uga_LikertAge$'NA')] <- 0
+
+
+Uga_LikertPlotAge <-HH::likert(Practice ~ .|Age, data = Uga_LikertAge, layout=c(1,5), ylab=NULL, as.percent=TRUE, main = list("How much do you trust workers and experts giving you \n information about COVID?",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#a6a6a6", "#6193CE", "#00508C"), ReferenceZero = 4, scales=list(y=list(relation="free")), between=list(y=1), positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.7, lines=3, x = unit(.25,"npc")), cex=1, resize.height.tuning=2)   
+plot(Uga_LikertPlotAge)
+
+
+```
+
+
+
+## Q10 Please tell us how much you agree with the following statement. "I trust my local health care providers to take care of me and my family." by Setting
+```{r echo= FALSE,fig.dim=c(10,4)}
+Uga_trust_workersSetting <- Uganda_raw1 %>% group_by(Setting)  %>% count(trust_healthcare_w)
+Uga_trust_workersSetting$Name <- "Trust healthcare workers" 
+Uga_LikertSetting <- spread(Uga_trust_workersSetting, trust_healthcare_w, n)
+names(Uga_LikertSetting) <-c("Setting","Practice", "Agree","Not sure","Somewhat disagree","Strongly agree","Strongly disagree", "NA")
+col_orderSetting <- c("Setting","Practice","Strongly disagree", "Somewhat disagree", "NA", "Not sure", "Agree", "Strongly agree")
+Uga_LikertSetting <- Uga_LikertSetting[, col_orderSetting]
+Uga_LikertSetting$'NA'[is.na(Uga_LikertSetting$'NA')] <- 0
+
+
+Uga_LikertPlotSetting <-HH::likert(Practice ~ .|Setting, data = Uga_LikertSetting, layout=c(1,2), ylab=NULL, as.percent=TRUE, main = list("How much do you trust workers and experts giving you \n information about COVID?",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#a6a6a6", "#6193CE", "#00508C"), ReferenceZero = 4, scales=list(y=list(relation="free")), between=list(y=1), positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=1, lines=2, x = unit(.25,"npc")), cex=1, resize.height.tuning=2)   
+plot(Uga_LikertPlotSetting)
+
+
+```
+
+
+## Q10 Please tell us how much you agree with the following statement. "I trust my local health care providers to take care of me and my family." by Language
+```{r echo= FALSE,fig.dim=c(10,8)}
+Uga_trust_workersLanguage <- Uganda_raw1 %>% group_by(Language)  %>% count(trust_healthcare_w)
+Uga_trust_workersLanguage$Name <- "Trust healthcare workers" 
+Uga_LikertLanguage <- spread(Uga_trust_workersLanguage, trust_healthcare_w, n)
+names(Uga_LikertLanguage) <-c("Language","Practice", "Agree","Not sure","Somewhat disagree","Strongly agree","Strongly disagree", "NA")
+col_orderLanguage <- c("Language","Practice","Strongly disagree", "Somewhat disagree", "NA", "Not sure", "Agree", "Strongly agree")
+Uga_LikertLanguage <- Uga_LikertLanguage[, col_orderLanguage]
+Uga_LikertLanguage$'NA'[is.na(Uga_LikertLanguage$'NA')] <- 0
+Uga_LikertLanguage$`Strongly disagree`[is.na(Uga_LikertLanguage$`Strongly disagree`)] <- 0
+Uga_LikertLanguage$`Somewhat disagree`[is.na(Uga_LikertLanguage$`Somewhat disagree`)] <- 0
+
+Uga_LikertPlotLanguage <-HH::likert(Practice ~ .|Language, data = Uga_LikertLanguage, layout=c(1,7), ylab=NULL, as.percent=TRUE, main = list("How much do you trust workers and experts giving you \n information about COVID?",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#a6a6a6", "#6193CE", "#00508C"), ReferenceZero = 4, scales=list(y=list(relation="free")), between=list(y=1), positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.7, lines=3, x = unit(.25,"npc")), cex=1, resize.height.tuning=2)   
+plot(Uga_LikertPlotLanguage)
+
+
+```
+
+
+## Q10 Please tell us how much you agree with the following statement. "I trust my local health care providers to take care of me and my family." by Education
+```{r echo= FALSE,fig.dim=c(10,8)}
+Uga_trust_workersEducation <- Uganda_raw1 %>% group_by(Education)  %>% count(trust_healthcare_w)
+Uga_trust_workersEducation$Name <- "Trust healthcare workers" 
+Uga_LikertEducation <- spread(Uga_trust_workersEducation, trust_healthcare_w, n)
+names(Uga_LikertEducation) <-c("Education","Practice", "Agree","Not sure","Somewhat disagree","Strongly agree","Strongly disagree", "NA")
+col_orderEducation <- c("Education","Practice","Strongly disagree", "Somewhat disagree", "NA", "Not sure", "Agree", "Strongly agree")
+Uga_LikertEducation <- Uga_LikertEducation[, col_orderEducation]
+Uga_LikertEducation$'NA'[is.na(Uga_LikertEducation$'NA')] <- 0
+
+
+
+Uga_LikertPlotEducation <-HH::likert(Practice ~ .|Education, data = Uga_LikertEducation, layout=c(1,4), ylab=NULL, as.percent=TRUE, main = list("How much do you trust workers and experts giving you \n information about COVID?",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#E94E1B", "#F7AA4E", "#BEBEBE", "#a6a6a6", "#6193CE", "#00508C"), ReferenceZero = 4 , scales=list(y=list(relation="free")), between=list(y=1), positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.8, lines=3, x = unit(.25,"npc")), cex=1, resize.height.tuning=2)   
+plot(Uga_LikertPlotEducation)
+
+
+```
+
+# Q11 During this COVID-19 pandemic, have you seeked or gone for other essential health care services such as antenatal care, immunization, HIV, diabetes, as advised by your healthcare provider?
+
+```{r}
+HIV_Uga<-new_df(HIV_Uga,Uganda_raw1,"essential_health_services",label,"essential_health_services")
+Barriers(HIV_Uga,essential_health_services,Percentage,Percentage,label,"Have you seeked or gone for other essential health care services such as antenatal care, immunization, HIV,\ndiabetes, as advised by your healthcare provider?","Percentage of Respondents", essential_health_services, essential_health_services, Percentage)
+
+
+```
+
+# Q11 During this COVID-19 pandemic, have you seeked or gone for other essential health care services such as antenatal care, immunization, HIV, diabetes, as advised by your healthcare provider? by Sex
+```{r}
+#HIV_Uga_sex<-category_df(HIV_Uga_sex,Uganda_raw1,Gender,essential_health_services,"rad_perct",label,"Gender","essential_health_services","Recipients","Percentage","label")
+
+
+#Barriers_Sex(HIV_Uga_sex,essential_health_services,Percentage,Percentage,Percentage,Gender,label,Percentage,essential_health_services,Percentage,Gender,"Have you seeked or gone for other essential health care servicessuch as antenatal care, immunization, HIV,\ndiabetes, as advised by your healthcare provider?","Percentages of Respondents by Sex")
+```
+
+# Q11 During this COVID-19 pandemic, have you seeked or gone for other essential health care services such as antenatal care, immunization, HIV, diabetes, as advised by your healthcare provider? by Age
+```{r}
+HIV_Uga_Age<-category_df(HIV_Uga_Age,Uganda_raw1,Age,essential_health_services,"rad_perct",label,"Age","essential_health_services","Recipients","Percentage","label")
+
+Barriers_Age(HIV_Uga_Age,essential_health_services,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,essential_health_services,Percentage,Age,NULL,"Have you seeked or gone for other essential health care servicessuch as antenatal care, immunization, HIV,\ndiabetes, as advised by your healthcare provider?","Percentages of Respondents by Age")
+
+
+
+
+```
+
+# Q11 During this COVID-19 pandemic, have you seeked or gone for other essential health care services such as antenatal care, immunization, HIV, diabetes, as advised by your healthcare provider? by Setting
+```{r}
+HIV_Uga_Setting<-category_df(HIV_Uga_Setting,Uganda_raw1,Setting,essential_health_services,"rad_perct",label,"Setting","essential_health_services","Recipients","Percentage","label")
+
+Barriers_Age(HIV_Uga_Setting,essential_health_services,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,essential_health_services,Percentage,Setting,NULL,"Have you seeked or gone for other essential health care services such as antenatal care, immunization, HIV,\ndiabetes, as advised by your healthcare provider?","Percentages of Respondents by Setting")
+
+
+```
+
+# Q11 During this COVID-19 pandemic, have you seeked or gone for other essential health care services such as antenatal care, immunization, HIV, diabetes, as advised by your healthcare provider? by Language
+```{r}
+HIV_Uga_Language<-category_df(HIV_Uga_Language,Uganda_raw1,Language,essential_health_services,"rad_perct",label,"Language","essential_health_services","Recipients","Percentage","label")
+
+Barriers_Age(HIV_Uga_Language,essential_health_services,Percentage,Percentage,Percentage,Language,~Language,2,label,Percentage,essential_health_services,Percentage,Language,NULL,"Have you seeked or gone for other essential health care servicessuch as antenatal care, immunization, HIV,\ndiabetes, as advised by your healthcare provider?","Percentages of Respondents by Language")
+
+
+```
+
+
+# Q11 During this COVID-19 pandemic, have you seeked or gone for other essential health care services such as antenatal care, immunization, HIV, diabetes, as advised by your healthcare provider? by Education
+
+```{r}
+HIV_Uga_Education<-category_df(HIV_Uga_Education,Uganda_raw1,Education,essential_health_services,"rad_perct",label,"Education","essential_health_services","Recipients","Percentage","label")
+
+Barriers_Age(HIV_Uga_Education,essential_health_services,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,essential_health_services,Percentage,Education,NULL,"Have you seeked or gone for other essential health care servicessuch as antenatal care, immunization, HIV,\ndiabetes, as advised by your healthcare provider?","Percentages of Respondents by Education")
+
+```
+
+
+# Q11 During this COVID-19 pandemic, have you seeked or gone for other essential health care services such as antenatal care, immunization, HIV, diabetes, as advised by your healthcare provider? by Sex and Setting
+
+```{r}
+#HIV_Uga_rural_urban<-urban_rural(HIV_Uga_rural,Uganda_raw1,Setting,Gender,essential_health_services,essential_health_services_perct,"Setting","Gender","essential_health_services_perct","Percent_essential_health_services_set")
+
+
+
+#setting_gender(HIV_Uga_rural_urban,essential_health_services_perct,Percent_essential_health_services_set,"Have you seeked or gone for other essential health care servicessuch as antenatal care, immunization, HIV,\ndiabetes, as advised by your healthcare provider?","Percentages of Respondents by by Sex and Setting")
+```
+
+# Q12 When schools reopen will you send your children back to school?
+
+```{r}
+Schools_Uga<-new_df(Schools_Uga,Uganda_raw1Parents,"schools_reopen",label,"schools_reopen")
+Barriers(Schools_Uga,schools_reopen,Percentage,Percentage,label,"When schools reopen will you send your children back to school?","Percentage of Respondents with school age children", schools_reopen, schools_reopen, Percentage)
+
+
+```
+
+# Q12 When schools reopen will you send your children back to school? by Sex
+```{r}
+#Schools_Uga_sex<-category_df(Schools_Uga_sex,Uganda_raw1,Gender,schools_reopen,"rad_perct",label,"Gender","schools_reopen","Recipients","Percentage","label")
+
+
+#Barriers_Sex(Schools_Uga_sex,schools_reopen,Percentage,Percentage,Percentage,Gender,label,Percentage,schools_reopen,Percentage,Gender,"When schools reopen will you send your children back to school?","Percentage of Respondents with school age children")
+```
+
+# Q12 When schools reopen will you send your children back to school? by Age
+```{r}
+Schools_Uga_Age<-category_df(Schools_Uga_Age,Uganda_raw1Parents,Age,schools_reopen,"rad_perct",label,"Age","schools_reopen","Recipients","Percentage","label")
+
+Barriers_Age(Schools_Uga_Age,schools_reopen,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,schools_reopen,Percentage,Age,NULL,"When schools reopen will you send your children back to school?","Percentage of Respondents with school age children, by Age")
+
+
+
+
+```
+
+# Q12 When schools reopen will you send your children back to school? by Setting
+```{r}
+Schools_Uga_Setting<-category_df(Schools_Uga_Setting,Uganda_raw1Parents,Setting,schools_reopen,"rad_perct",label,"Setting","schools_reopen","Recipients","Percentage","label")
+
+Barriers_Age(Schools_Uga_Setting,schools_reopen,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,schools_reopen,Percentage,Setting,NULL,"When schools reopen will you send your children back to school?","Percentage of Respondents with school age children, by Setting")
+
+
+```
+
+# Q12 When schools reopen will you send your children back to school? by Language
+```{r}
+Schools_Uga_Language<-category_df(Schools_Uga_Language,Uganda_raw1Parents,Language,schools_reopen,"rad_perct",label,"Language","schools_reopen","Recipients","Percentage","label")
+
+Barriers_Age(Schools_Uga_Language,schools_reopen,Percentage,Percentage,Percentage,Language,~Language,2,label,Percentage,schools_reopen,Percentage,Language,NULL,"When schools reopen will you send your children back to school?","Percentage of Respondents with school age children, by Language")
+
+
+```
+
+
+# Q12 When schools reopen will you send your children back to school? by Education
+
+```{r}
+Schools_Uga_Education<-category_df(Schools_Uga_Education,Uganda_raw1Parents,Education,schools_reopen,"rad_perct",label,"Education","schools_reopen","Recipients","Percentage","label")
+
+Barriers_Age(Schools_Uga_Education,schools_reopen,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,schools_reopen,Percentage,Education,NULL,"When schools reopen will you send your children back to school?","Percentage of Respondents with school age children, by Education")
+
+```
+
+
+# Q12 When schools reopen will you send your children back to school? by Sex and Setting
+
+```{r}
+#Schools_Uga_rural_urban<-urban_rural(Schools_Uga_rural,Uganda_raw1,Setting,Gender,schools_reopen,schools_reopen_perct,"Setting","Gender","schools_reopen_perct","Percent_schools_reopen_set")
+
+
+
+#setting_gender(Schools_Uga_rural_urban,schools_reopen_perct,Percent_schools_reopen_set,"When schools reopen will you send your children back to school?","Percentage of Respondents with school age children, by Sex and Setting")
+```
+
+# Q13 What is the main barrier for you to see a health care provider?
+
+```{r}
+BarrierHealth_Uga<-new_df(BarrierHealth_Uga,Uganda_raw1,"barrier_health",label,"barrier_health")
+Barriers(BarrierHealth_Uga,barrier_health,Percentage,Percentage,label,"What is the main barrier for you to see a health care provider?","Percentage of Respondents", barrier_health, barrier_health, Percentage)
+
+
+```
+
+# Q13 What is the main barrier for you to see a health care provider? by Sex
+```{r}
+#BarrierHealth_Uga_sex<-category_df(BarrierHealth_Uga_sex,Uganda_raw1,Gender,barrier_health,"rad_perct",label,"Gender","barrier_health","Recipients","Percentage","label")
+
+
+#Barriers_Sex(BarrierHealth_Uga_sex,barrier_health,Percentage,Percentage,Percentage,Gender,label,Percentage,barrier_health,Percentage,Gender,"What is the main barrier for you to see a health care provider?","Percentages of Respondents by Sex")
+```
+
+# Q13 What is the main barrier for you to see a health care provider? by Age
+```{r}
+BarrierHealth_Uga_Age<-category_df(BarrierHealth_Uga_Age,Uganda_raw1,Age,barrier_health,"rad_perct",label,"Age","barrier_health","Recipients","Percentage","label")
+
+Barriers_Age(BarrierHealth_Uga_Age,barrier_health,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,barrier_health,Percentage,Age,NULL,"What is the main barrier for you to see a health care provider?","Percentages of Respondents by Age")
+
+
+
+
+```
+
+# Q13 What is the main barrier for you to see a health care provider? by Setting
+```{r}
+BarrierHealth_Uga_Setting<-category_df(BarrierHealth_Uga_Setting,Uganda_raw1,Setting,barrier_health,"rad_perct",label,"Setting","barrier_health","Recipients","Percentage","label")
+
+Barriers_Age(BarrierHealth_Uga_Setting,barrier_health,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,barrier_health,Percentage,Setting,NULL,"What is the main barrier for you to see a health care provider?","Percentages of Respondents by Setting")
+
+
+```
+
+# Q13 What is the main barrier for you to see a health care provider? by Language
+```{r}
+BarrierHealth_Uga_Language<-category_df(BarrierHealth_Uga_Language,Uganda_raw1,Language,barrier_health,"rad_perct",label,"Language","barrier_health","Recipients","Percentage","label")
+
+Barriers_Age(BarrierHealth_Uga_Language,barrier_health,Percentage,Percentage,Percentage,Language,~Language,2,label,Percentage,barrier_health,Percentage,Language,NULL,"What is the main barrier for you to see a health care provider?","Percentages of Respondents by Language")
+
+
+```
+
+
+# Q13 What is the main barrier for you to see a health care provider? by Education
+
+```{r}
+BarrierHealth_Uga_Education<-category_df(BarrierHealth_Uga_Education,Uganda_raw1,Education,barrier_health,"rad_perct",label,"Education","barrier_health","Recipients","Percentage","label")
+
+Barriers_Age(BarrierHealth_Uga_Education,barrier_health,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,barrier_health,Percentage,Education,NULL,"What is the main barrier for you to see a health care provider?","Percentages of Respondents by Education")
+
+```
+
+
+# Q13 What is the main barrier for you to see a health care provider? by Sex and Setting
+
+```{r}
+#BarrierHealth_Uga_rural_urban<-urban_rural(BarrierHealth_Uga_rural,Uganda_raw1,Setting,Gender,barrier_health,barrier_health_perct,"Setting","Gender","barrier_health_perct","Percent_barrier_health_set")
+
+
+
+#setting_gender(BarrierHealth_Uga_rural_urban,barrier_health_perct,Percent_barrier_health_set,"What is the main barrier for you to see a health care provider? ","Percentages of Respondents by by Sex and Setting")
+```
+
+
+# Q14 Which source of information do you trust the most about COVID-19?
+```{r}
+Most_trust_source_Pak<-new_df(Most_trust_source_Pak,Uganda_raw1,"Most_trust_source",label,"Most_trust_source")
+Barriers(Most_trust_source_Pak,Most_trust_source,Percentage,Percentage,label,"What is the most trusted source of information you rely on about COVID19?","Percent of Respondents",Most_trust_source,Most_trust_source,Percentage)
+```
+
+
+# Q14 Which source of information do you trust the most about COVID-19? by Sex
+```{r}
+#Uga_Most_trust_source_sex<-category_df(Uga_Most_trust_source_sex,Uganda_raw1,Gender,Most_trust_source,"rad_perct",label,"Gender","Most_trust_source","Recipients","Percentage","label")
+
+
+#Barriers_Sex(Uga_Most_trust_source_sex,Most_trust_source,Percentage,Percentage,Percentage,Gender,label,Percentage,Most_trust_source,Percentage,Gender,"What is the most trusted source of information you rely on about COVID19?","Percentages of Respondents by Sex")
+```
+
+
+# Q14 Which source of information do you trust the most about COVID-19? by Age
+```{r}
+Uga_Most_trust_source_Age<-category_df(Uga_Most_trust_source_Age,Uganda_raw1,Age,Most_trust_source,"rad_perct",label,"Age","Most_trust_source","Recipients","Percentage","label")
+
+Barriers_Age(Uga_Most_trust_source_Age,Most_trust_source,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,Most_trust_source,Percentage,Age,NULL,"What is the most trusted source of information you rely on about COVID19?","Percentages of Respondents by Age")
+
+
+```
+
+
+# Q14 Which source of information do you trust the most about COVID-19? by Setting
+```{r}
+Uga_Most_trust_source_Setting<-category_df(Uga_Most_trust_source_Setting,Uganda_raw1,Setting,Most_trust_source,"rad_perct",label,"Setting","Most_trust_source","Recipients","Percentage","label")
+
+Barriers_Age(Uga_Most_trust_source_Setting,Most_trust_source,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,Most_trust_source,Percentage,Setting,NULL,"What is the most trusted source of information you rely on about COVID19?","Percentages of Respondents by Setting")
+
+
+```
+
+
+# Q14 Which source of information do you trust the most about COVID-19? by Language
+```{r}
+Uga_Most_trust_source_Language<-category_df(Uga_Most_trust_source_Language,Uganda_raw1,Language,Most_trust_source,"rad_perct",label,"Language","Most_trust_source","Recipients","Percentage","label")
+
+Barriers_Age(Uga_Most_trust_source_Language,Most_trust_source,Percentage,Percentage,Percentage,Language,~Language,2,label,Percentage,Most_trust_source,Percentage,Language,NULL,"What is the most trusted source of information you rely on about COVID19?","Percentages of Respondents by Language")
+
+
+```
+
+
+# Q14 Which source of information do you trust the most about COVID-19? by Education
+```{r}
+Uga_Most_trust_source_Education<-category_df(Uga_Most_trust_source_Education,Uganda_raw1,Education,Most_trust_source,"rad_perct",label,"Education","Most_trust_source","Recipients","Percentage","label")
+
+Barriers_Age(Uga_Most_trust_source_Education,Most_trust_source,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,Most_trust_source,Percentage,Education,NULL,"What is the most trusted source of information you rely on about COVID19?","Percentages of Respondents by Education")
+
+```
+
+
+# Q14 Which source of information do you trust the most about COVID-19? by Sex and Setting
+```{r}
+#Uga_Most_trust_source_rural_urban<-urban_rural(Uga_Most_trust_source_rural,Uganda_raw1,Setting,Gender,Most_trust_source,Most_trust_source_perct,"Setting","Gender","Most_trust_source_perct","Percent_Most_trust_source_set")
+
+
+
+#setting_gender(Uga_Most_trust_source_rural_urban,Most_trust_source_perct,Percent_Most_trust_source_set,"What is the most trusted source of information you rely on about COVID19?","Percentages of Respondents by by Sex and Setting")
+```
+
+
+# Q15 What is the MAIN reason you trust this source?
+```{r}
+reason_trust_Pak<-new_df(reason_trust_Pak,Uganda_raw1,"reason_trust",label,"reason_trust")
+Barriers(reason_trust_Pak,reason_trust,Percentage,Percentage,label,"What is the main reason you trust this source?","Percent of Respondents",reason_trust,reason_trust,Percentage)
+```
+```{r}
+#Uga_reason_trust_sex<-category_df(Uga_reason_trust_sex,Uganda_raw1,Gender,reason_trust,"rad_perct",label,"Gender","reason_trust","Recipients","Percentage","label")
+
+
+#Barriers_Sex(Uga_reason_trust_sex,reason_trust,Percentage,Percentage,Percentage,Gender,label,Percentage,reason_trust,Percentage,Gender,"What is the main reason you trust this source?","Percentages of Respondents by Sex")
+```
+
+
+
+# Q15 What is the MAIN reason you trust this source? by Age
+```{r}
+Uga_reason_trust_Age<-category_df(Uga_reason_trust_Age,Uganda_raw1,Age,reason_trust,"rad_perct",label,"Age","reason_trust","Recipients","Percentage","label")
+
+Barriers_Age(Uga_reason_trust_Age,reason_trust,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,reason_trust,Percentage,Age,NULL,"What is the main reason you trust this source?","Percentages of Respondents by Age")
+
+
+```
+
+
+
+# Q15 What is the MAIN reason you trust this source? by Setting
+```{r}
+Uga_reason_trust_Setting<-category_df(Uga_reason_trust_Setting,Uganda_raw1,Setting,reason_trust,"rad_perct",label,"Setting","reason_trust","Recipients","Percentage","label")
+
+Barriers_Age(Uga_reason_trust_Setting,reason_trust,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,reason_trust,Percentage,Setting,NULL,"What is the main reason you trust this source?","Percentages of Respondents by Setting")
+
+
+```
+
+
+# Q15 What is the MAIN reason you trust this source? by Language
+```{r}
+Uga_reason_trust_Language<-category_df(Uga_reason_trust_Language,Uganda_raw1,Language,reason_trust,"rad_perct",label,"Language","reason_trust","Recipients","Percentage","label")
+
+Barriers_Age(Uga_reason_trust_Language,reason_trust,Percentage,Percentage,Percentage,Language,~Language,2,label,Percentage,reason_trust,Percentage,Language,NULL,"What is the main reason you trust this source?","Percentages of Respondents by Language")
+
+
+```
+
+
+
+# Q15 What is the MAIN reason you trust this source? by Education
+```{r}
+Uga_reason_trust_Education<-category_df(Uga_reason_trust_Education,Uganda_raw1,Education,reason_trust,"rad_perct",label,"Education","reason_trust","Recipients","Percentage","label")
+
+Barriers_Age(Uga_reason_trust_Education,reason_trust,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,reason_trust,Percentage,Education,NULL,"What is the main reason you trust this source?","Percentages of Respondents by Education")
+
+```
+
+# Q15 What is the MAIN reason you trust this source? by Sex and Setting
+```{r}
+#Uga_reason_trust_source_rural_urban<-urban_rural(Uga_reason_trust_source_rural_urban,Uganda_raw1,Setting,Gender,reason_trust,reson_trust_source_perct,"Setting","Gender","reason_trust_source_perct","Percent_reason_trust_source_set")
+
+
+
+#setting_gender(Uga_reason_trust_source_rural_urban,reason_trust_source_perct,Percent_reason_trust_source_set,"What is the main reason you trust this source?","Percentages of Respondents by by Sex and Setting")
+```
+
+
+# Q16 Which community groups do you trust the MOST to support the community-based actions during COVID-19?
+```{r}
+community_groups_Pak<-new_df(community_groups_Pak,Uganda_raw1,"community_groups",label,"community_groups")
+Barriers(community_groups_Pak,community_groups,Percentage,Percentage,label,"Which community groups do you trust the MOST to support the community-based actions during COVID-19?","Percent of Respondents",community_groups,community_groups,Percentage)
+```
+
+
+# Q16 Which community groups do you trust the MOST to support the community-based actions during COVID-19? by Sex
+```{r}
+#Uga_community_groups_sex<-category_df(Uga_community_groups_sex,Uganda_raw1,Gender,community_groups,"rad_perct",label,"Gender","community_groups","Recipients","Percentage","label")
+
+
+#Barriers_Sex(Uga_community_groups_sex,community_groups,Percentage,Percentage,Percentage,Gender,label,Percentage,community_groups,Percentage,Gender,"Which community groups do you trust the MOST to support the community-based actions during COVID-19?","Percentages of Respondents by Sex")
+```
+
+
+# Q16 Which community groups do you trust the MOST to support the community-based actions during COVID-19? by Age
+```{r}
+Uga_community_groups_Age<-category_df(Uga_community_groups_Age,Uganda_raw1,Age,community_groups,"rad_perct",label,"Age","community_groups","Recipients","Percentage","label")
+
+Barriers_Age(Uga_community_groups_Age,community_groups,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,community_groups,Percentage,Age,NULL,"Which community groups do you trust the MOST to support the community-based actions during COVID-19?","Percentages of Respondents by Age")
+
+
+```
+
+
+# Q16 Which community groups do you trust the MOST to support the community-based actions during COVID-19? by Setting
+```{r}
+Uga_community_groups_Setting<-category_df(Uga_community_groups_Setting,Uganda_raw1,Setting,community_groups,"rad_perct",label,"Setting","community_groups","Recipients","Percentage","label")
+
+Barriers_Age(Uga_community_groups_Setting,community_groups,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,community_groups,Percentage,Setting,NULL,"What is the most trusted source of information you rely on about COVID19?","Percentages of Respondents by Setting")
+
+
+```
+
+
+# Q16 Which community groups do you trust the MOST to support the community-based actions during COVID-19? by Language
+```{r}
+Uga_community_groups_Language<-category_df(Uga_community_groups_Language,Uganda_raw1,Language,community_groups,"rad_perct",label,"Language","community_groups","Recipients","Percentage","label")
+
+Barriers_Age(Uga_community_groups_Language,community_groups,Percentage,Percentage,Percentage,Language,~Language,2,label,Percentage,community_groups,Percentage,Language,NULL,"Which community groups do you trust the MOST to support the community-based actions during COVID-19?","Percentages of Respondents by Language")
+
+
+```
+
+
+# Q16 Which community groups do you trust the MOST to support the community-based actions during COVID-19? by Education
+```{r}
+Uga_community_groups_Education<-category_df(Uga_community_groups_Education,Uganda_raw1,Education,community_groups,"rad_perct",label,"Education","community_groups","Recipients","Percentage","label")
+
+Barriers_Age(Uga_community_groups_Education,community_groups,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,community_groups,Percentage,Education,NULL,"Which community groups do you trust the MOST to support the community-based actions during COVID-19?","Percentages of Respondents by Education")
+
+```
+
+
+# Q16 Which community groups do you trust the MOST to support the community-based actions during COVID-19? by Sex and Setting
+```{r}
+#Uga_community_groups_rural_urban<-urban_rural(Uga_community_groups_rural,Uganda_raw1,Setting,Gender,community_groups,community_groups_perct,"Setting","Gender","community_groups_perct","Percent_community_groups_set")
+
+
+
+#setting_gender(Uga_community_groups_rural_urban,community_groups_perct,Percent_community_groups_set,"Which community groups do you trust the MOST to support the community-based actions during COVID-19?","Percentages of Respondents by by Sex and Setting")
+```
+
+
+
+# Q17 In the past month, how confident are you in providing what is needed for your family during the pandemic?
+```{r fig.dim=c(10,6)}
+confident_provide_pak <-plyr::count(Uganda_raw1$confident_provide)
+confident_provide_pak <- spread(confident_provide_pak, x, freq)
+confident_provide_pak$Area <-"Confidence level" 
+names(confident_provide_pak) <- c("Not Confident at all","Not Sure","Not very Confident","Somewhat Confident","Very Confident","NA","Area")
+col_order2 <- c("Area","NA","Not Confident at all","Not very Confident", "Not Sure","Somewhat Confident","Very Confident")
+confident_provide_pak <- confident_provide_pak[, col_order2]
+
+confident_provide_pak <- confident_provide_pak %>% dplyr::mutate_if(is.character,as.factor)
+confident_provide_pak <- as.data.frame(confident_provide_pak)
+
+
+confident_provide_plot <-HH::likert(Area ~ ., data = confident_provide_pak, ylab=NULL, as.percent=TRUE, main = list("How confident are you in providing what is needed for your family\n during this pandemic?",x=unit(.55, "npc")), sub= list("Confidence Levels Distribution",x=unit(.57, "npc")),xlim=c(-100,-80,-60,-40,-20,0,20,40,60,80,100), col=c("#a6a6a6" ,"#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C" ), rightAxis = FALSE, ReferenceZero=4)
+plot(confident_provide_plot)
+
+
+
+```
+
+
+# Q17 In the past month, how confident are you in providing what is needed for your family during the pandemic? by Age
+```{r fig.dim=c(10,8)}
+confident_provide_Age<-Uganda_raw1%>% group_by(Age)  %>% count(confident_provide)
+confident_provide_Age<- spread(confident_provide_Age,confident_provide, n)
+confident_provide_Age$Area <- "Confidence level"
+names(confident_provide_Age) <- c("Age","Not Confident at all","Not Sure","Not very Confident","Somewhat Confident","Very Confident","NA","Area")
+col_order3 <- c("Age","Area","NA","Not Confident at all","Not very Confident", "Not Sure","Somewhat Confident","Very Confident")
+confident_provide_Age<- confident_provide_Age[, col_order3]
+confident_provide_Age$'NA'[is.na(confident_provide_Age$'NA')] <- 0
+
+
+
+confident_provide_Age_plot<-HH::likert(Area ~ .|Age, data = confident_provide_Age, layout=c(1,5), ylab=NULL, as.percent=TRUE, main = list("How confident are you in providing what is needed for your family\n during this pandemic?",x=unit(.55, "npc")), sub= list("By Sex",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#a6a6a6","#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=4, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.7, lines=3, x = unit(.25,"npc")), cex=1, resize.height.tuning=2)   
+plot(confident_provide_Age_plot)
+
+
+```
+
+
+# Q17 In the past month, how confident are you in providing what is needed for your family during the pandemic? by Setting
+```{r fig.dim=c(10,4)}
+confident_provide_Setting<-Uganda_raw1%>% group_by(Setting)  %>% count(confident_provide)
+confident_provide_Setting<- spread(confident_provide_Setting,confident_provide, n)
+confident_provide_Setting$Area <- "Confidence level"
+names(confident_provide_Setting) <- c("Setting","Not Confident at all","Not Sure","Not very Confident","Somewhat Confident","Very Confident","NA","Area")
+col_order3 <- c("Setting","Area","NA","Not Confident at all","Not very Confident", "Not Sure","Somewhat Confident","Very Confident")
+confident_provide_Setting<- confident_provide_Setting[, col_order3]
+confident_provide_Setting$'NA'[is.na(confident_provide_Setting$'NA')] <- 0
+
+
+
+confident_provide_Setting_plot<-HH::likert(Area ~ .|Setting, data = confident_provide_Setting, layout=c(1,2), ylab=NULL, as.percent=TRUE, main = list("How confident are you in providing what is needed for your family\n during this pandemic?",x=unit(.55, "npc")), sub= list("By Sex",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#a6a6a6","#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=4, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=1, lines=1, x = unit(.25,"npc")), cex=1, resize.height.tuning=2)   
+plot(confident_provide_Setting_plot)
+
+```
+
+
+# Q17 In the past month, how confident are you in providing what is needed for your family during the pandemic? by Language
+```{r fig.dim=c(10,8)}
+confident_provide_Language<-Uganda_raw1%>% group_by(Language)  %>% count(confident_provide)
+confident_provide_Language<- spread(confident_provide_Language,confident_provide, n)
+confident_provide_Language$Area <- "Confidence level"
+names(confident_provide_Language) <- c("Language","Not Confident at all","Not Sure","Not very Confident","Somewhat Confident","Very Confident","NA","Area")
+col_order3 <- c("Language","Area","NA","Not Confident at all","Not very Confident", "Not Sure","Somewhat Confident","Very Confident")
+confident_provide_Language<- confident_provide_Language[, col_order3]
+confident_provide_Language$'NA'[is.na(confident_provide_Language$'NA')] <- 0
+confident_provide_Language$`Not Sure`[is.na(confident_provide_Language$`Not Sure`)] <- 0
+confident_provide_Language$`Not very Confident`[is.na(confident_provide_Language$`Not very Confident`)] <- 0
+confident_provide_Language$`Not Confident at all`[is.na(confident_provide_Language$`Not Confident at all`)] <- 0
+
+
+confident_provide_Language_plot<-HH::likert(Area ~ .|Language, data = confident_provide_Language, layout=c(1,7), ylab=NULL, as.percent=TRUE, main = list("How confident are you in providing what is needed for your family\n during this pandemic?",x=unit(.55, "npc")), sub= list("By Sex",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#a6a6a6","#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=4, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.7, lines=3, x = unit(.25,"npc")), cex=1, resize.height.tuning=2)   
+plot(confident_provide_Language_plot)
+
+```
+
+# Q17 In the past month, how confident are you in providing what is needed for your family during the pandemic? by Education
+```{r fig.dim=c(10,8)}
+confident_provide_Education<-Uganda_raw1%>% group_by(Education)  %>% count(confident_provide)
+confident_provide_Education<- spread(confident_provide_Education,confident_provide, n)
+confident_provide_Education$Area <- "Confidence level"
+names(confident_provide_Education) <- c("Education","Not Confident at all","Not Sure","Not very Confident","Somewhat Confident","Very Confident","NA","Area")
+col_order3 <- c("Education","Area","NA","Not Confident at all","Not very Confident", "Not Sure","Somewhat Confident","Very Confident")
+confident_provide_Education<- confident_provide_Education[, col_order3]
+confident_provide_Education$'NA'[is.na(confident_provide_Education$'NA')] <- 0
+
+
+
+confident_provide_Education_plot<-HH::likert(Area ~ .|Education, data = confident_provide_Education, layout=c(1,4), ylab=NULL, as.percent=TRUE, main = list("How confident are you in providing what is needed for your family\n during this pandemic?",x=unit(.55, "npc")), sub= list("By Sex",x=unit(.57, "npc")),xlim=c(-100,0,20,40,60,80,100), col=c("#a6a6a6","#E94E1B", "#F7AA4E", "#BEBEBE", "#6193CE", "#00508C"), scales=list(y=list(relation="free")), between=list(y=1), ReferenceZero=4, positive.order=TRUE, strip.left= TRUE, strip = FALSE, par.strip.text=list(cex=.7, lines=3, x = unit(.25,"npc")), cex=1, resize.height.tuning=2)   
+plot(confident_provide_Education_plot)
+
+```
+
+
+# Q18 During the past month, did anyone in your household engage in any of the following behaviours due to loss of income because of COVID-19? Please select the one that applies most to you 
+```{r}
+coping_strategies_Pak<-new_df(coping_strategies_Pak,Uganda_raw1,"coping_strategies",label,"coping_strategies")
+Barriers(coping_strategies_Pak,coping_strategies,Percentage,Percentage,label,"Coping Strategies","Percent of Respondents",coping_strategies,coping_strategies,Percentage)
+```
+
+
+# Q18 During the past month, did anyone in your household engage in any of the following behaviours due to loss of income because of COVID-19? Please select the one that applies most to you.by Sex
+```{r}
+#Uga_coping_strategies_sex<-category_df(Uga_coping_strategies_sex,Uganda_raw1,Gender,coping_strategies,"rad_perct",label,"Gender","coping_strategies","Recipients","Percentage","label")
+
+
+#Barriers_Sex(Uga_coping_strategies_sex,coping_strategies,Percentage,Percentage,Percentage,Gender,label,Percentage,coping_strategies,Percentage,Gender,"Coping Strategies","Percentages of Respondents by Sex")
+```
+
+
+# Q18 During the past month, did anyone in your household engage in any of the following behaviours due to loss of income because of COVID-19? Please select the one that applies most to you by Age
+```{r}
+Uga_coping_strategies_Age<-category_df(Uga_coping_strategies_Age,Uganda_raw1,Age,coping_strategies,"rad_perct",label,"Age","coping_strategies","Recipients","Percentage","label")
+
+Barriers_Age(Uga_coping_strategies_Age,coping_strategies,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,coping_strategies,Percentage,Age,NULL,"Coping Strategies","Percentages of Respondents by Age")
+
+
+```
+
+
+# Q18 During the past month, did anyone in your household engage in any of the following behaviours due to loss of income because of COVID-19? Please select the one that applies most to you by Setting
+```{r}
+Uga_coping_strategies_Setting<-category_df(Uga_coping_strategies_Setting,Uganda_raw1,Setting,coping_strategies,"rad_perct",label,"Setting","coping_strategies","Recipients","Percentage","label")
+
+Barriers_Age(Uga_coping_strategies_Setting,coping_strategies,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,coping_strategies,Percentage,Setting,NULL,"Coping Strategies","Percentages of Respondents by Setting")
+
+
+```
+
+
+# Q18 During the past month, did anyone in your household engage in any of the following behaviours due to loss of income because of COVID-19? Please select the one that applies most to you by Language
+```{r}
+Uga_coping_strategies_Language<-category_df(Uga_coping_strategies_Language,Uganda_raw1,Language,coping_strategies,"rad_perct",label,"Language","coping_strategies","Recipients","Percentage","label")
+
+Barriers_Age(Uga_coping_strategies_Language,coping_strategies,Percentage,Percentage,Percentage,Language,~Language,2,label,Percentage,coping_strategies,Percentage,Language,NULL,"Coping Strategies","Percentages of Respondents by Language")
+
+
+```
+
+
+#  Q18 During the past month, did anyone in your household engage in any of the following behaviours due to loss of income because of COVID-19? Please select the one that applies most to you by Education
+```{r}
+Uga_coping_strategies_Education<-category_df(Uga_coping_strategies_Education,Uganda_raw1,Education,coping_strategies,"rad_perct",label,"Education","coping_strategies","Recipients","Percentage","label")
+
+Barriers_Age(Uga_coping_strategies_Education,coping_strategies,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,coping_strategies,Percentage,Education,NULL,"Coping Strategies","Percentages of Respondents by Education")
+
+```
+
+
+# Q18 During the past month, did anyone in your household engage in any of the following behaviours due to loss of income because of COVID-19? Please select the one that applies most to you by Sex and Setting
+```{r}
+#Uga_coping_strategies_rural_urban<-urban_rural(Uga_coping_strategies_rural,Uganda_raw1,Setting,Gender,coping_strategies,coping_strategies_perct,"Setting","Gender","coping_strategies_perct","Percent_coping_strategies_set")
+
+
+
+#setting_gender(Uga_coping_strategies_rural_urban,coping_strategies_perct,Percent_coping_strategies_set,"Coping Strategies","Percentages of Respondents by by Sex and Setting")
+```
+
+# Q19 What is the biggest concern that you have for your children during COVID-19?
+```{r}
+concern_children_Pak<-new_df(concern_children_Pak,Uganda_raw1,"concern_children",label,"concern_children")
+Barriers(concern_children_Pak,concern_children,Percentage,Percentage,label,"The main concern that I have for my children during COVID-19 is:","Percent of Respondents",concern_children,concern_children,Percentage)
+```
+
+# Q19 What is the biggest concern that you have for your children during COVID-19? by Sex
+```{r}
+#Uga_concern_children_sex<-category_df(Uga_concern_children_sex,Uganda_raw1,Gender,concern_children,"rad_perct",label,"Gender","concern_children","Recipients","Percentage","label")
+
+
+#Barriers_Sex(Uga_concern_children_sex,concern_children,Percentage,Percentage,Percentage,Gender,label,Percentage,concern_children,Percentage,Gender,"The main concern that I have for my children during COVID-19 is:","Percentages of Respondents by Sex")
+```
+
+# Q19 What is the biggest concern that you have for your children during COVID-19? by Age
+```{r}
+Uga_concern_children_Age<-category_df(Uga_concern_children_Age,Uganda_raw1,Age,concern_children,"rad_perct",label,"Age","concern_children","Recipients","Percentage","label")
+
+Barriers_Age(Uga_concern_children_Age,concern_children,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,concern_children,Percentage,Age,NULL,"The main concern that I have for my children during COVID-19 is:","Percentages of Respondents by Age")
+
+
+```
+
+# Q19 What is the biggest concern that you have for your children during COVID-19? by Setting
+```{r}
+Uga_concern_children_Setting<-category_df(Uga_concern_children_Setting,Uganda_raw1,Setting,concern_children,"rad_perct",label,"Setting","concern_children","Recipients","Percentage","label")
+
+Barriers_Age(Uga_concern_children_Setting,concern_children,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,concern_children,Percentage,Setting,NULL,"The main concern that I have for my children during COVID-19 is:","Percentages of Respondents by Setting")
+
+
+```
+
+# Q19 What is the biggest concern that you have for your children during COVID-19? by Language
+```{r }
+Uga_concern_children_Language<-category_df(Uga_concern_children_Language,Uganda_raw1,Language,concern_children,"rad_perct",label,"Language","concern_children","Recipients","Percentage","label")
+
+Barriers_Age(Uga_concern_children_Language,concern_children,Percentage,Percentage,Percentage,Language,~Language,2,label,Percentage,concern_children,Percentage,Language,NULL,"The main concern that I have for my children during COVID-19 is:","Percentages of Respondents by Language")
+
+
+```
+
+# Q19 What is the biggest concern that you have for your children during COVID-19? by Education
+```{r }
+Uga_concern_children_Education<-category_df(Uga_concern_children_Education,Uganda_raw1,Education,concern_children,"rad_perct",label,"Education","concern_children","Recipients","Percentage","label")
+
+Barriers_Age(Uga_concern_children_Education,concern_children,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,concern_children,Percentage,Education,NULL,"The main concern that I have for my children during COVID-19 is:","Percentages of Respondents by Education")
+
+```
+ 
+# Q19 What is the biggest concern that you have for your children during COVID-19? by Sex and Setting
+```{r } 
+#Uga_concern_childrenrural_urban<-urban_rural(Uga_concern_childrenrural,Uganda_raw1,Setting,Gender,concern_children,concern_childrenperct,"Setting","Gender","concern_childrenperct","Percent_concern_childrenset")
+
+#setting_gender(Uga_concern_childrenrural_urban,concern_childrenperct,Percent_concern_childrenset,"The main concern that I have for my children during COVID-19 is:","Percentages of Respondents by by Sex and Setting")
+
+``` 
+ 
+
+# Q20 Which of the following social consequences related to COVID-19 has impacted you the MOST? 
+```{r}
+stigma_impact_Pak<-new_df(stigma_impact_Pak,Uganda_raw1,"stigma_impact",label,"stigma_impact")
+Barriers(stigma_impact_Pak,stigma_impact,Percentage,Percentage,label,"Social consequences that has had the most impact","Percent of Respondents",stigma_impact,stigma_impact,Percentage)
+```
+
+
+# Q20 Which of the following social consequences related to COVID-19 has impacted you the MOST? by Sex
+```{r}
+#Uga_stigma_impact_sex<-category_df(Uga_stigma_impact_sex,Uganda_raw1,Gender,stigma_impact,"rad_perct",label,"Gender","stigma_impact","Recipients","Percentage","label")
+
+
+#Barriers_Sex(Uga_stigma_impact_sex,stigma_impact,Percentage,Percentage,Percentage,Gender,label,Percentage,stigma_impact,Percentage,Gender,"Social consequences that has had the most impact","Percentages of Respondents by Sex")
+
+```
+
+
+# Q20 Which of the following social consequences related to COVID-19 has impacted you the MOST? by Age
+```{r}
+Uga_stigma_impact_Age<-category_df(Uga_stigma_impact_Age,Uganda_raw1,Age,stigma_impact,"rad_perct",label,"Age","stigma_impact","Recipients","Percentage","label")
+
+Barriers_Age(Uga_stigma_impact_Age,stigma_impact,Percentage,Percentage,Percentage,Age,~Age,2,label,Percentage,stigma_impact,Percentage,Age,NULL,"Social consequences that has had the most impact","Percentages of Respondents by Age")
+
+```
+
+
+# Q20 Which of the following social consequences related to COVID-19 has impacted you the MOST? by Setting
+```{r}
+Uga_stigma_impact_Setting<-category_df(Uga_stigma_impact_Setting,Uganda_raw1,Setting,stigma_impact,"rad_perct",label,"Setting","stigma_impact","Recipients","Percentage","label")
+
+Barriers_Age(Uga_stigma_impact_Setting,stigma_impact,Percentage,Percentage,Percentage,Setting,~Setting,1,label,Percentage,stigma_impact,Percentage,Setting,NULL,"What is the most trusted source of information you rely on about COVID19?","Percentages of Respondents by Setting")
+
+```
+
+
+# Q20 Which of the following social consequences related to COVID-19 has impacted you the MOST? by Language
+```{r}
+Uga_stigma_impact_Language<-category_df(Uga_stigma_impact_Language,Uganda_raw1,Language,stigma_impact,"rad_perct",label,"Language","stigma_impact","Recipients","Percentage","label")
+
+Barriers_Age(Uga_stigma_impact_Language,stigma_impact,Percentage,Percentage,Percentage,Language,~Language,2,label,Percentage,stigma_impact,Percentage,Language,NULL,"Social consequences that has had the most impact","Percentages of Respondents by Language")
+
+```
+
+
+# Q20 Which of the following social consequences related to COVID-19 has impacted you the MOST? by Education
+```{r}
+Uga_stigma_impact_Education<-category_df(Uga_stigma_impact_Education,Uganda_raw1,Education,stigma_impact,"rad_perct",label,"Education","stigma_impact","Recipients","Percentage","label")
+
+Barriers_Age(Uga_stigma_impact_Education,stigma_impact,Percentage,Percentage,Percentage,Education,~Education,2,label,Percentage,stigma_impact,Percentage,Education,NULL,"Social consequences that has had the most impact","Percentages of Respondents by Education")
+
+```
+
+
+# Q20 Which of the following social consequences related to COVID-19 has impacted you the MOST? by Sex and Setting
+```{r}
+#Uga_stigma_impact_rural_urban<-urban_rural(Uga_stigma_impact_rural,Uganda_raw1,Setting,Gender,stigma_impact,stigma_impact_perct,"Setting","Gender","stigma_impact_perct","Percent_stigma_impact_set")
+
+#setting_gender(Uga_stigma_impact_rural_urban,stigma_impact_perct,Percent_stigma_impact_set,"Social consequences that has had the most impact","Percentages of Respondents by by Sex and Setting")
+
+```
+
+
+
+		
+
