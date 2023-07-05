@@ -1,141 +1,117 @@
 <!DOCTYPE html>
-
+<html lang="en">
 <html>
 
 <title>Michaels Portfolio</title>
-
 <meta charset="UTF-8">
-<meta http-equiv="refresh" content="time; URL=http://michaeldestaubin.com/"/>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-<link href="https://fonts.googleapis.com/css?family=Arvo|Montserrat:300,700|Roboto:400,900" rel="stylesheet">  
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link href="https://fonts.googleapis.com/css?family=Gaegu:400,700" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Montserrat|Open+Sans" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Knewave" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Permanent+Marker" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Special+Elite" rel="stylesheet">
+    <meta http-equiv="refresh" content="time; URL=http://michaeldestaubin.com/"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/3.1.2/fullpage.min.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
 
-  <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
-  <link rel="stylesheet" href="libraries/leaflet/leaflet.css"/>
-  <script language="javascript" type="text/javascript" src="libraries/p5.js"></script>
-  <script language="javascript" type="text/javascript" src="libraries/p5.dom.js"></script> 
-  <script src="libraries/leaflet/leaflet.js"></script>
-  <script type="text/javascript" src="world-map.js"></script>  
-  <script type="text/javascript" src="lib-ETU.js"></script>  
-  <script type="text/javascript" src="town-Data.js"></script>  
+    <style>
+        .slide {
+           font-size: 3em;
+        }
+        .flex-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            text-align: left;
+        }
 
-<style>
-body,h2,h3,h4 {font-family: "Roboto", sans-serif} 
-* {
-    box-sizing: border-box;
+        .content-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .flex-item {
+            padding: 0 15px;
+        }
+
+        .flex-item img {
+            width: 90%;
+            height: auto;
+        }
+
+        .content-wrapper > .flex-item:first-child {
+            flex: 1;
+        }
+
+        .content-wrapper > .flex-item:last-child {
+            flex: 2;
+        }
+
+        .fp-slidesNav.bottom {
+            position: fixed; /* Make the dots independent from page scroll */
+            bottom: 15px; /* Place the dots near the bottom */
+            width: 100%; /* Make sure dots container span full width to correctly center them */
+            left: 0;
+            z-index: 99; /* Put the dots on top of other content */
+        }
+
+        .fp-slidesNav ul {
+            display: flex;
+            justify-content: center; /* Center the list of dots */
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+
+        #myList li {
+    margin-bottom: 30px; /* or however much space you want */
+    border-top: solid;
+    border-width: thin;
+    border-color: lightgrey;
+    margin-right: 20px;
+    margin-left: -40px;
 }
-.mySlides {display: none}
-html, body {
-    background-color: 'black';
-    padding: 0px;
-    height: 2000;
+
+#myList li {
+    list-style-type: none; /* Remove default bullet points */
+  }
+  
+
+/* The container div */
+div.scrollable {
+  scrollbar-width: thin; /* "auto" or "thin"  */
+  scrollbar-color: black; /* scrollbar color: thumb and track */
 }
-h6{font-family: 'Noto Sans', sans-serif;
-/*font-style: thin;*/
-font-size: 14px;
-text-align: justify;
+
+/* WebKit browsers like Chrome, Safari, and Opera */
+div.scrollable::-webkit-scrollbar {
+  width: 12px; /* width of the entire scrollbar */
 }
-a{font-family: "Roboto" , sans-serif;
+
+div.scrollable::-webkit-scrollbar-track {
+  background: none; /* color of the tracking area */
 }
-h5{font-family: "Roboto" , sans-serif;
-font-style: black;
-font-size: 17px;
+
+div.scrollable::-webkit-scrollbar-thumb {
+  background-color: rgba(155, 155, 155, 0.7);
+    border-radius: 20px;
+    border: 1px solid white;
 }
-h1{font-family: "Roboto" , sans-serif;
-font-style: black;
-}
-/* Center website */
-.main {
-    max-width: 1000px;
-    margin: auto;
-}
-.row {
-    margin: 10px -16px;
-}
-/* Add padding BETWEEN each column */
-.row,
-.row > .column {
-    padding: 8px;
-}
-/* Create three equal columns that floats next to each other */
-.column {
+
+/*.column {
     float: left;
     width: 33.33%;
-    display: none; /* Hide all elements by default */
+    display: none;  Hide all elements by default 
     margin-bottom: 5px;
     margin-top: 10px;
-}
+}*/
 
-.column1 {
-    float: left;
-    width: 33.33%;
-    display: none; /* Hide all elements by default */
-    margin-bottom: 5px;
-    margin-top: 10px;
-    border-style: solid;
-    border-color: black;
-}
-
-.column2 {
-    float: left;
-    width: 50%;
-    display: none; /* Hide all elements by default */
-    margin-bottom: 5px;
-    margin-top: 10px;
-    border-style: solid;
-    border-color: black;
-}
-
-ul.a {list-style-type: circle;}
-
-/* Clear floats after rows */ 
-.row:after {
-    content: "";
-    display: table;
-    clear: both;
-}
-/* Content */
-.content {
-    background-color: white;
-    /*padding: 10px;*/
-}
-/* The "show" class is added to the filtered elements */
-.show {
-  display: block;
-}
-/* Style the buttons */
-.btn {
-  border: none;
-  outline: none;
-  padding: 12px 16px;
-  background-color: white;
-  cursor: pointer;
-}
-.btn:hover {
-  background-color: #ddd;
-}
-.btn.active {
-  background-color: black;
-  color: white;
-}
-/* over lay description */
 .img__wrap {
   position: relative;
+  padding: 6px;
 }
-.img__wrap_2 {
-  position: relative;
-}
-.img__wrap_3 {
-  position: relative;
-}
+
 .img__description_layer {
   position: absolute;
   top: 0px;
@@ -152,66 +128,19 @@ ul.a {list-style-type: circle;}
   /* transition effect. not necessary */
   transition: opacity .1s, visibility .5s;
 }
-.img__description_layer_2 {
-  position: absolute;
-  top: 480px;
-  bottom: 0px;
-  left: 00px;
-  right: 0px;
-  background: rgba(255, 255, 255, 1);
-  color: black;
-  visibility: hidden;
-  opacity: 0;
-  display: flex;
-  align-items: bottom;
-  justify-content: right;
-  /* transition effect. not necessary */
-  transition: opacity .1s, visibility .1s;
-}
-.img__description_layer_3 {
-  position: absolute;
-  top: 0px;
-  bottom: 0px;
-  left: 0px;
-  right: 0px;
-  background: rgba(255, 255, 255, 1);
-  color: black;
-  visibility: hidden;
-  opacity: 0;
-  display: flex;
-  align-items: bottom;
-  justify-content: right;
-  /* transition effect. not necessary */
-  transition: opacity .1s, visibility .1s;
-}
+
 .img__wrap:hover .img__description_layer {
   visibility: visible;
   opacity: .8;
 }
-.img__wrap_2:hover .img__description_layer_2 {
-  visibility: visible;
-  opacity: .8;
-}
-.img__wrap_3:hover .img__description_layer_3 {
-  visibility: visible;
-  opacity: .8;
-}
+
 .img__description {
   transition: 0s;
   transform: translateY(0em);
   /*opacity: .7;*/
+  padding: 6px;
 }
-.img__description_2 {
-  transition: 0s;
-  transform: translateY(0em);
-  /*opacity: .7;*/
-}
-.img__description_3 {
-  padding: 20px;
-  transition: 0s;
-  transform: translateY(0em);
-  /*opacity: .7;*/
-}
+
 .img__wrap:hover .img__description {
   transform: translateY(0);}
   .skills {
@@ -220,996 +149,882 @@ ul.a {list-style-type: circle;}
   line-height: 6px;
   color: #595959;
 }
-.img__wrap_2:hover .img__description_2 {
-  transform: translateY(0);}
-  .skills {
-  text-align: bottom;
-  padding-right: 0px;
-  line-height: 6px;
-  color: #595959;
-}
-.img__wrap_3:hover .img__description_3 {
-  transform: translateY(0);}
-  .skills {
-  text-align: bottom;
-  padding-right: 0px;
-  line-height: 6px;
-  color: #595959;
-}
-.html {width: 80%; background-color: #595959;}
-.css {width: 70%; background-color: #595959;}
-.js {width: 60%; background-color: #595959;}
-.php {width: 50%; background-color: #595959;}
-#map { 
-    width: 1165px; 
-    height: 650px;
-    opacity: 1.0;
-    /*color: 'red';*/
-    color: #595959;
-    background-color: 'red';
-    margin: auto;
-    /*position: static;*/ 
-  }
-#container{
-    width:0px;
-    height:0px;
-    left:0px;
-    top:0px;
-    bottom: 0px;
-    background-color: 'white';
-    /*position:absolute;*/
-  }
-  #myDIV {
-    width: 100%;
 
-    .hero-image {
-  background-image: url("https://github.com/mdestaubin/mdestaubin.github.io/blob/master/portfolio/images/profile2.png");
-  /*height: 50%;*/
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  position: relative;
+.custom-button {
+    background-color: white;
+    border: none;
+    color: black; /* Set your desired initial text color here */
+    cursor: pointer;
+    display: inline-block;
+    font-size: 20px;
+    /*font-style: bold;*/
+    margin-left: -5px;
+    margin-top: 22px;
+    /*margin: 4px 2px;*/
+    opacity: 0;
+    text-align: center;
+    text-decoration: none;
+    transition: color 0.3s ease-in-out, opacity 1.5s; 
 }
 
-.hero-text {
-  text-align: center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
+.custom-button:hover {
+    color: blue;
 }
 
-.hero-text button {
-  border: none;
-  outline: 0;
-  display: inline-block;
-  padding: 10px 25px;
-  color: black;
-  background-color: #ddd;
-  text-align: center;
-  cursor: pointer;
-}
 
-.hero-text button:hover {
-  background-color: #555;
-  color: white;
-}
-}
-@-webkit-keyframes fade {
-  from {opacity: .4} 
-  to {opacity: 1}
-}
-@keyframes fade {
-  from {opacity: .4} 
-  to {opacity: 1}
-}
-</style>
+    </style>
+</head>
 
+<body>
+     <!-- Navigation bar -->
 
-<body class="w3-white w3-content" style="max-width:1200px">
-
-<!-- Overlay effect when opening sidebar on small screens -->
-<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
-
-<!-- !PAGE CONTENT! -->
-<div class="w3-main">
-
-  <!-- Header -->
-  <header id="photos">
-
-    <div class="w3-container w3-top">
-    <h1 style="font-size: 40px; margin-top: 0px; position: fixed; background-color:   #FFFFFF;"><b>Michael de St. Aubin</b></h1>
-    </div>
-
-    </header>
-
-    <div class="w3-bar w3-top w3-hide-small" style="max-width:1200px">
-      <div class="w3-right" id="myBtnContainer" style="margin-right: 16px">
-    
-      <!-- <span class="w3-margin-left w3-bar-item w3-white">Work :</span>  -->
-      <a href="#photos"> 
-      <button class="btn active w3-bar-item" onclick="filterSelection('all')">All</button>
-      </a>
-      <a href="#photos"> 
-      <button class="btn w3-bar-item" onclick="filterSelection('thesis')">Thesis</button>
-      <button class="btn w3-bar-item" onclick="filterSelection('technology')">Research & Technology</button>
-      <button class="btn w3-bar-item" onclick="filterSelection('architecture')">Architecture</button>
-      <!-- <button class="btn w3-bar-item" onclick="filterSelection('technology')">technology</button> -->
-      <button class="btn w3-bar-item" onclick="filterSelection('teaching')">Teaching</button>
-      </a>
-      <a href="#press">
-      <button class="btn w3-bar-item" onclick="filterSelection('all')">Publications</button>
-      </a>
-      <!-- <a href="#press" onclick="w3_close()" class="w3-bar-item w3-button w3-white"><i class="fa fa-file-text-o fa-fw w3-center"></i></a>  -->
-      <a href="#plot" onclick="w3_close()" class="w3-bar-item w3-button w3-padding w3-white"><i class=" fa fa-map-pin fa-fw w3-center"></i></a>
-      <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button w3-white"><i class="fa fa-user fa-fw w3-center"></i></a> 
-      </div>
-    </div>
-
-<!--     <div class="hero-image w3-row-padding w3-padding-64" style= "margin-bottom: 0px; margin-top: 0px">
-          <br><br>
-    <img class="column thesis architecture technology teaching img__img" src="images/profile3.png" alt="Norway" style="max-width: 500px;">
-    <div class="column thesis architecture technology teaching img__img" style="padding: 0px; width: 630px; margin-right: -0px">
-    <h1 style="font-size:30px;">Hello,</h1>
-    <p style="font-size:20px"> I'm honored to have been nominated for <b>Director-at-Large</b> at the Boston Society of Architects. If elected, I'll use my position to advocate for research and evidence based collaborations between designers and public health experts.</p>
-    <button class="w3-button" onclick="document.location='https://www.architects.org/about/bsa-aia/bsa-board-of-directors'" style="border-style: solid;border-width: 1px;">Learn More</button>
-    <br><br>
-    <img class="column thesis architecture technology teaching img__img" src="images/bsa.png" alt="bsa" style="max-width: 70px;">
-    </div>
-    </div> -->
-
-<div class="w3-container w3-padding-64">
-    <h5 style="font-size: 25px; margin-top: 25px">PROJECTS</h5>
-    </div>
-
-  <!-- Photo Grid-->
-  <div id="photos" class="w3-row-padding" style= "margin-bottom: 100px; margin-top: -50px">
-
-  <!--  </br></br> -->
-   <div class="column thesis w3-half" style = "min-width:785px;">
-       <div class="img__wrap">
-
-      <div>
-        <h5><b>VISUAL RESPONSE SIMULATOR | ViRS</b></h5>
-        </div>
-
-        <a href="https://mdestaubin.github.io/portfolio/links/thesis/index">
-      <img class="img__img" src="images/thesis.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-
-      <div class="img__description_layer w3-hide-small">
-        <div class="img__description" style="margin-top: -10px;">
-        <h5><b>VISUAL RESPONSE SIMULATOR | ViRS</b></h5>
-        <h6 style="padding: 15px;">
-        An agent-based simulation model to test infectious disease outbreak response strategies and capacities. It began as a thesis project, but is currently being developed further at the Harvard Humanitarian Initiative. 
-       </h6>
-
-         <div class="w3-border-top"style="font-size: 14px; padding: 15px">
-        <p>Graduate Thesis
-        <i class="w3-right">2017-2018</i></br>
-           <b>Harvard GSD</b>
-        <i class="w3-right">Cambridge, MA</i></br></br>
-          <!-- <b>Roles:</b></br>
-          Individual Project, Conception, Research, Code Development, UX Design, Data Visualization</br></br>
-          <b>Tools Used:</b></br>
-         ArcMap, Processing, Java, Photoshop, After Effects, Premiere -->
-         </p>
-         </div>
-
-        </div>
-       </div>
-       </a>
-
-        <!-- <h6>
-        An agent-based simulation model to test infectious disease outbreak response strategies and capacities. It began as a thesis project, but is currently being developed further at the Harvard Humanitarian Initiative.
-      </h6>
-      </div> -->
-      </div>
-    </div>
-  
-    <div class="column technology w3-third" style = "min-width:360px">
-       <div class="img__wrap">
-
-            <div>
-         <h5><b>INTERACTIVE EBOLA RESPONSE MAP</b></h5>
-         </div>
-        <a href="https://mdestaubin.github.io/ebolaMap">
-      <img class="img__img" src="images/ebolaMap.jpg" alt="Norway" style="width:100%" class="w3-hover-opacity">
-
-      <div class="img__description_layer w3-hide-small">
-        <div class="img__description" style="margin-top: -10px;">
-        <h5><b>INTERACTIVE EBOLA RESPONSE MAP</b></h5>
-        <h6 style="padding: 15px;">
-        Interactive map that contains multiple layers of data pertaining to the 2014 West Africa Ebola Outbreak and the international response to it. Completed as an assignment for a data visualization course at MIT.
-        </h6>
-
-         <div class="w3-border-top"style="font-size: 14px; padding: 15px;">
-        <p>Academic
-        <i class="w3-right">2017</i></br>
-           <b>MIT 4.S02</b>
-        <i class="w3-right">Cambridge, MA</i></br></br>
-<!--           <b>Roles: </b></br>
-          Individual Project, Conception, Research, Code Development, UX Design</br></br>
-          <b>Tools Used:</b> </br>
-         P5.js, Leaflet, Excel, HTML, CSS, JavaScript -->
-         </p>
-         </div>
-
-        </div>
-       </div>
-       
-
-
-        <!-- <h6>
-        Interactive map that contains multiple layers of data pertaining to the 2014 West Africa Ebola Outbreak and the international response to it. Completed as an assignment for a data visualization course at MIT.
-      </h6>
-      </div> -->
-      </a>
-      </div>
-    </div>
-
-    <div class="column architecture w3-third" style = "min-width:360px">
-       <div class="img__wrap">
-
-              <div>
-        <h5><b>TRIAGE + ISOLATION TREATMENT UNIT</b></h5>
-      </div>
-
-        <a href="https://mdestaubin.github.io/portfolio/links/triage/index">
-      <img class="img__img" src="images/triage.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      
-      <div class="img__description_layer w3-hide-small">
-        <div class="img__description" style="margin-top: -10px;">
-        <h5><b>TRIAGE + ISOLATION TREATMENT UNIT</b></h5>
-        <h6 style="padding: 15px;">
-        Intended as an alternate to UN temporary structures, the unit was designed in collaboration with experts at PIH as a prototype for a long-term solution to infectious disease screening at hospital entrances.
-        </h6>
-
-         <div class="w3-border-top"style="font-size: 14px; padding: 15px;">
-        <p>Professional 
-        <i class="w3-right">2015</i></br>
-           <b>Shepley Bulfinch</b>
-        <i class="w3-right">Sierra Leone + Liberia</i></br></br>
-<!--           <b>Roles: </b></br>
-          Schematic Design, Research, Space Programming, Construction Documentation</br></br>
-          <b>Tools Used:</b> </br>
-         AutoCAD, Revit, Sketchup, Photoshop, Illustrator -->
-         </p>
-         </div>
-
-        </div>
-       </div>
-       </a>
-
-      </div>
-    </div>
-
-     <div class="column architecture w3-third" style = "min-width:360px">
-       <div class="img__wrap">
-        <div>
-        <h5><b>UNIVERSITY OF GLOBAL HEALTH EQUITY</b></h5>
-        </div>
-        <a href="https://mdestaubin.github.io/portfolio/links/ughe/index">
-      <img class="img__img" src="images/UGHE.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      
-       <div class="img__description_layer w3-hide-small">
-        <div class="img__description" style="margin-top: -10px;">
-        <h5><b>UNIVERSITY OF GLOBAL HEALTH EQUITY</b></h5>
-       <h6 style="padding: 15px;">
-       Acadmic campus design for Partners in Health new global health university. The project is located in Butaro, Rwanda and will act as a regional model for future global health education hubs in Africa.
-       </h6>
-
-         <div class="w3-border-top"style="font-size: 14px; padding: 15px;">
-        <p>Professional 
-        <i class="w3-right">2015 - </i></br>
-           <b>Shepley Bulfinch</b>
-        <i class="w3-right">Rwanda</i></br>
-           <b>Partners in Health</b>
-<!--           </br></br>
-          <b>Roles: </b></br>
-          Material Research, Space Programming, Construction Documentation</br></br>
-          <b>Tools Used:</b> </br>
-         AutoCAD, Revit, Sketchup  -->
-         </p>
-         </div>
-
-        </div>
-       </div>
-      </a>
-
-<!--       <div>
-        <h5><b>UNIVERSITY OF GLOBAL HEALTH EQUITY</b></h5>
-        <h6>
-       Acadmic campus design for Partners in Health new global health university. The project is located in Butaro, Rwanda and will act as a regional model for future global health education hubs in Africa.
-      </h6>
-      </div> -->
-    </div>
-    </div>
-    
-    <div class="column architecture w3-third" style = "min-width:360px">
-       <div class="img__wrap">
-
-        <div>
-        <h5><b>WEST AFRICA HEALTH FACILITY ASSESSMENT</b></h5>
-        </div>
-
-        <a href="https://mdestaubin.github.io/portfolio/links/facilities/index">
-      <img class="img__img" src="images/ebola.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      
-      <div class="img__description_layer w3-hide-small">
-        <div class="img__description" style="margin-top: -10px;">
-        <h5><b>WEST AFRICA HEALTH FACILITY ASSESSMENT</b></h5>
-        <h6 style="padding: 15px;">
-       Hospital facility assessment conducted during the West Africa Ebola Outbreak. The report was prepared and given to PIH to understand the conditions and needs of the facilities they were working at
-      </h6>
-
-          <div class="w3-border-top"style="font-size: 14px;padding: 15px;">
-        <p>Professional 
-        <i class="w3-right">2015</i></br>
-           <b>Shepley Bulfinch</b>
-        <i class="w3-right">Sierra Leone + Liberia</i></br>
-           <b>Partners in Health</b>
-<!--           </br></br>
-          <b>Roles: </b></br>
-          Facility Surveying, Equipment and Space Assessment, Report Documentation</br></br>
-          <b>Tools Used:</b> </br>
-         Measuring Tape, Camera, Excel, AutoCAD, Indesign -->
-         </p>
-         </div>
-
-         </p>
-        </div>
-       </div>
-       </a>
-
-<!--         <h6>
-       Hospital facility assessment conducted during the West Africa Ebola Outbreak. The report was prepared and given to PIH to understand the conditions and needs of the facilities they were working at
-      </h6> -->
-      </div>
-      </div>
-
-
-    <div class="column technology w3-third" style = "min-width:360px">
-       <div class="img__wrap">
-
-      <div>
-        <h5><b>SOCIAL AGENCY: THE ROLE OF THE DESIGNER</b></h5>
-      </div>
-        <a href="https://mdestaubin.github.io/portfolio/links/social/index">
-      <img class="img__img" src="images/haitiVideo.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      
-      <div class="img__description_layer w3-hide-small">
-        <div class="img__description" style="margin-top: -10px;">
-        <h5><b>SOCIAL AGENCY: THE ROLE OF THE DESIGNER</b></h5>
-        <h6 style="padding: 15px">
-        A short video of interviews with foreign and local architects working in Haiti. It was completed as an assignment for a course at the GSD examining the role of social agency within architecture.
-        </h6>
-
-         <div class="w3-border-top"style="font-size: 14px;padding: 15px">
-        <p>Academic
-        <i class="w3-right">2016</i></br>
-           <b>Harvard GSD</b>
-        <i class="w3-right">Haiti</i></br>
-            AA Haiti Visiting School
-         <!--  </br></br>
-          <b>Roles: </b></br>
-          2 Person Team, Production, Directing, Filming, Editing</br></br>
-          <b>Tools Used:</b> </br>
-         Video Camera, Premiere -->
-         </p>
-         </div>
-
-        </div>
-       </div>
-       </a>
-
-<!--         <h6>
-        A short video of interviews with foreign and local architects working in Haiti. It was completed as an assignment for a course at the GSD examining the role of social agency within architecture.
-        </h6> -->
-      </div>
-      </div>
-
-
-
-    <div class="column technology w3-third" style = "min-width:360px">
-       <div class="img__wrap">
-
-      <div>
-        <h5><b>GLOBAL HUMANITARIAN AID FLOW</b></h5>
-      </div>
-        <a href="https://mdestaubin.github.io/ebolaAid">
-      <img class="img__img" src="images/ebolaAid.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      
-      <div class="img__description_layer w3-hide-small">
-        <div class="img__description" style="margin-top: -10px;">
-
-        <h5><b>GLOBAL HUMANITARIAN AID FLOW</b></h5>
-        <h6 style="padding: 15px">
-        Data visualization map of the flow of international humanitarian aid money to West Africa during the Ebola crisis. The dataset comes from the Financial Tracking Service of the UN.
-        </h6>
-
-         <div class="w3-border-top"style="font-size: 14px;padding: 15px">
-        <p>Academic
-        <i class="w3-right">2017</i></br>
-           <b>MIT 4.S02</b>
-        <i class="w3-right">Cambridge, MA</i></br></br>
-<!--           <b>Roles: </b></br>
-          Individual Project, Conception, Research, Code Development, UX Design</br></br>
-          <b>Tools Used:</b> </br>
-         P5.js, Leaflet, Excel, HTML, CSS, JavaScript -->
-         </p>
-         </div>
-
-        </div>
-       </div>
-       </a>
-
-<!--         <h6>
-        Data visualization map of the flow of international humanitarian aid money to West Africa during the Ebola crisis. The dataset comes from the Financial Tracking Service of the UN.
-        </h6> -->
-      </div>
-      </div>
-
-
-
-    <div class="column technology w3-third" style = "min-width:360px">
-       <div class="img__wrap">
-              <div>
-        <h5><b>PORTAL || KINECT</b></h5>
-      </div>
-        <a href="https://mdestaubin.github.io/portfolio/links/portal/index">
-      <img class="img__img" src="images/portal.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      
-      <div class="img__description_layer w3-hide-small">
-        <div class="img__description" style="margin-top: -10px;">
-
-        <h5><b>PORTAL || KINECT</b></h5>
-        <h6 style="padding: 15px;">
-        The portal intends to create a civic visual connection between Cambridge, MA and Bergamo, Italy. To go beyond a typical 2D interaction, the project adds a 3D parallax effect through framing and layering.
-        </h6>
-
-         <div class="w3-border-top"style="font-size: 14px;padding: 15px;">
-        <p>Academic
-        <i class="w3-right">2017</i></br>
-           <b>Harvard GSD</b>
-        <i class="w3-right">Cambridge, MA</i></br>
-          <b>University of Bergamo</b>
-  <!--         </br></br>
-          <b>Roles: </b></br>
-          2 Person Team, Conception, Research, Code Development, UX Design</br></br>
-          <b>Tools Used:</b> </br>
-         Processing, Kinect, AutoCad, Raspberry Pi, Premiere, Sketchup, Video Camera -->
-         </p>
-         </div>
-
-         </p>
-        </div>
-       </div>
-       </a>
-
-
-<!--         <h6>
-        The portal intends to create a civic visual connection between Cambridge, MA and Bergamo, Italy. To go beyond a typical 2D interaction, the project adds a 3D parallax effect through framing and layering.
-        </h6> -->
-      </div>
-      </div>
-
-
-
-    <div class="column architecture w3-third" style = "min-width:360px">
-       <div class="img__wrap">
-              <div>
-        <h5><b>DAVIDSON COLLEGE ACADEMIC CENTER</b></h5>
-      </div>
-        <a href="https://mdestaubin.github.io/portfolio/links/davidson/index">
-      <img class="img__img" src="images/davidson.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      
-      <div class="img__description_layer w3-hide-small">
-        <div class="img__description" style="margin-top: -10px;">
-
-        <h5><b>DAVIDSON COLLEGE ACADEMIC CENTER</b></h5>
-        <h6 style="padding: 15px;">
-       Large scale addition and renovation project for Davidson College's science and art departments. The central forum space acts as the social catalyst for cross-disciplinary interactions and sharing.
-        </h6>
-
-          <div class="w3-border-top"style="font-size: 14px;padding: 15px;">
-        <p>Professional 
-        <i class="w3-right">2012-2016</i></br>
-           <b>Shepley Bulfinch</b>
-        <i class="w3-right">Davidson, NC</i></br>
-           <b>Davidson College</b>
-          <!-- </br></br>
-          <b>Roles: </b></br>
-          Schematic, Design Development, Construction Documentaiton, Construction Administration</br></br>
-          <b>Tools Used:</b> </br>
-         Sketchup, Model Making, Photoshop, Revit, AutoCad -->
-         </p>
-         </div>
-
-         </p>
-        </div>
-       </div>
-       </a>
-<!--         <h6>
-       Large scale addition and renovation project for Davidson College's science and art departments. The central forum space acts as the social catalyst for cross-disciplinary interactions and sharing.
-        </h6> -->
-      </div>
-      </div>
-
-
-    <div class="column architecture w3-third" style = "min-width:360px">
-       <div class="img__wrap">
-       <div>
-        <h5><b>ROSE LEE'S HOUSE</b></h5>
-      </div>
-
-        <a href="https://mdestaubin.github.io/portfolio/links/rural/index">
-      <img class="img__img" src="images/rural.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      
-      <div class="img__description_layer w3-hide-small">
-        <div class="img__description" style="margin-top: -10px;">
-
-        <h5><b>ROSE LEE'S HOUSE</b></h5>
-        <h6 style="padding: 15px;">
-        A sustainable home in rural Alabama designed and built by a team of students for Rose Lee and her two sons. The low-cost design featured a large amount of donated and reclaimed material from local barns.
-        </h6>
-
-         <div class="w3-border-top"style="font-size: 14px;padding: 15px;">
-        <p>Academic
-        <i class="w3-right">2008-2009</i></br>
-           <b>Auburn University</b>
-        <i class="w3-right">Footwash, AL</i></br>
-          <b>Rural Studio</b>
-<!--           </br></br>
-          <b>Roles: </b></br>
-          Class Project, Schematic, Phase Planning, Construction, Material Research</br></br>
-          <b>Tools Used:</b> </br>
-         AutoCad, Sketchup, Model Making, Hammer, Saw, Shovel, Bobcat -->
-         </p>
-         </div>
-
-        </div>
-       </div>
-       </a>
-<!--         <h6>
-        A sustainable home in rural Alabama designed and built by a team of students for Rose Lee and her two sons. The low-cost design featured a large amount of donated and reclaimed material from local barns.
-        </h6> -->
-      </div>
-      </div>
-
-
-
-    <div class="column teaching w3-third" style = "min-width:360px">
-       <div class="img__wrap">
-
-        <div>
-        <h5><b>YOUTHBUILD BOSTON: HARVARD CSFP</b></h5>
-        </div>
-
-        <a href="https://mdestaubin.github.io/portfolio/links/youthbuild/index">
-      <img class="img__img" src="images/youthbuild.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      
-      <div class="img__description_layer w3-hide-small">
-        <div class="img__description" style="margin-top: -10px;">
-
-        <h5><b>YOUTHBUILD BOSTON: HARVARD CSFP</b></h5>
-        <h6 style="padding: 15px;">
-        2017 recipient of the Harvard GSD Community Service Fellowship Program. Led a team of local high school studentsts through a summer design project with a NGO working in Haiti.
-        </h6>
-
-         <div class="w3-border-top"style="font-size: 14px;padding: 15px;">
-        <p>Academic Fellowship
-        <i class="w3-right">2017</i></br>
-           <b>YouthBuild Boston</b>
-        <i class="w3-right">Boston, MA</i></br>
-          <b>Harvard GSD</b>
-<!--           </br></br>
-          <b>Roles: </b></br>
-          Lead Designer, Teacher</br></br>
-          <b>Tools Taught:</b> </br>
-          Hand Drafting, Model Making, Sketchup, Photoshop -->
-         </p>
-         </div>
-
-        </div>
-       </div>
-       </a>
-
-
-<!--         <h6>
-        2017 recipient of the Harvard GSD Community Service Fellowship Program. Led a team of local high school studentsts through a summer design project with a NGO working in Haiti.
-        </h6> -->
-      </div>
-      </div>
-  
-
-    <div class="column technology w3-third" style = "min-width:360px">
-       <div class="img__wrap">
-        <div>
-        <h5><b>WEATHER APP</b></h5>
-       </div>
-        <a href="https://mdestaubin.github.io/weather1/index.html">
-      <img class="img__img" src="images/weather.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      
-      <div class="img__description_layer w3-hide-small">
-        <div class="img__description" style="margin-top: -10px;">
-
-        <h5><b>WEATHER APP</b></h5>
-        <h6 style="padding: 15px;">
-        Created as an assignment for a MIT data visualization course. The concept is for the weather app to translate quantitative data pulled from an API into qualitative, descriptive text predictions.
-        </h6>
-
-         <div class="w3-border-top"style="font-size: 14px;padding: 15px;">
-        <p>Academic
-        <i class="w3-right">2017</i></br>
-           <b>MIT 4.S02</b>
-        <i class="w3-right">Cambrdige, MA</i></br></br>
-<!--           <b>Roles: </b></br>
-          Individual Project, Conception, Research, UX Design </br></br>
-          <b>Tools Used:</b> </br>
-         P5.js, HTML, CSS, JavaScrpit, Dark Sky API -->
-         </p>
-         </div>
-
-        </div>
-       </div>
-       </a>
-
-       <!--  <h6>
-        Created as an assignment for a MIT data visualization course. The concept is for the weather app to translate quantitative data pulled from an API into qualitative, descriptive text predictions.
-        </h6> -->
-      </div>
-
-      </div>
-   
-
-
-    <div class="column architecture w3-third" style = "min-width:360px">
-       <div class="img__wrap">
-
-      <div>
-        <h5><b>SUMMITS ACADEMY</b></h5>
-      </div>
-
-        <a href="https://mdestaubin.github.io/portfolio/links/academy/index">
-      <img class="img__img" src="images/haitiSchool.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      
-      <div class="img__description_layer w3-hide-small">
-        <div class="img__description" style="margin-top: -10px;">
-
-        <h5><b>SUMMITS ACADEMY</b></h5>
-        <h6 style="padding: 15px;">
-        Conceptual design for a college prep academy located in the central plateau region of Haiti. The campus will include teaching, library, dining, athletics, and dwelling spaces.
-        </h6>
-
-         <div class="w3-border-top"style="font-size: 14px;padding: 15px;">
-        <p>Professional
-          <i class="w3-right">2015</i></br>
-          <b>Shepley Bulfinch</b>
-          <i class="w3-right">Haiti</i></br>
-          <b>Summits Education</b>
-<!--           </br></br>
-          <b>Roles: </b></br>
-          Schematic, Site Planning, Phase Planning, Renderings </br></br>
-          <b>Tools Used:</b> </br>
-          AutoCad, Hand Skething, Sketchup, Photoshop, Illustrator, Indesign -->
-         </p>
-         </div>
-
-        </div>
-       </div>
-       </a>
-<!--         <h6>
-        Conceptual design for a college prep academy located in the central plateau region of Haiti. The campus will include teaching, library, dining, athletics, and dwelling spaces.
-        </h6> -->
-      </div>
-      </div>
-   
-
-
-    <div class="column architecture w3-third" style = "min-width:360px">
-       <div class="img__wrap">
-       <div>
-        <h5><b>HAITIAN PHYSICAL REHAB CENTER</b></h5>
-       </div>
-
-        <a href="https://mdestaubin.github.io/portfolio/links/rehab/index">
-      <img class="img__img" src="images/haitiRehab.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      
-      <div class="img__description_layer w3-hide-small">
-        <div class="img__description" style="margin-top: -10px;">
-
-        <h5><b>HAITIAN PHYSICAL REHAB CENTER</b></h5>
-        <h6 style="padding: 15px;">
-        Multi-phased design of a rehabilitation clinic located on the Mirebalais Hospital campus in central Haiti. The first phase is a gym and the second phase includes clinical support spaces.
-        </h6>
-
-         <div class="w3-border-top"style="font-size: 14px; padding: 15px;">
-        <p>Professional
-        <i class="w3-right">2012</i></br>
-          <b>Shepley Bulfinch</b>
-          <i class="w3-right">Haiti</i></br>
-          <b>Partners in Health</b>
-<!--           </br></br>
-          <b>Roles: </b></br>
-          Schematic, Phase Planning, Material Research, Renderings</br></br>
-          <b>Tools Used:</b> </br>
-          AutoCad, Sketchup, Photoshop -->
-         </p>
-         </div>
-
-        </div>
-       </div>
-       </a>
-<!--         <h6>
-        Multi-phased design of a rehabilitation clinic located on the Mirebalais Hospital campus in central Haiti. The first phase is a gym and the second phase includes clinical support spaces.
-        </h6> -->
-      </div>
-      </div>
-
-
-    <div class="column technology w3-third" style = "min-width:360px">
-       <div class="img__wrap">
-              <div>
-        <h5><b>SPARKLE & CHIME</b></h5>
-      </div>
-        <a href="https://mdestaubin.github.io/portfolio/links/sparkle/index">
-      <img class="img__img" src="images/sparkle.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      
-      <div class="img__description_layer w3-hide-small">
-        <div class="img__description" style="margin-top: -10px;">
-
-        <h5><b>SPARKLE & CHIME</b></h5>
-        <h6 style="padding: 15px;">>
-        A dazzling art installation in Evans Way Park in Boston, MA. The team consisted of volunteers at Shepley Bulfinch and the project was composed of 1000's of hanging recycled hard disks and mirrors.
-        </h6>
-
-         <div class="w3-border-top"style="font-size: 14px;padding: 15px;">
-        <p>Volunteer
-        <i class="w3-right">2014</i></br>
-           <b>Shepley Bulfinch</b>
-        <i class="w3-right">Boston, MA</i></br>
-          <b>Fenway Alliance</b>
-<!--           </br></br>
-          <b>Roles: </b></br>
-          Design Development, Material Research, Installation, Video Promotion</br></br>
-          <b>Tools Used:</b> </br>
-          AutoCad, Hand Construction, Premiere -->
-         </p>
-         </div>
-
-        </div>
-       </div>
-       </a>
-
-<!--         <h6>
-        A dazzling art installation in Evans Way Park in Boston, MA. The team consisted of volunteers at Shepley Bulfinch and the project was composed of 1000's of hanging recycled hard disks and mirrors.
-        </h6> -->
-      </div>
-      </div>
-
-
-    <div class="column teaching w3-third" style = "min-width:360px">
-       <div class="img__wrap">
-
-     <div>
-       <h5><b>BOSTON ARCHITECTURAL COLLEGE: CITY LAB</b></h5>
-     </div>
-
-        <a href="https://the-bac.edu/experience-the-bac/galleries/citylab-at-the-bac">
-      <img class="img__img" src="images/bac.png" alt="Norway" style="width:100%" class="w3-hover-opacity">
-      
-      <div class="img__description_layer w3-hide-small">
-        <div class="img__description" style="margin-top: -10px;">
-
-        <h5><b>BOSTON ARCHITECTURAL COLLEGE: CITY LAB</b></h5>
-        <h6 style="padding: 15px;">
-        A dazzling art installation in Evans Way Park in Boston, MA. The team consisted of volunteers at Shepley Bulfinch and the project was composed of 1000's of hanging recycled hard disks and mirrors.
-        </h6>
-
-         <div class="w3-border-top"style="font-size: 14px;padding: 15px;">
-        <p>Professional
-        <i class="w3-right">2013-2014</i></br>
-           <b>BAC</b>
-        <i class="w3-right">Boston, MA</i>
-<!--           </br></br>
-          <b>Roles: </b></br>
-          Co-Instructor</br></br>
-          <b>Tools Taught:</b> </br>
-         Hand Sketching, Critical Observation -->
-         </p>
-         </div>
-
-        </div>
-       </div>
-       </a>
-<!--         <h6>
-        A dazzling art installation in Evans Way Park in Boston, MA. The team consisted of volunteers at Shepley Bulfinch and the project was composed of 1000's of hanging recycled hard disks and mirrors.
-        </h6> -->
-      </div>
-      </div>
-
-   </div>
-  </div>
-
-        <!-- Contact Section -->
-
-   <div id="press">
-    <div class="w3-container w3-padding-16" style="height: 1000px;">
-    </br>
-    <div class="w3-half column column thesis architecture technology teaching w3-padding-16" style="width: 50%;" >
-      <h5 style="font-size: 25px; margin-top: 25px">PRESS</h5>
-      <div>
-        <br>
-        <a style="text-decoration: none;" href="https://www.gsd.harvard.edu/2020/05/how-long-should-we-keep-social-distancing-a-simulation-tool-by-gsd-alum-michael-de-st-aubin-offers-answers/">
-          <img src="images/articlePic.jpg" alt="Norway" style="width:75%;" class="w3-hover-opacity">
-       <p style="font-size:20px; padding-right: 120px;">How can design improve disease modeling and outbreak response? A simulation tool by GSD alum Michael de St. Aubin offers answers </br> <b style="font-size: 15px">Harvard University Graduate School of Design</b></p>
-       </a>
-       </div>
-      </div>
-         <div class="w3-half column column thesis architecture technology teaching w3-padding-16" style="width: 50%;"> 
-      <h5 style="font-size: 25px; margin-top: 25px">ACADEMIC</h5>
-      <ul style="border-left-style: solid;border-left-width: .5px">
-
-       <li>
-        <a style="text-decoration: none;" >
-          <p style="font-size: 15px; margin-bottom: -10px;"><b>Paper</b> | Contributing Author</p>
-       <p style="font-size:20px; padding-right:10px;">Discrete SARS-CoV-2 antibody titers track with functional humoral stability</br><b style="font-size: 15px;font-weight: normal;">Under Review 2020</b></p>
-       </a>
-       </li>
-       <br>
-       <li>
-        <a style="text-decoration: none;" >
-          <p style="font-size: 15px; margin-bottom: -10px;"><b>Paper</b> | Acknowledgement</p>
-       <p style="font-size:20px; padding-right:10px;">Presence of detectable SARS-CoV-2 nucleic acids despite previous SARS-CoV-2 IgG seroconversion</br><b style="font-size: 15px;font-weight: normal;">Under Review 2020</b></p>
-       </a>
-       </li>
-      <br>
-      <li>
-        <a style="text-decoration: none;" href="https://reliefweb.int/sites/reliefweb.int/files/resources/neverforget_eng_2.pdf">
-          <p style="font-size: 15px; margin-bottom: -10px;"><b>Report</b> | Design Acknowledgement</p>
-       <p style="font-size:20px; padding-right:10px;">Never Forget: Views on Peace and Justice Within Conflict-Affected Communities in Northern Iraq</br><b style="font-size: 15px;font-weight: normal;">Harvard Humanitarian Initiative 2019</b></p>
-       </a>
-       </li>
-       <br>
-       <li>
-        <a style="text-decoration: none;" href="https://www.thehumanitarianhub.org/event/design-for-humanity-summit/">
-          <p style="font-size: 15px; margin-bottom: -10px;"><b>Conference</b> | Workshop Leader</p>
-       <p style="font-size:20px; padding-right:10px;">Design for Humanity Summit II: Design in the Time of Displacement</br><b style="font-size: 15px;font-weight: normal;">Fordham University 2019</b></p>
-       </a>
-       </li>
-       <ul>
-      </div>
-      </div>
-      </div> 
-
-        <div class="w3-container w3-padding-64 w3-hide-small" id="plot">
-        
-          <h5 style="font-size: 25px; margin-top: 25px">PROJECT MAP</h5>
-          <div id='container'></div>
-          <div id='map'></div>
-          <script type="text/javascript" src="sketch.js"></script>
-          </div>
-
-
-    <div class="w3-container w3-white">
-        </br></br></br></br></br></br></br></br></br></br>
-    </div>
-
-      </br></br></br></br></br></br></br></br></br></br>
-     <!-- <div id="press"style= "margin-bottom: 0px; margin-top: 0px"> -->
-  <!--  </br></br> -->
-<!--    <div class="column2">
-    <p>Left Side</p>
-  </div>
-
-  <div class="column2 w3-half">
-    <p>Right Side</p>
-  </div> -->
-<!-- </div> -->
-
-
-  <!-- About Me -->
-  <div id="about" style="height: 1000px" class="w3-padding-64">
-
-    <div class="w3-container">
-    <h5 style="font-size: 25px; margin-top: 25px">RESUME</h1>
-    </div>
-
-
-<div class="w3-content w3-display-container w3-row-padding w3-row" style="max-width:1185px">
-
-  <div>
-              
-
-        <div id="Demo">
-            <!-- <h4 style="margin-top: -20px"><b>Resume</b></h4> -->
-
-<div class="w3-quarter" style=" margin-top: 28px">
+    <div id="fullpage">
+        <div class="section">
             
-          <img src="images/profile3.png" alt="Headshot" style="width: 120%; margin-top: -15px; margin-left: -60px" > 
-          <p style="margin-top: 0px; text-align: center; margin-left: -60px">
-          </br> 404.933.3271 </br>
-          <a class="email" href="mailto:mdestaubin@gsd.harvard.edu">mdestaubin@hsph.harvard.edu</a></br>
-          </br>
-          19 Hilliard Street, 2R</br>
-          Cambridge, MA 02138</br></br>
-        </p>          
+            <div class="slide" data-anchor="intro">
+                <div class="flex-container">
+                    <div class="content-wrapper">
+
+                        <div class="flex-item">
+                            <img src="images/newprofile2.png" alt="Profile" style="width: 90%; filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.2));">
+                        </div>
+                       
+                            <div class="flex-item" style="">
+                            <!-- <div class="scrollable" style="overflow-y: auto; margin-bottom: 18px; max-height: 80vh;"> -->
+                                
+                                <h1 id="element" style="font-size:30px;padding-left: 0px; margin-top: 70px;"></h1>
+                            
+                                <button id="about-me-btn" class="custom-button" style="display: block;"><b>ABOUT ME</b></button>
+                            
+                                <div class="scrollable" style="overflow-y: auto; margin-bottom: 18px; max-height: 60vh;">
+
+                                    <div id="about-me-text" style="display: none;">
+                                        <p style="font-size:16px; margin-left: 0px; margin-right: 20px;"> I would describe myself as a mission-driven and data-led designer and researcher. I've dedicated my career to collaborating with cross-disciplinary teams in public health and humanitarian contexts, while leveraging my design perspective and skillsets</br></br> My journey began in architecture where I was fortunate to work on high-impact projects in low-income settings that aimed to transform the lives of individual families and entire communities. However, a profound experience working with an NGO client during the 2014-2016 Ebola Outbreak in West Africa inspired me to return to school to explore how I could broaden and apply my design background and skillset within the humanitarian field as a full-time career.
+                                        </br></br> 
+                                        Since graduating in 2018, I've had the incredible opportunity to cultivate my profressional growth at the <a href="https://hhi.harvard.edu/" target="_blank" style=" color: blue;text-decoration: none;">Harvard Humanitarian Initiative</a>, where I've supported a diverse array of humanitarian research and operational programs. While my interests and skillsets remain broad, I've developed a particular skill and interest in building data collection and management systems with real-time, interactive data monitoring, and analysis dashboards. The applications for these dashboards have been diverse, ranging from disease surveillance platforms for the CDC and the Dominican Republic's Ministry of Health, to user registration and knowledge retention dashboards tracking key metrics for a global humanitarian response online training program.
+                                        </p>    
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- <p id="element2" style="font-size:15px"></p> -->
+                            <!-- <p id="element3" style="font-size:15px"></p> -->
+                        
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="slide" data-anchor="about" style="position: relative;"> 
+                <h2 class="w3-row" style="position: absolute; top: 25px; left: 0; right: 0; text-align: center;">About Me</h2>
+                    <div class="flex-container">
+                        <div class="content-wrapper" style="text-align: center;">
+                             <p style="font-size:18px"> I would describe myself as a mission-driven and data-led designer and researcher. I've dedicated my career to collaborating with cross-disciplinary teams in public health and humanitarian contexts, while leveraging my design perspective and skillsets</br></br> My journey began in architecture where I was fortunate to work on high-impact projects in low-income settings that aimed to transform the lives of individual families and entire communities. However, a profound experience working with an NGO client during the 2014-2016 Ebola Outbreak in West Africa inspired me to return to school to explore how I could broaden and apply my design background and skillset within the humanitarian field as a full-time career.</br></br> 
+                             Since graduating in 2018, I've had the incredible opportunity to cultivate my profressional growth at the <a href="https://hhi.harvard.edu/" target="_blank" style="color: blue;text-decoration: none;">Harvard Humanitarian Initiative</a>, where I've supported a diverse array of humanitarian research and operational programs. While my interests and skillsets remain broad, I've developed a particular skill and interest in building data collection and management systems with real-time, interactive data monitoring, and analysis dashboards. The applications for these dashboards have been diverse, ranging from disease surveillance platforms for the CDC and the Dominican Republic's Ministry of Health, to user registration and knowledge retention dashboards tracking key metrics for a global humanitarian response online training program.
+                            </p>
+                        </div>
+                    </div>
+            </div> -->
+
+
+            <div class="slide" data-anchor="work" style="position: relative;">
+           <!-- <h2 class="w3-row" style="position: absolute; top: 25px; left: 0; right: 0; text-align: center;">SELECTED WORKS</h2> -->
+            <div class="flex-container">
+                <div class="content-wrapper">
+
+                    <div class="scrollable" style="max-height: 700px; overflow-y: auto; margin-bottom: 18px;">
+                    
+                        <div class="column technology w3-third" >
+                            <div class="img__wrap">
+                                <div>
+                                    <h5><b>COVID-19 HOME-BASED CARE STUDY</b></h5>
+                                </div>
+                            <a href="http://covid-19data.org/">
+                                <img class="img__img w3-hover-opacity" src="images/honduras.png" alt="Norway" style="width:100%">
+                                <div class="img__description_layer w3-hide-small">
+                                    <div class="img__description">
+                                        <h5><b>COVID-19 HOME-BASED CARE STUDY</b></h5>
+                                        <h6 style="padding: 15px;">
+                                            The survey is being used for tracking, monitoring, and analyzing global trends to inform the COVID-19 global response.
+                                        </h6>
+                                        <div class="w3-border-top" style="font-size: 14px; padding: 15px;">
+                                            <p>
+                                                Research
+                                                <i class="w3-right">2020</i><br/>
+                                                <b>HHI</b>
+                                                <i class="w3-right">Dominican Republic</i><br/><br/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+
+                    <div class="column technology w3-third" style="min-width:0px;">
+                        <div class="img__wrap">
+                            <div>
+                                <h5><b>HOSPITAL WASH INTERVENTION</b></h5>
+                            </div>
+                            <a href="http://covid-19data.org/">
+                                <img class="img__img w3-hover-opacity" src="images/abhr.png" alt="Norway" style="width:100%">
+                                <div class="img__description_layer w3-hide-small">
+                                    <div class="img__description">
+                                        <h5><b>HOSPITAL WASH INTERVENTION</b></h5>
+                                        <h6 style="padding: 15px;">
+                                            The survey is being used for tracking, monitoring, and analyzing global trends to inform the COVID-19 global response.
+                                        </h6>
+                                        <div class="w3-border-top" style="font-size: 14px; padding: 15px;">
+                                            <p>
+                                                Research
+                                                <i class="w3-right">2020</i><br/>
+                                                <b>HHI</b>
+                                                <i class="w3-right">Worldwide</i><br/><br/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="column technology w3-third">
+                        <div class="img__wrap">
+                            <div>
+                                <h5><b>TRANSITIONAL JUSTICE SURVEY</b></h5>
+                            </div>
+                            <a href="http://covid-19data.org/">
+                                <img class="img__img w3-hover-opacity" src="images/ethiopia.png" alt="Norway" style="width:100%">
+                                <div class="img__description_layer w3-hide-small">
+                                    <div class="img__description">
+                                        <h5><b>TRANSITIONAL JUSTICE SURVEY</b></h5>
+                                        <h6 style="padding: 15px;">
+                                            The survey is being used for tracking, monitoring, and analyzing global trends to inform the COVID-19 global response.
+                                        </h6>
+                                        <div class="w3-border-top" style="font-size: 14px; padding: 15px;">
+                                            <p>
+                                                Research
+                                                <i class="w3-right">2020</i><br/>
+                                                <b>HHI</b>
+                                                <i class="w3-right">Dominican Republic</i><br/><br/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="column technology w3-third" style="min-width:360px">
+                        <div class="img__wrap">
+                            <div>
+                                <h5><b>GLOBAL COVID-19 ONLINE SURVEY</b></h5>
+                            </div>
+                            <a href="http://covid-19data.org/">
+                                <img class="img__img w3-hover-opacity" src="images/covid.png" alt="Norway" style="width:100%">
+                                <div class="img__description_layer w3-hide-small">
+                                    <div class="img__description">
+                                        <h5><b>GLOBAL COVID-19 ONLINE SURVEY</b></h5>
+                                        <h6 style="padding: 15px;">
+                                            The survey is being used for tracking, monitoring, and analyzing global trends to inform the COVID-19 global response.
+                                        </h6>
+                                        <div class="w3-border-top" style="font-size: 14px; padding: 15px;">
+                                            <p>
+                                                Research
+                                                <i class="w3-right">2020</i><br/>
+                                                <b>HHI</b>
+                                                <i class="w3-right">Worldwide</i><br/><br/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+
+                    <div class="column technology w3-third">
+    <div class="img__wrap">
+        <div>
+            <h5><b>HUMANITARIAN TRAINING DASHBOARD</b></h5>
+        </div>
+        <a href="http://covid-19data.org/">
+            <img class="img__img w3-hover-opacity" src="images/bbr.png" alt="Norway" style="width:100%">
+            <div class="img__description_layer w3-hide-small">
+                <div class="img__description">
+                    <h5><b>HUMANITARIAN TRAINING DASHBOARD</b></h5>
+                    <h6 style="padding: 15px;">
+                        The survey is being used for tracking, monitoring, and analyzing global trends to inform the COVID-19 global response.
+                    </h6>
+                    <div class="w3-border-top" style="font-size: 14px; padding: 15px;">
+                        <p>Research 
+                        <i class="w3-right">2020</i><br/>
+                        <b>HHI</b>
+                        <i class="w3-right">Dominican Republic</i><br/><br/>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
 </div>
+
+<div class="column technology w3-third">
+    <div class="img__wrap">
+        <div>
+            <h5><b>REGIONAL AFI DISEASE SURVEILLANCE</b></h5>
+        </div>
+        <a href="http://covid-19data.org/">
+            <img class="img__img w3-hover-opacity" src="images/lab.jpg" alt="Norway" style="width:100%">
+            <div class="img__description_layer w3-hide-small">
+                <div class="img__description">
+                    <h5><b>REGIONAL AFI DISEASE SURVEILLANCE</b></h5>
+                    <h6 style="padding: 15px;">
+                        The survey is being used for tracking, monitoring, and analyzing global trends to inform the COVID-19 global response.
+                    </h6>
+                    <div class="w3-border-top" style="font-size: 14px; padding: 15px;">
+                        <p>Research 
+                        <i class="w3-right">2020</i><br/>
+                        <b>HHI</b>
+                        <i class="w3-right">Worldwide</i><br/><br/>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<div class="column technology w3-third">
+    <div class="img__wrap">
+        <div>
+            <h5><b>NATIONAL SEROSURVEY AND COHORT</b></h5>
+        </div>
+        <a href="http://covid-19data.org/">
+            <img class="img__img w3-hover-opacity" src="images/sero.png" alt="Norway" style="width:100%">
+            <div class="img__description_layer w3-hide-small">
+                <div class="img__description">
+                    <h5><b>NATIONAL SEROSURVEY AND COHORT</b></h5>
+                    <h6 style="padding: 15px;">
+                        The survey is being used for tracking, monitoring, and analyzing global trends to inform the COVID-19 global response.
+                    </h6>
+                    <div class="w3-border-top" style="font-size: 14px; padding: 15px;">
+                        <p>Research 
+                        <i class="w3-right">2020</i><br/>
+                        <b>HHI</b>
+                        <i class="w3-right">Dominican Republic</i><br/><br/>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
 </div>
 
 
-<div class="w3-quarter" style=" margin-top: 20px">
+                    <div class="column thesis w3-third">
+        <div class="img__wrap">
+            <div>
+                <h5><b>ViRS | VISUAL RESPONSE SIMULATOR</b></h5>
+            </div>
+            <a href="https://mdestaubin.github.io/portfolio/links/thesis/index">
+                <img class="img__img w3-hide-medium w3-hide-small w3-hover-opacity" src="images/thesis.png" alt="Norway" style="width:100%">
+                <img class="img__img w3-hide-large w3-hover-opacity" src="images/thesis.png" alt="Norway" >
+                <div class="img__description_layer w3-hide-small">
+                    <div class="img__description">
+                        <h5><b>ViRS | VISUAL RESPONSE SIMULATOR</b></h5>
+                        <h6 style="padding: 15px;">
+                            An agent-based simulation model to test infectious disease outbreak response strategies and capacities. It began as a thesis project, but is currently being developed further at the Harvard Humanitarian Initiative. 
+                        </h6>
+                        <div class="w3-border-top" style="font-size: 14px; padding: 15px">
+                            <p>Graduate Thesis
+                            <i class="w3-right">2017-2018</i><br/>
+                            <b>Harvard GSD</b>
+                            <i class="w3-right">Cambridge, MA</i><br/><br/>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
 
- 
-      
-          <h5 style="font-size: 25px"><b>Education</b></h5>
+    <div class="column architecture w3-third" style="min-width:360px">
+        <div class="img__wrap">
+            <div>
+                <h5><b>EBOLA TRIAGE + ISOLATION UNIT</b></h5>
+            </div>
+            <a href="https://mdestaubin.github.io/portfolio/links/triage/index">
+                <img class="img__img w3-hover-opacity" src="images/triage.png" alt="Norway" style="width:100%">
+                <div class="img__description_layer w3-hide-small">
+                    <div class="img__description">
+                        <h5><b>EBOLA TRIAGE + ISOLATION UNIT</b></h5>
+                        <h6 style="padding: 15px;">
+                            Intended as an alternate to UN temporary structures, the unit was designed in collaboration with experts at PIH as a prototype for a long-term solution to infectious disease screening at hospital entrances.
+                        </h6>
+                        <div class="w3-border-top" style="font-size: 14px; padding: 15px;">
+                            <p>Professional 
+                            <i class="w3-right">2015</i><br/>
+                            <b>Shepley Bulfinch</b>
+                            <i class="w3-right">Sierra Leone + Liberia</i><br/><br/>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
 
-    <p><b style="font-size: 16px">Harvard University <br/>Graduate School of Design</b>
+    <div class="column technology w3-third" style="min-width:360px">
+        <div class="img__wrap">
+            <div>
+                <h5><b>INTERACTIVE EBOLA RESPONSE MAP</b></h5>
+            </div>
+            <a href="https://mdestaubin.github.io/ebolaMap">
+                <img class="img__img w3-hover-opacity" src="images/ebolaMap.jpg" alt="Norway" style="width:100%">
+                <div class="img__description_layer w3-hide-small">
+                    <div class="img__description">
+                        <h5><b>INTERACTIVE EBOLA RESPONSE MAP</b></h5>
+                        <h6 style="padding: 15px;">
+                            Interactive map that contains multiple layers of data pertaining to the 2014 West Africa Ebola Outbreak and the international response to it. Completed as an assignment for a data visualization course at MIT.
+                        </h6>
+                        <div class="w3-border-top" style="font-size: 14px; padding: 15px;">
+                            <p>Academic
+                            <i class="w3-right">2017</i><br/>
+                            <b>MIT 4.S02</b>
+                            <i class="w3-right">Cambridge, MA</i><br/><br/>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="column architecture w3-third" style="min-width:360px">
+        <div class="img__wrap">
+            <div>
+                <h5><b>UNIVERSITY OF GLOBAL HEALTH EQUITY</b></h5>
+            </div>
+            <a href="https://mdestaubin.github.io/portfolio/links/ughe/index">
+                <img class="img__img w3-hover-opacity" src="images/UGHE.png" alt="Norway" style="width:100%">
+                <div class="img__description_layer w3-hide-small">
+                    <div class="img__description">
+                        <h5><b>UNIVERSITY OF GLOBAL HEALTH EQUITY</b></h5>
+                        <h6 style="padding: 15px;">
+                            Academic campus design for Partners in Health new global health university. The project is located in Butaro, Rwanda and will act as a regional model for future global health education hubs in Africa.
+                        </h6>
+                        <div class="w3-border-top" style="font-size: 14px; padding: 15px;">
+                            <p>Professional 
+                            <i class="w3-right">2015 - </i><br/>
+                            <b>Shepley Bulfinch</b>
+                            <i class="w3-right">Rwanda</i><br/>
+                            <b>Partners in Health</b>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+
+    <div class="column architecture w3-third" style="min-width:360px">
+    <div class="img__wrap">
+        <div>
+            <h5><b>RAPID HEALTH FACILITY ASSESSMENT</b></h5>
+        </div>
+        <a href="https://mdestaubin.github.io/portfolio/links/facilities/index">
+            <img class="img__img w3-hover-opacity" src="images/ebola.png" alt="Norway" style="width:100%">
+            <div class="img__description_layer w3-hide-small">
+                <div class="img__description">
+                    <h5><b>RAPID HEALTH FACILITY ASSESSMENT</b></h5>
+                    <h6 style="padding: 15px;">
+                        Hospital facility assessment conducted during the West Africa Ebola Outbreak. The report was prepared and given to PIH to understand the conditions and needs of the facilities they were working at.
+                    </h6>
+                    <div class="w3-border-top" style="font-size: 14px; padding: 15px;">
+                        <p>Professional 
+                            <i class="w3-right">2015</i><br/>
+                            <b>Shepley Bulfinch</b>
+                            <i class="w3-right">Sierra Leone + Liberia</i><br/>
+                            <b>Partners in Health</b>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<div class="column technology w3-third" style="min-width:360px">
+    <div class="img__wrap">
+        <div>
+            <h5><b>SOCIAL AGENCY: ROLE OF THE DESIGNER</b></h5>
+        </div>
+        <a href="https://mdestaubin.github.io/portfolio/links/social/index">
+            <img class="img__img w3-hover-opacity" src="images/haitiVideo.png" alt="Norway" style="width:100%">
+            <div class="img__description_layer w3-hide-small">
+                <div class="img__description">
+                    <h5><b>SOCIAL AGENCY: ROLE OF THE DESIGNER</b></h5>
+                    <h6 style="padding: 15px">
+                        A short video of interviews with foreign and local architects working in Haiti. It was completed as an assignment for a course at the GSD examining the role of social agency within architecture.
+                    </h6>
+                    <div class="w3-border-top" style="font-size: 14px; padding: 15px">
+                        <p>Academic
+                            <i class="w3-right">2016</i><br/>
+                            <b>Harvard GSD</b>
+                            <i class="w3-right">Haiti</i><br/>
+                            AA Haiti Visiting School
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<div class="column technology w3-third" style="min-width:360px">
+    <div class="img__wrap">
+        <div>
+            <h5><b>GLOBAL HUMANITARIAN AID FLOW</b></h5>
+        </div>
+        <a href="https://mdestaubin.github.io/ebolaAid">
+            <img class="img__img w3-hover-opacity" src="images/ebolaAid.png" alt="Norway" style="width:100%">
+            <div class="img__description_layer w3-hide-small">
+                <div class="img__description">
+                    <h5><b>GLOBAL HUMANITARIAN AID FLOW</b></h5>
+                    <h6 style="padding: 15px">
+                        Data visualization map of the flow of international humanitarian aid money to West Africa during the Ebola crisis. The dataset comes from the Financial Tracking Service of the UN.
+                    </h6>
+                    <div class="w3-border-top" style="font-size: 14px; padding: 15px">
+                        <p>Academic
+                            <i class="w3-right">2017</i><br/>
+                            <b>MIT 4.S02</b>
+                            <i class="w3-right">Cambridge, MA</i><br/>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<div class="column technology w3-third" style="min-width:360px">
+    <div class="img__wrap">
+        <div>
+            <h5><b>PORTAL || KINECT</b></h5>
+        </div>
+        <a href="https://mdestaubin.github.io/portfolio/links/portal/index">
+            <img class="img__img w3-hover-opacity" src="images/portal.png" alt="Norway" style="width:100%">
+            <div class="img__description_layer w3-hide-small">
+                <div class="img__description">
+                    <h5><b>PORTAL || KINECT</b></h5>
+                    <h6 style="padding: 15px;">
+                        The portal intends to create a civic visual connection between Cambridge, MA and Bergamo, Italy. To go beyond a typical 2D interaction, the project adds a 3D parallax effect through framing and layering.
+                    </h6>
+                    <div class="w3-border-top" style="font-size: 14px; padding: 15px;">
+                        <p>Academic
+                            <i class="w3-right">2017</i><br/>
+                            <b>Harvard GSD</b>
+                            <i class="w3-right">Cambridge, MA</i><br/>
+                            <b>University of Bergamo</b>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<div class="column architecture w3-third" style="min-width:360px">
+    <div class="img__wrap">
+        <div>
+            <h5><b>DAVIDSON COLLEGE ACADEMIC CENTER</b></h5>
+        </div>
+        <a href="https://mdestaubin.github.io/portfolio/links/davidson/index">
+            <img class="img__img w3-hover-opacity" src="images/davidson.png" alt="Norway" style="width:100%">
+            <div class="img__description_layer w3-hide-small">
+                <div class="img__description">
+                    <h5><b>DAVIDSON COLLEGE ACADEMIC CENTER</b></h5>
+                    <h6 style="padding: 15px;">
+                        Large scale addition and renovation project for Davidson College's science and art departments. The central forum space acts as the social catalyst for cross-disciplinary interactions and sharing.
+                    </h6>
+                    <div class="w3-border-top" style="font-size: 14px; padding: 15px;">
+                        <p>Professional 
+                            <i class="w3-right">2012-2016</i><br/>
+                            <b>Shepley Bulfinch</b>
+                            <i class="w3-right">Davidson, NC</i><br/>
+                            <b>Davidson College</b>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+
+<div class="column architecture w3-third" style="min-width:360px">
+    <div class="img__wrap">
+        <div>
+            <h5><b>ROSE LEE'S HOUSE</b></h5>
+        </div>
+        <a href="https://mdestaubin.github.io/portfolio/links/rural/index">
+            <img class="img__img w3-hover-opacity" src="images/rural.png" alt="Norway" style="width:100%">
+            <div class="img__description_layer w3-hide-small">
+                <div class="img__description">
+                    <h5><b>ROSE LEE'S HOUSE</b></h5>
+                    <h6 style="padding: 15px;">
+                        A sustainable home in rural Alabama designed and built by a team of students for Rose Lee and her two sons. The low-cost design featured a large amount of donated and reclaimed material from local barns.
+                    </h6>
+                    <div class="w3-border-top" style="font-size: 14px; padding: 15px;">
+                        <p>Academic
+                            <i class="w3-right">2008-2009</i><br/>
+                            <b>Auburn University</b>
+                            <i class="w3-right">Footwash, AL</i><br/>
+                            <b>Rural Studio</b>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+<div class="column teaching w3-third" style="min-width:360px">
+    <div class="img__wrap">
+        <div>
+            <h5><b>YOUTHBUILD BOSTON DESIGNERY</b></h5>
+        </div>
+        <a href="https://mdestaubin.github.io/portfolio/links/youthbuild/index">
+            <img class="img__img w3-hover-opacity" src="images/youthbuild.png" alt="Norway" style="width:100%">
+            <div class="img__description_layer w3-hide-small">
+                <div class="img__description">
+                    <h5><b>YOUTHBUILD BOSTON DESIGNERY</b></h5>
+                    <h6 style="padding: 15px;">
+                        2017 recipient of the Harvard GSD Community Service Fellowship Program. Led a team of local high school students through a summer design project with a NGO working in Haiti.
+                    </h6>
+                    <div class="w3-border-top" style="font-size: 14px; padding: 15px;">
+                        <p>Academic Fellowship
+                            <i class="w3-right">2017</i><br/>
+                            <b>YouthBuild Boston</b>
+                            <i class="w3-right">Boston, MA</i><br/>
+                            <b>Harvard GSD</b>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+<div class="column technology w3-third" style="min-width:360px">
+    <div class="img__wrap">
+        <div>
+            <h5><b>WEATHER APP</b></h5>
+        </div>
+        <a href="https://mdestaubin.github.io/weather1/index.html">
+            <img class="img__img w3-hover-opacity" src="images/weather.png" alt="Norway" style="width:100%">
+            <div class="img__description_layer w3-hide-small">
+                <div class="img__description">
+                    <h5><b>WEATHER APP</b></h5>
+                    <h6 style="padding: 15px;">
+                        Created as an assignment for a MIT data visualization course. The concept is for the weather app to translate quantitative data pulled from an API into qualitative, descriptive text predictions.
+                    </h6>
+                    <div class="w3-border-top" style="font-size: 14px; padding: 15px;">
+                        <p>Academic
+                            <i class="w3-right">2017</i><br/>
+                            <b>MIT 4.S02</b>
+                            <i class="w3-right">Cambrdige, MA</i>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+<div class="column architecture w3-third" style="min-width:360px">
+    <div class="img__wrap">
+        <div>
+            <h5><b>SUMMITS ACADEMY</b></h5>
+        </div>
+        <a href="https://mdestaubin.github.io/portfolio/links/academy/index">
+            <img class="img__img w3-hover-opacity" src="images/haitiSchool.png" alt="Norway" style="width:100%">
+            <div class="img__description_layer w3-hide-small">
+                <div class="img__description">
+                    <h5><b>SUMMITS ACADEMY</b></h5>
+                    <h6 style="padding: 15px;">
+                        Conceptual design for a college prep academy located in the central plateau region of Haiti. The campus will include teaching, library, dining, athletics, and dwelling spaces.
+                    </h6>
+                    <div class="w3-border-top" style="font-size: 14px; padding: 15px;">
+                        <p>Professional
+                            <i class="w3-right">2015</i><br/>
+                            <b>Shepley Bulfinch</b>
+                            <i class="w3-right">Haiti</i><br/>
+                            <b>Summits Education</b>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+<div class="column architecture w3-third" style="min-width:360px">
+    <div class="img__wrap">
+        <div>
+            <h5><b>PHYSICAL REHABILITATION CENTER</b></h5>
+        </div>
+        <a href="https://mdestaubin.github.io/portfolio/links/rehab/index">
+            <img class="img__img w3-hover-opacity" src="images/haitiRehab.png" alt="Norway" style="width:100%">
+            <div class="img__description_layer w3-hide-small">
+                <div class="img__description">
+                    <h5><b>PHYSICAL REHABILITATION CENTER</b></h5>
+                    <h6 style="padding: 15px;">
+                        Multi-phased design of a rehabilitation clinic located on the Mirebalais Hospital campus in central Haiti. The first phase is a centralized gym and the second phase includes clinical support spaces.
+                    </h6>
+                    <div class="w3-border-top" style="font-size: 14px; padding: 15px;">
+                        <p>Professional
+                            <i class="w3-right">2012</i><br/>
+                            <b>Shepley Bulfinch</b>
+                            <i class="w3-right">Haiti</i><br/>
+                            <b>Partners in Health</b>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+
+<div class="column technology w3-third" style="min-width:360px">
+    <div class="img__wrap">
+        <div>
+            <h5><b>SPARKLE & CHIME</b></h5>
+        </div>
+        <a href="https://mdestaubin.github.io/portfolio/links/sparkle/index">
+            <img class="img__img w3-hover-opacity" src="images/sparkle.png" alt="Norway" style="width:100%">
+            <div class="img__description_layer w3-hide-small">
+                <div class="img__description">
+                    <h5><b>SPARKLE & CHIME</b></h5>
+                    <h6 style="padding: 15px;">
+                        A dazzling art installation in Evans Way Park in Boston, MA. The team consisted of volunteers at Shepley Bulfinch and the project was composed of 1000's of hanging recycled hard disks and mirrors.
+                    </h6>
+                    <div class="w3-border-top" style="font-size: 14px; padding: 15px;">
+                        <p>Volunteer
+                            <i class="w3-right">2014</i><br/>
+                            <b>Shepley Bulfinch</b>
+                            <i class="w3-right">Boston, MA</i><br/>
+                            <b>Fenway Alliance</b>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<div class="column teaching w3-third" style="min-width:360px">
+    <div class="img__wrap">
+        <div>
+            <h5><b>BAC CITY LAB</b></h5>
+        </div>
+        <a href="https://the-bac.edu/experience-the-bac/galleries/citylab-at-the-bac">
+            <img class="img__img w3-hover-opacity" src="images/bac.png" alt="Norway" style="width:100%">
+            <div class="img__description_layer w3-hide-small">
+                <div class="img__description">
+                    <h5><b>BAC CITY LAB</b></h5>
+                    <h6 style="padding: 15px;">
+                        A dazzling art installation in Evans Way Park in Boston, MA. The team consisted of volunteers at Shepley Bulfinch and the project was composed of 1000's of hanging recycled hard disks and mirrors.
+                    </h6>
+                    <div class="w3-border-top" style="font-size: 14px; padding: 15px;">
+                        <p>Professional
+                            <i class="w3-right">2013-2014</i><br/>
+                            <b>BAC</b>
+                            <i class="w3-right">Boston, MA</i>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+
+
+
+        </div>
+
+                </div>
+            </div>
+        </div>
+  
+
+            <div class="slide" data-anchor="publications"style="position: relative;">
+                <!-- <h2 class="w3-row" style="position: absolute; top: 25px; left: 0; right: 0; text-align: center;">PUBLICATIONS</h2> -->
+            <div class="flex-container">
+                <div class="content-wrapper">
+
+                    <div class="w3-half" style="padding-right: 35px; max-height: 650px;">
+                        <!-- <h5 style="font-size: 25px; margin-top: 0px">PRESS</h5> -->
+                        <a target="_blank" style="text-decoration: none;" href="https://www.gsd.harvard.edu/2020/05/how-long-should-we-keep-social-distancing-a-simulation-tool-by-gsd-alum-michael-de-st-aubin-offers-answers/">
+                            <img src="images/articlePic.jpg" alt="Norway" style="width:95%;" class="w3-hover-opacity">
+                            <p style="font-size:17px;">How can design improve disease modeling and outbreak response? A simulation tool by GSD alum Michael de St. Aubin offers answers <br /><b style="font-size: 15px">Harvard University Graduate School of Design</b></p>
+                        </a>
+                    </div>
+
+                    <div class="w3-half" style="padding-left: 0px; max-height: 590px; ">
+                        <h5 style="font-size: 25px; margin-top: -40px;">ACADEMIC PUBLICATIONS</h5>
+                            <div class="scrollable" style="max-height: 500px; overflow-y: auto;">
+            
+                            <ul id="myList">
+                                <li style="margin-top: -40px;">
+                                    <a target="_blank" style="text-decoration: none;" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10045678/">
+                                        <p style="font-size: 15px;">Paper | Contributing Author</p>
+                                        <p style="font-size:17px;">Monitoring Temporal Changes in SARS-CoV-2 Spike Antibody Levels and Variant-Specific Risk for Infection, Dominican Republic, March 2021–August 2022<br /><b style="font-size: 15px;">Emerging Infectious Diseases, 2023</b></p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a target="_blank" style="text-decoration: none;" href="https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(23)00001-4/fulltext">
+                                        <p style="font-size: 15px; margin-bottom: -10px;">Paper | Contributing Author</p>
+                                        <p style="font-size:17px;">Tracking immune correlates of protection for emerging SARS-CoV-2 variants<br /><b style="font-size: 15px;">The Lancet Infectious Diseases, 2023</b></p>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a target="_blank" style="text-decoration: none;" href="https://journals.plos.org/water/article?id=10.1371/journal.pwat.0000027">
+                                        <p style="font-size: 15px; margin-bottom: -10px;">Paper | Contributing Author</p>
+                                        <p style="font-size:17px;">Improving water, sanitation, and hygiene (WASH), with a focus on hand hygiene, globally for community mitigation of COVID-19<br /><b style="font-size: 15px;">PLOS Water 1, 2022</b></p>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a target="_blank" style="text-decoration: none;" href="https://www.sciencedirect.com/science/article/pii/S2667193X22002071">
+                                        <p style="font-size: 15px; margin-bottom: -10px;">Paper | Contributing Author</p>
+                                        <p style="font-size:17px;">SARS-CoV-2 seroprevalence, cumulative infections, and immunity to symptomatic infection – A multistage national household survey and modelling study, Dominican Republic, June–October 2021<br /><b style="font-size: 15px;">The Lancet Regional Health-Americas 16, 2022</b></p>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a target="_blank" style="text-decoration: none;" href="https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3001531">
+                                        <p style="font-size: 15px; margin-bottom: -10px;">Paper | Contributing Author</p>
+                                        <p style="font-size:17px;">SARS-CoV-2 antibodies protect against reinfection for at least 6 months in a multicentre seroepidemiological workplace cohort<br /><b style="font-size: 15px;">PLoS Biology 20, 2022</b></p>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a target="_blank" style="text-decoration: none;" href="https://www.mdpi.com/1999-4915/13/11/2235">
+                                        <p style="font-size: 15px; margin-bottom: -10px;">Paper | Contributing Author</p>
+                                        <p style="font-size:17px;">Epidemiological and immunological features of obesity and SARS-CoV-2<br /><b style="font-size: 15px;">Viruses 13, 2022</b></p>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a target="_blank" style="text-decoration: none;" href="https://www.science.org/doi/full/10.1126/scitranslmed.abm2311">
+                                        <p style="font-size: 15px; margin-bottom: -10px;">Paper | Contributing Author</p>
+                                        <p style="font-size:17px;">mRNA-1273 and BNT162b2 COVID-19 vaccines elicit antibodies with differences in Fc-mediated effector functions<br /><b style="font-size: 15px;">Science Translational Medicine 14, 2021</b></p>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a target="_blank" style="text-decoration: none;" href="https://www.nature.com/articles/s41467-021-21336-8">
+                                        <p style="font-size: 15px; margin-bottom: -10px;">Paper | Contributing Author</p>
+                                        <p style="font-size:17px;">Discrete SARS-CoV-2 antibody titers track with functional humoral stability<br /><b style="font-size: 15px;">Nature Communications 12, 2021</b></p>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a target="_blank" style="text-decoration: none;" href="https://reliefweb.int/sites/reliefweb.int/files/resources/neverforget_eng_2.pdf">
+                                        <p style="font-size: 15px; margin-bottom: -10px;">Report | Design Acknowledgement</p>
+                                        <p style="font-size:17px;">Never Forget: Views on Peace and Justice Within Conflict-Affected Communities in Northern Iraq<br /><b style="font-size: 15px;">Harvard Humanitarian Initiative 2019</b></p>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+            <div class="slide" data-anchor="resume" style="position: relative;">
+                <div class="flex-container">
+                    <div class="content-wrapper">
+
+                        <div class="scrollable" style="max-height: 90vh; overflow-y: auto; margin-bottom: 18px; font-size: 14px;">
+
+                        <div class="w3-quarter" style=" margin-top: 0px">
+                            <h5 style="font-size: 25px"><b>Education</b></h5>
+                        </div>
+
+            <div class="w3-half" style=" margin-top: 0px">
+                <p><b>Harvard University Graduate School of Design</b>
                 <br/>
-                Master in Design Studies<br/> Concentration: <a href="http://www.gsd.harvard.edu/design-studies/risk-and-resilience/">Risk + Resilience</a><br/>
-                August 2016 - May 2018</p>
+                Master in Design Studies<br/> Concentration: <a href="http://www.gsd.harvard.edu/design-studies/risk-and-resilience/">Risk + Resilience</a>
+                <br/>August 2016 - May 2018
+            </p>
 
-                <p>
+                <!-- <p>
                    + <a href="https://hhi.harvard.edu/">H.H.I</a> Internship: Spring 2018 <br/>
                    + <a href="https://www.gsd.harvard.edu/resources/community-service-fellowship-program/">CSFP</a> Summer Fellow 2017
                 </p>
+ -->
+            </div>
 
-                <p><b style="font-size: 16px">Auburn University</b><br/>
+            <div class="w3-quarter" style=" margin-top: 0px">
+                <p><b>Auburn University</b><br/>
                 Bachelor of Architecture<br/>
                 August 2007 - May 2012</p>
+            </div>
 
-                  <p>+ Study Abroad: Rome, Italy 2010<br/>
-                    + Rural Studio: Newbern, AL 2008
-                  </p>
+<div class="w3-row">
+
+    <div class="w3-quarter" style=" margin-top: 0px; border-top: 1px solid #150;">
+
+     <h5 style="font-size: 25px"><b>Professional</b></h5>
+    </div>
+
+<div class="w3-half" style=" margin-top: 0px;  border-top: 1px solid #150; padding-right: 20px;">
+<p><b style="border-bottom: 1px;">Harvard Humanitarian Initiative</b> (3 Positions)
+
+ <!--  <div style="margin-left: 40px; border-left: 1px solid #000; padding-left: 10px; "> -->
+  <br/><br/><b>Research Specialist, </b> Infectious Diseases and Epidemics Program (IDEP)<br/>July 2019 - Current | Brigham and Women's Hospital
+        </p>
+               
+        <p>- Team lead on data collection, management, and storage infrastructures<br/>
+           - Develop and maintain numerous interactive data monitoring dashboards<br/>
+           - Team lead on graphic, communication, and product design needs<br/>
+           - General project and research cordination and administration</p>  
+
+<p><b>Data Visualization Designer, </b><a href="https://buildingabetterresponse.org/">Building a Better Response</a><br/>
+        July 2022 - Current [Part-Time] | Harvard School of Public Health</p>
+               
+        <p>- Develop and maintain internal interactive data monitoring dashboard<br/>
+          - Assist in donor reporting and programmatic impact communications<br/>
+          - General data management and cleaning
 
 
-                
-                <h5 style="font-size: 25px"><b>Volunteer</b></h5>
+   <br/><br/><b>Project Coordinator,</b> <a href="https://www.kobotoolbox.org">KoBoToolbox</a> & The Visual Response Simulator (ViRS)<br/>
+          October 2018 - May 2022 | Harvard School of Public Health</p>
+               
+        <p>- Kobotoolbox user support lead and community forum manager<br/>
+          - UI/UX design for KoboToolbox and ViRS<br/>
+          - General project and research cordination and administration</p>  
+<!-- </div> -->
 
-                <p><b style="font-size: 16px">WEGL 91.1 FM</b><br/>
-                Student Radio DJ<br/>
-                Auburn, AL | 2009 - 2012</p>
-
-                <p><b style="font-size: 16px">Adventures in Missions</b><br/>
-                Construction Volunteer<br/>
-                Mexico + Peru | 2004, 2005, 2007</p>
-
-                <!-- <p><b style="font-size: 16px">W.W.O.O.F.</b><br/>
-                Volunteer<br/>
-                Monticello, WI | 2010</p>
- -->
-          
 </div>
-
-
-
-<div class="w3-quarter" style=" margin-top: 20px;">
-
-  <h5 style="font-size: 25px"><b>Professional</b></h5>
-
-<p><b style="font-size: 16px">Harvard Humanitarian Initiative</b><br/>Infectious Diseases and Epidemics Program | IDEP<br/>Research Consultant<br/>
-        Cambridge, MA | July 2019 - Current</p>
+<div class="w3-rest" style=" margin-top: 0px;  border-top: 1px solid #150; ">
+<p><b>Architecture Experience</b><br/><br/>
+        <b>Junior Architect</b><br/>
+        Sept 2012 - July 2016 | Shepley Bulfinch</p>
                
-        <p>+ Project Coordination<br/>
-           + Data Collection and Management<br/>
-           + Data Visualization<br/>
-           + Graphic Design</p>  
-  <a href="https://www.kobotoolbox.org">KoBoToolbox</a><br/>Project Coordinator<br/>
-        Cambridge, MA | Oct 2018 - June 2020</p>
-               
-        <p>+ User Support Team Lead<br/>
-           + UI/UX Design<br/>
-           + Research Project Support<br/>
-           + Social Media Management</p>  
-
-<p><b style="font-size: 16px">Shepley Bulfinch</b> <br/>Junior Architect<br/>
-        Boston, MA | Sept 2012 - July 2016</p>
-               
-        <p>+ Schematic and Conceptual Design<br/>
-           + Construction Documentation<br/>
-           + Project Coordination<br/>
-           + International Development</p>
+        <p>- Schematic and conceptual design<br/>
+          - Construction documentation<br/>
+          - Engineering consultant coordination<br/>
+           - International development</p>
+</div>
 
 <!--            <p><b style="font-size: 16px">Alta Planning + Design</b> <br/>Hubway Launch Team<br/>
         Boston, MA | Summer 2011</p>
@@ -1227,28 +1042,49 @@ ul.a {list-style-type: circle;}
            + Town Planning Workshops<br/>
            + Material Research</p> -->
 </div>
-            
-   <div class="w3-quarter" style="margin-top: 20px">
-    <h5 style="font-size: 25px"><b>Teaching</b></h5>
 
-    <p><b style="font-size: 16px">YouthBuild Boston</b> <br/>Harvard CSFP Fellow<br/>
-        Boston, MA | Summer 2017</p>
-         
-        <p><b style="font-size: 16px">Boston Architectural College</b> <br/>City Lab Co-Instructor<br/>
-        Boston, MA | 2013 - 2014</p>
-
+<div class="w3-quarter" style="margin-top: 0px; border-top: 1px solid #150;">
+<h5 style="font-size: 25px"><b>Teaching</b></h5>
+</div>
+<div class="w3-quarter" style="margin-top: 0px; border-top: 1px solid #150;">
+        <p><b>Workshop Leader</b> <br/>Design for Humanity Summit II<br/>
+        Fordham University | 2019</p>
+        </div>
+<div class="w3-quarter" style="margin-top: 0px; border-top: 1px solid #150;">
+    <p><b>Design Instructor</b> <br/> Youthbuild Boston<br/>
+        Harvard GSD CSFP Fellow | 2017</p>
+         </div>
+         <div class="w3-quarter" style="margin-top: 0px; border-top: 1px solid #150;">
+        <p><b>Co-Instructor</b><br/>City Lab Intensive Course<br/>
+        Boston Architectural College | 2013 - 2014</p>
+        </div>
+        
+     
+<!--    <div class="w3-row">   -->     
+   <div class="w3-quarter" style="margin-top: 0px; border-top: 1px solid #150;">
         <h5 style="font-size: 25px"><b>Skills</b></h5>
-   
+   </div>
+   <div class="w3-quarter" style="padding-right:10px; border-top: 1px solid #150;">
                     <p>
-                       Data Collection and Management</br> Data Visualization </br> Project Coordination </br> Agent Based Modeling </br> Web Development </br> Mapping </br>   
-                       Graphic Design </br> Architectural Design and Documentaion</br> Communtiy Planning </br> Teaching </br></br> Programing Languages: </br>
-                       Processing.JS, P5.JS, HTML, CSS, Javascript
+                       Data Collection & Management <b>/</b> Data Visualization <b>/</b> Project Coordination <b>/</b>
+                      Research Support <b>/</b> Web Development <b>/</b> Mapping <b>/</b> Graphic Design <b>/</b> UI/UX <b>/</b>
+                       Disease Modeling <b>/</b> Architectural Design <b>/</b> Course Instruction
+                     </p>
+                   </div>
+    <div class="w3-quarter" style="padding-right: 10px; border-top: 1px solid #150;">
+                      <p>
+                      <b>Software:</b>
+                       Power BI, KoboToolbox/ODK,
+                        Excel, Adobe Creative Suite, ArcGIS,
+                        Google Suite, Airtable, Autodesk, Click-
+                        Up, Sketchup</p>
+                     </div>
+                     <div class="w3-quarter" style="margin-top: 0px; border-top: 1px solid #150;">
+                     <p><b>Programming:</b> 
+                       R, Processing.JS, P5.JS, HTML, CSS, Javascript, SQL</p>
 
-                     </br></br> Software: </br>
-                       Power BI, Excel, Google Suite, KoBoToolbox, ArcGIS, Adobe Creative Suite, Airtable, Autodesk Products, ClickUp, Sketchup</p>
-<!-- 
 
-                    <p class="w3-half">
+                    <!-- <p class="w3-half">
                        Adobe Creative Suite </br> Power BI </br> Processing.JS  </br>
                        P5.JS  </br> Excel </br> Google Suite </br> Autodesk Revit  </br>
                        Autodesk AutoCAD </br> Hand Sketching </br> 3D Model Making </br>
@@ -1260,94 +1096,65 @@ ul.a {list-style-type: circle;}
                       </p> -->
 
          </div>
+     </div>
+ </div>
 
-</div>
+                    </div>
+                </div>
+            </div>
 
-</div>
 
-
-</div>
-</br></br></br></br>
-
+            
+        </div>
     </div>
-    </div>
-</div>
-<!--         <div class="w3-container w3-white">
-        </br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br>
-    </div> -->
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/3.1.2/fullpage.min.js"></script>
+    <script>
+     new fullpage('#fullpage', {
+    autoScrolling: true,
+    // overScrolling: true,
+    sectionsColor: ['white', 'white', 'white', 'white', 'white'],
+    controlArrows: false,
+    slidesNavigation: true,
+    slidesNavPosition: 'bottom',
+    anchors: ['intro','about','work', 'publications', 'resume']
+});
 
-<!-- End page content -->
-</div>
-
-
-
-
-<!-- // Script to open and close sidebar -->
-<script>
-filterSelection("all")
-function filterSelection(c) {
-  var x, i;
-  x = document.getElementsByClassName("column");
-  if (c == "all") c = "";
-  for (i = 0; i < x.length; i++) {
-    w3RemoveClass(x[i], "show");
-    if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "show");
-  }
+function updateTooltips() {
+    const slideNames = ['intro','about','work', 'publications', 'resume'];
+    const slideNavDots = document.querySelectorAll('.fp-slidesNav ul li span');
+    slideNavDots.forEach((dot, i) => {
+        dot.title = slideNames[i];
+    });
 }
-function w3AddClass(element, name) {
-  var i, arr1, arr2;
-  arr1 = element.className.split(" ");
-  arr2 = name.split(" ");
-  for (i = 0; i < arr2.length; i++) {
-    if (arr1.indexOf(arr2[i]) == -1) {element.className += " " + arr2[i];}
-  }
-}
-function w3RemoveClass(element, name) {
-  var i, arr1, arr2;
-  arr1 = element.className.split(" ");
-  arr2 = name.split(" ");
-  for (i = 0; i < arr2.length; i++) {
-    while (arr1.indexOf(arr2[i]) > -1) {
-      arr1.splice(arr1.indexOf(arr2[i]), 1);     
+
+var typed = new Typed('#element', {
+    strings: ["Hi, I'm Michael de St. Aubin.", "Thank you for visiting my site.", "Here, you'll get to know a little about me.", "Explore a wide range of projects I've worked on.","Read publications I've been featured in or co-authored", "and examine my resume.", "I hope you enjoy your visit.","Please feel free to <a href='mailto:mdestaubin@hsph.harvard.edu'style='color: blue;text-decoration: none;'>reach out</a> for further discussions and potential collaborations."],
+    typeSpeed: 15,
+    showCursor: false,
+    backDelay: 1000,  // Time before backspace if backspace is needed
+    smartBackspace: true, // this is a default
+    loop: false, // loop on or off (true or false)
+    loopCount: false, // number of loops, false = infinite
+    startDelay: 0, // delay time before typing
+    onComplete: (self) => {
+        setTimeout(function() {
+            var aboutMeButton = document.getElementById('about-me-btn');
+            aboutMeButton.style.display = 'block';  // or 'block'
+            aboutMeButton.style.opacity = '1';
+        }, 700);
     }
-  }
-  element.className = arr1.join(" ");
-}
-// Add active class to the current button (highlight it)
-var btnContainer = document.getElementById("myBtnContainer");
-var btns = btnContainer.getElementsByClassName("btn");
-for (var i = 0; i < btns.length; i++) {
-  btns[i].addEventListener("click", function(){
-    var current = document.getElementsByClassName("active");
-    current[0].className = current[0].className.replace(" active", "");
-    this.className += " active";
-  });
-}
-function myFunction() {
-    var x = document.getElementById("Demo");
-    if (x.className.indexOf("w3-show") == -1) {
-        x.className += " w3-show";
+});
+
+document.getElementById('about-me-btn').addEventListener('click', function() {
+    var aboutMeText = document.getElementById('about-me-text');
+    if (aboutMeText.style.display === 'block') {
+        aboutMeText.style.display = 'none'; // If the text is visible, hide it
     } else {
-        x.className = x.className.replace(" w3-show", "");
+        aboutMeText.style.display = 'block'; // If the text is hidden, show it
     }
-}
-var slideIndex = 1;
-showDivs(slideIndex);
-function plusDivs(n) {
-  showDivs(slideIndex += n);
-}
-function showDivs(n) {
-  var i;
-  var x = document.getElementsByClassName("mySlides");
-  if (n > x.length) {slideIndex = 1}    
-  if (n < 1) {slideIndex = x.length}
-  for (i = 0; i < x.length; i++) {
-     x[i].style.display = "none";  
-  }
-  x[slideIndex-1].style.display = "block";  
-}
-</script>
-
+});
+    </script>
 </body>
+
 </html>
